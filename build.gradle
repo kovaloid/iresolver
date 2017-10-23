@@ -1,16 +1,16 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.8.RELEASE'
-	}
-	repositories {
-		maven { url 'https://plugins.gradle.org/m2/' }
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'com.moowork.gradle:gradle-node-plugin:1.1.1',
-		  'com.moowork.gradle:gradle-gulp-plugin:0.13'
-	}
+  ext {
+    springBootVersion = '1.5.8.RELEASE'
+  }
+  repositories {
+    maven { url 'https://plugins.gradle.org/m2/' }
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+              'com.moowork.gradle:gradle-node-plugin:1.1.1',
+              'com.moowork.gradle:gradle-gulp-plugin:0.13'
+  }
 }
 
 apply plugin: 'java'
@@ -22,16 +22,17 @@ version = '0.0.1'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+  mavenCentral()
+  maven {
+    url 'https://m2proxy.atlassian.com/repository/public'
+  }
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-    //compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    //compile('org.springframework.boot:spring-boot-starter-security')
-	runtime('com.h2database:h2')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-    //testCompile('org.springframework.security:spring-security-test')
+  compile 'org.springframework.boot:spring-boot-starter-web',
+          'com.atlassian.jira:jira-rest-java-client:1.2-m01'
+  runtime 'com.h2database:h2'
+  testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 apply plugin: 'com.moowork.node'
