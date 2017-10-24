@@ -19,10 +19,15 @@ public class JiraResolverController {
   @Autowired
   private JiraResolverService service;
 
-  @RequestMapping("/home")
+  @RequestMapping("/trigger")
   @ResponseBody
-  String home() throws URISyntaxException {
+  public void startWork() throws URISyntaxException, InterruptedException {
     service.execute("", "", "");
-    return "Hello World!";
+  }
+
+  @RequestMapping("/status")
+  @ResponseBody
+  int status() throws URISyntaxException {
+    return service.getStatus();
   }
 }

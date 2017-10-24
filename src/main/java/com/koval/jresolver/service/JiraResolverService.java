@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class JiraResolverService {
 
   //@Async
-  public void execute(String url, String username, String password) throws URISyntaxException {
+/*  public void execute(String url, String username, String password) throws URISyntaxException {
     System.out.println("Start retrieving...");
     JiraClient client = new BasicJiraClient(url, username, password);
     JiraRequestProperties request = new JiraRequestProperties()
@@ -33,6 +34,22 @@ public class JiraResolverService {
 
     DataRetriever dataRetriever = new JiraDataRetriever(client, request, extraction, consumer);
     dataRetriever.start();
+  }*/
+
+  private AtomicInteger progress = new AtomicInteger();
+
+  @Async
+  public void execute(String url, String username, String password) throws URISyntaxException, InterruptedException {
+
+    while (true) {
+      Thread.sleep(1000);
+      progress.addAndGet(1);
+    }
+
+  }
+
+  public int getStatus() {
+    return progress.get();
   }
 
 }
