@@ -30,6 +30,11 @@ public class JiraDataRetriever implements DataRetriever {
     return "project=" + request.getProjectName();
   }
 
+  public int getTotal() {
+    handler.process(0, 0);
+    return handler.getTotalResults();
+  }
+
   public void start() {
     int startAt = extraction.getStartAt();
     totalResults = maxResults;

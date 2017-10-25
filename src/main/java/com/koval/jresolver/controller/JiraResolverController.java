@@ -5,8 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 
@@ -19,10 +18,12 @@ public class JiraResolverController {
   @Autowired
   private JiraResolverService service;
 
-  @RequestMapping("/trigger")
+  @RequestMapping(value= "/trigger", method = RequestMethod.GET)
   @ResponseBody
-  public void startWork() throws URISyntaxException, InterruptedException {
-    service.execute("", "", "");
+  public void startWork(@RequestParam(value="url", required=false) String url,
+                        @RequestParam(value="user", required=false) String user,
+                        @RequestParam(value="pass", required=false) String pass) throws URISyntaxException, InterruptedException {
+    service.execute(url, user, pass);
   }
 
   @RequestMapping("/status")
