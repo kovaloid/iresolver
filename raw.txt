@@ -1,3 +1,6 @@
-class1        | John likes to watch movies. Mary likes movies too.
-class1,class2 | John also likes to watch football games.
-class6        | hello world
+label3,user1 | John likes to watch movies. Mary likes movies too.
+label1,user2 | John also likes to watch football games.
+label2,user4 | Hello world
+label2,user2 | World is so big!
+label1,user5 | Mary hate football
+label3,user3 | Mary hate football

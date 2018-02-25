@@ -1,6 +1,5 @@
 package com.koval.jresolver.core;
 
-
 import org.apache.commons.io.IOUtils;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
@@ -25,19 +24,20 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class MyClassifier {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MyClassifier.class);
 
-  private static Logger log = LoggerFactory.getLogger(MyClassifier.class);
-
-  private static Map<Integer,String> eats = readEnumCSV("/DataExamples/animals/eats.csv");
-  private static Map<Integer,String> sounds = readEnumCSV("/DataExamples/animals/sounds.csv");
-  private static Map<Integer,String> classifiers = readEnumCSV("/DataExamples/animals/classifiers.csv");
+  //private static Map<Integer,String> classifiers = readEnumCSV("/classification/classes_0.csv");
+  private static Map<Integer,String> classifiers = readEnumCSV("classes_0.csv");
 
   private int labelIndex;
   private int batchSizeTraining;
@@ -46,8 +46,8 @@ public class MyClassifier {
   private int classifierOutputs;
 
   public MyClassifier(int labelIndex, int batchSizeTraining, int batchSizeTest, int classifierInputs, int classifierOutputs ) {
-    this.labelIndex = labelIndex; //5 values in each row of the animals.csv CSV: 4 input features followed by an integer label (class) index. Labels are the 5th value (index 4) in each row
-    this.batchSizeTraining = batchSizeTraining; //Iris data set: 150 examples total. We are loading all of them into one DataSet (not recommended for large data sets)
+    this.labelIndex = labelIndex;
+    this.batchSizeTraining = batchSizeTraining;
     this.batchSizeTest = batchSizeTest; // this is the data we want to classify
     this.classifierInputs = classifierInputs;
     this.classifierOutputs = classifierOutputs;
@@ -55,17 +55,15 @@ public class MyClassifier {
 
   public void launch() {
     try {
-      DataSet trainingData = readCSVDataset(
-        "/DataExamples/animals/animals_train.csv",
+      //DataSet trainingData = readCSVDataset("/classification/dataset.csv",
+      DataSet trainingData = readCSVDataset("dataset.csv",
         batchSizeTraining, labelIndex, classifierOutputs);
 
-      DataSet testData = readCSVDataset("/DataExamples/animals/animals.csv",
+      //DataSet testData = readCSVDataset("/classification/dataset.csv",
+      DataSet testData = readCSVDataset("dataset.csv",
         batchSizeTest, labelIndex, classifierOutputs);
 
-
-      // make the data model for records prior to normalization, because it
-      // changes the data.
-      Map<Integer,Map<String,Object>> animals = makeAnimalsForTesting(testData);
+      logFeatureMatrix(testData);
 
       //We need to normalize our data. We'll use NormalizeStandardize (which gives us mean 0, unit variance):
       DataNormalization normalizer = new NormalizerStandardize();
@@ -73,12 +71,10 @@ public class MyClassifier {
       normalizer.transform(trainingData);     //Apply normalization to the training data
       normalizer.transform(testData);         //Apply normalization to the test data. This is using statistics calculated from the *training* set
 
-      //int classifierInputs = 4; //vector of words
-      //int classifierOutputs = 3; //vector of classes
       int iterations = 1000;
       long seed = 6;
 
-      log.info("Build model....");
+      LOGGER.info("Build model....");
       MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
         .seed(seed)
         .iterations(iterations)
@@ -114,6 +110,7 @@ public class MyClassifier {
       */
 
 
+
       //run the model
       MultiLayerNetwork model = new MultiLayerNetwork(conf);
       model.init();
@@ -123,7 +120,7 @@ public class MyClassifier {
 
       //evaluate the model on the test set
       System.out.println("Evaluate model....");
-      Evaluation eval = new Evaluation(classifierOutputs); //vector of classes
+      Evaluation eval = new Evaluation(classifierOutputs);
       INDArray output = model.output(testData.getFeatureMatrix());
 
      /* while(testIter.hasNext()){
@@ -131,49 +128,37 @@ public class MyClassifier {
         INDArray features = t.getFeatureMatrix();
         INDArray lables = t.getLabels();
         INDArray predicted = model.output(features,false);
-
         eval.eval(lables, predicted);
-
       }*/
 
       eval.eval(testData.getLabels(), output);
-      log.info(eval.stats());
+      LOGGER.info(eval.stats());
 
-      setFittedClassifiers(output, animals);
-      logAnimals(animals);
+
+      for (int i = 0; i < output.rows() ; i++) {
+        // set the classification from the fitted results
+        System.out.println(classifiers.get(maxIndex(getFloatArrayFromSlice(output.slice(i)))));
+      }
+      logFeatureMatrix(testData);
+
 
     } catch (Exception e){
       e.printStackTrace();
     }
   }
 
-
-
-  public static void logAnimals(Map<Integer,Map<String,Object>> animals){
-    for(Map<String,Object> a:animals.values())
-      log.info(a.toString());
-  }
-
-  public static void setFittedClassifiers(INDArray output, Map<Integer,Map<String,Object>> animals){
-    for (int i = 0; i < output.rows() ; i++) {
-
-      // set the classification from the fitted results
-      animals.get(i).put("classifier",
-        classifiers.get(maxIndex(getFloatArrayFromSlice(output.slice(i)))));
-
+  private void logFeatureMatrix(DataSet testData) {
+    INDArray features = testData.getFeatureMatrix();
+    for (int i = 0; i < features.rows(); i++) {
+      INDArray slice = features.slice(i);
+      for (int j = 0; j < features.columns(); j++) {
+        System.out.print(String.valueOf(slice.getFloat(j)) + "\t ");
+      }
+      System.out.println();
     }
-
   }
 
 
-  /**
-   * This method is to show how to convert the INDArray to a float array. This is to
-   * provide some more examples on how to convert INDArray to types that are more java
-   * centric.
-   *
-   * @param rowSlice
-   * @return
-   */
   public static float[] getFloatArrayFromSlice(INDArray rowSlice){
     float[] result = new float[rowSlice.columns()];
     for (int i = 0; i < rowSlice.columns(); i++) {
@@ -182,13 +167,6 @@ public class MyClassifier {
     return result;
   }
 
-  /**
-   * find the maximum item index. This is used when the data is fitted and we
-   * want to determine which class to assign the test row to
-   *
-   * @param vals
-   * @return
-   */
   public static int maxIndex(float[] vals){
     int maxIndex = 0;
     for (int i = 1; i < vals.length; i++){
@@ -200,37 +178,10 @@ public class MyClassifier {
     return maxIndex;
   }
 
-  /**
-   * take the dataset loaded for the matric and make the record model out of it so
-   * we can correlate the fitted classifier to the record.
-   *
-   * @param testData
-   * @return
-   */
-  public static Map<Integer,Map<String,Object>> makeAnimalsForTesting(DataSet testData){
-    Map<Integer,Map<String,Object>> animals = new HashMap<>();
-
-    INDArray features = testData.getFeatureMatrix();
-    for (int i = 0; i < features.rows() ; i++) {
-      INDArray slice = features.slice(i);
-      Map<String,Object> animal = new HashMap();
-
-      //set the attributes
-      animal.put("yearsLived", slice.getInt(0));
-      animal.put("eats", eats.get(slice.getInt(1)));
-      animal.put("sounds", sounds.get(slice.getInt(2)));
-      animal.put("weight", slice.getFloat(3));
-
-      animals.put(i,animal);
-    }
-    return animals;
-
-  }
-
-
   public static Map<Integer,String> readEnumCSV(String csvFileClasspath) {
     try{
-      List<String> lines = IOUtils.readLines(new ClassPathResource(csvFileClasspath).getInputStream());
+      //List<String> lines = IOUtils.readLines(new ClassPathResource(csvFileClasspath).getInputStream());
+      List<String> lines = IOUtils.readLines(new FileInputStream(csvFileClasspath));
       Map<Integer,String> enums = new HashMap<>();
       for(String line:lines){
         String[] parts = line.split(",");
@@ -241,12 +192,12 @@ public class MyClassifier {
       e.printStackTrace();
       return null;
     }
-
   }
 
   private static DataSet readCSVDataset(String csvFileClasspath, int batchSize, int labelIndex, int numClasses) throws IOException, InterruptedException {
     RecordReader recordReader = new CSVRecordReader();
-    recordReader.initialize(new FileSplit(new ClassPathResource(csvFileClasspath).getFile()));
+    //recordReader.initialize(new FileSplit(new ClassPathResource(csvFileClasspath).getFile()));
+    recordReader.initialize(new FileSplit(new File(csvFileClasspath)));
     DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelIndex, numClasses);
     return iterator.next();
   }

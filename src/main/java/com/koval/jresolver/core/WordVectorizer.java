@@ -2,6 +2,7 @@ package com.koval.jresolver.core;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.bagofwords.vectorizer.TfidfVectorizer;
 import org.deeplearning4j.models.word2vec.VocabWord;
@@ -18,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,6 +31,7 @@ public class WordVectorizer {
   private TokenPreProcess tokenPreprocessor;
   private int minWordFrequency;
   private Collection<String> stopWords;
+  private final Map<Integer, List<String>> classes = new HashMap<>();
 
   public WordVectorizer() {
     this.tokenPreprocessor = new CommonPreprocessor(); //new StemmingPreprocessor()
@@ -66,6 +65,19 @@ public class WordVectorizer {
   }
 
   private void createVectorizerWithIterator(LabelAwareSentenceIterator iterator) {
+    classes.clear();
+    iterator.setPreProcessor((sentence) -> {
+      String[] labels = iterator.currentLabel().split(",");
+      for (int i = 0; i < labels.length; i++) {
+        if (!classes.containsKey(i)) {
+          classes.put(i, new ArrayList<>());
+        }
+        if (!classes.get(i).contains(labels[i])) {
+          classes.get(i).add(labels[i]);
+        }
+      }
+      return sentence;
+    });
     TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
     tokenizerFactory.setTokenPreProcessor(tokenPreprocessor);
 
@@ -133,5 +145,9 @@ public class WordVectorizer {
           return 0;
       })
       .collect(Collectors.toList());
+  }
+
+  public Map<Integer, List<String>> getClasses() {
+    return classes;
   }
 }

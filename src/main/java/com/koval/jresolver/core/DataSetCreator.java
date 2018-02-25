@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 
 
 public class DataSetCreator {
@@ -26,11 +27,9 @@ public class DataSetCreator {
       iterator.setPreProcessor((sentence) -> {
         try {
           String[] labels = iterator.currentLabel().split(",");
-          IOUtils.write(labels[0].trim(), output, Charsets.UTF_8);
-          for (int i = 1; i < labels.length; i++) {
-            IOUtils.write("," + labels[i].trim(), output, Charsets.UTF_8);
-          }
-
+          //TODO: Add other classes, not only one
+          int labelIndex = wordVectorizer.getClasses().get(0).indexOf(labels[0].trim());
+          IOUtils.write(String.valueOf(labelIndex), output, Charsets.UTF_8);
 
           double[] data = wordVectorizer.getVectorFromString(sentence);
           for (double d: data) {
