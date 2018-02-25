@@ -14,6 +14,7 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -117,6 +118,16 @@ public class MyClassifier {
       model.setListeners(new ScoreIterationListener(100)); //Print score every 100 parameter updates
 
       model.fit(trainingData);
+
+
+      //Save the model
+      File locationToSave = new File("MyMultiLayerNetwork.zip");      //Where to save the network. Note: the file is in .zip format - can be opened externally
+      boolean saveUpdater = true;                                             //Updater: i.e., the state for Momentum, RMSProp, Adagrad etc. Save this if you want to train your network more in the future
+      ModelSerializer.writeModel(model, locationToSave, saveUpdater);
+      //Load the model
+      //MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
+
+
 
       //evaluate the model on the test set
       System.out.println("Evaluate model....");
