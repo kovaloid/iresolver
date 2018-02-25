@@ -1,0 +1,3 @@
+class1        | John likes to watch movies. Mary likes movies too.
+class1,class2 | John also likes to watch football games.
+class6        | hello world

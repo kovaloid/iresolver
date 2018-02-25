@@ -2,6 +2,7 @@ package com.koval.jresolver.resolver;
 
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.koval.jresolver.jira.bean.PreparedJiraIssue;
 import com.koval.jresolver.jira.client.BasicJiraClient;
@@ -20,7 +21,8 @@ public class Resolver {
         .maxResults(3)
         .startAt(0)
         .delayAfterEveryMaxResults(5);
-    Consumer<PreparedJiraIssue> consumer = new JiraConsumer();
+    AtomicInteger progress = new AtomicInteger(0);
+    Consumer<PreparedJiraIssue> consumer = new JiraConsumer(progress);
 
     DataRetriever dataRetriever = new JiraDataRetriever(client, request, extraction, consumer);
     dataRetriever.start();

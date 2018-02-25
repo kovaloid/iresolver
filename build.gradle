@@ -15,7 +15,10 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
+
+mainClassName = 'com.koval.jresolver.core.TestMain'
 
 group = 'com.koval'
 version = '0.0.1'
@@ -30,7 +33,13 @@ repositories {
 
 dependencies {
   compile 'org.springframework.boot:spring-boot-starter-web',
-          'com.atlassian.jira:jira-rest-java-client:1.2-m01'
+          'com.atlassian.jira:jira-rest-java-client:1.2-m01',
+          'org.deeplearning4j:deeplearning4j-core:0.8.0',
+          'org.deeplearning4j:deeplearning4j-nlp:0.8.0',
+          'org.nd4j:nd4j-native-platform:0.8.0',
+          'org.datavec:datavec-data-nlp:0.8.0'
+          //'org.slf4j:slf4j-simple:1.7.25',
+          //'org.slf4j:slf4j-api:1.7.25'
   runtime 'com.h2database:h2'
   testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
