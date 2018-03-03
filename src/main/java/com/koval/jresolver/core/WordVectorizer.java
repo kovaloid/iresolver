@@ -2,15 +2,14 @@ package com.koval.jresolver.core;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.bagofwords.vectorizer.TfidfVectorizer;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareFileSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareListSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIterator;
+import org.deeplearning4j.text.stopwords.StopWords;
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
-import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.deeplearning4j.util.SerializationUtils;
@@ -34,9 +33,9 @@ public class WordVectorizer {
   private final Map<Integer, List<String>> classes = new HashMap<>();
 
   public WordVectorizer() {
-    this.tokenPreprocessor = new CommonPreprocessor(); //new StemmingPreprocessor()
+    this.tokenPreprocessor = new StemmingPreprocessor();
     this.minWordFrequency = 1;
-    this.stopWords = new ArrayList<>();
+    this.stopWords = StopWords.getStopWords();
   }
 
   public WordVectorizer(TokenPreProcess tokenPreprocessor, int minWordFrequency, Collection<String> stopWords) {
