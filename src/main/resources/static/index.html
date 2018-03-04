@@ -79,12 +79,13 @@
             if (xhr.status != 200) {
                 document.getElementById('status-of-train').textContent = 'no connection';
             } else {
-                document.getElementById('status-of-train').textContent = 'train status: ' + xhr.responseText;
+                document.getElementById('status-of-train').textContent = 'train status complete: ' + xhr.responseText;
             }
         }
 
         window.setInterval(function(){
             check();
+            checkTrain();
         }, 1000);
     </script>
 </body>
