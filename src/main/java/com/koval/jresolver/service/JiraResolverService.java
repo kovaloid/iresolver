@@ -1,5 +1,9 @@
 package com.koval.jresolver.service;
 
+import com.koval.jresolver.core.ClassesFileCreator;
+import com.koval.jresolver.core.DataSetCreator;
+import com.koval.jresolver.core.MyClassifier;
+import com.koval.jresolver.core.WordVectorizer;
 import com.koval.jresolver.extraction.client.JiraClient;
 import com.koval.jresolver.extraction.client.impl.BasicJiraClient;
 import com.koval.jresolver.extraction.configuration.JiraExtractionProperties;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -23,6 +28,7 @@ public class JiraResolverService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraResolverService.class);
   private DataRetriever dataRetriever;
+  private AtomicBoolean isTrainingComplete = new AtomicBoolean(false);
 
   @PostConstruct
   public void init() throws URISyntaxException {
@@ -49,11 +55,43 @@ public class JiraResolverService {
     dataRetriever.start();
   }
 
+  public void stopExecution() {
+    dataRetriever.stop();
+  }
+
   public double getStatus() {
     if (dataRetriever == null) {
       return 0.0;
     }
     return dataRetriever.getStatus();
+  }
+
+  @Async
+  public void train() {
+    isTrainingComplete.set(false);
+    WordVectorizer wordVectorizer = new WordVectorizer();
+    wordVectorizer.createFromFile("raw.txt");
+
+    ClassesFileCreator classesFileCreator = new ClassesFileCreator(wordVectorizer);
+    classesFileCreator.createFilesWithPrefix("classes");
+
+    DataSetCreator dataSetCreator = new DataSetCreator(wordVectorizer);
+    dataSetCreator.create("raw.txt", "dataset.csv");
+
+    int batchSizeTraining = 3; //30;
+    int batchSizeTest = 5; //44;
+
+    int labelIndex = 0; //4; //index of column with class id
+    int classifierInputs = wordVectorizer.getVocabularSortedByIndex().size(); //4; //word vector length
+    int classifierOutputs = wordVectorizer.getClasses().get(0).size(); //3; //number of classes
+
+    MyClassifier cl = new MyClassifier(labelIndex, batchSizeTraining, batchSizeTest, classifierInputs, classifierOutputs);
+    cl.launch();
+    isTrainingComplete.set(true);
+  }
+
+  public boolean getTrainStatus() {
+    return isTrainingComplete.get();
   }
 
 }

@@ -17,6 +17,7 @@ public class BasicDataRetriever implements DataRetriever {
   private int startAt;
   private int delayAfterEveryRequest;
   private double status = 0.0;
+  private boolean isComplete = false;
 
   public BasicDataRetriever(JiraClient jiraClient, DataConsumer dataConsumer, JiraExtractionProperties jiraExtractionProperties) {
     this(jiraClient, dataConsumer, jiraExtractionProperties.getSearchJqlRequest(),
@@ -35,7 +36,8 @@ public class BasicDataRetriever implements DataRetriever {
 
   @Override
   public void start() {
-    while (true) {
+    isComplete = false;
+    while (!isComplete) {
       SearchResult searchResult = jiraClient.searchByJql(jql, maxResults, startAt);
 
       searchResult.getIssues().forEach((BasicIssue basicIssue) -> {
@@ -57,6 +59,11 @@ public class BasicDataRetriever implements DataRetriever {
       }
 
     }
+  }
+
+  @Override
+  public void stop() {
+    isComplete = true;
   }
 
   private void delay() {

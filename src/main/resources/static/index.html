@@ -54,7 +54,10 @@
             <input type="submit" value="Extract" />
         </div>
     </form>
+    <a href="/extraction/stop">Stop Extraction</a>
+    <a href="/core/train">Neural Network Train</a>
     <div id="status-of-extraction" style="border: 2px black solid; width: 300px; margin: 30px; padding: 5px;"></div>
+    <div id="status-of-train" style="border: 2px black solid; width: 300px; margin: 30px; padding: 5px;"></div>
     <script>
         function check() {
             var xhr = new XMLHttpRequest();
@@ -65,6 +68,18 @@
                 document.getElementById('status-of-extraction').textContent = 'no connection';
             } else {
                 document.getElementById('status-of-extraction').textContent = 'status: ' + parseFloat(xhr.responseText) * 100 + ' %';
+            }
+        }
+
+        function checkTrain() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/core/status', false);
+            xhr.send();
+
+            if (xhr.status != 200) {
+                document.getElementById('status-of-train').textContent = 'no connection';
+            } else {
+                document.getElementById('status-of-train').textContent = 'train status: ' + xhr.responseText;
             }
         }
 

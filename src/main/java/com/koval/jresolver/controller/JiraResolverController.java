@@ -33,9 +33,28 @@ public class JiraResolverController {
     return "redirect:/index.html";
   }
 
+  @RequestMapping(value= "/extraction/stop", method = RequestMethod.GET)
+  public String start() throws URISyntaxException {
+    service.stopExecution();
+    return "redirect:/";
+  }
+
   @RequestMapping("/extraction/status")
   @ResponseBody
   public double status() {
     return service.getStatus();
+  }
+
+
+  @RequestMapping(value= "/core/train", method = RequestMethod.GET)
+  public String train() {
+    service.train();
+    return "redirect:/";
+  }
+
+  @RequestMapping("/core/status")
+  @ResponseBody
+  public boolean trainStatus() {
+    return service.getTrainStatus();
   }
 }
