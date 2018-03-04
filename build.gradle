@@ -15,10 +15,11 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'application'
+//apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
-mainClassName = 'com.koval.jresolver.core.TestMain'
+//mainClassName = 'com.koval.jresolver.core.TestMain'
+//mainClassName = 'com.koval.jresolver.extraction.TestMain'
 
 group = 'com.koval'
 version = '0.0.1'

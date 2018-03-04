@@ -17,7 +17,7 @@ public class JiraResolverServiceTest {
 
   @Test
   public void execute() throws Exception {
-    service.execute("", "", "");
+    service.execute("https://issues.apache.org/jira", "project = AMQ", 5, 0, 3000);
   }
 
 }

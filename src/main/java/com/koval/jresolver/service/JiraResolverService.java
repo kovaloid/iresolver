@@ -1,84 +1,59 @@
 package com.koval.jresolver.service;
 
-import com.koval.jresolver.jira.bean.PreparedJiraIssue;
-import com.koval.jresolver.jira.client.BasicJiraClient;
-import com.koval.jresolver.jira.client.JiraClient;
-import com.koval.jresolver.jira.configuration.JiraExtractionProperties;
-import com.koval.jresolver.jira.configuration.JiraRequestProperties;
-import com.koval.jresolver.jira.process.JiraDataRetriever;
-import com.koval.jresolver.resolver.Consumer;
-import com.koval.jresolver.resolver.DataRetriever;
-import com.koval.jresolver.resolver.JiraConsumer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.koval.jresolver.extraction.client.JiraClient;
+import com.koval.jresolver.extraction.client.impl.BasicJiraClient;
+import com.koval.jresolver.extraction.configuration.JiraExtractionProperties;
+import com.koval.jresolver.extraction.deliver.DataConsumer;
+import com.koval.jresolver.extraction.deliver.impl.BasicDataConsumer;
+import com.koval.jresolver.extraction.issue.IssueHandler;
+import com.koval.jresolver.extraction.issue.impl.BasicIssueHandler;
+import com.koval.jresolver.extraction.process.DataRetriever;
+import com.koval.jresolver.extraction.process.impl.BasicDataRetriever;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Service
 public class JiraResolverService {
 
-  //private Consumer<PreparedJiraIssue> consumer;
+  private static final Logger LOGGER = LoggerFactory.getLogger(JiraResolverService.class);
+  private DataRetriever dataRetriever;
 
-  //@PostConstruct
-  //public void init() {
-  //  consumer = new JiraConsumer();
-  //}
-
-  //@Async
-/*  public void execute(String url, String username, String password) throws URISyntaxException {
-    System.out.println("Start retrieving...");
-    JiraClient client = new BasicJiraClient(url, username, password);
-    JiraRequestProperties request = new JiraRequestProperties()
-      .project("EAS")
-      .createdDate(new Date());
-    JiraExtractionProperties extraction = new JiraExtractionProperties()
-      .maxResults(3)
-      .startAt(0)
-      .delayAfterEveryMaxResults(5);
-    Consumer<PreparedJiraIssue> consumer = new JiraConsumer();
-
-    DataRetriever dataRetriever = new JiraDataRetriever(client, request, extraction, consumer);
-    dataRetriever.start();
-  }*/
-
-  private AtomicInteger progress = new AtomicInteger();
-  private AtomicInteger total = new AtomicInteger();
-
-  @Async
-  public void execute(String url, String username, String password) throws URISyntaxException, InterruptedException {
-
-
-    System.out.println("Start retrieving...");
-    JiraClient client = new BasicJiraClient(url, username, password);
-    JiraRequestProperties request = new JiraRequestProperties()
-      .project("EAS")
-      .createdDate(new Date());
-    JiraExtractionProperties extraction = new JiraExtractionProperties()
-      .maxResults(3)
-      .startAt(0)
-      .delayAfterEveryMaxResults(5);
-    Consumer<PreparedJiraIssue> consumer = new JiraConsumer(progress);
-
-    DataRetriever dataRetriever = new JiraDataRetriever(client, request, extraction, consumer);
-    total.set(dataRetriever.getTotal());
-    dataRetriever.start();
-
-
-
-
-    /*while (true) {
-      Thread.sleep(1000);
-      progress.addAndGet(1);
-    }*/
-
+  @PostConstruct
+  public void init() throws URISyntaxException {
+    LOGGER.info("Initialize JiraResolverService...");
   }
 
-  public int getStatus() {
-    return progress.get()/total.get();
+  @Async
+  public void execute(String url, String jql, int maxResults, int startAt, int delay) throws URISyntaxException {
+    LOGGER.info("Start retrieving...");
+
+    JiraClient jiraClient = new BasicJiraClient(url);
+
+    JiraExtractionProperties jiraExtractionProperties = new JiraExtractionProperties()
+      .searchJqlRequest(jql)
+      .maxResults(maxResults)
+      .startAt(startAt)
+      .delayAfterEveryRequest(delay);
+
+    IssueHandler issueHandler = new BasicIssueHandler();
+    DataConsumer dataConsumer = new BasicDataConsumer();
+
+    dataRetriever = new BasicDataRetriever(jiraClient, dataConsumer, jiraExtractionProperties);
+
+    dataRetriever.start();
+  }
+
+  public double getStatus() {
+    if (dataRetriever == null) {
+      return 0.0;
+    }
+    return dataRetriever.getStatus();
   }
 
 }

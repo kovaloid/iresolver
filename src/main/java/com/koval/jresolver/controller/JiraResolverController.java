@@ -18,17 +18,24 @@ public class JiraResolverController {
   @Autowired
   private JiraResolverService service;
 
-  @RequestMapping(value= "/trigger", method = RequestMethod.GET)
-  @ResponseBody
-  public void startWork(@RequestParam(value="url", required=false) String url,
-                        @RequestParam(value="user", required=false) String user,
-                        @RequestParam(value="pass", required=false) String pass) throws URISyntaxException, InterruptedException {
-    service.execute(url, user, pass);
+  @RequestMapping(value= "/extraction/start", method = RequestMethod.GET)
+  public String start(@RequestParam(value="url", required=false) String url,
+                      @RequestParam(value="jql", required=false) String jql,
+                      @RequestParam(value="maxResults", required=false) int maxResults,
+                      @RequestParam(value="startAt", required=false) int startAt,
+                      @RequestParam(value="delay", required=false) int delay) throws URISyntaxException {
+    LOGGER.info("URL: {}", url);
+    LOGGER.info("JQL: {}", jql);
+    LOGGER.info("MaxResults: {}", maxResults);
+    LOGGER.info("StartAt: {}", startAt);
+    LOGGER.info("Delay: {}", delay);
+    service.execute(url, jql, maxResults, startAt, delay);
+    return "redirect:/index.html";
   }
 
-  @RequestMapping("/status")
+  @RequestMapping("/extraction/status")
   @ResponseBody
-  int status() throws URISyntaxException {
+  public double status() {
     return service.getStatus();
   }
 }
