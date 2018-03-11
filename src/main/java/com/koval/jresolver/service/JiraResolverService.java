@@ -1,9 +1,9 @@
 package com.koval.jresolver.service;
 
-import com.koval.jresolver.core.ClassesFileCreator;
-import com.koval.jresolver.core.DataSetCreator;
-import com.koval.jresolver.core.MyClassifier;
-import com.koval.jresolver.core.WordVectorizer;
+import com.koval.jresolver.core.mlp.ClassesFileCreator;
+import com.koval.jresolver.core.mlp.DataSetCreator;
+import com.koval.jresolver.core.mlp.MyClassifier;
+import com.koval.jresolver.core.mlp.WordVectorizer;
 import com.koval.jresolver.extraction.client.JiraClient;
 import com.koval.jresolver.extraction.client.impl.BasicJiraClient;
 import com.koval.jresolver.extraction.configuration.JiraExtractionProperties;

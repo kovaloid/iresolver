@@ -1,5 +1,7 @@
-package com.koval.jresolver.core;
+package com.koval.jresolver.core.mlp;
 
+import com.koval.jresolver.core.StemmingPreprocessor;
+import com.koval.jresolver.core.Vectorizer;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.datavec.api.util.ClassPathResource;
@@ -22,7 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class WordVectorizer {
+public class WordVectorizer implements Vectorizer {
 
   private final static Logger LOGGER = LoggerFactory.getLogger(WordVectorizer.class);
 
@@ -33,9 +35,7 @@ public class WordVectorizer {
   private final Map<Integer, List<String>> classes = new HashMap<>();
 
   public WordVectorizer() {
-    this.tokenPreprocessor = new StemmingPreprocessor();
-    this.minWordFrequency = 1;
-    this.stopWords = StopWords.getStopWords();
+    this(new StemmingPreprocessor(), 1, StopWords.getStopWords());
   }
 
   public WordVectorizer(TokenPreProcess tokenPreprocessor, int minWordFrequency, Collection<String> stopWords) {
@@ -54,6 +54,16 @@ public class WordVectorizer {
     }
   }
 
+  @Override
+  public void createFromFile(File inputFile) {
+    try (InputStream inputStream = new FileInputStream(inputFile)) {
+      createFromInputStream(inputStream);
+    } catch (IOException e) {
+      LOGGER.error("Could not find file: " + inputFile.getAbsolutePath(), e);
+    }
+  }
+
+  @Override
   public void createFromInputStream(InputStream inputStream) {
     try {
       LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
@@ -90,22 +100,16 @@ public class WordVectorizer {
     vectorizer.fit();
   }
 
-  public void createFromFile(File inputFile) {
-    try (InputStream inputStream = new FileInputStream(inputFile)) {
-      createFromInputStream(inputStream);
-    } catch (IOException e) {
-      LOGGER.error("Could not find file: " + inputFile.getAbsolutePath(), e);
-    }
-  }
-
   public void createFromFile(String pathToInputFile) {
     createFromFile(new File(pathToInputFile));
   }
 
+  @Override
   public void save(String pathToSerializedFile) {
     SerializationUtils.saveObject(vectorizer, new File(pathToSerializedFile));
   }
 
+  @Override
   public void load(String pathToSerializedFile) {
     vectorizer = SerializationUtils.readObject(new File(pathToSerializedFile));
     TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();

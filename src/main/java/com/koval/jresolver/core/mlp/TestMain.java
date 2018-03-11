@@ -1,4 +1,4 @@
-package com.koval.jresolver.core;
+package com.koval.jresolver.core.mlp;
 
 
 public class TestMain {

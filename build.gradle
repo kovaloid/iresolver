@@ -18,6 +18,8 @@ apply plugin: 'eclipse'
 //apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
+
+//mainClassName = 'com.koval.jresolver.doc2vec.TestMain'
 //mainClassName = 'com.koval.jresolver.core.TestMain'
 //mainClassName = 'com.koval.jresolver.extraction.TestMain'
 
