@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier;
+package com.koval.jresolver.core;
 
 
 public interface ModelConstants {

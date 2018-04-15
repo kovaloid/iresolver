@@ -12,7 +12,9 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
 
@@ -22,54 +24,71 @@ sourceCompatibility = 1.8
 
 repositories {
   mavenCentral()
+  maven {
+    url 'https://m2proxy.atlassian.com/repository/public'
+  }
 }
 
 dependencies {
   compile 'org.springframework.boot:spring-boot-starter-web',
           project(':connector'),
           project(':classifier')
-          //'org.slf4j:slf4j-simple:1.7.25',
-          //'org.slf4j:slf4j-api:1.7.25'
   testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
-apply plugin: 'checkstyle'
-checkstyle {
-  configFile = rootProject.file('config/checkstyle.xml')
-  toolVersion = '6.17'
-  ignoreFailures = false
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'application'
 
-// Despite ignoreFailures=false, the build wonby default 't fail on CheckStyle warnings
-// https://issues.gradle.org/browse/GRADLE-2888
-tasks.withType(Checkstyle).each { checkstyleTask ->
-  checkstyleTask.doLast {
-    reports.all { report ->
-      def outputFile = report.destination
-      if (outputFile.exists() && outputFile.text.contains("<error ")) {
-        throw new GradleException("Found checkstyle issues in $outputFile")
-      }
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://m2proxy.atlassian.com/repository/public'
+        }
     }
-  }
-}
 
-apply plugin: 'pmd'
-pmd {
-  ruleSetFiles = rootProject.files('config/pmd.xml')
-  toolVersion = '5.4.1'
-  ignoreFailures = false
-}
+    dependencies {
+        testCompile 'junit:junit:4.11'
+    }
 
-apply plugin: 'findbugs'
-findbugs {
-  toolVersion = '3.0.1'
-  excludeFilter = rootProject.file('config/findbugs_filter.xml')
-  ignoreFailures = false
-}
+    apply plugin: 'checkstyle'
+    checkstyle {
+        configFile = rootProject.file('config/checkstyle.xml')
+        toolVersion = '8.1'
+        ignoreFailures = false
+    }
 
-tasks.withType(FindBugs) {
-  reports {
-    xml.enabled = false
-    html.enabled = true
-  }
+    tasks.withType(Checkstyle).each { checkstyleTask ->
+        checkstyleTask.doLast {
+            reports.all { report ->
+                def outputFile = report.destination
+                if (outputFile.exists() && outputFile.text.contains("<error ")) {
+                    throw new GradleException("Found checkstyle issues in $outputFile")
+                }
+            }
+        }
+    }
+
+    apply plugin: 'pmd'
+    pmd {
+        ruleSetFiles = rootProject.files('config/pmd.xml')
+        toolVersion = '5.4.1'
+        ignoreFailures = false
+    }
+
+    apply plugin: 'findbugs'
+    findbugs {
+        toolVersion = '3.0.1'
+        excludeFilter = rootProject.file('config/findbugs_filter.xml')
+        ignoreFailures = false
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
 }
