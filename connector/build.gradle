@@ -1,0 +1,17 @@
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'com.koval.jresolver.connector.TestMain'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://m2proxy.atlassian.com/repository/public'
+    }
+}
+
+dependencies {
+    compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'
+    testCompile 'junit:junit:4.11'
+}
