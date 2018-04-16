@@ -5,9 +5,14 @@ import java.util.List;
 
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
+import org.drools.core.impl.KnowledgeBaseFactory;
+import org.drools.core.marshalling.impl.ProtobufMessages;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
 
 
 public class TestMain {
@@ -20,6 +25,24 @@ public class TestMain {
     execute(kc);
   }
 
+/*
+  public static void ccccc() {
+    ProtobufMessages.KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+    KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+    for ( int i = 0; i < rules.length; i++ ) {
+      String ruleFile = rules[i];
+      System.out.println( "Loading file: " + ruleFile );
+      kbuilder.add( ResourceFactory.newClassPathResource( ruleFile,
+        RuleRunner.class ),
+        ResourceType.DRL );
+    }
+    Collection<KnowledgePackage> pkgs = kbuilder.getKnowledgePackages();
+    kbase.addKnowledgePackages( pkgs );
+    StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+  }*/
+
+
+
   public static void execute( KieContainer kc ) {
     // From the container, a session is created based on
     // its definition and configuration in the META-INF/kmodule.xml file
@@ -28,7 +51,10 @@ public class TestMain {
     // Once the session is created, the application can interact with it
     // In this case it is setting a global as defined in the
     // org/drools/examples/helloworld/HelloWorld.drl file
-    ksession.setGlobal("list", new ArrayList<Object>() );
+
+    List<Object> list = new ArrayList<>();
+
+    ksession.setGlobal("list", list );
 
     // The application can also setup listeners
     ksession.addEventListener( new DebugAgendaEventListener() );
@@ -49,6 +75,9 @@ public class TestMain {
 
     // and fire the rules
     ksession.fireAllRules();
+
+
+    System.out.println(list);
 
     // Remove comment if using logging
     // logger.close();

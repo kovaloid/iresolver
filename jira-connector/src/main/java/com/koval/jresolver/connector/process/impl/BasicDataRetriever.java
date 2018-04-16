@@ -4,7 +4,6 @@ import com.atlassian.jira.rest.client.domain.BasicIssue;
 import com.atlassian.jira.rest.client.domain.Issue;
 import com.atlassian.jira.rest.client.domain.SearchResult;
 import com.koval.jresolver.connector.client.JiraClient;
-import com.koval.jresolver.connector.configuration.JiraExtractionProperties;
 import com.koval.jresolver.connector.deliver.DataConsumer;
 import com.koval.jresolver.connector.process.DataRetriever;
 
@@ -18,12 +17,6 @@ public class BasicDataRetriever implements DataRetriever {
   private int delayAfterEveryRequest;
   private double status = 0.0;
   private boolean isComplete = false;
-
-  public BasicDataRetriever(JiraClient jiraClient, DataConsumer dataConsumer, JiraExtractionProperties jiraExtractionProperties) {
-    this(jiraClient, dataConsumer, jiraExtractionProperties.getSearchJqlRequest(),
-      jiraExtractionProperties.getMaxResults(), jiraExtractionProperties.getStartAt(),
-      jiraExtractionProperties.getDelayAfterEveryRequest());
-  }
 
   public BasicDataRetriever(JiraClient jiraClient, DataConsumer dataConsumer, String jql, int maxResults, int startAt, int delayAfterEveryRequest) {
     this.jiraClient = jiraClient;
