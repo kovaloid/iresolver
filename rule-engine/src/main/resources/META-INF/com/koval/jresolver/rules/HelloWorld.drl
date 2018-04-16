@@ -1,0 +1,24 @@
+
+package com.koval.jresolver.rules
+
+import com.koval.jresolver.rules.TestMain.Message;
+
+global java.util.List list
+
+rule "Hello World"
+    dialect "mvel"
+    when
+        m : Message( status == Message.HELLO, message : message )
+    then
+        System.out.println( message );
+    modify ( m ) { message = "Goodbye world",
+                   status = Message.GOODBYE };
+end
+
+rule "Good Bye"
+    dialect "java"
+    when
+        Message( status == Message.GOODBYE, message : message )
+    then
+        System.out.println( message );
+end

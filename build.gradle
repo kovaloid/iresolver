@@ -27,11 +27,14 @@ repositories {
   maven {
     url 'https://m2proxy.atlassian.com/repository/public'
   }
+  maven {
+    url 'http://repository.jboss.org/nexus/content/groups/public-jboss'
+  }
 }
 
 dependencies {
   compile 'org.springframework.boot:spring-boot-starter-web',
-          project(':connector'),
+          project(':jira-connector'),
           project(':classifier')
   testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -42,10 +45,17 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'application'
 
+    group = 'com.koval'
+    version = '0.0.1'
+    sourceCompatibility = 1.8
+
     repositories {
         mavenCentral()
         maven {
             url 'https://m2proxy.atlassian.com/repository/public'
+        }
+        maven {
+            url 'http://repository.jboss.org/nexus/content/groups/public-jboss'
         }
     }
 

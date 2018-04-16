@@ -1,0 +1,12 @@
+
+mainClassName = 'com.koval.jresolver.rules.TestMain'
+
+ext {
+  droolsVersion = '7.7.0.Final'
+}
+
+dependencies {
+  compile "org.kie:kie-api:$droolsVersion"
+  compile "org.drools:drools-core:$droolsVersion"
+  compile "org.drools:drools-compiler:$droolsVersion"
+}
