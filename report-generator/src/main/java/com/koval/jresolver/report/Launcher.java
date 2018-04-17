@@ -1,5 +1,7 @@
 package com.koval.jresolver.report;
 
+import java.util.List;
+
 import com.atlassian.jira.rest.client.domain.Issue;
 import com.koval.jresolver.classifier.Doc2vecClassifier;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
@@ -8,13 +10,16 @@ import com.koval.jresolver.connector.configuration.JiraProperties;
 import com.koval.jresolver.rules.RuleEngine;
 import com.koval.jresolver.rules.RulesResult;
 
-import java.util.List;
 
-public class Launcher {
+public final class Launcher {
 
   private static JiraConnector jiraConnector;
   private static Doc2vecClassifier doc2vecClassifier;
   private static RuleEngine ruleEngine = new RuleEngine();
+
+  private Launcher() {
+
+  }
 
   public static void main(String[] args) throws Exception {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
@@ -24,11 +29,11 @@ public class Launcher {
     generate();
   }
 
-  public static void configure() {
+  private static void configure() {
     doc2vecClassifier.configure();
   }
 
-  public static void generate() throws Exception {
+  private static void generate() throws Exception {
     List<Issue> actualIssues = jiraConnector.getActualIssues();
     System.out.println("Retrieving actual issues completed");
     TotalResults totalResults = new TotalResults();

@@ -20,8 +20,8 @@ public class RulesResult {
 
   @Override
   public String toString() {
-    return "RulesResult{" +
-        "advices=" + advices +
-        '}';
+    return "RulesResult{"
+        + "advices=" + advices
+        + '}';
   }
 }

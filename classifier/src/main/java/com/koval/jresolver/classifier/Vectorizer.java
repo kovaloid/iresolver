@@ -1,7 +1,5 @@
 package com.koval.jresolver.classifier;
 
-import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
-
 import java.io.File;
 import java.io.InputStream;
 

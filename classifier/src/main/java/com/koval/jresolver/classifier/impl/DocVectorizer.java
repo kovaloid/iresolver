@@ -1,7 +1,9 @@
 package com.koval.jresolver.classifier.impl;
 
-import com.koval.jresolver.classifier.impl.StemmingPreprocessor;
-import com.koval.jresolver.classifier.Vectorizer;
+import java.io.*;
+import java.util.Collection;
+import java.util.List;
+
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
@@ -19,9 +21,7 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.Collection;
-import java.util.List;
+import com.koval.jresolver.classifier.Vectorizer;
 
 
 public class DocVectorizer implements Vectorizer {
@@ -51,13 +51,13 @@ public class DocVectorizer implements Vectorizer {
       LOGGER.error("Could not find file: " + inputFile.getAbsolutePath(), e);
     }
   }
-  
+
   public void createFromDataset(String datasetFileName) {
-	  try (InputStream inputStream = DocVectorizer.class.getResourceAsStream(datasetFileName)) {
-	      createFromInputStream(inputStream);
-	  } catch (IOException e) {
-	      LOGGER.error("Could not find dataset: " + datasetFileName, e);
-	  }
+    try (InputStream inputStream = DocVectorizer.class.getResourceAsStream(datasetFileName)) {
+      createFromInputStream(inputStream);
+    } catch (IOException e) {
+      LOGGER.error("Could not find dataset: " + datasetFileName, e);
+    }
   }
 
   @Override

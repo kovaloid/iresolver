@@ -1,5 +1,10 @@
 package com.koval.jresolver.classifier;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.atlassian.jira.rest.client.domain.Issue;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
 import com.koval.jresolver.classifier.impl.DocVectorizer;
@@ -8,18 +13,13 @@ import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 
 public class Doc2vecClassifier {
 
-  private final static String DATASET_FILE_NAME = "dataset.txt";
-  private final static String VECTOR_MODEL_FILE_NAME = "vectors.model";
-  private final static int NUMBER_OF_NEAREST_LABELS = 10;
-	
+  private static final String DATASET_FILE_NAME = "dataset.txt";
+  private static final String VECTOR_MODEL_FILE_NAME = "vectors.model";
+  private static final int NUMBER_OF_NEAREST_LABELS = 10;
+
   private DocVectorizer docVectorizer = new DocVectorizer();
   private JiraConnector jiraConnector;
   private JiraClient jiraClient;
@@ -29,7 +29,7 @@ public class Doc2vecClassifier {
 	  jiraConnector = new JiraConnector(jiraProperties);
 	  jiraClient = new BasicJiraClient(jiraProperties.getUrl());
   }
-  
+
   public void configure() {
 	  jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
 	  docVectorizer.createFromDataset(DATASET_FILE_NAME);

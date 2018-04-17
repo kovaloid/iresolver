@@ -1,19 +1,13 @@
 package com.koval.jresolver.classifier;
 
-import com.atlassian.jira.rest.client.domain.BasicIssue;
-import com.atlassian.jira.rest.client.domain.Issue;
-import com.koval.jresolver.classifier.impl.ClassifierResult;
-import com.koval.jresolver.classifier.impl.DocVectorizer;
-
 
 public class Launcher {
 
   public static void main(String[] args) throws Exception {
-	  
 	  Doc2vecClassifier classifier = new Doc2vecClassifier();
 	  classifier.configure();
-	  Issue issue = (Issue) new BasicIssue(null, null, null);
-	  ClassifierResult res = classifier.execute(issue);
+	  //Issue issue = (Issue) new BasicIssue(null, null, null);
+	  //ClassifierResult res = classifier.execute(issue);
 	  
 	  
     //DocVectorizer docVectorizer = new DocVectorizer();

@@ -1,11 +1,13 @@
 package com.koval.jresolver.rules;
 
-import com.atlassian.jira.rest.client.domain.Issue;
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+
+import com.atlassian.jira.rest.client.domain.Issue;
+
 
 public class RuleEngine {
 
