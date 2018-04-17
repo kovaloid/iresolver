@@ -53,8 +53,10 @@ public class TestMain {
     // org/drools/examples/helloworld/HelloWorld.drl file
 
     List<Object> list = new ArrayList<>();
+    List<String> recommends = new ArrayList<>();
 
     ksession.setGlobal("list", list );
+    ksession.setGlobal("recommends", recommends );
 
     // The application can also setup listeners
     ksession.addEventListener( new DebugAgendaEventListener() );
@@ -71,13 +73,21 @@ public class TestMain {
     final Message message = new Message();
     message.setMessage( "Hello World" );
     message.setStatus( Message.HELLO );
+    
+    final TestIssue testIssue = new TestIssue();
+    testIssue.setDescription("33");
+    
+    
     ksession.insert( message );
+    ksession.insert( testIssue );
 
     // and fire the rules
     ksession.fireAllRules();
 
 
     System.out.println(list);
+    
+    System.out.println(recommends);
 
     // Remove comment if using logging
     // logger.close();

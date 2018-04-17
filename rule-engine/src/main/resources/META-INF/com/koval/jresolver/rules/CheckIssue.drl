@@ -1,0 +1,15 @@
+
+package com.koval.jresolver.rules
+
+import com.koval.jresolver.rules.TestIssue;
+
+global java.util.List recommends
+
+rule "Claim more information"
+    dialect "mvel"
+    when
+        m : TestIssue( description.length < 5 )
+    then
+        System.out.println("need more info");
+        recommends.add("need more info")
+end
