@@ -1,16 +1,8 @@
 package com.koval.jresolver.service;
 
-import com.koval.jresolver.classifier.mlp.ClassesFileCreator;
-import com.koval.jresolver.classifier.mlp.DataSetCreator;
-import com.koval.jresolver.classifier.mlp.MyClassifier;
-import com.koval.jresolver.classifier.mlp.WordVectorizer;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.configuration.JiraExtractionProperties;
 import com.koval.jresolver.connector.deliver.DataConsumer;
-import com.koval.jresolver.connector.deliver.impl.BasicDataConsumer;
-import com.koval.jresolver.connector.issue.IssueHandler;
-import com.koval.jresolver.connector.issue.impl.BasicIssueHandler;
 import com.koval.jresolver.connector.process.DataRetriever;
 import com.koval.jresolver.connector.process.impl.BasicDataRetriever;
 import org.slf4j.Logger;
@@ -41,7 +33,7 @@ public class JiraResolverService {
 
     JiraClient jiraClient = new BasicJiraClient(url);
 
-    JiraExtractionProperties jiraExtractionProperties = new JiraExtractionProperties()
+    /*JiraExtractionProperties jiraExtractionProperties = new JiraExtractionProperties()
       .searchJqlRequest(jql)
       .maxResults(maxResults)
       .startAt(startAt)
@@ -52,7 +44,7 @@ public class JiraResolverService {
 
     dataRetriever = new BasicDataRetriever(jiraClient, dataConsumer, jiraExtractionProperties);
 
-    dataRetriever.start();
+    dataRetriever.start();*/
   }
 
   public void stopExecution() {
@@ -69,7 +61,7 @@ public class JiraResolverService {
   @Async
   public void train() {
     isTrainingComplete.set(false);
-    WordVectorizer wordVectorizer = new WordVectorizer();
+    /*WordVectorizer wordVectorizer = new WordVectorizer();
     wordVectorizer.createFromFile("raw.txt");
 
     ClassesFileCreator classesFileCreator = new ClassesFileCreator(wordVectorizer);
@@ -87,7 +79,7 @@ public class JiraResolverService {
 
     MyClassifier cl = new MyClassifier(labelIndex, batchSizeTraining, batchSizeTest, classifierInputs, classifierOutputs);
     cl.launch();
-    isTrainingComplete.set(true);
+    isTrainingComplete.set(true);*/
   }
 
   public boolean getTrainStatus() {

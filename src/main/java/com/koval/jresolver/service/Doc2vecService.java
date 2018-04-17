@@ -1,7 +1,7 @@
 package com.koval.jresolver.service;
 
 import com.koval.jresolver.core.ModelConstants;
-import com.koval.jresolver.classifier.doc2vec.DocVectorizer;
+import com.koval.jresolver.classifier.impl.DocVectorizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;

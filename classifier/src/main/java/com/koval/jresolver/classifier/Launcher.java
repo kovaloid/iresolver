@@ -1,10 +1,9 @@
-package com.koval.jresolver.classifier.doc2vec;
+package com.koval.jresolver.classifier;
+
+import com.koval.jresolver.classifier.impl.DocVectorizer;
 
 
-import com.koval.jresolver.connector.client.JiraClient;
-import com.koval.jresolver.connector.client.impl.BasicJiraClient;
-
-public class TestMain {
+public class Launcher {
 
   public static void main(String[] args) throws Exception {
     DocVectorizer docVectorizer = new DocVectorizer();

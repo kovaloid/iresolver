@@ -1,6 +1,6 @@
-package com.koval.jresolver.classifier.doc2vec;
+package com.koval.jresolver.classifier.impl;
 
-import com.koval.jresolver.classifier.StemmingPreprocessor;
+import com.koval.jresolver.classifier.impl.StemmingPreprocessor;
 import com.koval.jresolver.classifier.Vectorizer;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -50,6 +50,14 @@ public class DocVectorizer implements Vectorizer {
     } catch (IOException e) {
       LOGGER.error("Could not find file: " + inputFile.getAbsolutePath(), e);
     }
+  }
+  
+  public void createFromDataset(String datasetFileName) {
+	  try (InputStream inputStream = DocVectorizer.class.getResourceAsStream(datasetFileName)) {
+	      createFromInputStream(inputStream);
+	  } catch (IOException e) {
+	      LOGGER.error("Could not find dataset: " + datasetFileName, e);
+	  }
   }
 
   @Override

@@ -6,6 +6,7 @@ ext {
 }
 
 dependencies {
+  compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'
   compile "org.kie:kie-api:$droolsVersion"
   compile "org.drools:drools-core:$droolsVersion"
   compile "org.drools:drools-compiler:$droolsVersion"

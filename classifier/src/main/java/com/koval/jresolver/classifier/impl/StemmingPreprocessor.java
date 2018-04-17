@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier;
+package com.koval.jresolver.classifier.impl;
 
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.tartarus.snowball.ext.PorterStemmer;
@@ -7,7 +7,7 @@ import org.tartarus.snowball.ext.PorterStemmer;
 public class StemmingPreprocessor extends CommonPreprocessor {
 
   @Override
-  public  String preProcess(String token) {
+  public String preProcess(String token) {
     String prep = super.preProcess(token);
     PorterStemmer stemmer = new PorterStemmer();
     stemmer.setCurrent(prep);
