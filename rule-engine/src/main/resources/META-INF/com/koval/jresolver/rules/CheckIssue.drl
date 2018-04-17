@@ -3,13 +3,13 @@ package com.koval.jresolver.rules
 
 import com.koval.jresolver.rules.TestIssue;
 
-global java.util.List recommends
+global com.koval.jresolver.rules.RulesResult results
 
 rule "Claim more information"
     dialect "mvel"
     when
-        m : TestIssue( description.length < 5 )
+        m : TestIssue( description.length < 5, something.size() == 0 )
     then
         System.out.println("need more info");
-        recommends.add("need more info")
+        results.putAdvice("need more info");
 end

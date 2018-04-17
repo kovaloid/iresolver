@@ -6,4 +6,8 @@
     <ksession name="HelloWorldKS"/>
   </kbase>
 
+  <kbase packages="rules">
+    <ksession name="JiraRules"/>
+  </kbase>
+
 </kmodule>

@@ -45,9 +45,11 @@ public class BasicDataRetriever implements DataRetriever {
 
       startAt += maxResults;
       setStatus(searchResult);
-      if (searchResult.getStartIndex() > searchResult.getTotal()) {
+      if (searchResult.getStartIndex() + maxResults > searchResult.getTotal()) {
+        System.out.println("break retrieving issues");
         break;
       } else {
+        System.out.println(startAt + " " + maxResults);
         delay();
       }
 

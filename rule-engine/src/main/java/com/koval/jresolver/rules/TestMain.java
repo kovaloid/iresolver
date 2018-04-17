@@ -1,5 +1,6 @@
 package com.koval.jresolver.rules;
 
+import com.atlassian.jira.rest.client.domain.Issue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,10 +54,10 @@ public class TestMain {
     // org/drools/examples/helloworld/HelloWorld.drl file
 
     List<Object> list = new ArrayList<>();
-    List<String> recommends = new ArrayList<>();
+    RulesResult results = new RulesResult();
 
     ksession.setGlobal("list", list );
-    ksession.setGlobal("recommends", recommends );
+    ksession.setGlobal("results", results );
 
     // The application can also setup listeners
     ksession.addEventListener( new DebugAgendaEventListener() );
@@ -76,8 +77,10 @@ public class TestMain {
     
     final TestIssue testIssue = new TestIssue();
     testIssue.setDescription("33");
-    
-    
+    testIssue.setSomething(new ArrayList<>());
+
+
+
     ksession.insert( message );
     ksession.insert( testIssue );
 
@@ -87,7 +90,7 @@ public class TestMain {
 
     System.out.println(list);
     
-    System.out.println(recommends);
+    System.out.println(results);
 
     // Remove comment if using logging
     // logger.close();

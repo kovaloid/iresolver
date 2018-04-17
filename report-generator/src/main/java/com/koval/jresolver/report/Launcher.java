@@ -2,9 +2,9 @@ package com.koval.jresolver.report;
 
 import com.atlassian.jira.rest.client.domain.Issue;
 import com.koval.jresolver.classifier.Doc2vecClassifier;
-import com.koval.jresolver.classifier.doc2vec.DocVectorizer;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
 import com.koval.jresolver.connector.JiraConnector;
+import com.koval.jresolver.connector.configuration.JiraProperties;
 import com.koval.jresolver.rules.RuleEngine;
 import com.koval.jresolver.rules.RulesResult;
 
@@ -12,11 +12,14 @@ import java.util.List;
 
 public class Launcher {
 
-  private static JiraConnector jiraConnector = new JiraConnector(null);
-  private static Doc2vecClassifier doc2vecClassifier = new Doc2vecClassifier();
+  private static JiraConnector jiraConnector;
+  private static Doc2vecClassifier doc2vecClassifier;
   private static RuleEngine ruleEngine = new RuleEngine();
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
+    JiraProperties jiraProperties = new JiraProperties("connector.properties");
+    jiraConnector = new JiraConnector(jiraProperties);
+    doc2vecClassifier = new Doc2vecClassifier();
     configure();
     generate();
   }
@@ -25,14 +28,15 @@ public class Launcher {
     doc2vecClassifier.configure();
   }
 
-  public static void generate() {
+  public static void generate() throws Exception {
     List<Issue> actualIssues = jiraConnector.getActualIssues();
+    System.out.println("Retrieving actual issues completed");
     TotalResults totalResults = new TotalResults();
 
-    for (int i = 0; i < actualIssues.size(); i++) {
-      ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssues.get(i));
-      RulesResult ruleResult = ruleEngine.execute(actualIssues.get(i));
-      totalResults.add(actualIssues.get(i), classifierResult, ruleResult);
+    for (Issue actualIssue : actualIssues) {
+      ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
+      RulesResult ruleResult = ruleEngine.execute(actualIssue);
+      totalResults.add(actualIssue, classifierResult, ruleResult);
     }
   }
 
