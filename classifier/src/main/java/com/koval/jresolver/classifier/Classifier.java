@@ -7,6 +7,7 @@ import com.koval.jresolver.classifier.impl.ClassifierResult;
 
 
 public interface Classifier {
+  void prepare();
   void configure();
   ClassifierResult execute(Issue actualIssue) throws URISyntaxException;
 }

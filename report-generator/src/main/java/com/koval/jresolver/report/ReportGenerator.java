@@ -1,5 +1,5 @@
 package com.koval.jresolver.report;
 
 public interface ReportGenerator {
-  void generate();
+  void generate() throws Exception;
 }

@@ -18,7 +18,7 @@ import com.koval.jresolver.connector.configuration.JiraProperties;
 public class Doc2vecClassifier implements Classifier {
 
   private static final String DATASET_FILE_NAME = "dataset.txt";
-  private static final String VECTOR_MODEL_FILE_NAME = "vectors.model";
+  private static final String VECTOR_MODEL_FILE_NAME = "vectors.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private DocVectorizer docVectorizer = new DocVectorizer();
@@ -32,8 +32,13 @@ public class Doc2vecClassifier implements Classifier {
   }
 
   @Override
+  public void prepare() {
+    jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
+  }
+
+  @Override
   public void configure() {
-	  jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
+	  //jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
 	  docVectorizer.createFromDataset(DATASET_FILE_NAME);
 	  docVectorizer.save(VECTOR_MODEL_FILE_NAME);
   }
@@ -45,17 +50,23 @@ public class Doc2vecClassifier implements Classifier {
     List<String> labels = new ArrayList<>();
     List<String> users = new ArrayList<>();
     List<String> attachments = new ArrayList<>();
+
+    System.out.println("Nearest issues: " + keys);
     keys.forEach((key) -> {
-      Issue issue = jiraClient.getIssueByKey(key);
+      Issue issue = jiraClient.getIssueByKey(key.trim());
       labels.addAll(issue.getLabels());
-      users.add(issue.getAssignee().getName());
-      users.add(issue.getReporter().getName());
+      if (issue.getAssignee() != null) {
+        users.add(issue.getAssignee().getName());
+      }
+      if (issue.getReporter() != null) {
+        users.add(issue.getReporter().getName());
+      }
       issue.getComments().forEach((comment) -> {
-    	  users.add(comment.getAuthor().getName());
+        if (comment.getAuthor() != null) {
+          users.add(comment.getAuthor().getName());
+        }
       });
-      issue.getAttachments().forEach((attachment) -> {
-    	  attachments.add(attachment.getFilename());
-      });
+      issue.getAttachments().forEach((attachment) -> attachments.add(attachment.getFilename()));
     });
     ClassifierResult result = new ClassifierResult();
     result.setIssues(keys);

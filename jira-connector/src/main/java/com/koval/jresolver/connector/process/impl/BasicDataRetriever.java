@@ -1,5 +1,7 @@
 package com.koval.jresolver.connector.process.impl;
 
+import java.util.Iterator;
+
 import com.atlassian.jira.rest.client.domain.BasicIssue;
 import com.atlassian.jira.rest.client.domain.Issue;
 import com.atlassian.jira.rest.client.domain.SearchResult;
@@ -18,6 +20,8 @@ public class BasicDataRetriever implements DataRetriever {
   private double status = 0.0;
   private boolean isComplete = false;
 
+  private int maxIssues = 10;
+
   public BasicDataRetriever(JiraClient jiraClient, DataConsumer dataConsumer, String jql, int maxResults, int startAt, int delayAfterEveryRequest) {
     this.jiraClient = jiraClient;
     this.dataConsumer = dataConsumer;
@@ -29,31 +33,38 @@ public class BasicDataRetriever implements DataRetriever {
 
   @Override
   public void start() {
+    status = 0.0;
     isComplete = false;
+    System.out.println("Receiving data started.");
     while (!isComplete) {
       SearchResult searchResult = jiraClient.searchByJql(jql, maxResults, startAt);
 
-      searchResult.getIssues().forEach((BasicIssue basicIssue) -> {
-        Issue issue = jiraClient.getIssueByKey(basicIssue.getKey());
-        dataConsumer.consume(issue);
-        System.out.println("--------------------");
-        System.out.println(searchResult.getStartIndex());
-        System.out.println(searchResult.getMaxResults());
-        System.out.println(searchResult.getTotal());
-        System.out.println("--------------------");
-      });
+      Iterator<? extends BasicIssue> issueIterator = searchResult.getIssues().iterator();
 
-      startAt += maxResults;
-      setStatus(searchResult);
-      if (searchResult.getStartIndex() + maxResults > searchResult.getTotal()) {
-        System.out.println("break retrieving issues");
+      if (!issueIterator.hasNext()) {
+        System.out.println("All data was collected. Stop receiving.");
         break;
-      } else {
-        System.out.println(startAt + " " + maxResults);
-        delay();
       }
 
+      int index = 0;
+      while (issueIterator.hasNext()) {
+        BasicIssue basicIssue = issueIterator.next();
+        Issue issue = jiraClient.getIssueByKey(basicIssue.getKey());
+        dataConsumer.consume(issue);
+        index++;
+        System.out.println("Progress: " + (startAt + index) + "/" + searchResult.getTotal() + " Issue: " + issue.getKey());
+        if (startAt + index >= maxIssues) {
+          System.out.println("Max issues number was reached. Stop receiving.");
+          isComplete = true;
+          break;
+        }
+      }
+
+      setStatus((double) (startAt + index)/searchResult.getTotal());
+      startAt += maxResults;
+      delay();
     }
+    System.out.println("Receiving data stopped.");
   }
 
   @Override
@@ -70,8 +81,8 @@ public class BasicDataRetriever implements DataRetriever {
     }
   }
 
-  private void setStatus(SearchResult searchResult) {
-    status = (double) searchResult.getStartIndex() / searchResult.getTotal();
+  private void setStatus(double status) {
+    this.status = status;
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.koval.jresolver.classifier.impl;
 import java.io.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
