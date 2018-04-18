@@ -1,5 +1,5 @@
 
-//mainClassName = 'com.koval.jresolver.rules.TestMain'
+mainClassName = 'com.koval.jresolver.rules.TestMain'
 
 ext {
   droolsVersion = '7.7.0.Final'

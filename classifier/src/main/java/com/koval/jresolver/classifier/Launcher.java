@@ -1,28 +1,42 @@
 package com.koval.jresolver.classifier;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class Launcher {
 
-  public static void main(String[] args) throws Exception {
-	  Doc2vecClassifier classifier = new Doc2vecClassifier();
-	  classifier.configure();
-	  //Issue issue = (Issue) new BasicIssue(null, null, null);
-	  //ClassifierResult res = classifier.execute(issue);
-	  
-	  
-    //DocVectorizer docVectorizer = new DocVectorizer();
-    //docVectorizer.createFromResourceWithoutLabels("/raw_sentences.txt");
-    //System.out.println(docVectorizer.getNearestLabels("This is my way .", 10));
+  private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
-    //Doc2vec is an extension of word2vec that
-    //learns to correlate labels and words rather than words with other words.
+  public static void main(String[] args) throws IOException, URISyntaxException {
+	  Classifier classifier = new Doc2vecClassifier();
 
-    //System.out.println("9836/12493 ('This is my house .'/'This is my world .') similarity: " + docVectorizer.getSimilarity("DOC_9835", "DOC_12492"));
-    //System.out.println("3721/16393 ('This is my way .'/'This is my work .') similarity: " + docVectorizer.getSimilarity("DOC_3720", "DOC_16392"));
-    //System.out.println("6348/3721 ('This is my case .'/'This is my way .') similarity: " + docVectorizer.getSimilarity("DOC_6347", "DOC_3720"));
-    //System.out.println("3721/9853 ('This is my way .'/'We now have one .') similarity: " + docVectorizer.getSimilarity("DOC_3720", "DOC_9852"));
-
+    if (args.length == 0) {
+      LOGGER.warn("No arguments. Please use 'prepare', 'configure' or 'predict'");
+    } else if (args.length == 1) {
+      switch (args[0]) {
+        case "prepare":
+          LOGGER.info("Create data set...");
+          classifier.prepare();
+          break;
+        case "configure":
+          LOGGER.warn("Train classifier...");
+          classifier.configure();
+          break;
+        case "predict":
+          LOGGER.warn("Predict...");
+          classifier.getVectorizer().getNearestLabels(args[1], 10);
+          break;
+        default:
+          LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'predict'");
+          break;
+      }
+    } else {
+      LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'predict'");
+    }
   }
 }

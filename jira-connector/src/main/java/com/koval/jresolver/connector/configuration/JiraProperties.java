@@ -10,42 +10,41 @@ import java.util.Properties;
 public class JiraProperties {
 
   private String url;
+  private String username;
+  private String password;
   private String historyJql;
   private String actualJql;
-  private String extractFromIssue;
-  private String issuesPerRequest;
-  private String delayBetweenRequests;
+  private int startAtIssue = 0;
+  private int issuesPerRequest = 10;
+  private int delayBetweenRequests = 3000;
+  private int maxIssues = 10;
+  private boolean appendToDataSet = true;
+  private String workFolder;
 
-  public JiraProperties() {
+  public JiraProperties(String url, String historyJql, String actualJql) {
+    this.url = url;
+    this.historyJql = historyJql;
+    this.actualJql = actualJql;
   }
 
-  public JiraProperties(String propertiesFileName) {
+  public JiraProperties(String propertiesFileName) throws IOException {
     Properties properties = new Properties();
     try (InputStream input = JiraConnector.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
-
       if (input == null) {
-        System.out.println("Could not find " + propertiesFileName);
-        return;
+        throw new IOException("Could not find properties file: " + propertiesFileName);
       }
-
       properties.load(input);
-
-      //get the property value and print it out
-      //System.out.println(properties.getProperty("url"));
-      //System.out.println(properties.getProperty("historyJql"));
-      //System.out.println(properties.getProperty("actualJql"));
-      //System.out.println(properties.getProperty("extractFromIssue"));
-      //System.out.println(properties.getProperty("issuesPerRequest"));
-      //System.out.println(properties.getProperty("delayBetweenRequests"));
-
       url = properties.getProperty("url");
+      username = properties.getProperty("username");
+      password = properties.getProperty("password");
       historyJql = properties.getProperty("historyJql");
       actualJql = properties.getProperty("actualJql");
-      extractFromIssue = properties.getProperty("extractFromIssue");
-      issuesPerRequest = properties.getProperty("issuesPerRequest");
-      delayBetweenRequests = properties.getProperty("delayBetweenRequests");
-    } catch (IOException ex) {
-      ex.printStackTrace();
+      startAtIssue = Integer.valueOf(properties.getProperty("startAtIssue"));
+      issuesPerRequest = Integer.valueOf(properties.getProperty("issuesPerRequest"));
+      delayBetweenRequests = Integer.valueOf(properties.getProperty("delayBetweenRequests"));
+      maxIssues = Integer.valueOf(properties.getProperty("maxIssues"));
+      appendToDataSet = Boolean.valueOf(properties.getProperty("appendToDataSet"));
+      workFolder = properties.getProperty("workFolder");
     }
   }
 
@@ -55,6 +54,22 @@ public class JiraProperties {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getHistoryJql() {
@@ -73,27 +88,55 @@ public class JiraProperties {
     this.actualJql = actualJql;
   }
 
-  public String getIssuesPerRequest() {
+  public int getIssuesPerRequest() {
     return issuesPerRequest;
   }
 
-  public void setIssuesPerRequest(String issuesPerRequest) {
+  public void setIssuesPerRequest(int issuesPerRequest) {
     this.issuesPerRequest = issuesPerRequest;
   }
 
-  public String getExtractFromIssue() {
-    return extractFromIssue;
+  public int getStartAtIssue() {
+    return startAtIssue;
   }
 
-  public void setExtractFromIssue(String extractFromIssue) {
-    this.extractFromIssue = extractFromIssue;
+  public void setStartAtIssue(int startAtIssue) {
+    this.startAtIssue = startAtIssue;
   }
 
-  public String getDelayBetweenRequests() {
+  public int getDelayBetweenRequests() {
     return delayBetweenRequests;
   }
 
-  public void setDelayBetweenRequests(String delayBetweenRequests) {
+  public void setDelayBetweenRequests(int delayBetweenRequests) {
     this.delayBetweenRequests = delayBetweenRequests;
+  }
+
+  public int getMaxIssues() {
+    return maxIssues;
+  }
+
+  public void setMaxIssues(int maxIssues) {
+    this.maxIssues = maxIssues;
+  }
+
+  public boolean isAppendToDataSet() {
+    return appendToDataSet;
+  }
+
+  public void setAppendToDataSet(boolean appendToDataSet) {
+    this.appendToDataSet = appendToDataSet;
+  }
+
+  public boolean isAnonymous() {
+    return username == null || password == null || username.isEmpty() || password.isEmpty();
+  }
+
+  public String getWorkFolder() {
+    return workFolder;
+  }
+
+  public void setWorkFolder(String workFolder) {
+    this.workFolder = workFolder;
   }
 }

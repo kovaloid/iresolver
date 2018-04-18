@@ -1,5 +1,6 @@
 
-//mainClassName = 'com.koval.jresolver.connector.Launcher'
+mainClassName = 'com.koval.jresolver.connector.Launcher'
+run.args = ['history']
 
 dependencies {
     compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'

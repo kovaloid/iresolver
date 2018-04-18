@@ -1,23 +1,33 @@
 package com.koval.jresolver.connector.deliver.impl;
 
-import com.atlassian.jira.rest.client.domain.Issue;
+import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.deliver.DataConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
 
 public class FileDataConsumer implements DataConsumer {
 
-  private File file;
+  private static final Logger LOGGER = LoggerFactory.getLogger(FileDataConsumer.class);
 
-  public FileDataConsumer(File file) {
-    this.file = file;
+  private File file;
+  private boolean isAppend;
+
+  public FileDataConsumer(String dataSetFileName) {
+    this(dataSetFileName, true);
+  }
+
+  public FileDataConsumer(String dataSetFileName, boolean isAppend) {
+    this.file = new File(dataSetFileName);
+    this.isAppend = isAppend;
   }
 
   @Override
-  public void consume(Issue issue) {
-    String key = "null";
-    String text = "null";
+  public void consume(JiraIssue issue) {
+    String key = "";
+    String text = "";
 
     if (issue.getKey() != null && !issue.getKey().isEmpty()) {
       key = issue.getKey();
@@ -26,8 +36,8 @@ public class FileDataConsumer implements DataConsumer {
       text = issue.getSummary() + " " + issue.getDescription().trim().replaceAll("[^A-Za-z0-9]", " ").replaceAll(" +", " ");
     }
 
-    //if (!user.isEmpty() && !label.isEmpty() && !text.isEmpty()) {
-      try (FileWriter fileWriter = new FileWriter(file, true);
+    if (!key.isEmpty() && !text.isEmpty()) {
+      try (FileWriter fileWriter = new FileWriter(file, isAppend);
            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
            PrintWriter out = new PrintWriter(bufferedWriter))
       {
@@ -35,8 +45,8 @@ public class FileDataConsumer implements DataConsumer {
         out.print(" | ");
         out.println(text);
       } catch (IOException e) {
-        e.printStackTrace();
+        LOGGER.error("Could not write issue: " + issue.getKey() + " in file: " + file.getName(), e);
       }
-    //}
+    }
   }
 }

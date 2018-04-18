@@ -1,21 +1,30 @@
 package com.koval.jresolver.connector.deliver.impl;
 
-import com.atlassian.jira.rest.client.domain.Issue;
+import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.deliver.DataConsumer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ListDataConsumer implements DataConsumer {
 
-  private List<Issue> list;
+  private List<JiraIssue> issueList;
 
-  public ListDataConsumer(List<Issue> list) {
-    this.list = list;
+  public ListDataConsumer() {
+    this.issueList = new ArrayList<>();
+  }
+
+  public ListDataConsumer(List<JiraIssue> issueList) {
+    this.issueList = issueList;
   }
 
   @Override
-  public void consume(Issue issue) {
-    list.add(issue);
+  public void consume(JiraIssue issue) {
+    issueList.add(issue);
+  }
+
+  public List<JiraIssue> getIssues() {
+    return issueList;
   }
 }

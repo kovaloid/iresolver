@@ -1,8 +1,8 @@
 package com.koval.jresolver.connector.deliver;
 
-import com.atlassian.jira.rest.client.domain.Issue;
+import com.koval.jresolver.connector.bean.JiraIssue;
 
 
 public interface DataConsumer {
-  void consume(Issue issue);
+  void consume(JiraIssue issue);
 }

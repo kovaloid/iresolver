@@ -53,21 +53,23 @@ public class DocVectorizer implements Vectorizer {
     }
   }
 
-  public void createFromDataset(String datasetFileName) {
+  public void createFromDataset(String datasetFileName) throws IOException {
     try (InputStream inputStream = DocVectorizer.class.getClassLoader().getResourceAsStream(datasetFileName)) {
       createFromInputStream(inputStream);
     } catch (IOException e) {
       LOGGER.error("Could not find dataset: " + datasetFileName, e);
+      throw e;
     }
   }
 
   @Override
-  public void createFromInputStream(InputStream inputStream) {
+  public void createFromInputStream(InputStream inputStream) throws IOException {
     try {
       LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
       createVectorizerWithIterator(iterator);
     } catch (IOException e) {
       LOGGER.error("Could not create vectorizer from stream", e);
+      throw e;
     }
   }
 
@@ -130,6 +132,7 @@ public class DocVectorizer implements Vectorizer {
     return paragraphVectors.similarity(label1, label2);
   }
 
+  @Override
   public Collection<String> getNearestLabels(String rawText, int topN) {
     return paragraphVectors.nearestLabels(rawText, topN);
   }

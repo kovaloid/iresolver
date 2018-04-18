@@ -1,5 +1,8 @@
 
-//mainClassName = 'com.koval.jresolver.classifier.Launcher'
+mainClassName = 'com.koval.jresolver.classifier.Launcher'
+run {
+  args = ['configure']
+}
 
 dependencies {
     compile 'org.deeplearning4j:deeplearning4j-core:0.8.0',

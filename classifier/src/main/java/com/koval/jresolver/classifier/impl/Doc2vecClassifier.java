@@ -1,15 +1,15 @@
 package com.koval.jresolver.classifier.impl;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.atlassian.jira.rest.client.domain.Issue;
 import com.koval.jresolver.classifier.Classifier;
-import com.koval.jresolver.classifier.impl.ClassifierResult;
-import com.koval.jresolver.classifier.impl.DocVectorizer;
+import com.koval.jresolver.classifier.Vectorizer;
 import com.koval.jresolver.connector.JiraConnector;
+import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
@@ -25,7 +25,7 @@ public class Doc2vecClassifier implements Classifier {
   private JiraConnector jiraConnector;
   private JiraClient jiraClient;
 
-  public Doc2vecClassifier() throws URISyntaxException {
+  public Doc2vecClassifier() throws URISyntaxException, IOException {
 	  JiraProperties jiraProperties = new JiraProperties("connector.properties");
 	  jiraConnector = new JiraConnector(jiraProperties);
 	  jiraClient = new BasicJiraClient(jiraProperties.getUrl());
@@ -33,18 +33,18 @@ public class Doc2vecClassifier implements Classifier {
 
   @Override
   public void prepare() {
-    jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
+    jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
   }
 
   @Override
-  public void configure() {
-	  //jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
+  public void configure() throws IOException {
+	  //jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
 	  docVectorizer.createFromDataset(DATASET_FILE_NAME);
 	  docVectorizer.save(VECTOR_MODEL_FILE_NAME);
   }
 
   @Override
-  public ClassifierResult execute(Issue actualIssue) throws URISyntaxException {
+  public ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException {
 	docVectorizer.load(VECTOR_MODEL_FILE_NAME);
     Collection<String> keys = docVectorizer.getNearestLabels(actualIssue.getDescription(), NUMBER_OF_NEAREST_LABELS);
     List<String> labels = new ArrayList<>();
@@ -53,7 +53,7 @@ public class Doc2vecClassifier implements Classifier {
 
     System.out.println("Nearest issues: " + keys);
     keys.forEach((key) -> {
-      Issue issue = jiraClient.getIssueByKey(key.trim());
+      JiraIssue issue = jiraClient.getIssueByKey(key.trim());
       labels.addAll(issue.getLabels());
       if (issue.getAssignee() != null) {
         users.add(issue.getAssignee().getName());
@@ -74,6 +74,11 @@ public class Doc2vecClassifier implements Classifier {
     result.setUsers(users);
     result.setAttachments(attachments);
     return result;
+  }
+
+  @Override
+  public Vectorizer getVectorizer() {
+    return docVectorizer;
   }
 
 }

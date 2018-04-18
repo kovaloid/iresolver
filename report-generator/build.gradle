@@ -1,5 +1,5 @@
 
-//mainClassName = 'com.koval.jresolver.report.Launcher'
+mainClassName = 'com.koval.jresolver.report.Launcher'
 
 dependencies {
     compile project(':jira-connector'),

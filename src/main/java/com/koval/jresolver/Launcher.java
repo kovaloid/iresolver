@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 
 import com.koval.jresolver.classifier.Classifier;
 import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
-import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.report.HtmlReportGenerator;
 import com.koval.jresolver.report.ReportGenerator;
 import org.slf4j.Logger;
@@ -54,9 +53,5 @@ public class Launcher {
     System.out.println("Generation...");
     ReportGenerator reportGenerator = new HtmlReportGenerator();
     reportGenerator.generate();
-
-
-    //BasicJiraClient cl = new BasicJiraClient("https://issues.apache.org/jira");
-    //cl.getIssueByKey("AMQ-6134 ");
   }
 }
