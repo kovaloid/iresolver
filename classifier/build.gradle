@@ -1,5 +1,5 @@
 
-mainClassName = 'com.koval.jresolver.classifier.doc2vec.TestMain'
+//mainClassName = 'com.koval.jresolver.classifier.Launcher'
 
 dependencies {
     compile 'org.deeplearning4j:deeplearning4j-core:0.8.0',

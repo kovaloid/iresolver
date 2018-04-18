@@ -7,7 +7,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    //classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
   }
 }
 
@@ -15,8 +15,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'application'
-apply plugin: 'org.springframework.boot'
-
+//apply plugin: 'org.springframework.boot'
 
 group = 'com.koval'
 version = '0.0.1'
@@ -33,17 +32,24 @@ repositories {
 }
 
 dependencies {
-  compile 'org.springframework.boot:spring-boot-starter-web',
-          project(':jira-connector'),
-          project(':classifier')
-  testCompile 'org.springframework.boot:spring-boot-starter-test'
+  compile project(':classifier'),
+  project(':report-generator'),
+  'org.slf4j:slf4j-api:1.7.25',
+  'org.slf4j:slf4j-log4j12:1.7.25'
+  //compile 'org.springframework.boot:spring-boot-starter-web'
+  //testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+run {
+  main = 'com.koval.jresolver.Launcher'
+  args = ['configure']
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'eclipse'
-    apply plugin: 'application'
+    //apply plugin: 'application'
 
     group = 'com.koval'
     version = '0.0.1'
@@ -60,6 +66,8 @@ subprojects {
     }
 
     dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.25',
+                'org.slf4j:slf4j-log4j12:1.7.25'
         testCompile 'junit:junit:4.11'
     }
 

@@ -1,5 +1,5 @@
 
-mainClassName = 'com.koval.jresolver.connector.Launcher'
+//mainClassName = 'com.koval.jresolver.connector.Launcher'
 
 dependencies {
     compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'

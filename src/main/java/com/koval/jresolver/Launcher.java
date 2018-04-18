@@ -1,0 +1,48 @@
+package com.koval.jresolver;
+
+import java.net.URISyntaxException;
+
+import com.koval.jresolver.classifier.Classifier;
+import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
+import com.koval.jresolver.report.HtmlReportGenerator;
+import com.koval.jresolver.report.ReportGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+public class Launcher {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
+
+  public static void main(String[] args) throws URISyntaxException {
+    if (args.length == 0) {
+      System.out.println("No arguments. Please use 'configure' or 'run'");
+    } else if (args.length == 1) {
+      switch (args[0]) {
+        case "configure":
+          configure();
+          break;
+        case "run":
+          run();
+          break;
+        default:
+          System.out.println("Wrong arguments. Please use 'configure' or 'run'");
+          break;
+      }
+    } else {
+      System.out.println("Too much arguments. Please use 'configure' or 'run'");
+    }
+  }
+
+  private static void configure() throws URISyntaxException {
+    LOGGER.info("Configuration...");
+    Classifier classifier = new Doc2vecClassifier();
+    classifier.configure();
+  }
+
+  private static void run() {
+    System.out.println("Generation...");
+    ReportGenerator reportGenerator = new HtmlReportGenerator();
+    reportGenerator.generate();
+  }
+}

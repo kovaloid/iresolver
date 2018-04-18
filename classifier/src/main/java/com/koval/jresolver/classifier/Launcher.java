@@ -1,6 +1,8 @@
 package com.koval.jresolver.classifier;
 
 
+import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
+
 public class Launcher {
 
   public static void main(String[] args) throws Exception {

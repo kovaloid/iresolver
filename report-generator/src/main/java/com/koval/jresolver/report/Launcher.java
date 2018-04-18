@@ -3,7 +3,7 @@ package com.koval.jresolver.report;
 import java.util.List;
 
 import com.atlassian.jira.rest.client.domain.Issue;
-import com.koval.jresolver.classifier.Doc2vecClassifier;
+import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.configuration.JiraProperties;

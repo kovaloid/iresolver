@@ -36,7 +36,7 @@ public class JiraConnector {
   }
 
   public void createHistoryIssuesDataset(String datasetFileName) {
-    DataConsumer dataConsumer = new FileDataConsumer(new File(datasetFileName));
+    DataConsumer dataConsumer = new FileDataConsumer(new File("src/main/resources/" + datasetFileName));
     dataRetriever = getRetriever(historyJql, dataConsumer);
     dataRetriever.start();
   }
@@ -51,13 +51,6 @@ public class JiraConnector {
 
   private DataRetriever getRetriever(String jql, DataConsumer dataConsumer) {
     return new BasicDataRetriever(jiraClient, dataConsumer, jql, maxResults, startAt, delayAfterEveryRequest);
-  }
-
-  public double getStatus() {
-    if (dataRetriever == null) {
-      return -1.0;
-    }
-    return dataRetriever.getStatus();
   }
 
 }

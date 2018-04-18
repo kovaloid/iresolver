@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier;
+package com.koval.jresolver.classifier.impl;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.atlassian.jira.rest.client.domain.Issue;
+import com.koval.jresolver.classifier.Classifier;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
 import com.koval.jresolver.classifier.impl.DocVectorizer;
 import com.koval.jresolver.connector.JiraConnector;
@@ -14,7 +15,7 @@ import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
 
 
-public class Doc2vecClassifier {
+public class Doc2vecClassifier implements Classifier {
 
   private static final String DATASET_FILE_NAME = "dataset.txt";
   private static final String VECTOR_MODEL_FILE_NAME = "vectors.model";
@@ -30,12 +31,14 @@ public class Doc2vecClassifier {
 	  jiraClient = new BasicJiraClient(jiraProperties.getUrl());
   }
 
+  @Override
   public void configure() {
 	  jiraConnector.createHistoryIssuesDataset(DATASET_FILE_NAME);
 	  docVectorizer.createFromDataset(DATASET_FILE_NAME);
 	  docVectorizer.save(VECTOR_MODEL_FILE_NAME);
   }
 
+  @Override
   public ClassifierResult execute(Issue actualIssue) throws URISyntaxException {
 	docVectorizer.load(VECTOR_MODEL_FILE_NAME);
     Collection<String> keys = docVectorizer.getNearestLabels(actualIssue.getDescription(), NUMBER_OF_NEAREST_LABELS);
