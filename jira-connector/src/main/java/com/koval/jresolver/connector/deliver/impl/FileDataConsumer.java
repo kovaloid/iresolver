@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.deliver.impl;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +39,18 @@ public class FileDataConsumer implements DataConsumer {
     }
 
     if (!key.isEmpty() && !text.isEmpty()) {
-      try (FileWriter fileWriter = new FileWriter(file, isAppend);
+      /*try (FileWriter fileWriter = new FileWriter(file, isAppend);
            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+           PrintWriter out = new PrintWriter(bufferedWriter)) {*/
+
+
+
+      try (OutputStream outputStream = new FileOutputStream(file, isAppend);
+           Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+           BufferedWriter bufferedWriter = new BufferedWriter(writer);
            PrintWriter out = new PrintWriter(bufferedWriter)) {
+
+
         out.print(key);
         out.print(" | ");
         out.println(text);

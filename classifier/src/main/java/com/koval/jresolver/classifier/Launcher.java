@@ -3,10 +3,10 @@ package com.koval.jresolver.classifier;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
 
 

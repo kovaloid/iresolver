@@ -2,10 +2,10 @@ package com.koval.jresolver.report;
 
 import java.util.List;
 
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.impl.ClassifierResult;
 import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
 import com.koval.jresolver.connector.JiraConnector;

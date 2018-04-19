@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.Collection;
 import java.util.List;
 
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
@@ -23,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.Vectorizer;
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 
 
 public class DocVectorizer implements Vectorizer {
@@ -31,19 +31,17 @@ public class DocVectorizer implements Vectorizer {
 
   private ParagraphVectors paragraphVectors;
   private TokenPreProcess tokenPreprocessor;
-  private int minWordFrequency;
   private List<String> stopWords;
   private ClassifierProperties classifierProperties;
 
   public DocVectorizer(ClassifierProperties classifierProperties) {
-    this(new StemmingPreprocessor(), 1, StopWords.getStopWords());
-    this.classifierProperties = classifierProperties;
+    this(new StemmingPreprocessor(), StopWords.getStopWords(), classifierProperties);
   }
 
-  public DocVectorizer(TokenPreProcess tokenPreprocessor, int minWordFrequency, List<String> stopWords) {
+  public DocVectorizer(TokenPreProcess tokenPreprocessor, List<String> stopWords, ClassifierProperties classifierProperties) {
     this.tokenPreprocessor = tokenPreprocessor;
-    this.minWordFrequency = minWordFrequency;
     this.stopWords = stopWords;
+    this.classifierProperties = classifierProperties;
   }
 
   @Override
@@ -95,18 +93,18 @@ public class DocVectorizer implements Vectorizer {
     LabelsSource source = new LabelsSource("DOC_");
 
     paragraphVectors = new ParagraphVectors.Builder()
-      .minWordFrequency(minWordFrequency)
-      .iterations(5)
-      .epochs(1)
-      .layerSize(100)
-      .learningRate(0.025)
+      .minWordFrequency(classifierProperties.getMinWordFrequency())
+      .iterations(classifierProperties.getIterations())
+      .epochs(classifierProperties.getEpochs())
+      .layerSize(classifierProperties.getLayerSize())
+      .learningRate(classifierProperties.getLearningRate())
       .labelsSource(source)
-      .windowSize(5)
+      .windowSize(classifierProperties.getWindowSize())
       .iterate(iterator)
-      .trainWordVectors(false)
+      .trainWordVectors(classifierProperties.isTrainWordVectors())
       .vocabCache(cache)
       .tokenizerFactory(tokenizerFactory)
-      .sampling(0)
+      .sampling(classifierProperties.getSampling())
       .stopWords(stopWords)
       .build();
 

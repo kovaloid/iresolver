@@ -13,8 +13,8 @@ public class ClassifierProperties {
   private int layerSize = 100;
   private double learningRate = 0.025;
   private int windowSize = 5;
-  private boolean trainWordVectors = false;
-  private int sampling = 0;
+  private boolean trainWordVectors;
+  private int sampling;
 
   public ClassifierProperties() {
   }

@@ -30,6 +30,7 @@ import com.atlassian.jira.rest.client.domain.Version;
 import com.atlassian.jira.rest.client.domain.Worklog;
 
 
+@SuppressWarnings("PMD.TooManyFields")
 public class JiraIssue {
 
   private String key;
