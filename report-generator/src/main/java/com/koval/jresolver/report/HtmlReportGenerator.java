@@ -2,6 +2,7 @@ package com.koval.jresolver.report;
 
 import java.util.List;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,8 @@ public class HtmlReportGenerator implements ReportGenerator {
   public void generate() throws Exception {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     JiraConnector jiraConnector = new JiraConnector(jiraProperties);
-    Doc2vecClassifier doc2vecClassifier = new Doc2vecClassifier();
+    ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
+    Doc2vecClassifier doc2vecClassifier = new Doc2vecClassifier(classifierProperties);
     RuleEngine ruleEngine = new RuleEngine();
 
     List<JiraIssue> actualIssues = jiraConnector.getActualIssues();

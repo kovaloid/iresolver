@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,14 +26,15 @@ public class Doc2vecClassifier implements Classifier {
   private static final String VECTOR_MODEL_FILE_NAME = "vectors.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
-  private final DocVectorizer docVectorizer = new DocVectorizer();
+  private final DocVectorizer docVectorizer;
   private final JiraConnector jiraConnector;
   private final JiraClient jiraClient;
 
-  public Doc2vecClassifier() throws URISyntaxException, IOException {
+  public Doc2vecClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     jiraClient = new BasicJiraClient(jiraProperties.getUrl());
+    docVectorizer = new DocVectorizer(classifierProperties);
   }
 
   @Override

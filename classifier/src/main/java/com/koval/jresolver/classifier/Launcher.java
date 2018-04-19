@@ -3,6 +3,7 @@ package com.koval.jresolver.classifier;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,8 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    Classifier classifier = new Doc2vecClassifier();
+    ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
+    Classifier classifier = new Doc2vecClassifier(classifierProperties);
 
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'prepare', 'configure' or 'predict'");

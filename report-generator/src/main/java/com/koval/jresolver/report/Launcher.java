@@ -3,6 +3,7 @@ package com.koval.jresolver.report;
 import java.io.IOException;
 import java.util.List;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,8 @@ public final class Launcher {
   public static void main(String[] args) throws Exception {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
-    doc2vecClassifier = new Doc2vecClassifier();
+    ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
+    doc2vecClassifier = new Doc2vecClassifier(classifierProperties);
     configure();
     generate();
   }

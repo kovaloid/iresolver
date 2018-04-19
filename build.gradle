@@ -57,6 +57,7 @@ distributions {
     baseName = 'jresolver'
     contents {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
+      from('classifier/src/main/resources/classifier.properties') { into 'config' }
     }
   }
 }
@@ -67,9 +68,9 @@ startScripts {
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile = file getUnixScript()
     windowsScriptFile.text = windowsScriptFile.text
-        .replace('%APP_HOME%\\lib\\config', '%APP_HOME%\\config')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config')
     unixScriptFile.text = unixScriptFile.text
-        .replace('$APP_HOME/lib/config', '$APP_HOME/config')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config')
   }
 }
 

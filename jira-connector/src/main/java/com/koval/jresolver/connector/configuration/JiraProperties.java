@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.koval.jresolver.connector.JiraConnector;
-
 
 public class JiraProperties {
 
@@ -29,7 +27,7 @@ public class JiraProperties {
 
   public JiraProperties(String propertiesFileName) throws IOException {
     Properties properties = new Properties();
-    try (InputStream input = JiraConnector.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
+    try (InputStream input = JiraProperties.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
       if (input == null) {
         throw new IOException("Could not find properties file: " + propertiesFileName);
       }

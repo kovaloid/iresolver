@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.List;
 
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
@@ -32,9 +33,11 @@ public class DocVectorizer implements Vectorizer {
   private TokenPreProcess tokenPreprocessor;
   private int minWordFrequency;
   private List<String> stopWords;
+  private ClassifierProperties classifierProperties;
 
-  public DocVectorizer() {
+  public DocVectorizer(ClassifierProperties classifierProperties) {
     this(new StemmingPreprocessor(), 1, StopWords.getStopWords());
+    this.classifierProperties = classifierProperties;
   }
 
   public DocVectorizer(TokenPreProcess tokenPreprocessor, int minWordFrequency, List<String> stopWords) {
@@ -52,11 +55,11 @@ public class DocVectorizer implements Vectorizer {
     }
   }
 
-  public void createFromDataset(String datasetFileName) throws IOException {
-    try (InputStream inputStream = DocVectorizer.class.getClassLoader().getResourceAsStream(datasetFileName)) {
+  public void createFromDataset(String dataSetFileName) throws IOException {
+    try (InputStream inputStream = DocVectorizer.class.getClassLoader().getResourceAsStream(dataSetFileName)) {
       createFromInputStream(inputStream);
     } catch (IOException e) {
-      LOGGER.error("Could not find dataset: " + datasetFileName, e);
+      LOGGER.error("Could not find data set: " + dataSetFileName, e);
       throw e;
     }
   }
