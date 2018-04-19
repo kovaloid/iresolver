@@ -2,7 +2,6 @@
 mainClassName = 'com.koval.jresolver.report.Launcher'
 
 dependencies {
-    compile project(':jira-connector'),
-            project(':classifier'),
+    compile project(':classifier'),
             project(':rule-engine')
 }
