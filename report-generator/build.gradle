@@ -1,9 +1,25 @@
 
 mainClassName = 'com.koval.jresolver.report.Launcher'
 
+sourceSets {
+  main {
+    resources {
+      srcDir '../rule-engine/src/main/resources'
+    }
+  }
+
+  test {
+    resources {
+      srcDir '../rule-engine/src/main/resources'
+    }
+  }
+}
+
 dependencies {
     compile(project(':classifier')) {
         exclude group: 'ch.qos.logback', module: 'logback-classic'
     }
     compile project(':rule-engine')
+    compile 'org.apache.velocity:velocity:1.7'
+            'org.apache.velocity:velocity-tools:2.0'
 }

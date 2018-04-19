@@ -1,8 +1,15 @@
 package com.koval.jresolver.report;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +35,32 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws Exception {
-    ruleEngine = new RuleEngine();
+    /*ruleEngine = new RuleEngine();
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     doc2vecClassifier = new Doc2vecClassifier(classifierProperties);
     //configure();
     generate();
-    ruleEngine.close();
+    ruleEngine.close();*/
+
+    fillTemplate();
+  }
+
+  private static void fillTemplate() {
+    VelocityEngine velocityEngine = new VelocityEngine();
+    velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+    velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+    velocityEngine.init();
+
+    Template template = velocityEngine.getTemplate("index.vm");
+
+    VelocityContext context = new VelocityContext();
+    context.put("name", "World");
+
+    StringWriter writer = new StringWriter();
+    template.merge(context, writer);
+    System.out.println(writer.toString());
   }
 
   private static void configure() throws IOException {
@@ -47,11 +72,18 @@ public final class Launcher {
     LOGGER.info("Retrieving actual issues completed");
     TotalResults totalResults = new TotalResults();
 
+    List<RulesResult> res = new ArrayList<>();
+
     for (JiraIssue actualIssue : actualIssues) {
-      ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
+      //ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
-      totalResults.add(actualIssue, classifierResult, ruleResult);
+      res.add(ruleResult);
+      //totalResults.add(actualIssue, classifierResult, ruleResult);
     }
+
+    System.out.println();
+    System.out.println();
+    System.out.println(res);
   }
 
 }
