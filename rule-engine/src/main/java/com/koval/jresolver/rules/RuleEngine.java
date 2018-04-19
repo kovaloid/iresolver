@@ -1,58 +1,82 @@
 package com.koval.jresolver.rules;
 
+import java.io.IOException;
+import java.util.Collection;
+
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
-import org.kie.api.KieServices;
-import org.kie.api.runtime.KieContainer;
+import org.drools.core.impl.InternalKnowledgeBase;
+import org.drools.core.impl.KnowledgeBaseFactory;
+import org.kie.api.definition.KiePackage;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.koval.jresolver.connector.bean.JiraIssue;
 
 
-public class RuleEngine {
+public class RuleEngine implements AutoCloseable {
 
-  private static final KieServices KIE_SERVICES = KieServices.Factory.get();
-  private final KieContainer kieContainer;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RuleEngine.class);
+  private final KieSession kieSession;
 
-  public RuleEngine() {
-    // From the kie services, a container is created from the classpath
-    kieContainer = KIE_SERVICES.getKieClasspathContainer();
+  public RuleEngine() throws IOException {
+    final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+    addRulesToKnowledgeBuilder(knowledgeBuilder);
+    checkForErrors(knowledgeBuilder);
+    LOGGER.info("Create kie session");
+    kieSession = createSession(knowledgeBuilder);
+  }
+
+  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) throws IOException {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
+    Resource[] resources = resolver.getResources("classpath*:rules/*.drl");
+    for (Resource resource: resources) {
+      String filePath = resource.getFile().getAbsolutePath();
+      LOGGER.info("Add file to rule engine builder: {}", filePath);
+      knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+    }
+  }
+
+  private void checkForErrors(KnowledgeBuilder knowledgeBuilder) {
+    if (knowledgeBuilder.hasErrors()) {
+      LOGGER.error(knowledgeBuilder.getErrors().toString());
+      throw new RuntimeException("Unable to compile .drl files");
+    }
+  }
+
+  private KieSession createSession(KnowledgeBuilder knowledgeBuilder) {
+    final Collection<KiePackage> packages = knowledgeBuilder.getKnowledgePackages();
+    final InternalKnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
+    knowledgeBase.addPackages(packages);
+    return knowledgeBase.newKieSession();
+  }
+
+  public void setDebugMode() {
+    kieSession.addEventListener(new DebugAgendaEventListener());
+    kieSession.addEventListener(new DebugRuleRuntimeEventListener());
   }
 
   public RulesResult execute(JiraIssue actualIssue) {
-    // From the container, a session is created based on
-    // its definition and configuration in the META-INF/kmodule.xml file
-    KieSession kieSession = kieContainer.newKieSession("JiraRules");
-
-    // Once the session is created, the application can interact with it
-    // In this case it is setting a global as defined in the
-    // org/drools/examples/helloworld/HelloWorld.drl file
-
     RulesResult results = new RulesResult();
     kieSession.setGlobal("results", results);
-
-    // The application can also setup listeners
-    kieSession.addEventListener(new DebugAgendaEventListener());
-    kieSession.addEventListener(new DebugRuleRuntimeEventListener());
-
-    // To setup a file based audit logger, uncomment the next line
-    // KieRuntimeLogger logger = ks.getLoggers().newFileLogger( ksession, "./helloworld" );
-
-    // To setup a ThreadedFileLogger, so that the audit view reflects events whilst debugging,
-    // uncomment the next line
-    // KieRuntimeLogger logger = ks.getLoggers().newThreadedFileLogger( ksession, "./helloworld", 1000 );
-
-    // The application can insert facts into the session
+    // insert facts into the session
     kieSession.insert(actualIssue);
-
     kieSession.fireAllRules();
-
-    // Remove comment if using logging
-    // logger.close();
-
-    // and then dispose the session
-    kieSession.dispose();
     return results;
   }
 
+  @Override
+  public void close() throws Exception {
+    LOGGER.info("Dispose kie session");
+    kieSession.dispose();
+  }
 }

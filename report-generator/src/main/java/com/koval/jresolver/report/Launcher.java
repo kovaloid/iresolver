@@ -22,18 +22,20 @@ public final class Launcher {
 
   private static JiraConnector jiraConnector;
   private static Doc2vecClassifier doc2vecClassifier;
-  private static RuleEngine ruleEngine = new RuleEngine();
+  private static RuleEngine ruleEngine;
 
   private Launcher() {
   }
 
   public static void main(String[] args) throws Exception {
+    ruleEngine = new RuleEngine();
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     doc2vecClassifier = new Doc2vecClassifier(classifierProperties);
-    configure();
+    //configure();
     generate();
+    ruleEngine.close();
   }
 
   private static void configure() throws IOException {

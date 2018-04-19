@@ -5,9 +5,15 @@ ext {
   droolsVersion = '7.7.0.Final'
 }
 
+jar {
+  exclude('rules')
+}
+
 dependencies {
   compile project(':jira-connector')
   compile "org.kie:kie-api:$droolsVersion"
   compile "org.drools:drools-core:$droolsVersion"
   compile "org.drools:drools-compiler:$droolsVersion"
+
+  compile 'org.springframework:spring-core:5.0.5.RELEASE'
 }

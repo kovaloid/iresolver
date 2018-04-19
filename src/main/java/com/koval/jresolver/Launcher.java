@@ -18,7 +18,9 @@ public class Launcher {
 
   public static void main(String[] args) throws Exception {
     if (args.length == 0) {
-      System.out.println("No arguments. Please use 'configure' or 'run'");
+      //System.out.println("No arguments. Please use 'configure' or 'run'");
+      System.out.println("Use default argument 'run'");
+      run();
     } else if (args.length == 1) {
       switch (args[0]) {
         case "prepare":
@@ -31,8 +33,7 @@ public class Launcher {
           run();
           break;
         default:
-          //System.out.println("Wrong arguments. Please use 'configure' or 'run'");
-          run();
+          System.out.println("Wrong arguments. Please use 'configure' or 'run'");
           break;
       }
     } else {

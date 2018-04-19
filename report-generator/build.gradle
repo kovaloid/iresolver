@@ -2,6 +2,8 @@
 mainClassName = 'com.koval.jresolver.report.Launcher'
 
 dependencies {
-    compile project(':classifier'),
-            project(':rule-engine')
+    compile(project(':classifier')) {
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+    }
+    compile project(':rule-engine')
 }

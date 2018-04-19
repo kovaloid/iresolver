@@ -32,8 +32,10 @@ repositories {
 }
 
 dependencies {
-  compile project(':report-generator'),
-          'org.slf4j:slf4j-api:1.7.25',
+  compile (project(':report-generator')) {
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
+  }
+  compile 'org.slf4j:slf4j-api:1.7.25',
           'org.slf4j:slf4j-log4j12:1.7.25'
   //compile 'org.springframework.boot:spring-boot-starter-web'
   //testCompile 'org.springframework.boot:spring-boot-starter-test'
@@ -58,6 +60,8 @@ distributions {
     contents {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
       from('classifier/src/main/resources/classifier.properties') { into 'config' }
+      from('src/main/resources/log4j.properties') { into 'config' }
+      from('rule-engine/src/main/resources/rules') { into 'rules' }
     }
   }
 }
@@ -68,9 +72,9 @@ startScripts {
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile = file getUnixScript()
     windowsScriptFile.text = windowsScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%')
     unixScriptFile.text = unixScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%')
   }
 }
 
@@ -95,8 +99,8 @@ subprojects {
     }
 
     dependencies {
-        compile 'org.slf4j:slf4j-api:1.7.25',
-                'org.slf4j:slf4j-log4j12:1.7.25'
+        /*compile 'org.slf4j:slf4j-api:1.7.25',
+                'org.slf4j:slf4j-log4j12:1.7.25'*/
         testCompile 'junit:junit:4.11'
     }
 

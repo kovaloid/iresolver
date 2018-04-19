@@ -24,10 +24,13 @@ public final class Launcher {
     JiraConnector jiraConnector = new JiraConnector(jiraProperties);
     List<JiraIssue> issues = jiraConnector.getActualIssues();
 
-    RuleEngine ruleEngine = new RuleEngine();
-    issues.forEach((issue) -> {
-      RulesResult result = ruleEngine.execute(issue);
-      LOGGER.info(result.toString());
-    });
+    try (RuleEngine ruleEngine = new RuleEngine()) {
+      issues.forEach((issue) -> {
+        RulesResult result = ruleEngine.execute(issue);
+        LOGGER.info("{} : {} ", issue.getKey(), result.toString());
+      });
+    } catch (Exception e) {
+      LOGGER.error("Could not start rule engine", e);
+    }
   }
 }

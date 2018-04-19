@@ -2,6 +2,23 @@
 mainClassName = 'com.koval.jresolver.connector.Launcher'
 run.args = ['history']
 
+
+sourceSets {
+  main {
+    resources {
+      srcDir '../src/main/resources'
+    }
+  }
+
+  test {
+    resources {
+      srcDir '../src/main/resources'
+    }
+  }
+}
+
 dependencies {
-    compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'
+    compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01',
+            'org.slf4j:slf4j-api:1.7.25',
+            'org.slf4j:slf4j-log4j12:1.7.25'
 }
