@@ -52,6 +52,27 @@ task wrapper(type: Wrapper) {
   gradleVersion = '4.6'
 }
 
+distributions {
+  main {
+    baseName = 'jresolver'
+    contents {
+      from('jira-connector/src/main/resources/connector.properties') { into 'config' }
+    }
+  }
+}
+
+startScripts {
+  classpath += files('config')
+  doLast {
+    def windowsScriptFile = file getWindowsScript()
+    def unixScriptFile = file getUnixScript()
+    windowsScriptFile.text = windowsScriptFile.text
+        .replace('%APP_HOME%\\lib\\config', '%APP_HOME%\\config')
+    unixScriptFile.text = unixScriptFile.text
+        .replace('$APP_HOME/lib/config', '$APP_HOME/config')
+  }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
