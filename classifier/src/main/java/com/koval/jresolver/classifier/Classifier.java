@@ -8,8 +8,12 @@ import com.koval.jresolver.connector.bean.JiraIssue;
 
 
 public interface Classifier {
+
   void prepare();
+
   void configure() throws IOException;
+
   ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException;
+
   Vectorizer getVectorizer();
 }

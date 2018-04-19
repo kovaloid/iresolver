@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.codehaus.jettison.json.JSONObject;
+import org.joda.time.DateTime;
+
 import com.atlassian.jira.rest.client.domain.Attachment;
 import com.atlassian.jira.rest.client.domain.BasicComponent;
 import com.atlassian.jira.rest.client.domain.BasicIssueType;
@@ -25,8 +28,7 @@ import com.atlassian.jira.rest.client.domain.Subtask;
 import com.atlassian.jira.rest.client.domain.TimeTracking;
 import com.atlassian.jira.rest.client.domain.Version;
 import com.atlassian.jira.rest.client.domain.Worklog;
-import org.codehaus.jettison.json.JSONObject;
-import org.joda.time.DateTime;
+
 
 public class JiraIssue {
 
@@ -102,6 +104,9 @@ public class JiraIssue {
   }
 
   private <T> Collection<T> toCollection(final Iterable<T> iterable) {
+    if (iterable == null) {
+      return null;
+    }
     Collection<T> result = new ArrayList<>();
     iterable.forEach(result::add);
     return result;

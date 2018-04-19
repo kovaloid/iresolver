@@ -1,10 +1,10 @@
 package com.koval.jresolver.connector.configuration;
 
-import com.koval.jresolver.connector.JiraConnector;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.koval.jresolver.connector.JiraConnector;
 
 
 public class JiraProperties {
@@ -14,7 +14,7 @@ public class JiraProperties {
   private String password;
   private String historyJql;
   private String actualJql;
-  private int startAtIssue = 0;
+  private int startAtIssue;
   private int issuesPerRequest = 10;
   private int delayBetweenRequests = 3000;
   private int maxIssues = 10;
@@ -39,11 +39,11 @@ public class JiraProperties {
       password = properties.getProperty("password");
       historyJql = properties.getProperty("historyJql");
       actualJql = properties.getProperty("actualJql");
-      startAtIssue = Integer.valueOf(properties.getProperty("startAtIssue"));
-      issuesPerRequest = Integer.valueOf(properties.getProperty("issuesPerRequest"));
-      delayBetweenRequests = Integer.valueOf(properties.getProperty("delayBetweenRequests"));
-      maxIssues = Integer.valueOf(properties.getProperty("maxIssues"));
-      appendToDataSet = Boolean.valueOf(properties.getProperty("appendToDataSet"));
+      startAtIssue = Integer.parseInt(properties.getProperty("startAtIssue"));
+      issuesPerRequest = Integer.parseInt(properties.getProperty("issuesPerRequest"));
+      delayBetweenRequests = Integer.parseInt(properties.getProperty("delayBetweenRequests"));
+      maxIssues = Integer.parseInt(properties.getProperty("maxIssues"));
+      appendToDataSet = Boolean.parseBoolean(properties.getProperty("appendToDataSet"));
       workFolder = properties.getProperty("workFolder");
     }
   }

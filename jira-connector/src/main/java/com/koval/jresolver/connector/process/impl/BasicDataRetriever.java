@@ -2,29 +2,30 @@ package com.koval.jresolver.connector.process.impl;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atlassian.jira.rest.client.domain.BasicIssue;
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.bean.JiraSearchResult;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.deliver.DataConsumer;
 import com.koval.jresolver.connector.process.DataRetriever;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class BasicDataRetriever implements DataRetriever {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BasicDataRetriever.class);
 
-  private JiraClient jiraClient;
-  private DataConsumer dataConsumer;
-  private String jql;
-  private int maxResults;
+  private final JiraClient jiraClient;
+  private final DataConsumer dataConsumer;
+  private final String jql;
+  private final int maxResults;
   private int startAt;
-  private int delayAfterEveryRequest;
-  private int maxIssues;
-  private double status = 0.0;
-  private boolean isComplete = false;
+  private final int delayAfterEveryRequest;
+  private final int maxIssues;
+  private double status;
+  private boolean isComplete;
 
   public BasicDataRetriever(JiraClient jiraClient, DataConsumer dataConsumer, String jql, int maxResults, int startAt, int delayAfterEveryRequest, int maxIssues) {
     this.jiraClient = jiraClient;
@@ -65,7 +66,7 @@ public class BasicDataRetriever implements DataRetriever {
         }
       }
 
-      setStatus((double) (startAt + index)/searchResult.getTotal());
+      setStatus((double)(startAt + index) / searchResult.getTotal());
       startAt += maxResults;
       delay();
     }

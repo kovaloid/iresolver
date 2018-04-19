@@ -1,12 +1,12 @@
 
-mainClassName = 'com.koval.jresolver.rules.TestMain'
+mainClassName = 'com.koval.jresolver.rules.Launcher'
 
 ext {
   droolsVersion = '7.7.0.Final'
 }
 
 dependencies {
-  compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01'
+  compile project(':jira-connector')
   compile "org.kie:kie-api:$droolsVersion"
   compile "org.drools:drools-core:$droolsVersion"
   compile "org.drools:drools-compiler:$droolsVersion"

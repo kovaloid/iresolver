@@ -1,11 +1,12 @@
 package com.koval.jresolver.connector.deliver.impl;
 
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.deliver.DataConsumer;
+import java.io.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.deliver.DataConsumer;
 
 
 public class FileDataConsumer implements DataConsumer {
@@ -39,8 +40,7 @@ public class FileDataConsumer implements DataConsumer {
     if (!key.isEmpty() && !text.isEmpty()) {
       try (FileWriter fileWriter = new FileWriter(file, isAppend);
            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-           PrintWriter out = new PrintWriter(bufferedWriter))
-      {
+           PrintWriter out = new PrintWriter(bufferedWriter)) {
         out.print(key);
         out.print(" | ");
         out.println(text);

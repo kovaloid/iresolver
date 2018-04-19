@@ -1,5 +1,6 @@
 package com.koval.jresolver;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.koval.jresolver.classifier.Classifier;
@@ -37,13 +38,13 @@ public class Launcher {
     }
   }
 
-  private static void prepare() throws URISyntaxException {
+  private static void prepare() throws URISyntaxException, IOException {
     LOGGER.info("Preparation...");
     Classifier classifier = new Doc2vecClassifier();
     classifier.prepare();
   }
 
-  private static void configure() throws URISyntaxException {
+  private static void configure() throws URISyntaxException, IOException {
     LOGGER.info("Configuration...");
     Classifier classifier = new Doc2vecClassifier();
     classifier.configure();

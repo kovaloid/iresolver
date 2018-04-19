@@ -1,5 +1,9 @@
 package com.koval.jresolver.connector;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
@@ -10,23 +14,19 @@ import com.koval.jresolver.connector.deliver.impl.ListDataConsumer;
 import com.koval.jresolver.connector.process.DataRetriever;
 import com.koval.jresolver.connector.process.impl.BasicDataRetriever;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class JiraConnector {
 
   private JiraClient jiraClient;
   private DataRetriever dataRetriever;
-  private String historyJql;
-  private String actualJql;
-  private int startAtIssue;
-  private int issuesPerRequest;
-  private int delayBetweenRequests;
-  private int maxIssues;
-  private boolean appendToDataSet;
-  private String workFolder;
+  private final String historyJql;
+  private final String actualJql;
+  private final int startAtIssue;
+  private final int issuesPerRequest;
+  private final int delayBetweenRequests;
+  private final int maxIssues;
+  private final boolean appendToDataSet;
+  private final String workFolder;
 
   public JiraConnector(JiraProperties jiraProperties) throws URISyntaxException {
     if (jiraProperties.isAnonymous()) {

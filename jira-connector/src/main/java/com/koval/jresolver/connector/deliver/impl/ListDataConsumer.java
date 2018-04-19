@@ -1,15 +1,15 @@
 package com.koval.jresolver.connector.deliver.impl;
 
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.deliver.DataConsumer;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.deliver.DataConsumer;
 
 
 public class ListDataConsumer implements DataConsumer {
 
-  private List<JiraIssue> issueList;
+  private final List<JiraIssue> issueList;
 
   public ListDataConsumer() {
     this.issueList = new ArrayList<>();
