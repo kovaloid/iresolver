@@ -1,7 +1,23 @@
 
-mainClassName = 'com.koval.jresolver.classifier.Launcher'
-run {
+task runClassifierPrepare(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.classifier.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+  args = ['prepare']
+}
+
+task runClassifierConfigure(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.classifier.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
   args = ['configure']
+}
+
+task runClassifierPredict(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.classifier.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+  args = ['predict', 'hello world']
 }
 
 dependencies {

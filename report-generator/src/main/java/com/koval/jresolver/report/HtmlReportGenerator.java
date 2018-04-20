@@ -29,12 +29,12 @@ public class HtmlReportGenerator implements ReportGenerator {
 
     List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
     LOGGER.info("Retrieving actual issues completed");
-    TotalResults totalResults = new TotalResults();
+
 
     for (JiraIssue actualIssue : actualIssues) {
       ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
-      totalResults.add(actualIssue, classifierResult, ruleResult);
+      TotalResults totalResults = new TotalResults(actualIssue, classifierResult, ruleResult);
     }
   }
 }

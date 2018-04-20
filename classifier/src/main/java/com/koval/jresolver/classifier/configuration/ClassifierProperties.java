@@ -15,6 +15,7 @@ public class ClassifierProperties {
   private int windowSize = 5;
   private boolean trainWordVectors;
   private int sampling;
+  private String workFolder;
 
   public ClassifierProperties() {
   }
@@ -34,6 +35,7 @@ public class ClassifierProperties {
       windowSize = Integer.parseInt(properties.getProperty("windowSize"));
       trainWordVectors = Boolean.parseBoolean(properties.getProperty("trainWordVectors"));
       sampling = Integer.parseInt(properties.getProperty("sampling"));
+      workFolder = properties.getProperty("workFolder");
     }
   }
 
@@ -99,5 +101,13 @@ public class ClassifierProperties {
 
   public void setSampling(int sampling) {
     this.sampling = sampling;
+  }
+
+  public String getWorkFolder() {
+    return workFolder;
+  }
+
+  public void setWorkFolder(String workFolder) {
+    this.workFolder = workFolder;
   }
 }

@@ -24,6 +24,7 @@ public class FileDataConsumer implements DataConsumer {
   public FileDataConsumer(String dataSetFileName, boolean isAppend) {
     this.file = new File(dataSetFileName);
     this.isAppend = isAppend;
+    LOGGER.info("New data set file will be created: {}", file.getAbsolutePath());
   }
 
   @Override

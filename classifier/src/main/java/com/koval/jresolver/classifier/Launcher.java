@@ -33,13 +33,16 @@ public final class Launcher {
           LOGGER.warn("Train classifier...");
           classifier.configure();
           break;
-        case "predict":
-          LOGGER.warn("Predict...");
-          classifier.getVectorizer().getNearestLabels(args[1], 10);
-          break;
         default:
           LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'predict'");
           break;
+      }
+    } else if (args.length == 2) {
+      if (args[0].equals("predict")) {
+        LOGGER.warn("Predict...");
+        classifier.getVectorizer().getNearestLabels(args[1], 10);
+      } else {
+        LOGGER.warn("Try to type 'predict' and second argument");
       }
     } else {
       LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'predict'");

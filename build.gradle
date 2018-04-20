@@ -1,21 +1,20 @@
 buildscript {
-  ext {
-    springBootVersion = '1.5.8.RELEASE'
-  }
+  //ext {
+  //  springBootVersion = '1.5.8.RELEASE'
+  //}
   repositories {
     maven { url 'https://plugins.gradle.org/m2/' }
     mavenCentral()
   }
-  dependencies {
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-  }
+  //dependencies {
+  //  classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+  //}
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'application'
-apply plugin: 'org.springframework.boot'
 
 group = 'com.koval'
 version = '0.0.1'
@@ -37,8 +36,6 @@ dependencies {
   }
   compile 'org.slf4j:slf4j-api:1.7.25',
           'org.slf4j:slf4j-log4j12:1.7.25'
-  //compile 'org.springframework.boot:spring-boot-starter-web'
-  //testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 mainClassName = 'com.koval.jresolver.Launcher'
@@ -79,67 +76,72 @@ startScripts {
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
-    apply plugin: 'application'
+  apply plugin: 'java'
+  apply plugin: 'idea'
+  apply plugin: 'eclipse'
 
-    group = 'com.koval'
-    version = '0.0.1'
-    sourceCompatibility = 1.8
+  group = 'com.koval'
+  version = '0.0.1'
+  sourceCompatibility = 1.8
 
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://m2proxy.atlassian.com/repository/public'
+  repositories {
+    mavenCentral()
+    maven {
+      url 'https://m2proxy.atlassian.com/repository/public'
+    }
+    maven {
+      url 'http://repository.jboss.org/nexus/content/groups/public-jboss'
+    }
+  }
+
+  sourceSets {
+    main {
+      resources {
+        srcDir '../src/main/resources'
+      }
+    }
+  }
+
+  dependencies {
+    testCompile 'junit:junit:4.11'
+  }
+
+  apply plugin: 'checkstyle'
+  checkstyle {
+    configFile = rootProject.file('config/checkstyle.xml')
+    toolVersion = '8.1'
+    ignoreFailures = false
+  }
+
+  tasks.withType(Checkstyle).each { checkstyleTask ->
+    checkstyleTask.doLast {
+      reports.all { report ->
+        def outputFile = report.destination
+        if (outputFile.exists() && outputFile.text.contains("<error ")) {
+          throw new GradleException("Found checkstyle issues in $outputFile")
         }
-        maven {
-            url 'http://repository.jboss.org/nexus/content/groups/public-jboss'
-        }
+      }
     }
+  }
 
-    dependencies {
-        /*compile 'org.slf4j:slf4j-api:1.7.25',
-                'org.slf4j:slf4j-log4j12:1.7.25'*/
-        testCompile 'junit:junit:4.11'
-    }
+  apply plugin: 'pmd'
+  pmd {
+    ruleSetFiles = rootProject.files('config/pmd.xml')
+    toolVersion = '5.4.1'
+    ignoreFailures = false
+  }
 
-    apply plugin: 'checkstyle'
-    checkstyle {
-        configFile = rootProject.file('config/checkstyle.xml')
-        toolVersion = '8.1'
-        ignoreFailures = false
-    }
+  apply plugin: 'findbugs'
+  findbugs {
+    toolVersion = '3.0.1'
+    excludeFilter = rootProject.file('config/findbugs_filter.xml')
+    ignoreFailures = false
+  }
 
-    tasks.withType(Checkstyle).each { checkstyleTask ->
-        checkstyleTask.doLast {
-            reports.all { report ->
-                def outputFile = report.destination
-                if (outputFile.exists() && outputFile.text.contains("<error ")) {
-                    throw new GradleException("Found checkstyle issues in $outputFile")
-                }
-            }
-        }
+  tasks.withType(FindBugs) {
+    reports {
+      xml.enabled = false
+      html.enabled = true
     }
-
-    apply plugin: 'pmd'
-    pmd {
-        ruleSetFiles = rootProject.files('config/pmd.xml')
-        toolVersion = '5.4.1'
-        ignoreFailures = false
-    }
-
-    apply plugin: 'findbugs'
-    findbugs {
-        toolVersion = '3.0.1'
-        excludeFilter = rootProject.file('config/findbugs_filter.xml')
-        ignoreFailures = false
-    }
-
-    tasks.withType(FindBugs) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
+  }
 }

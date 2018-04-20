@@ -1,14 +1,13 @@
 
-mainClassName = 'com.koval.jresolver.report.Launcher'
+task runReportGenerator(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.report.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+  args = ['actual']
+}
 
 sourceSets {
   main {
-    resources {
-      srcDir '../rule-engine/src/main/resources'
-    }
-  }
-
-  test {
     resources {
       srcDir '../rule-engine/src/main/resources'
     }

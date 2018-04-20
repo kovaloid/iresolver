@@ -1,5 +1,9 @@
 
-mainClassName = 'com.koval.jresolver.rules.Launcher'
+task runRuleEngine(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.rules.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+}
 
 ext {
   droolsVersion = '7.7.0.Final'

@@ -1,5 +1,6 @@
 package com.koval.jresolver.report;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -35,19 +36,17 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws Exception {
-    /*ruleEngine = new RuleEngine();
+    ruleEngine = new RuleEngine();
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     doc2vecClassifier = new Doc2vecClassifier(classifierProperties);
     //configure();
     generate();
-    ruleEngine.close();*/
-
-    fillTemplate();
+    ruleEngine.close();
   }
 
-  private static void fillTemplate() {
+  private static void fillTemplate(List<TotalResults> results) throws IOException {
     VelocityEngine velocityEngine = new VelocityEngine();
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
@@ -56,11 +55,18 @@ public final class Launcher {
     Template template = velocityEngine.getTemplate("index.vm");
 
     VelocityContext context = new VelocityContext();
-    context.put("name", "World");
+
+    context.put("results", results);
 
     StringWriter writer = new StringWriter();
     template.merge(context, writer);
     System.out.println(writer.toString());
+
+
+    try (FileWriter fileWriter = new FileWriter("index.html")) {
+      template.merge(context, fileWriter);
+    }
+
   }
 
   private static void configure() throws IOException {
@@ -70,20 +76,18 @@ public final class Launcher {
   private static void generate() throws Exception {
     List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
     LOGGER.info("Retrieving actual issues completed");
-    TotalResults totalResults = new TotalResults();
 
-    List<RulesResult> res = new ArrayList<>();
+    List<TotalResults> res = new ArrayList<>();
 
     for (JiraIssue actualIssue : actualIssues) {
-      //ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
+      ClassifierResult classifierResult = doc2vecClassifier.execute(actualIssue);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
-      res.add(ruleResult);
-      //totalResults.add(actualIssue, classifierResult, ruleResult);
+
+      TotalResults totalResults = new TotalResults(actualIssue, classifierResult, ruleResult);
+      res.add(totalResults);
     }
 
-    System.out.println();
-    System.out.println();
-    System.out.println(res);
+    fillTemplate(res);
   }
 
 }

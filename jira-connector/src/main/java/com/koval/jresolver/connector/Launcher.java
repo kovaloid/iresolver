@@ -31,7 +31,7 @@ public final class Launcher {
           jiraConnector.createHistoryIssuesDataSet("DataSet.txt");
           break;
         case "actual":
-          LOGGER.warn("Get actual issues...");
+          LOGGER.info("Get actual issues...");
           List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
           actualIssues.forEach((issue) -> LOGGER.info(issue.getKey()));
           break;

@@ -22,19 +22,21 @@ import com.koval.jresolver.connector.configuration.JiraProperties;
 public class Doc2vecClassifier implements Classifier {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Doc2vecClassifier.class);
-  private static final String DATASET_FILE_NAME = "dataset.txt";
-  private static final String VECTOR_MODEL_FILE_NAME = "vectors.zip";
+  private static final String DATASET_FILE_NAME = "DataSet.txt";
+  private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final DocVectorizer docVectorizer;
   private final JiraConnector jiraConnector;
   private final JiraClient jiraClient;
+  private final String workFolder;
 
   public Doc2vecClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     jiraClient = new BasicJiraClient(jiraProperties.getUrl());
     docVectorizer = new DocVectorizer(classifierProperties);
+    workFolder = classifierProperties.getWorkFolder();
   }
 
   @Override
@@ -45,12 +47,12 @@ public class Doc2vecClassifier implements Classifier {
   @Override
   public void configure() throws IOException {
     docVectorizer.createFromDataset(DATASET_FILE_NAME);
-    docVectorizer.save(VECTOR_MODEL_FILE_NAME);
+    docVectorizer.save(workFolder + VECTOR_MODEL_FILE_NAME);
   }
 
   @Override
   public ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException {
-    docVectorizer.load(VECTOR_MODEL_FILE_NAME);
+    docVectorizer.load(workFolder + VECTOR_MODEL_FILE_NAME);
     Collection<String> keys = docVectorizer.getNearestLabels(actualIssue.getDescription(), NUMBER_OF_NEAREST_LABELS);
     List<String> labels = new ArrayList<>();
     List<String> users = new ArrayList<>();

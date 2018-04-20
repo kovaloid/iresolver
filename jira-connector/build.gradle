@@ -1,20 +1,16 @@
 
-mainClassName = 'com.koval.jresolver.connector.Launcher'
-run.args = ['history']
+task runConnectorHistory(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.connector.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+  args = ['history']
+}
 
-
-sourceSets {
-  main {
-    resources {
-      srcDir '../src/main/resources'
-    }
-  }
-
-  test {
-    resources {
-      srcDir '../src/main/resources'
-    }
-  }
+task runConnectorActual(type:JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.connector.Launcher'
+  classpath = sourceSets.main.runtimeClasspath
+  args = ['actual']
 }
 
 dependencies {

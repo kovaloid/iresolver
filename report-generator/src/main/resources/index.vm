@@ -5,7 +5,39 @@
     </head>
     <body>
         <span>
-            Hello $name!  Welcome to Velocity!
+
+
+            #foreach ($result in $results)
+                $result.getIssue().getKey()
+                <br/>
+                issues:
+                #foreach ($issue in $result.getIssues())
+                    $issue
+                #end
+                <br/>
+                labels:
+                #foreach ($label in $result.getLabels())
+                    $label
+                #end
+                <br/>
+                users:
+                #foreach ($user in $result.getUsers())
+                    $user
+                #end
+                <br/>
+                attachments:
+                #foreach ($attachment in $result.getAttachments())
+                    $attachment
+                #end
+                <br/>
+                advices:
+                #foreach ($advice in $result.getAdvices())
+                    $advice
+                #end
+
+                <br/><br/><br/>
+            #end
+
         </span>
     </body>
 </html>
