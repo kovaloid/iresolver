@@ -10,7 +10,7 @@ ext {
 }
 
 jar {
-  exclude('rules')
+  exclude('*.drl')
 }
 
 dependencies {

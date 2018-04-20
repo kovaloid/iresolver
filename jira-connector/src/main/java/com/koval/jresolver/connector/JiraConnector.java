@@ -1,5 +1,6 @@
 package com.koval.jresolver.connector;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,16 @@ public class JiraConnector {
     this.maxIssues = jiraProperties.getMaxIssues();
     this.appendToDataSet = jiraProperties.isAppendToDataSet();
     this.workFolder = jiraProperties.getWorkFolder();
+    File folder = new File(workFolder);
+    if (folder.exists()) {
+      System.out.println("Folder exists: " + workFolder);
+    } else {
+      if (folder.mkdir()) {
+        System.out.println("Folder created successfully: " + workFolder);
+      } else {
+        System.out.println("Folder creation failed: " + workFolder);
+      }
+    }
   }
 
   public void createHistoryIssuesDataSet(String dataSetFileName) {

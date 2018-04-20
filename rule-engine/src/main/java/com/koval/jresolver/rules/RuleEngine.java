@@ -38,7 +38,7 @@ public class RuleEngine implements AutoCloseable {
   private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) throws IOException {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    Resource[] resources = resolver.getResources("classpath*:rules/*.drl");
+    Resource[] resources = resolver.getResources("classpath*:*.drl");
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any .drl files");
     }

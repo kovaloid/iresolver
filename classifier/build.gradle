@@ -20,6 +20,14 @@ task runClassifierPredict(type:JavaExec) {
   args = ['predict', 'hello world']
 }
 
+sourceSets {
+  main {
+    resources {
+      srcDir '../data'
+    }
+  }
+}
+
 dependencies {
     compile 'org.deeplearning4j:deeplearning4j-core:0.8.0',
             'org.deeplearning4j:deeplearning4j-nlp:0.8.0',

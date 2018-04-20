@@ -58,7 +58,7 @@ distributions {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
       from('classifier/src/main/resources/classifier.properties') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
-      from('rule-engine/src/main/resources/rules') { into 'rules' }
+      from('rule-engine/src/main/resources') { into 'rules' }
     }
   }
 }
@@ -69,11 +69,22 @@ startScripts {
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile = file getUnixScript()
     windowsScriptFile.text = windowsScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
     unixScriptFile.text = unixScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%')
+        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
   }
 }
+
+
+sourceSets {
+  main {
+    resources {
+      srcDir 'data'
+      srcDir 'output'
+    }
+  }
+}
+
 
 subprojects {
   apply plugin: 'java'
