@@ -1,14 +1,13 @@
-package com.koval.jresolver.report;
+package com.koval.jresolver.report.results;
 
 import java.util.Collection;
-import java.util.List;
 
-import com.koval.jresolver.classifier.impl.ClassifierResult;
+import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.rules.RulesResult;
+import com.koval.jresolver.rules.results.RulesResult;
 
 
-public class TotalResults {
+public class TotalResult {
 
   private JiraIssue issue;
   private Collection<String> issues;
@@ -17,7 +16,7 @@ public class TotalResults {
   private Collection<String> attachments;
   private Collection<String> advices;
 
-  public TotalResults(JiraIssue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
+  public TotalResult(JiraIssue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
     this.issue = issue;
     this.issues = classifierResult.getIssues();
     this.labels = classifierResult.getLabels();

@@ -6,14 +6,6 @@ task runReportGenerator(type:JavaExec) {
   args = ['actual']
 }
 
-sourceSets {
-  main {
-    resources {
-      srcDir '../rule-engine/src/main/resources'
-    }
-  }
-}
-
 dependencies {
     compile(project(':classifier')) {
         exclude group: 'ch.qos.logback', module: 'logback-classic'

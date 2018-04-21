@@ -4,7 +4,7 @@ package com.koval.jresolver.rules
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.bean.JiraStatus;
 
-global com.koval.jresolver.rules.RulesResult results
+global com.koval.jresolver.rules.results.RulesResult results
 
 rule "Claim more information"
     dialect "mvel"

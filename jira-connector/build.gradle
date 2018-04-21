@@ -13,10 +13,6 @@ task runConnectorActual(type:JavaExec) {
   args = ['actual']
 }
 
-//jar {
-//  exclude('connector.properties')
-//}
-
 dependencies {
     compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01',
             'org.slf4j:slf4j-api:1.7.25',

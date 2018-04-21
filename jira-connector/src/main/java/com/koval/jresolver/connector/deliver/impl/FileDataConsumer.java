@@ -14,17 +14,11 @@ public class FileDataConsumer implements DataConsumer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FileDataConsumer.class);
 
-  private File file;
-  private boolean isAppend;
+  private final File dataSetFile;
 
-  public FileDataConsumer(String dataSetFileName) {
-    this(dataSetFileName, true);
-  }
-
-  public FileDataConsumer(String dataSetFileName, boolean isAppend) {
-    this.file = new File(dataSetFileName);
-    this.isAppend = isAppend;
-    LOGGER.info("New data set file will be created: {}", file.getAbsolutePath());
+  public FileDataConsumer(File dataSetFile) {
+    this.dataSetFile = dataSetFile;
+    LOGGER.info("New data set dataSetFile will be created: {}", this.dataSetFile.getAbsolutePath());
   }
 
   @Override
@@ -40,13 +34,13 @@ public class FileDataConsumer implements DataConsumer {
     }
 
     if (!key.isEmpty() && !text.isEmpty()) {
-      /*try (FileWriter fileWriter = new FileWriter(file, isAppend);
+      /*try (FileWriter fileWriter = new FileWriter(dataSetFile, isAppend);
            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
            PrintWriter out = new PrintWriter(bufferedWriter)) {*/
 
 
 
-      try (OutputStream outputStream = new FileOutputStream(file, isAppend);
+      try (OutputStream outputStream = new FileOutputStream(dataSetFile, true);
            Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
            BufferedWriter bufferedWriter = new BufferedWriter(writer);
            PrintWriter out = new PrintWriter(bufferedWriter)) {
@@ -56,7 +50,7 @@ public class FileDataConsumer implements DataConsumer {
         out.print(" | ");
         out.println(text);
       } catch (IOException e) {
-        LOGGER.error("Could not write issue: " + issue.getKey() + " in file: " + file.getName(), e);
+        LOGGER.error("Could not write issue: " + issue.getKey() + " in dataSetFile: " + dataSetFile.getName(), e);
       }
     }
   }

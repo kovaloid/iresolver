@@ -1,27 +1,28 @@
+### Gradle ###
 .gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
-/node*/
+!gradle/
 
-### STS ###
-.apt_generated
+### Logs ###
+*.log
+
+### Eclipse ###
+bin/
+tmp/
 .classpath
-.factorypath
 .project
 .settings
-.springBeans
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-nbproject/private/
 build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-/bin/
+.idea
+*.iml
+
+### Misc ###
+/data/
+/output/
+
+
+
+
+
+

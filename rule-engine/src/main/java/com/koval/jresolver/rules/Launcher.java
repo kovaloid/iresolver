@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.rules.core.RuleEngine;
+import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
+import com.koval.jresolver.rules.results.RulesResult;
 
 
 public final class Launcher {
@@ -24,7 +27,7 @@ public final class Launcher {
     JiraConnector jiraConnector = new JiraConnector(jiraProperties);
     List<JiraIssue> issues = jiraConnector.getActualIssues();
 
-    try (RuleEngine ruleEngine = new RuleEngine()) {
+    try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
       issues.forEach((issue) -> {
         RulesResult result = ruleEngine.execute(issue);
         LOGGER.info("{} : {} ", issue.getKey(), result.toString());

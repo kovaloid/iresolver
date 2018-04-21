@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier;
+package com.koval.jresolver.classifier.core;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier.impl;
+package com.koval.jresolver.classifier.core.impl;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,9 +9,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.classifier.Classifier;
-import com.koval.jresolver.classifier.Vectorizer;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
+import com.koval.jresolver.classifier.core.Classifier;
+import com.koval.jresolver.classifier.core.Vectorizer;
+import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
@@ -19,9 +20,9 @@ import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
 
 
-public class Doc2vecClassifier implements Classifier {
+public class DocClassifier implements Classifier {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Doc2vecClassifier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocClassifier.class);
   private static final String DATASET_FILE_NAME = "DataSet.txt";
   private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
@@ -31,21 +32,30 @@ public class Doc2vecClassifier implements Classifier {
   private final JiraClient jiraClient;
   private final String workFolder;
 
-  public Doc2vecClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
+  public DocClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     jiraConnector = new JiraConnector(jiraProperties);
     jiraClient = new BasicJiraClient(jiraProperties.getUrl());
     docVectorizer = new DocVectorizer(classifierProperties);
     workFolder = classifierProperties.getWorkFolder();
+    /*File folder = new File(workFolder);
+    if (folder.exists()) {
+      System.out.println("Folder exists: " + workFolder);
+    } else {
+      throw new RuntimeException("Could not find 'data' folder");
+    }*/
   }
 
   @Override
-  public void prepare() {
+  public void prepare() throws IOException {
     jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
   }
 
   @Override
   public void configure() throws IOException {
+    if (DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null) {
+      return;
+    }
     docVectorizer.createFromDataset(DATASET_FILE_NAME);
     docVectorizer.save(workFolder + VECTOR_MODEL_FILE_NAME);
   }

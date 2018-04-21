@@ -1,4 +1,4 @@
-package com.koval.jresolver.rules;
+package com.koval.jresolver.rules.core.impl;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -20,14 +20,16 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.rules.core.RuleEngine;
+import com.koval.jresolver.rules.results.RulesResult;
 
 
-public class RuleEngine implements AutoCloseable {
+public class DroolsRuleEngine implements RuleEngine {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RuleEngine.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
-  public RuleEngine() throws IOException {
+  public DroolsRuleEngine() throws IOException {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder);
     checkForErrors(knowledgeBuilder);
@@ -68,6 +70,7 @@ public class RuleEngine implements AutoCloseable {
     kieSession.addEventListener(new DebugRuleRuntimeEventListener());
   }
 
+  @Override
   public RulesResult execute(JiraIssue actualIssue) {
     RulesResult results = new RulesResult();
     kieSession.setGlobal("results", results);

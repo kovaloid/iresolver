@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
-import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
+import com.koval.jresolver.classifier.core.Classifier;
+import com.koval.jresolver.classifier.core.impl.DocClassifier;
 
 
 public final class Launcher {
@@ -19,7 +20,7 @@ public final class Launcher {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    Classifier classifier = new Doc2vecClassifier(classifierProperties);
+    Classifier classifier = new DocClassifier(classifierProperties);
 
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'prepare', 'configure' or 'predict'");

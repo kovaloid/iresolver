@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier.impl;
+package com.koval.jresolver.classifier.results;
 
 import java.util.Collection;
 

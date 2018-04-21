@@ -1,4 +1,4 @@
-package com.koval.jresolver.classifier.impl;
+package com.koval.jresolver.classifier.core.impl;
 
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.tartarus.snowball.ext.PorterStemmer;

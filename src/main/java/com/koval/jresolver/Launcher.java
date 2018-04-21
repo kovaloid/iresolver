@@ -1,16 +1,14 @@
 package com.koval.jresolver;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Enumeration;
 
-import com.koval.jresolver.classifier.Classifier;
+import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
-import com.koval.jresolver.classifier.impl.Doc2vecClassifier;
-import com.koval.jresolver.report.HtmlReportGenerator;
-import com.koval.jresolver.report.ReportGenerator;
+import com.koval.jresolver.classifier.core.impl.DocClassifier;
+import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
+import com.koval.jresolver.report.core.ReportGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -25,8 +23,8 @@ public class Launcher {
   public static void main(String[] args) throws Exception {
 
 
-    File f = new File("qwerty");
-    f.mkdirs();
+    //File f = new File("qwerty");
+    //f.mkdirs();
 
     //System.exit(0);
 
@@ -39,8 +37,8 @@ public class Launcher {
 
 
 
-    System.out.println(checkDroolsFileExists());
-    System.out.println(checkVectorModelFileExists());
+    //System.out.println(checkDroolsFileExists());
+    //System.out.println(checkVectorModelFileExists());
 
     //System.exit(0);
 
@@ -72,21 +70,21 @@ public class Launcher {
   private static void prepare() throws URISyntaxException, IOException {
     LOGGER.info("Preparation...");
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    Classifier classifier = new Doc2vecClassifier(classifierProperties);
+    Classifier classifier = new DocClassifier(classifierProperties);
     classifier.prepare();
   }
 
   private static void configure() throws URISyntaxException, IOException {
     LOGGER.info("Configuration...");
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    Classifier classifier = new Doc2vecClassifier(classifierProperties);
+    Classifier classifier = new DocClassifier(classifierProperties);
     classifier.configure();
   }
 
   private static void run() throws Exception {
     System.out.println("Generation...");
-    ReportGenerator reportGenerator = new HtmlReportGenerator();
-    reportGenerator.generate();
+    //ReportGenerator reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
+    //reportGenerator.generate();
   }
 
 

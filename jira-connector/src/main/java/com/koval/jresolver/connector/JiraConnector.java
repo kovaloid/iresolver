@@ -1,9 +1,13 @@
 package com.koval.jresolver.connector;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
@@ -17,6 +21,8 @@ import com.koval.jresolver.connector.process.impl.BasicDataRetriever;
 
 
 public class JiraConnector {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(JiraConnector.class);
 
   private JiraClient jiraClient;
   private DataRetriever dataRetriever;
@@ -45,18 +51,25 @@ public class JiraConnector {
     this.workFolder = jiraProperties.getWorkFolder();
     File folder = new File(workFolder);
     if (folder.exists()) {
-      System.out.println("Folder exists: " + workFolder);
+      LOGGER.info("Folder exists: " + workFolder);
     } else {
       if (folder.mkdir()) {
-        System.out.println("Folder created successfully: " + workFolder);
+        LOGGER.info("Folder created successfully: " + workFolder);
       } else {
-        System.out.println("Folder creation failed: " + workFolder);
+        LOGGER.error("Folder creation failed: " + workFolder);
       }
     }
   }
 
-  public void createHistoryIssuesDataSet(String dataSetFileName) {
-    DataConsumer dataConsumer = new FileDataConsumer(workFolder + dataSetFileName, appendToDataSet);
+  public void createHistoryIssuesDataSet(String dataSetFileName) throws IOException {
+    File dataSetFile = new File(workFolder, dataSetFileName);
+    if (!appendToDataSet) {
+      if (dataSetFile.exists()) {
+        dataSetFile.delete();
+      }
+      dataSetFile.createNewFile();
+    }
+    DataConsumer dataConsumer = new FileDataConsumer(dataSetFile);
     dataRetriever = getRetriever(historyJql, dataConsumer);
     dataRetriever.start();
   }
