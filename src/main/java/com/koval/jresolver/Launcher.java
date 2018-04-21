@@ -1,5 +1,6 @@
 package com.koval.jresolver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -7,8 +8,12 @@ import java.net.URL;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
+import com.koval.jresolver.connector.JiraConnector;
+import com.koval.jresolver.connector.configuration.JiraProperties;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.report.core.ReportGenerator;
+import com.koval.jresolver.rules.core.RuleEngine;
+import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -68,14 +73,21 @@ public class Launcher {
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     Classifier classifier = new DocClassifier(classifierProperties);
     classifier.configure();
+
+    File outputFolder = new File("../output");
+    outputFolder.mkdir();
   }
 
   private static void run() throws Exception {
     System.out.println("Generation...");
-    //ReportGenerator reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
-    //reportGenerator.generate();
+    ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
+    Classifier classifier = new DocClassifier(classifierProperties);
+    RuleEngine ruleEngine = new DroolsRuleEngine();
+    ReportGenerator reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
+    JiraProperties jiraProperties = new JiraProperties("connector.properties");
+    JiraConnector jiraConnector = new JiraConnector(jiraProperties);
+    reportGenerator.generate(jiraConnector.getActualIssues());
   }
-
 
   private static boolean checkVectorModelFileExists() {
     URL vectorModelResource = Launcher.class.getClassLoader().getResource("VectorModel.zip");
