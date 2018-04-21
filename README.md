@@ -1,4 +1,4 @@
-image:https://img.shields.io/badge/license-mit-ff69b4.svg[title="License: MIT", link="https://opensource.org/licenses/MIT"]
+![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg "License: MIT")
 
 # Jira Resolver
 
