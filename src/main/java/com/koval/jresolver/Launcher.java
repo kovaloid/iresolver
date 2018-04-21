@@ -22,29 +22,18 @@ public class Launcher {
 
   public static void main(String[] args) throws Exception {
 
-
     //File f = new File("qwerty");
     //f.mkdirs();
-
     //System.exit(0);
-
     //Enumeration<URL> e = Launcher.class.getClassLoader().getResources("placeholder");
     //while (e.hasMoreElements()) {
     //  System.out.println(e.nextElement());
     //}
-
-
-
-
-
     //System.out.println(checkDroolsFileExists());
     //System.out.println(checkVectorModelFileExists());
-
     //System.exit(0);
 
-
     if (args.length == 0) {
-      //System.out.println("No arguments. Please use 'configure' or 'run'");
       System.out.println("Use default argument 'run'");
       run();
     } else if (args.length == 1) {

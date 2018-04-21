@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
+import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.bean.JiraIssue;
@@ -22,8 +23,8 @@ public final class Launcher {
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
   private static JiraConnector jiraConnector;
-  private static DocClassifier docClassifier;
-  private static ReportGenerator gen;
+  private static Classifier classifier;
+  private static ReportGenerator reportGenerator;
 
   private Launcher() {
   }
@@ -34,25 +35,23 @@ public final class Launcher {
       JiraProperties jiraProperties = new JiraProperties("connector.properties");
       jiraConnector = new JiraConnector(jiraProperties);
       ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-      docClassifier = new DocClassifier(classifierProperties);
+      classifier = new DocClassifier(classifierProperties);
 
-      gen = new HtmlReportGenerator(docClassifier, ruleEngine);
+      reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
       configure();
       generate();
     }
   }
 
   private static void configure() throws IOException {
-    docClassifier.configure();
-    gen.configure();
+    classifier.configure();
+    reportGenerator.configure();
   }
 
   private static void generate() throws Exception {
     List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
     LOGGER.info("Retrieving actual issues completed");
-
-
-    gen.generate(actualIssues);
+    reportGenerator.generate(actualIssues);
   }
 
 }
