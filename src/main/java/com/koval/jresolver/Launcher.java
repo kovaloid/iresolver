@@ -89,8 +89,8 @@ public final class Launcher {
   }
 
   private static boolean checkDataSetFileNotExists() {
-    URL vectorModelResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
-    return vectorModelResource == null;
+    URL dataSetResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
+    return dataSetResource == null;
   }
 
   private static boolean checkVectorModelFileNotExists() {
