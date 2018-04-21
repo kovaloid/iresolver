@@ -1,5 +1,6 @@
 package com.koval.jresolver;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,8 +32,13 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws Exception {
+    char[] password = getPassword();
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    classifier = new DocClassifier(classifierProperties);
+    if (password == null || password.length == 0) {
+      classifier = new DocClassifier(classifierProperties);
+    } else {
+      classifier = new DocClassifier(classifierProperties, String.valueOf(password));
+    }
     reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
 
     if (args.length == 0) {
@@ -86,6 +92,15 @@ public final class Launcher {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     JiraConnector jiraConnector = new JiraConnector(jiraProperties);
     reportGenerator.generate(jiraConnector.getActualIssues());
+  }
+
+  private static char[] getPassword() {
+    Console console = System.console();
+    if (console == null) {
+      LOGGER.error("Could not get console instance.");
+      System.exit(0);
+    }
+    return console.readPassword("Enter your Jira password: ");
   }
 
   private static boolean checkDataSetFileNotExists() {

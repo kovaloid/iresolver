@@ -27,23 +27,27 @@ public class DocClassifier implements Classifier {
   private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
-  private final DocVectorizer docVectorizer;
-  private final JiraConnector jiraConnector;
-  private final JiraClient jiraClient;
-  private final String workFolder;
+  private DocVectorizer docVectorizer;
+  private JiraConnector jiraConnector;
+  private JiraClient jiraClient;
+  private String workFolder;
 
   public DocClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
-    jiraConnector = new JiraConnector(jiraProperties);
-    jiraClient = new BasicJiraClient(jiraProperties.getUrl());
-    docVectorizer = new DocVectorizer(classifierProperties);
-    workFolder = classifierProperties.getWorkFolder();
-    /*File folder = new File(workFolder);
-    if (folder.exists()) {
-      System.out.println("Folder exists: " + workFolder);
-    } else {
-      throw new RuntimeException("Could not find 'data' folder");
-    }*/
+    init(jiraProperties, classifierProperties);
+  }
+
+  public DocClassifier(ClassifierProperties classifierProperties, String password) throws URISyntaxException, IOException {
+    JiraProperties jiraProperties = new JiraProperties("connector.properties");
+    jiraProperties.setPassword(password);
+    init(jiraProperties, classifierProperties);
+  }
+
+  private void init(JiraProperties jiraProperties, ClassifierProperties classifierProperties) throws URISyntaxException {
+    this.jiraConnector = new JiraConnector(jiraProperties);
+    this.jiraClient = new BasicJiraClient(jiraProperties.getUrl());
+    this.docVectorizer = new DocVectorizer(classifierProperties);
+    this.workFolder = classifierProperties.getWorkFolder();
   }
 
   @Override
