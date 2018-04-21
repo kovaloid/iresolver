@@ -1,4 +1,4 @@
-![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg "License: MIT")
+![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg)
 
 # Jira Resolver
 
