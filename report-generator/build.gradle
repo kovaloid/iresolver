@@ -3,7 +3,6 @@ task runReportGenerator(type:JavaExec) {
   group 'application'
   main = 'com.koval.jresolver.report.Launcher'
   classpath = sourceSets.main.runtimeClasspath
-  args = ['actual']
 }
 
 dependencies {

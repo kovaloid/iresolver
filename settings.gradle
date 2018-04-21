@@ -5,3 +5,5 @@ include 'classifier'
 include 'rule-engine'
 include 'report-generator'
 
+startParameter.excludedTaskNames = ['run']
+
