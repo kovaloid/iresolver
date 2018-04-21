@@ -34,7 +34,7 @@ startScripts {
 }
 
 jar {
-    exclude('log4j.properties')
+  exclude('log4j.properties')
 }
 
 defaultTasks 'build'

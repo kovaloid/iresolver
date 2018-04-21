@@ -97,8 +97,7 @@ public final class Launcher {
   private static char[] getPassword() {
     Console console = System.console();
     if (console == null) {
-      LOGGER.error("Could not get console instance.");
-      System.exit(0);
+      throw new RuntimeException("Could not get console instance.");
     }
     return console.readPassword("Enter your Jira password: ");
   }
