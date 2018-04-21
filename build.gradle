@@ -1,20 +1,13 @@
-
 apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
 dependencies {
-  compile (project(':report-generator')) {
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-  }
-  compile 'org.slf4j:slf4j-api:1.7.25',
-          'org.slf4j:slf4j-log4j12:1.7.25'
+  compile project(':report-generator')
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = '4.6'
 }
-
-//run.enabled = false
 
 distributions {
   main {
@@ -122,9 +115,5 @@ subprojects {
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
             'connector.properties', 'classifier.properties', '*.drl')
-  }
-
-  dependencies {
-    testCompile 'junit:junit:4.11'
   }
 }

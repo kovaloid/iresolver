@@ -2,9 +2,6 @@
 .gradle
 !gradle/
 
-### Logs ###
-*.log
-
 ### Eclipse ###
 bin/
 tmp/
@@ -20,6 +17,7 @@ build/
 ### Misc ###
 /data/
 /output/
+*.log
 
 
 

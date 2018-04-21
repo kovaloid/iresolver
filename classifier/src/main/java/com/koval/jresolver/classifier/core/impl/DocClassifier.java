@@ -48,12 +48,17 @@ public class DocClassifier implements Classifier {
 
   @Override
   public void prepare() throws IOException {
+    if (DocClassifier.class.getClassLoader().getResource(DATASET_FILE_NAME) != null) {
+      LOGGER.info("Skip classifier preparation. File 'DataSet.txt' is already exists.");
+      return;
+    }
     jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
   }
 
   @Override
   public void configure() throws IOException {
     if (DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null) {
+      LOGGER.info("Skip classifier configuration. File 'VectorModel.zip' is already exists.");
       return;
     }
     docVectorizer.createFromDataset(DATASET_FILE_NAME);

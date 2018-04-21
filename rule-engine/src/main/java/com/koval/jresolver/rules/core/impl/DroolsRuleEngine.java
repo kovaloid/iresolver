@@ -33,8 +33,8 @@ public class DroolsRuleEngine implements RuleEngine {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder);
     checkForErrors(knowledgeBuilder);
-    LOGGER.info("Create kie session");
     kieSession = createSession(knowledgeBuilder);
+    LOGGER.info("Kie session was created.");
   }
 
   private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) throws IOException {
@@ -42,7 +42,7 @@ public class DroolsRuleEngine implements RuleEngine {
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     Resource[] resources = resolver.getResources("classpath*:*.drl");
     if (resources.length == 0) {
-      throw new RuntimeException("Could not find any .drl files");
+      throw new RuntimeException("Could not find any *.drl files.");
     }
     for (Resource resource: resources) {
       String filePath = resource.getFile().getAbsolutePath();
@@ -54,7 +54,7 @@ public class DroolsRuleEngine implements RuleEngine {
   private void checkForErrors(KnowledgeBuilder knowledgeBuilder) {
     if (knowledgeBuilder.hasErrors()) {
       LOGGER.error(knowledgeBuilder.getErrors().toString());
-      throw new RuntimeException("Unable to compile .drl files");
+      throw new RuntimeException("Unable to compile *.drl files.");
     }
   }
 
@@ -82,7 +82,7 @@ public class DroolsRuleEngine implements RuleEngine {
 
   @Override
   public void close() throws Exception {
-    LOGGER.info("Dispose kie session");
     kieSession.dispose();
+    LOGGER.info("Kie session was disposed.");
   }
 }

@@ -21,17 +21,16 @@ public final class Launcher {
   public static void main(String[] args) throws IOException, URISyntaxException {
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     Classifier classifier = new DocClassifier(classifierProperties);
-
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'prepare', 'configure' or 'predict'");
     } else if (args.length == 1) {
       switch (args[0]) {
         case "prepare":
-          LOGGER.info("Create data set...");
+          LOGGER.info("Data set creation phase started.");
           classifier.prepare();
           break;
         case "configure":
-          LOGGER.warn("Train classifier...");
+          LOGGER.info("Train phase started.");
           classifier.configure();
           break;
         default:
@@ -40,7 +39,7 @@ public final class Launcher {
       }
     } else if (args.length == 2) {
       if (args[0].equals("predict")) {
-        LOGGER.warn("Predict...");
+        LOGGER.info("Predict phase started.");
         classifier.getVectorizer().getNearestLabels(args[1], 10);
       } else {
         LOGGER.warn("Try to type 'predict' and second argument");

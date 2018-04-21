@@ -33,7 +33,7 @@ public final class Launcher {
         LOGGER.info("{} : {} ", issue.getKey(), result.toString());
       });
     } catch (Exception e) {
-      LOGGER.error("Could not start rule engine", e);
+      LOGGER.error("Could not start rule engine.", e);
     }
   }
 }

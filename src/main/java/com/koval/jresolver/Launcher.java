@@ -36,37 +36,38 @@ public final class Launcher {
     reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
 
     if (args.length == 0) {
-      LOGGER.info("Use default argument 'run'");
+      LOGGER.info("There are no arguments. Phase 'run' will be started.");
       run();
     } else if (args.length == 1) {
       switch (args[0]) {
         case "prepare":
+          LOGGER.info("Classifier preparation phase started.");
           prepare();
           break;
         case "configure":
+          LOGGER.info("Classifier and report configuration phase started.");
           configure();
           break;
         case "run":
+          LOGGER.info("Report generation phase started.");
           run();
           break;
         default:
-          LOGGER.warn("Wrong arguments. Please use 'configure' or 'run'");
+          LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'run'.");
           break;
       }
     } else {
-      LOGGER.warn("Too much arguments. Please use 'configure' or 'run'");
+      LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'run'.");
     }
   }
 
   private static void prepare() throws URISyntaxException, IOException {
-    LOGGER.info("Preparation...");
     classifier.prepare();
   }
 
   private static void configure() throws URISyntaxException, IOException {
-    LOGGER.info("Configuration...");
-    if (checkVectorModelFileNotExists()) {
-      LOGGER.error("There're no VectorModel.zip dile");
+    if (checkDataSetFileNotExists()) {
+      LOGGER.error("There are no 'DataSet.txt' file in 'data' folder. Run 'prepare' phase.");
       return;
     }
     classifier.configure();
@@ -74,14 +75,22 @@ public final class Launcher {
   }
 
   private static void run() throws Exception {
-    LOGGER.info("Generation...");
+    if (checkVectorModelFileNotExists()) {
+      LOGGER.error("There are no 'VectorModel.zip' file in 'data' folder. Run 'configure' phase.");
+      return;
+    }
     if (checkDroolsFileNotExists()) {
-      LOGGER.error("There're no *.drl files");
+      LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
       return;
     }
     JiraProperties jiraProperties = new JiraProperties("connector.properties");
     JiraConnector jiraConnector = new JiraConnector(jiraProperties);
     reportGenerator.generate(jiraConnector.getActualIssues());
+  }
+
+  private static boolean checkDataSetFileNotExists() {
+    URL vectorModelResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
+    return vectorModelResource == null;
   }
 
   private static boolean checkVectorModelFileNotExists() {
@@ -90,7 +99,7 @@ public final class Launcher {
   }
 
   private static boolean checkDroolsFileNotExists() throws IOException {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+    ClassLoader classLoader = Launcher.class.getClassLoader();
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     Resource[] resources = resolver.getResources("classpath*:*.drl");
     return resources.length == 0;

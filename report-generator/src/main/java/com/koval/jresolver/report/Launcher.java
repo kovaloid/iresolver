@@ -30,13 +30,11 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws Exception {
-
     try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
       JiraProperties jiraProperties = new JiraProperties("connector.properties");
       jiraConnector = new JiraConnector(jiraProperties);
       ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
       classifier = new DocClassifier(classifierProperties);
-
       reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
       configure();
       generate();
@@ -50,7 +48,7 @@ public final class Launcher {
 
   private static void generate() throws Exception {
     List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
-    LOGGER.info("Retrieving actual issues completed");
+    LOGGER.info("Retrieving actual issues was completed.");
     reportGenerator.generate(actualIssues);
   }
 

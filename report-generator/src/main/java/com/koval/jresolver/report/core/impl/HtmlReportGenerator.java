@@ -38,21 +38,26 @@ public class HtmlReportGenerator implements ReportGenerator {
   @Override
   public void configure() {
     File file = new File("../output");
-    file.mkdir();
+    if (file.exists()) {
+      LOGGER.info("Report output folder is already exists.");
+    } else {
+      if (file.mkdir()) {
+        LOGGER.info("Report output folder was created.");
+      } else {
+        throw new RuntimeException("Could not create 'output' folder.");
+      }
+    }
   }
 
   @Override
   public void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException {
     List<TotalResult> results = new ArrayList<>();
-
     for (JiraIssue actualIssue : actualIssues) {
       ClassifierResult classifierResult = classifier.execute(actualIssue);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
-
       TotalResult totalResult = new TotalResult(actualIssue, classifierResult, ruleResult);
       results.add(totalResult);
     }
-
     fillTemplate(results);
   }
 
@@ -61,21 +66,15 @@ public class HtmlReportGenerator implements ReportGenerator {
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
     velocityEngine.init();
-
     Template template = velocityEngine.getTemplate("index.vm");
-
     VelocityContext context = new VelocityContext();
-
     context.put("results", results);
-
     StringWriter writer = new StringWriter();
     template.merge(context, writer);
-    LOGGER.info(writer.toString());
-
+    LOGGER.debug(writer.toString());
     try (OutputStream outputStream = new FileOutputStream("../output/index.html");
          Writer fileWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       template.merge(context, fileWriter);
     }
-
   }
 }

@@ -1,4 +1,3 @@
-
 task runRuleEngine(type:JavaExec) {
   group 'application'
   main = 'com.koval.jresolver.rules.Launcher'
@@ -10,10 +9,9 @@ ext {
 }
 
 dependencies {
-  compile project(':jira-connector')
-  compile "org.kie:kie-api:$droolsVersion"
-  compile "org.drools:drools-core:$droolsVersion"
-  compile "org.drools:drools-compiler:$droolsVersion"
-
-  compile 'org.springframework:spring-core:5.0.5.RELEASE'
+  compile project(':jira-connector'),
+          "org.kie:kie-api:$droolsVersion",
+          "org.drools:drools-core:$droolsVersion",
+          "org.drools:drools-compiler:$droolsVersion",
+          'org.springframework:spring-core:5.0.5.RELEASE'
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RulesResult {
-  // private String key;
+
   private final List<String> advices = new ArrayList<>();
 
   public List<String> getAdvices() {
