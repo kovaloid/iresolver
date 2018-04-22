@@ -15,6 +15,7 @@ distributions {
     contents {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
       from('classifier/src/main/resources/classifier.properties') { into 'config' }
+      from('report-generator/src/main/resources') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
       from('rule-engine/src/main/resources') { into 'rules' }
     }
@@ -114,6 +115,7 @@ subprojects {
 
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
-            'connector.properties', 'classifier.properties', '*.drl')
+            'connector.properties', 'classifier.properties',
+			'index.vm', '*.drl')
   }
 }

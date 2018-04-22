@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width"/>
-        <title>Issue Report</title>
-        <style type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width"/>
+    <title>Issue Report</title>
+    <style type="text/css">
 			body {background-color: #F5F5F5; margin: 0; padding: 0;}
 			h3 {margin:0; padding:0;}
+			span {padding-left: 40px;}
 			.container {
 			    margin: 40px auto;
 			    background-color: #FFFFFF;
@@ -23,38 +24,37 @@
                 padding: 20px;
                 margin-bottom: 20px;
 			}
-		</style>
+    </style>
 </head>
 <body>
     <div class="container">
-
 		#foreach ($result in $results)
 		<div class="item">
         		<h3>$result.getIssue().getKey()</h3>
                 <br/>
-                issues:
+                issues:<br/>
                 #foreach ($issue in $result.getIssues())
-                    $issue<br/>
+                    <span>$issue</span><br/>
                 #end
                 <br/>
-                labels:
+                labels:<br/>
                 #foreach ($label in $result.getLabels())
-                    $label<br/>
+                    <span>$label</span><br/>
                 #end
                 <br/>
-                users:
+                users:<br/>
                 #foreach ($user in $result.getUsers())
-                    $user<br/>
+                    <span>$user</span><br/>
                 #end
                 <br/>
-                attachments:
+                attachments:<br/>
                 #foreach ($attachment in $result.getAttachments())
-                    $attachment<br/>
+                    <span>$attachment</span><br/>
                 #end
                 <br/>
-                advices:
+                advices:<br/>
                 #foreach ($advice in $result.getAdvices())
-                    $advice<br/>
+                    <span>$advice</span><br/>
                 #end
 		</div>
 		#end
