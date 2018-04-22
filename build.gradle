@@ -116,6 +116,6 @@ subprojects {
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
             'connector.properties', 'classifier.properties',
-			'index.vm', '*.drl')
+			'template.vm', '*.drl')
   }
 }
