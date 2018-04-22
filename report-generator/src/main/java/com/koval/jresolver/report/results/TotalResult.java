@@ -1,6 +1,7 @@
 package com.koval.jresolver.report.results;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
@@ -10,19 +11,19 @@ import com.koval.jresolver.rules.results.RulesResult;
 public class TotalResult {
 
   private JiraIssue issue;
-  private Collection<String> issues;
-  private Collection<String> labels;
-  private Collection<String> users;
-  private Collection<String> attachments;
-  private Collection<String> advices;
+  private Set<String> issues;
+  private Set<String> labels;
+  private Set<String> users;
+  private Set<String> attachments;
+  private Set<String> advices;
 
   public TotalResult(JiraIssue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
     this.issue = issue;
-    this.issues = classifierResult.getIssues();
-    this.labels = classifierResult.getLabels();
-    this.users = classifierResult.getUsers();
-    this.attachments = classifierResult.getAttachments();
-    this.advices = ruleResult.getAdvices();
+    this.issues = new HashSet<>(classifierResult.getIssues());
+    this.labels = new HashSet<>(classifierResult.getLabels());
+    this.users = new HashSet<>(classifierResult.getUsers());
+    this.attachments = new HashSet<>(classifierResult.getAttachments());
+    this.advices = new HashSet<>(ruleResult.getAdvices());
   }
 
   public JiraIssue getIssue() {
@@ -33,43 +34,43 @@ public class TotalResult {
     this.issue = issue;
   }
 
-  public Collection<String> getIssues() {
+  public Set<String> getIssues() {
     return issues;
   }
 
-  public void setIssues(Collection<String> issues) {
+  public void setIssues(Set<String> issues) {
     this.issues = issues;
   }
 
-  public Collection<String> getLabels() {
+  public Set<String> getLabels() {
     return labels;
   }
 
-  public void setLabels(Collection<String> labels) {
+  public void setLabels(Set<String> labels) {
     this.labels = labels;
   }
 
-  public Collection<String> getUsers() {
+  public Set<String> getUsers() {
     return users;
   }
 
-  public void setUsers(Collection<String> users) {
+  public void setUsers(Set<String> users) {
     this.users = users;
   }
 
-  public Collection<String> getAttachments() {
+  public Set<String> getAttachments() {
     return attachments;
   }
 
-  public void setAttachments(Collection<String> attachments) {
+  public void setAttachments(Set<String> attachments) {
     this.attachments = attachments;
   }
 
-  public Collection<String> getAdvices() {
+  public Set<String> getAdvices() {
     return advices;
   }
 
-  public void setAdvices(Collection<String> advices) {
+  public void setAdvices(Set<String> advices) {
     this.advices = advices;
   }
 }
