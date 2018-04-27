@@ -40,6 +40,10 @@ jar {
 
 defaultTasks 'build'
 
+task openGithubRepo << {
+  java.awt.Desktop.desktop.browse "https://github.com/kovaloid/jresolver".toURI()
+}
+
 allprojects {
   apply plugin: 'java'
   apply plugin: 'idea'
