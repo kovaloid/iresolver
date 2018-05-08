@@ -11,3 +11,18 @@ In order to compile the distribution, enter in the console:
 ```
 gradlew
 ```
+
+Unzip the distribution, launch cmd and go to bin directory.
+
+Create dataset:
+```
+jresolver prepare
+```
+Create doc2vec model:
+```
+jresolver configure
+```
+Run tool:
+```
+jresolver
+```
