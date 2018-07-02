@@ -10,8 +10,6 @@ import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -23,21 +21,24 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class testCase {
+public class ReportGeneratorTests {
 
     private static ReportGenerator reportGenerator;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
         Classifier classifier = new DocClassifier(classifierProperties);
         reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
     }
 
     @Test
-    public void configurationTest(){
+    public void configurationTest() {
         boolean flag = false;
         reportGenerator.configure();
         File file = new File("../output");
@@ -48,7 +49,7 @@ public class testCase {
     }
 
     @Test
-    public void totalResultTest() throws Exception{
+    public void totalResultTest() throws Exception {
         Collection<String> collection = new HashSet<>();
         collection.add("testString");
         ClassifierResult classifierResult = new ClassifierResult();
@@ -80,7 +81,7 @@ public class testCase {
         byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
         byte[] hash1 = MessageDigest.getInstance("MD5").digest(bytes1);
 
-        byte[] bytes2 = Files.readAllBytes(Paths.get(testCase.class.getClassLoader().getResource("testIndex.html").toURI()));
+        byte[] bytes2 = Files.readAllBytes(Paths.get(ReportGeneratorTests.class.getClassLoader().getResource("testIndex.html").toURI()));
         byte[] hash2 = MessageDigest.getInstance("MD5").digest(bytes2);
 
         assertArrayEquals(hash1, hash2);
