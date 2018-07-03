@@ -101,6 +101,19 @@ allprojects {
       html.enabled = true
     }
   }
+
+  apply plugin: 'jacoco'
+  jacoco {
+    reportsDir = file('build/customJacocoReportDir')
+  }
+
+  jacocoTestReport {
+    reports {
+      xml.enabled false
+      csv.enabled false
+      html.destination file('build/customJacocoReportDir/jacocoHtml')
+    }
+  }
 }
 
 subprojects {
