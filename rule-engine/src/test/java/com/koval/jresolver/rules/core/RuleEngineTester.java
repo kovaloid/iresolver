@@ -15,12 +15,7 @@ import com.koval.jresolver.rules.results.RulesResult;
 public class RuleEngineTester {
 
     @Test
-    public void testCreation() throws Exception {
-        DroolsRuleEngine test = new DroolsRuleEngine();
-    }
-
-    @Test
-    public void testClosing() throws Exception {
+    public void testCreating() throws Exception {
         DroolsRuleEngine test = new DroolsRuleEngine();
         test.close();
     }
@@ -40,5 +35,6 @@ public class RuleEngineTester {
     public void testSettingDebugMode() throws Exception {
         DroolsRuleEngine test = new DroolsRuleEngine();
         test.setDebugMode();
+        test.close();
     }
 }
