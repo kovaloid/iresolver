@@ -10,7 +10,6 @@ import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.configuration.JiraProperties;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
-import com.koval.jresolver.rules.results.RulesResult;
 
 public class RuleEngineTester {
 
@@ -28,7 +27,9 @@ public class RuleEngineTester {
 
         DroolsRuleEngine test = new DroolsRuleEngine();
 
-        RulesResult result = test.execute(issues.get(0));
+        test.execute(issues.get(0));
+
+        test.close();
     }
 
     @Test
