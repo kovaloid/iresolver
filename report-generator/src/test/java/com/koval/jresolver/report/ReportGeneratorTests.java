@@ -5,13 +5,11 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
+import org.apache.uima.pear.util.FileUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,10 +37,19 @@ public class ReportGeneratorTests {
     }
 
     @Test
-    public void configurationTest() {
+    public void configurationTest() throws Exception {
         boolean flag = false;
-        reportGenerator.configure();
         File file = new File("../output");
+        if (file.exists()) {
+            FileUtil.deleteDirectory(file);
+        }
+        reportGenerator.configure();
+        if (file.exists()) {
+            flag = true;
+        }
+        assertTrue(flag);
+        flag = false;
+        reportGenerator.configure();
         if (file.exists()) {
             flag = true;
         }
@@ -52,7 +59,7 @@ public class ReportGeneratorTests {
     @Test
     public void totalResultTest() throws Exception {
         Collection<String> collection = new HashSet<>();
-        collection.add("testString");
+        collection.add("test1");
         ClassifierResult classifierResult = new ClassifierResult();
         classifierResult.setIssues(collection);
         classifierResult.setLabels(collection);
@@ -61,16 +68,27 @@ public class ReportGeneratorTests {
 
 
         RulesResult ruleResult = new RulesResult();
-        ruleResult.putAdvice("testAdvice");
+        ruleResult.putAdvice("test2");
 
         JiraIssue testIssue = new JiraIssue();
-        testIssue.setDescription("testDesc");
+        testIssue.setDescription("test3");
 
         TotalResult totalResult = new TotalResult(testIssue, classifierResult, ruleResult);
 
         assertEquals(testIssue, totalResult.getIssue());
         assertTrue(totalResult.getIssues().containsAll(collection));
         assertTrue(totalResult.getAdvices().containsAll(ruleResult.getAdvices()));
+
+        Set<String> set = new HashSet<>();
+        set.add("testString");
+
+        totalResult.setAdvices(new HashSet<String>() { { add("testAdvice"); } });
+        testIssue.setDescription("testDesc");
+        totalResult.setIssue(testIssue);
+        totalResult.setIssues(set);
+        totalResult.setLabels(set);
+        totalResult.setUsers(set);
+        totalResult.setAttachments(set);
 
         List<TotalResult> results = new ArrayList<>();
         results.add(totalResult);
@@ -87,5 +105,10 @@ public class ReportGeneratorTests {
 
         assertArrayEquals(hash1, hash2);
     }
+
+//    @Test //should i do this? Seems like this class haven`t used.
+//    public void launcherTest() throws Exception {
+//        Launcher.main(new String[0]);
+//    }
 
 }
