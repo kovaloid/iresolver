@@ -29,7 +29,7 @@ import com.koval.jresolver.rules.results.RulesResult;
 
 public class ReportGeneratorTests {
 
-    private static ReportGenerator reportGenerator;
+    private ReportGenerator reportGenerator;
 
     @Before
     public void setUp() throws Exception {
