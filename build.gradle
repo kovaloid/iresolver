@@ -104,14 +104,14 @@ allprojects {
 
   apply plugin: 'jacoco'
   jacoco {
-    reportsDir = file('build/customJacocoReportDir')
+    reportsDir = file('build/reports/jacoco')
   }
 
   jacocoTestReport {
     reports {
       xml.enabled false
       csv.enabled false
-      html.destination file('build/customJacocoReportDir/jacocoHtml')
+      html.destination file('build/reports/jacoco/jacoco.html')
     }
   }
 }
