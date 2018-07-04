@@ -15,8 +15,15 @@ public class RuleEngineTester {
 
     @Test
     public void testCreating() throws Exception {
-        DroolsRuleEngine test = new DroolsRuleEngine();
-        test.close();
+        boolean flag = true;
+        try {
+            DroolsRuleEngine test = new DroolsRuleEngine();
+            test.close();
+        } catch (Exception e) { //Not IOException, becouse close() throws Exception
+            flag = false;
+        }
+
+        assertTrue(flag);
     }
 
     @Test
@@ -25,17 +32,29 @@ public class RuleEngineTester {
         JiraConnector jiraConnector = new JiraConnector(jiraProperties);
         List<JiraIssue> issues = jiraConnector.getActualIssues();
 
-        DroolsRuleEngine test = new DroolsRuleEngine();
+        boolean flag = true;
+        try {
+            DroolsRuleEngine test = new DroolsRuleEngine();
+            test.execute(issues.get(0));
+            test.close();
+        } catch (Exception e) {
+            flag = false;
+        }
 
-        test.execute(issues.get(0));
-
-        test.close();
+        assertTrue(flag);
     }
 
     @Test
     public void testSettingDebugMode() throws Exception {
-        DroolsRuleEngine test = new DroolsRuleEngine();
-        test.setDebugMode();
-        test.close();
+        boolean flag = true;
+        try {
+            DroolsRuleEngine test = new DroolsRuleEngine();
+            test.setDebugMode();
+            test.close();
+        } catch (Exception e) {
+            flag = false;
+        }
+
+        assertTrue(flag);
     }
 }
