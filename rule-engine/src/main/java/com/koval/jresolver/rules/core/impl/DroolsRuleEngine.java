@@ -2,6 +2,8 @@ package com.koval.jresolver.rules.core.impl;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
@@ -44,10 +46,14 @@ public class DroolsRuleEngine implements RuleEngine {
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any *.drl files.");
     }
+    List<String> rules = new LinkedList<>();
     for (Resource resource: resources) {
-      String filePath = resource.getFile().getAbsolutePath();
-      LOGGER.info("Add file to rule engine builder: {}", filePath);
-      knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+      if (!rules.contains(resource.getFilename())) {
+        String filePath = resource.getFile().getAbsolutePath();
+        LOGGER.info("Add file to rule engine builder: {}", filePath);
+        knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+        rules.add(resource.getFilename());
+      }
     }
   }
 
