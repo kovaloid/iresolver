@@ -14,7 +14,7 @@ public interface ReportGenerator {
     return HtmlReportGenerator.checkConfigure();
   }
 
-  void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException;
+  void generate(List<JiraIssue> actualIssues, String vectorModelResource) throws IOException, URISyntaxException;
 
   void configure();
 }

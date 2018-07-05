@@ -79,8 +79,8 @@ public class DocClassifier implements Classifier {
   }
 
   @Override
-  public ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException {
-    docVectorizer.load(workFolder + VECTOR_MODEL_FILE_NAME);
+  public ClassifierResult execute(JiraIssue actualIssue, String vectorModelResource) throws URISyntaxException {
+    docVectorizer.load(vectorModelResource);
     Collection<String> keys = docVectorizer.getNearestLabels(actualIssue.getDescription(), NUMBER_OF_NEAREST_LABELS);
     List<String> labels = new ArrayList<>();
     List<String> users = new ArrayList<>();

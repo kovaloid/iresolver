@@ -68,7 +68,7 @@ public class BasicDataRetriever implements DataRetriever {
 
       setStatus((double)(startAt + index) / searchResult.getTotal());
       startAt += maxResults;
-      delay();
+      //delay(); //todo: do automatic delay (it isn`t always needed)
     }
     LOGGER.info("Receiving data stopped.");
   }

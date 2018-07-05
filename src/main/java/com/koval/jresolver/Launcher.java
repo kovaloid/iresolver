@@ -125,7 +125,7 @@ public final class Launcher {
     if (reportGenerator == null) {
       createReportGenerator();
     }
-    reportGenerator.generate(jiraConnector.getActualIssues());
+    reportGenerator.generate(jiraConnector.getActualIssues(), Launcher.class.getClassLoader().getResource("VectorModel.zip").toURI().getPath());
   }
 
   private static String getPassword() throws Exception {

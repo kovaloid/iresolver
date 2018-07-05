@@ -54,10 +54,10 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   @Override
-  public void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException {
+  public void generate(List<JiraIssue> actualIssues, String vectorModelResource) throws IOException, URISyntaxException {
     List<TotalResult> results = new ArrayList<>();
     for (JiraIssue actualIssue : actualIssues) {
-      ClassifierResult classifierResult = classifier.execute(actualIssue);
+      ClassifierResult classifierResult = classifier.execute(actualIssue, vectorModelResource);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
       TotalResult totalResult = new TotalResult(actualIssue, classifierResult, ruleResult);
       results.add(totalResult);
