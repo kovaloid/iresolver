@@ -15,6 +15,8 @@ import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -29,25 +31,31 @@ public class DroolsRuleEngine implements RuleEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
-  public DroolsRuleEngine() throws IOException {
+  public DroolsRuleEngine(Resource[] resources) throws Exception {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-    addRulesToKnowledgeBuilder(knowledgeBuilder);
+    addRulesToKnowledgeBuilder(knowledgeBuilder, resources);
     checkForErrors(knowledgeBuilder);
     kieSession = createSession(knowledgeBuilder);
     LOGGER.info("Kie session was created.");
   }
 
-  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) throws IOException {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    Resource[] resources = resolver.getResources("classpath*:*.drl");
+  public DroolsRuleEngine() throws Exception {
+      this(getDefaultResources());
+  }
+
+  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws IOException, RuntimeException {
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any *.drl files.");
     }
     for (Resource resource: resources) {
-      String filePath = resource.getFile().getAbsolutePath();
-      LOGGER.info("Add file to rule engine builder: {}", filePath);
-      knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+      if (resource instanceof FileSystemResource) {
+        String filePath = resource.getFile().getAbsolutePath();
+        LOGGER.info("Add file to rule engine builder: {}", filePath);
+        knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+      } else if (resource instanceof InputStreamResource) {
+        LOGGER.info(resource.getDescription());
+        knowledgeBuilder.add(ResourceFactory.newInputStreamResource(resource.getInputStream()), ResourceType.DRL);
+      }
     }
   }
 
@@ -63,6 +71,12 @@ public class DroolsRuleEngine implements RuleEngine {
     final InternalKnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
     knowledgeBase.addPackages(packages);
     return knowledgeBase.newKieSession();
+  }
+
+  private static Resource[] getDefaultResources() throws IOException {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
+    return resolver.getResources("classpath*:*.drl");
   }
 
   public void setDebugMode() {

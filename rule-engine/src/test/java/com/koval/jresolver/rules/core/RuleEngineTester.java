@@ -1,21 +1,33 @@
 package com.koval.jresolver.rules.core;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+
 
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 public class RuleEngineTester {
 
+    @SuppressWarnings("VisibilityModifier")
+    private final InputStream stream = new ByteArrayInputStream("global com.koval.jresolver.rules.results.RulesResult results".getBytes(StandardCharsets.UTF_8));
+    private final InputStream badStream = new ByteArrayInputStream("test syntax mistake in rule".getBytes(StandardCharsets.UTF_8));
+
     @Test
     public void testCreating() throws Exception {
         boolean flag = true;
         try {
-            DroolsRuleEngine test = new DroolsRuleEngine();
+            Resource[] resources = new Resource[1];
+            resources[0] = new InputStreamResource(stream);
+            DroolsRuleEngine test = new DroolsRuleEngine(resources);
             test.close();
         } catch (Exception e) { //Not IOException, becouse close() throws Exception
             flag = false;
@@ -33,7 +45,9 @@ public class RuleEngineTester {
 
         boolean flag = true;
         try {
-            DroolsRuleEngine test = new DroolsRuleEngine();
+            Resource[] resources = new Resource[1];
+            resources[0] = new InputStreamResource(stream);
+            DroolsRuleEngine test = new DroolsRuleEngine(resources);
             test.execute(issue);
             test.close();
         } catch (Exception e) {
@@ -47,11 +61,50 @@ public class RuleEngineTester {
     public void testSettingDebugMode() throws Exception {
         boolean flag = true;
         try {
-            DroolsRuleEngine test = new DroolsRuleEngine();
+            Resource[] resources = new Resource[1];
+            resources[0] = new InputStreamResource(stream);
+            DroolsRuleEngine test = new DroolsRuleEngine(resources);
             test.setDebugMode();
             test.close();
         } catch (Exception e) {
             flag = false;
+        }
+
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testIfNoOneRule() throws Exception {
+        boolean flag = true;
+        try {
+            Resource[] resources = new Resource[0];
+            DroolsRuleEngine test = new DroolsRuleEngine(resources);
+            test.close();
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("Could not find any *.drl files.")) {
+                flag = true;
+            } else {
+                flag = false;
+            }
+        }
+
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testIfRuleWithMistake() throws Exception {
+        boolean flag = true;
+        try {
+            Resource[] resources = new Resource[1];
+            resources[0] = new InputStreamResource(badStream);
+            DroolsRuleEngine test = new DroolsRuleEngine(resources);
+            test.close();
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("Unable to compile *.drl files.")) {
+                flag = true;
+            } else {
+                flag = false;
+            }
         }
 
         assertTrue(flag);
