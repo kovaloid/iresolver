@@ -52,21 +52,30 @@ public class DocClassifier implements Classifier {
 
   @Override
   public void prepare() throws IOException {
-    if (DocClassifier.class.getClassLoader().getResource(DATASET_FILE_NAME) != null) {
+    if (checkPrepare()) {
       LOGGER.info("Skip classifier preparation. File 'DataSet.txt' is already exists.");
       return;
     }
     jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
   }
 
+  public static boolean checkPrepare() {
+    return DocClassifier.class.getClassLoader().getResource(DATASET_FILE_NAME) != null;
+  }
+
   @Override
   public void configure() throws IOException {
-    if (DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null) {
+    if (checkConfigure()) {
       LOGGER.info("Skip classifier configuration. File 'VectorModel.zip' is already exists.");
+      LOGGER.info(DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME).toString());
       return;
     }
     docVectorizer.createFromDataset(DATASET_FILE_NAME);
     docVectorizer.save(workFolder + VECTOR_MODEL_FILE_NAME);
+  }
+
+  public static boolean checkConfigure() {
+    return DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null;
   }
 
   @Override

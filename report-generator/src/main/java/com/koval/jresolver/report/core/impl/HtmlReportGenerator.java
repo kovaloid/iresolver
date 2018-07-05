@@ -49,6 +49,10 @@ public class HtmlReportGenerator implements ReportGenerator {
     }
   }
 
+  public static boolean checkConfigure() {
+    return new File("../output").exists();
+  }
+
   @Override
   public void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException {
     List<TotalResult> results = new ArrayList<>();
