@@ -1,14 +1,12 @@
 package com.koval.jresolver.rules.core;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.configuration.JiraProperties;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 public class RuleEngineTester {
@@ -28,14 +26,15 @@ public class RuleEngineTester {
 
     @Test
     public void testExecuting() throws Exception {
-        JiraProperties jiraProperties = new JiraProperties("connector.properties");
-        JiraConnector jiraConnector = new JiraConnector(jiraProperties);
-        List<JiraIssue> issues = jiraConnector.getActualIssues();
+        JiraIssue issue = new JiraIssue();
+        issue.setKey("test_issue");
+        issue.setDescription("test_description");
+        issue.setComments(new ArrayList<>());
 
         boolean flag = true;
         try {
             DroolsRuleEngine test = new DroolsRuleEngine();
-            test.execute(issues.get(0));
+            test.execute(issue);
             test.close();
         } catch (Exception e) {
             flag = false;
