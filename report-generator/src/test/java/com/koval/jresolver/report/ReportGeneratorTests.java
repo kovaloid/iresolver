@@ -13,6 +13,8 @@ import org.apache.uima.pear.util.FileUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+//import static org.mockito.Mockito.*;
+
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
@@ -38,11 +40,11 @@ public class ReportGeneratorTests {
 
     @Test
     public void configurationTest() throws Exception {
-        boolean flag = false;
         File file = new File("../output");
-        if (file.exists()) {
-            FileUtil.deleteDirectory(file);
+        if (file.exists() && !FileUtil.deleteDirectory(file)) {
+            return; //file system error, directory founded but not deleted.
         }
+        boolean flag = false;
         reportGenerator.configure();
         if (file.exists()) {
             flag = true;
@@ -65,7 +67,6 @@ public class ReportGeneratorTests {
         classifierResult.setLabels(collection);
         classifierResult.setUsers(collection);
         classifierResult.setAttachments(collection);
-
 
         RulesResult ruleResult = new RulesResult();
         ruleResult.putAdvice("test2");
@@ -98,17 +99,14 @@ public class ReportGeneratorTests {
         method.invoke(reportGenerator, results);
 
         byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
-        byte[] hash1 = MessageDigest.getInstance("MD5").digest(bytes1);
+        byte[] hash = MessageDigest.getInstance("MD5").digest(bytes1);
 
         byte[] bytes2 = Files.readAllBytes(Paths.get(ReportGeneratorTests.class.getClassLoader().getResource("testIndex.html").toURI()));
-        byte[] hash2 = MessageDigest.getInstance("MD5").digest(bytes2);
+        byte[] expected = MessageDigest.getInstance("MD5").digest(bytes2);
+//        byte[] expected = new byte[]{22, 15, -31, 18, -70, -14, -107, -15, -27, 48, 110, 77, -121, 5, 60, 115};
+        //it works on my pc but does`nt on cloud. Why?
 
-        assertArrayEquals(hash1, hash2);
+        assertArrayEquals(hash, expected);
     }
-
-//    @Test //should i do this? Seems like this class haven`t used.
-//    public void launcherTest() throws Exception {
-//        Launcher.main(new String[0]);
-//    }
 
 }
