@@ -8,16 +8,13 @@ import java.security.MessageDigest;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.uima.pear.util.FileUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-//import static org.mockito.Mockito.*;
-
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
-import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.report.core.ReportGenerator;
@@ -32,10 +29,8 @@ public class ReportGeneratorTests {
     private ReportGenerator reportGenerator;
 
     @Before
-    public void setUp() throws Exception {
-        ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-        Classifier classifier = new DocClassifier(classifierProperties);
-        reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
+    public void setUp() {
+        reportGenerator = new HtmlReportGenerator(mock(Classifier.class), mock(DroolsRuleEngine.class));
     }
 
     @Test
