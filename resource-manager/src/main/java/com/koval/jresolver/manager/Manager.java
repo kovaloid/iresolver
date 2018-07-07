@@ -16,8 +16,8 @@ public final class Manager {
     }
   }
 
-  public static void setTest() {
-    workdir = "resources/test/";
+  public static void setTest(String testName) {
+    workdir = "../resources/test/" + testName + '/';
   }
 
   public static String getResourceDirectory() {
