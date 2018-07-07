@@ -1,9 +1,7 @@
 package com.koval.jresolver.rules.core.impl;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
@@ -17,11 +15,9 @@ import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
 
@@ -31,7 +27,7 @@ public class DroolsRuleEngine implements RuleEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
-  public DroolsRuleEngine() throws IOException {
+  public DroolsRuleEngine() {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder);
     checkForErrors(knowledgeBuilder);
@@ -39,21 +35,15 @@ public class DroolsRuleEngine implements RuleEngine {
     LOGGER.info("Kie session was created.");
   }
 
-  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) throws IOException {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    Resource[] resources = resolver.getResources("classpath*:*.drl");
-    if (resources.length == 0) {
-      throw new RuntimeException("Could not find any *.drl files.");
+  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) {
+    File dir = new File(Manager.getRulesDirectory());
+    String[] rules = dir.list();
+    if (rules == null || rules.length == 0) {
+      throw new RuntimeException("Could not find any files in /rules.");
     }
-    List<String> rules = new LinkedList<>();
-    for (Resource resource: resources) {
-      if (!rules.contains(resource.getFilename())) {
-        String filePath = resource.getFile().getAbsolutePath();
-        LOGGER.info("Add file to rule engine builder: {}", filePath);
-        knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
-        rules.add(resource.getFilename());
-      }
+    for (String rule: rules) {
+      LOGGER.info("Add file to rule engine builder: {}", rule);
+      knowledgeBuilder.add(ResourceFactory.newFileResource(Manager.getRulesDirectory() + rule), ResourceType.DRL);
     }
   }
 

@@ -5,6 +5,7 @@ task runReportGenerator(type:JavaExec) {
 }
 
 dependencies {
+  compile project(':resource-manager')
   compile(project(':classifier')) {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
   }

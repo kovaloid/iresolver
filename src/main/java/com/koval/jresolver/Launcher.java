@@ -1,28 +1,27 @@
 package com.koval.jresolver;
 
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.*;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 
 public final class Launcher {
+
+  static {
+    PropertyConfigurator.configure(Manager.getConfigDirectory() + "log4j.properties");
+  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
@@ -81,7 +80,7 @@ public final class Launcher {
   }
 
   private static void prepare() throws Exception {
-    if (Classifier.checkPrepare()) {
+    if (Manager.checkClassifierPrepare()) {
       LOGGER.info("Skip classifier preparation.");
       return;
     }
@@ -95,7 +94,7 @@ public final class Launcher {
       return;
     }
 
-    if (Classifier.checkConfigure() && ReportGenerator.checkConfigure()) {
+    if (Manager.checkClassifierConfigure() && Manager.checkReportGeneratorConfigure()) {
       LOGGER.info("Skip configuration stage.");
       return;
     }
@@ -125,7 +124,7 @@ public final class Launcher {
     if (reportGenerator == null) {
       createReportGenerator();
     }
-    reportGenerator.generate(jiraConnector.getActualIssues(), Launcher.class.getClassLoader().getResource("VectorModel.zip").toURI().getPath());
+    reportGenerator.generate(jiraConnector.getActualIssues());
   }
 
   private static String getPassword() throws Exception {
@@ -139,20 +138,17 @@ public final class Launcher {
   }
 
   private static boolean checkDataSetFileNotExists() {
-    URL dataSetResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
-    return dataSetResource == null;
+    return !new File(Manager.getDataDirectory() + "DataSet.txt").exists();
   }
 
   private static boolean checkVectorModelFileNotExists() {
-    URL vectorModelResource = Launcher.class.getClassLoader().getResource("VectorModel.zip");
-    return vectorModelResource == null;
+    return !new File(Manager.getDataDirectory() + "VectorModel.zip").exists();
   }
 
-  private static boolean checkDroolsFileNotExists() throws IOException {
-    ClassLoader classLoader = Launcher.class.getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    Resource[] resources = resolver.getResources("classpath*:*.drl");
-    return resources.length == 0;
+  private static boolean checkDroolsFileNotExists() {
+    File dir = new File(Manager.getRulesDirectory());
+    String[] files = dir.list();
+    return files == null || files.length == 0;
   }
 
   private static void createClassifier() throws Exception {
@@ -175,4 +171,5 @@ public final class Launcher {
     }
     reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
   }
+
 }

@@ -2,6 +2,7 @@ apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
 dependencies {
+  compile project(':resource-manager')
   compile project(':report-generator')
 }
 
@@ -13,11 +14,7 @@ distributions {
   main {
     baseName = 'jresolver'
     contents {
-      from('jira-connector/src/main/resources/connector.properties') { into 'config' }
-      from('classifier/src/main/resources/classifier.properties') { into 'config' }
-      from('report-generator/src/main/resources') { into 'config' }
-      from('src/main/resources/log4j.properties') { into 'config' }
-      from('rule-engine/src/main/resources') { into 'rules' }
+      from('resources/main') { into '' }
     }
   }
 }
@@ -117,19 +114,6 @@ allprojects {
 }
 
 subprojects {
-  sourceSets {
-    main {
-      resources {
-        srcDir '../data'
-        srcDir '../src/main/resources'
-        srcDir '../jira-connector/src/main/resources'
-        srcDir '../classifier/src/main/resources'
-        srcDir '../rule-engine/src/main/resources'
-        srcDir '../report-generator/src/main/resources'
-      }
-    }
-  }
-
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
             'connector.properties', 'classifier.properties',

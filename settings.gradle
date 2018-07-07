@@ -1,5 +1,6 @@
 rootProject.name = 'jresolver'
 
+include 'resource-manager'
 include 'jira-connector'
 include 'classifier'
 include 'rule-engine'

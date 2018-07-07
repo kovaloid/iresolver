@@ -18,6 +18,7 @@ import com.koval.jresolver.connector.deliver.impl.FileDataConsumer;
 import com.koval.jresolver.connector.deliver.impl.ListDataConsumer;
 import com.koval.jresolver.connector.process.DataRetriever;
 import com.koval.jresolver.connector.process.impl.BasicDataRetriever;
+import com.koval.jresolver.manager.Manager;
 
 
 public class JiraConnector {
@@ -48,11 +49,9 @@ public class JiraConnector {
     this.delayBetweenRequests = jiraProperties.getDelayBetweenRequests();
     this.maxIssues = jiraProperties.getMaxIssues();
     this.appendToDataSet = jiraProperties.isAppendToDataSet();
-    this.workFolder = jiraProperties.getWorkFolder();
+    this.workFolder = Manager.getDataDirectory();
     File folder = new File(workFolder);
-    if (folder.exists()) {
-      LOGGER.info("Folder exists: " + workFolder);
-    } else {
+    if (!folder.exists()) {
       if (folder.mkdir()) {
         LOGGER.info("Folder created successfully: " + workFolder);
       } else {

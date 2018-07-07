@@ -18,13 +18,12 @@ import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.manager.Manager;
 
 
 public class DocClassifier implements Classifier {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocClassifier.class);
-  private static final String DATASET_FILE_NAME = "DataSet.txt";
-  private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private DocVectorizer docVectorizer;
@@ -47,35 +46,26 @@ public class DocClassifier implements Classifier {
     this.jiraConnector = new JiraConnector(jiraProperties);
     this.jiraClient = new BasicJiraClient(jiraProperties.getUrl());
     this.docVectorizer = new DocVectorizer(classifierProperties);
-    this.workFolder = classifierProperties.getWorkFolder();
+    this.workFolder = Manager.getDataDirectory();
   }
 
   @Override
   public void prepare() throws IOException {
-    if (checkPrepare()) {
+    if (Manager.checkClassifierPrepare()) {
       LOGGER.info("Skip classifier preparation. File 'DataSet.txt' is already exists.");
       return;
     }
-    jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
-  }
-
-  public static boolean checkPrepare() {
-    return DocClassifier.class.getClassLoader().getResource(DATASET_FILE_NAME) != null;
+    jiraConnector.createHistoryIssuesDataSet("DataSet.txt");
   }
 
   @Override
   public void configure() throws IOException {
-    if (checkConfigure()) {
+    if (Manager.checkClassifierConfigure()) {
       LOGGER.info("Skip classifier configuration. File 'VectorModel.zip' is already exists.");
-      LOGGER.info(DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME).toString());
       return;
     }
-    docVectorizer.createFromDataset(DATASET_FILE_NAME);
-    docVectorizer.save(workFolder + VECTOR_MODEL_FILE_NAME);
-  }
-
-  public static boolean checkConfigure() {
-    return DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null;
+    docVectorizer.createFromDataset(workFolder + "DataSet.txt");
+    docVectorizer.save(workFolder + "VectorModel.zip");
   }
 
   @Override
@@ -86,7 +76,6 @@ public class DocClassifier implements Classifier {
     List<String> users = new ArrayList<>();
     List<String> attachments = new ArrayList<>();
 
-    LOGGER.info("Nearest issues: " + keys);
     keys.forEach((key) -> {
       JiraIssue issue = jiraClient.getIssueByKey(key.trim());
       labels.addAll(issue.getLabels());

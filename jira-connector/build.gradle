@@ -13,6 +13,7 @@ task runConnectorActual(type:JavaExec) {
 }
 
 dependencies {
+  compile project(':resource-manager')
   compile 'com.atlassian.jira:jira-rest-java-client:1.2-m01',
           'org.slf4j:slf4j-api:1.7.25',
           'org.slf4j:slf4j-log4j12:1.7.25'
