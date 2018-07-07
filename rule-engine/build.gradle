@@ -14,4 +14,5 @@ dependencies {
           "org.drools:drools-core:$droolsVersion",
           "org.drools:drools-compiler:$droolsVersion",
           'org.springframework:spring-core:5.0.5.RELEASE'
+  testCompile 'junit:junit:4.12'
 }
