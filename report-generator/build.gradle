@@ -12,4 +12,6 @@ dependencies {
   compile project(':rule-engine'),
           'org.apache.velocity:velocity:1.7'
           'org.apache.velocity:velocity-tools:2.0'
+
+  compile 'org.mockito:mockito-core:2.19.0'
 }
