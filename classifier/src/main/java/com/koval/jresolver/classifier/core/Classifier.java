@@ -13,7 +13,7 @@ public interface Classifier {
 
   void configure() throws IOException;
 
-  ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException;
+  ClassifierResult execute(JiraIssue actualIssue, String vectorModelResource) throws URISyntaxException;
 
   Vectorizer getVectorizer();
 }
