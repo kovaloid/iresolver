@@ -54,7 +54,7 @@ public class DocVectorizer implements Vectorizer {
   }
 
   public void createFromDataset(String dataSetFileName) throws IOException {
-    try (InputStream inputStream = DocVectorizer.class.getClassLoader().getResourceAsStream(dataSetFileName)) {
+    try (InputStream inputStream = new FileInputStream(dataSetFileName)) {
       createFromInputStream(inputStream);
     } catch (IOException e) {
       LOGGER.error("Could not find data set: " + dataSetFileName, e);

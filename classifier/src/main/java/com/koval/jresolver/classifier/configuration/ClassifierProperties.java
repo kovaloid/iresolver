@@ -1,8 +1,11 @@
 package com.koval.jresolver.classifier.configuration;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.koval.jresolver.manager.Manager;
 
 
 public class ClassifierProperties {
@@ -15,17 +18,13 @@ public class ClassifierProperties {
   private int windowSize = 5;
   private boolean trainWordVectors;
   private int sampling;
-  private String workFolder;
 
   public ClassifierProperties() {
   }
 
   public ClassifierProperties(String propertiesFileName) throws IOException {
     Properties properties = new Properties();
-    try (InputStream input = ClassifierProperties.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
-      if (input == null) {
-        throw new IOException("Could not find properties file: " + propertiesFileName);
-      }
+    try (InputStream input = new FileInputStream(Manager.getConfigDirectory() + propertiesFileName)) {
       properties.load(input);
       minWordFrequency = Integer.parseInt(properties.getProperty("minWordFrequency"));
       iterations = Integer.parseInt(properties.getProperty("iterations"));
@@ -35,7 +34,6 @@ public class ClassifierProperties {
       windowSize = Integer.parseInt(properties.getProperty("windowSize"));
       trainWordVectors = Boolean.parseBoolean(properties.getProperty("trainWordVectors"));
       sampling = Integer.parseInt(properties.getProperty("sampling"));
-      workFolder = properties.getProperty("workFolder");
     }
   }
 
@@ -103,11 +101,4 @@ public class ClassifierProperties {
     this.sampling = sampling;
   }
 
-  public String getWorkFolder() {
-    return workFolder;
-  }
-
-  public void setWorkFolder(String workFolder) {
-    this.workFolder = workFolder;
-  }
 }

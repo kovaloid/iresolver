@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
@@ -30,12 +31,14 @@ public class ReportGeneratorTests {
 
     @Before
     public void setUp() {
+        Manager.setTest("repgen");
         reportGenerator = new HtmlReportGenerator(mock(Classifier.class), mock(DroolsRuleEngine.class));
+        reportGenerator.configure();
     }
 
     @Test
     public void configurationTest() throws Exception {
-        File file = new File("../output");
+        File file = new File(Manager.getOutputDirectory());
         if (file.exists() && !FileUtil.deleteDirectory(file)) {
             return; //file system error, directory founded but not deleted.
         }
@@ -93,10 +96,10 @@ public class ReportGeneratorTests {
         method.setAccessible(true);
         method.invoke(reportGenerator, results);
 
-        byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
+        byte[] bytes1 = Files.readAllBytes(Paths.get(Manager.getOutputDirectory() + "index.html"));
         byte[] hash = MessageDigest.getInstance("MD5").digest(bytes1);
 
-        byte[] bytes2 = Files.readAllBytes(Paths.get(ReportGeneratorTests.class.getClassLoader().getResource("testIndex.html").toURI()));
+        byte[] bytes2 = Files.readAllBytes(Paths.get(Manager.getResourceDirectory() + "testIndex.html"));
         byte[] expected = MessageDigest.getInstance("MD5").digest(bytes2);
 //        byte[] expected = new byte[]{22, 15, -31, 18, -70, -14, -107, -15, -27, 48, 110, 77, -121, 5, 60, 115};
         //it works on my pc but does`nt on cloud. Why?

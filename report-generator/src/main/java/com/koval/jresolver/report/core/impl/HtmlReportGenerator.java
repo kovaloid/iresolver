@@ -5,18 +5,18 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -37,7 +37,7 @@ public class HtmlReportGenerator implements ReportGenerator {
 
   @Override
   public void configure() {
-    File file = new File("../output");
+    File file = new File(Manager.getOutputDirectory());
     if (file.exists()) {
       LOGGER.info("Report output folder is already exists.");
     } else {
@@ -53,7 +53,7 @@ public class HtmlReportGenerator implements ReportGenerator {
   public void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException {
     List<TotalResult> results = new ArrayList<>();
     for (JiraIssue actualIssue : actualIssues) {
-      ClassifierResult classifierResult = classifier.execute(actualIssue);
+      ClassifierResult classifierResult = classifier.execute(actualIssue, Manager.getDataDirectory() + "VectorModel.zip");
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
       TotalResult totalResult = new TotalResult(actualIssue, classifierResult, ruleResult);
       results.add(totalResult);
@@ -63,18 +63,20 @@ public class HtmlReportGenerator implements ReportGenerator {
 
   private void fillTemplate(List<TotalResult> results) throws IOException {
     VelocityEngine velocityEngine = new VelocityEngine();
-    velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-    velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-    velocityEngine.init();
+    Properties props = new Properties();
+    props.put("file.resource.loader.path", Manager.getConfigDirectory());
+    velocityEngine.init(props);
     Template template = velocityEngine.getTemplate("template.vm");
     VelocityContext context = new VelocityContext();
     context.put("results", results);
     StringWriter writer = new StringWriter();
     template.merge(context, writer);
     LOGGER.debug(writer.toString());
-    try (OutputStream outputStream = new FileOutputStream("../output/index.html");
+    try (OutputStream outputStream = new FileOutputStream(Manager.getOutputDirectory() + "index.html");
          Writer fileWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       template.merge(context, fileWriter);
     }
+    LOGGER.info("===================================");
+    LOGGER.info("Completed! Check /output/index.html");
   }
 }
