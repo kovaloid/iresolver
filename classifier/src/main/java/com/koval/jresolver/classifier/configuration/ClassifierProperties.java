@@ -16,6 +16,7 @@ public class ClassifierProperties {
   private boolean trainWordVectors;
   private int sampling;
   private String workFolder;
+  private String language = "English";
 
   public ClassifierProperties() {
   }
@@ -36,6 +37,7 @@ public class ClassifierProperties {
       trainWordVectors = Boolean.parseBoolean(properties.getProperty("trainWordVectors"));
       sampling = Integer.parseInt(properties.getProperty("sampling"));
       workFolder = properties.getProperty("workFolder");
+      language = properties.getProperty("language");
     }
   }
 
@@ -109,5 +111,13 @@ public class ClassifierProperties {
 
   public void setWorkFolder(String workFolder) {
     this.workFolder = workFolder;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
   }
 }
