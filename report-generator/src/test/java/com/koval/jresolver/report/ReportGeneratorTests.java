@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -32,6 +33,7 @@ public class ReportGeneratorTests {
     public void setUp() {
         Manager.setTest("repgen");
         reportGenerator = new HtmlReportGenerator(mock(Classifier.class), mock(DroolsRuleEngine.class));
+        reportGenerator.configure();
     }
 
     @Test
@@ -95,8 +97,14 @@ public class ReportGeneratorTests {
         method.invoke(reportGenerator, results);
 
         byte[] bytes1 = Files.readAllBytes(Paths.get(Manager.getOutputDirectory() + "index.html"));
+        byte[] hash = MessageDigest.getInstance("MD5").digest(bytes1);
+
         byte[] bytes2 = Files.readAllBytes(Paths.get(Manager.getResourceDirectory() + "testIndex.html"));
-        assertArrayEquals(bytes1, bytes2);
+        byte[] expected = MessageDigest.getInstance("MD5").digest(bytes2);
+//        byte[] expected = new byte[]{22, 15, -31, 18, -70, -14, -107, -15, -27, 48, 110, 77, -121, 5, 60, 115};
+        //it works on my pc but does`nt on cloud. Why?
+
+        assertArrayEquals(hash, expected);
     }
 
 }
