@@ -15,6 +15,9 @@ import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 
 import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.manager.Manager;
@@ -27,12 +30,36 @@ public class DroolsRuleEngine implements RuleEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
+  public DroolsRuleEngine(Resource[] resources) throws Exception {
+    final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+    addRulesToKnowledgeBuilder(knowledgeBuilder, resources);
+    checkForErrors(knowledgeBuilder);
+    kieSession = createSession(knowledgeBuilder);
+    LOGGER.info("Kie session was created.");
+  }
+
   public DroolsRuleEngine() {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder);
     checkForErrors(knowledgeBuilder);
     kieSession = createSession(knowledgeBuilder);
     LOGGER.info("Kie session was created.");
+  }
+
+  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws Exception {
+    if (resources.length == 0) {
+      throw new RuntimeException("Could not find any *.drl files.");
+    }
+    for (Resource resource: resources) {
+      if (resource instanceof FileSystemResource) {
+        String filePath = resource.getFile().getAbsolutePath();
+        LOGGER.info("Add file to rule engine builder: {}", filePath);
+        knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
+      } else if (resource instanceof InputStreamResource) {
+        LOGGER.info(resource.getDescription());
+        knowledgeBuilder.add(ResourceFactory.newInputStreamResource(resource.getInputStream()), ResourceType.DRL);
+      }
+    }
   }
 
   private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder) {
