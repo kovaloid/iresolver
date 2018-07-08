@@ -1,11 +1,10 @@
-package com;
+package com.tests;
 
 import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
-
 
 @Category(FunctionalTests.class)
 public class PojoTestsClassifierProperties extends Assert {
@@ -20,7 +19,7 @@ public class PojoTestsClassifierProperties extends Assert {
     }
 
     @Test
-    public void testDefaultInit() throws Exception  {
+    public void testInit() throws Exception  {
         if (classifierProperties == null) {
             classifierProperties = new ClassifierProperties("classifier.properties");
         }
@@ -32,6 +31,17 @@ public class PojoTestsClassifierProperties extends Assert {
         assertSame(classifierProperties.getWindowSize(), 5);
         assertSame(classifierProperties.getSampling(), 0);
         assertFalse(classifierProperties.isTrainWordVectors());
+    }
+
+    @Test
+    public void testDefaultInit() throws Exception {
+        ClassifierProperties clpr = new ClassifierProperties();
+        assertSame(classifierProperties.getMinWordFrequency(), 1);
+        assertSame(classifierProperties.getIterations(), 5);
+        assertSame(classifierProperties.getEpochs(), 1);
+        assertSame(classifierProperties.getLayerSize(), 100);
+        assertTrue(classifierProperties.getLearningRate() - 0.025 < 0.001);
+        assertSame(classifierProperties.getWindowSize(), 5);
     }
 
     @Test
@@ -71,8 +81,14 @@ public class PojoTestsClassifierProperties extends Assert {
     }
 
     @Test
-    public void testSetWorkDirectory() {
-        classifierProperties.setWorkFolder("test/directory");
-        assertSame(classifierProperties.getWorkFolder().compareTo("test/directory"), 0);
+    public void testSetSampling() {
+        classifierProperties.setSampling(10);
+        assertSame(classifierProperties.getSampling(), 10);
+    }
+
+    @Test
+    public void testSetTrainWordVector() {
+        classifierProperties.setTrainWordVectors(true);
+        assertTrue(classifierProperties.isTrainWordVectors());
     }
 }

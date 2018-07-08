@@ -9,8 +9,10 @@ public final class Manager {
   }
 
   static {
-    if (new File("build.gradle").exists()) {
+    if (new File("settings.gradle").exists()) {
       workdir = "resources/main/";
+    } else if (new File("build.gradle").exists()) {
+      workdir = "../resources/main/";
     } else {
       workdir = "../";
     }
