@@ -40,8 +40,10 @@ jar {
 
 defaultTasks 'build'
 
-task openGithubRepo << {
-  java.awt.Desktop.desktop.browse "https://github.com/kovaloid/jresolver".toURI()
+task openGithubRepo {
+  doLast{
+    java.awt.Desktop.desktop.browse "https://github.com/kovaloid/jresolver".toURI()
+  }
 }
 
 allprojects {
