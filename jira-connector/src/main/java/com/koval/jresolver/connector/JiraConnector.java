@@ -18,6 +18,7 @@ import com.koval.jresolver.connector.deliver.impl.FileDataConsumer;
 import com.koval.jresolver.connector.deliver.impl.ListDataConsumer;
 import com.koval.jresolver.connector.process.DataRetriever;
 import com.koval.jresolver.connector.process.impl.BasicDataRetriever;
+import com.koval.jresolver.manager.Manager;
 
 
 public class JiraConnector {
@@ -33,7 +34,6 @@ public class JiraConnector {
   private final int delayBetweenRequests;
   private final int maxIssues;
   private final boolean appendToDataSet;
-  private final String workFolder;
 
   public JiraConnector(JiraProperties jiraProperties) throws URISyntaxException {
     if (jiraProperties.isAnonymous()) {
@@ -48,21 +48,20 @@ public class JiraConnector {
     this.delayBetweenRequests = jiraProperties.getDelayBetweenRequests();
     this.maxIssues = jiraProperties.getMaxIssues();
     this.appendToDataSet = jiraProperties.isAppendToDataSet();
-    this.workFolder = jiraProperties.getWorkFolder();
-    File folder = new File(workFolder);
+    File folder = Manager.getDataDirectory();
     if (folder.exists()) {
-      LOGGER.info("Folder exists: " + workFolder);
+      LOGGER.info("Folder exists: " + folder.getAbsolutePath());
     } else {
       if (folder.mkdir()) {
-        LOGGER.info("Folder created successfully: " + workFolder);
+        LOGGER.info("Folder created successfully: " + folder.getAbsolutePath());
       } else {
-        LOGGER.error("Folder creation failed: " + workFolder);
+        LOGGER.error("Folder creation failed: " + folder.getAbsolutePath());
       }
     }
   }
 
-  public void createHistoryIssuesDataSet(String dataSetFileName) throws IOException {
-    File dataSetFile = new File(workFolder, dataSetFileName);
+  public void createHistoryIssuesDataSet() throws IOException {
+    File dataSetFile = Manager.getDataSet();
     if (!appendToDataSet) {
       if (dataSetFile.exists()) {
         dataSetFile.delete();

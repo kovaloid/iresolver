@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
@@ -31,26 +32,21 @@ public class ReportGeneratorTests {
     @Before
     public void setUp() {
         reportGenerator = new HtmlReportGenerator(mock(Classifier.class), mock(DroolsRuleEngine.class));
+        reportGenerator.configure(); //for totalResultTest, w/o it sometimes failed to write for /output, because it does`nt exist
     }
 
     @Test
     public void configurationTest() throws Exception {
-        File file = new File("../output");
+        File file = Manager.getOutputDirectory();
         if (file.exists() && !FileUtil.deleteDirectory(file)) {
             return; //file system error, directory founded but not deleted.
         }
-        boolean flag = false;
-        reportGenerator.configure();
-        if (file.exists()) {
-            flag = true;
-        }
-        assertTrue(flag);
-        flag = false;
-        reportGenerator.configure();
-        if (file.exists()) {
-            flag = true;
-        }
-        assertTrue(flag);
+
+        reportGenerator.configure(); //no directory
+        assertTrue(file.exists());
+
+        reportGenerator.configure(); //with directory
+        assertTrue(file.exists());
     }
 
     @Test
@@ -93,7 +89,7 @@ public class ReportGeneratorTests {
         method.setAccessible(true);
         method.invoke(reportGenerator, results);
 
-        byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
+        byte[] bytes1 = Files.readAllBytes(Paths.get(Manager.getOutputFile().getAbsolutePath()));
         byte[] hash = MessageDigest.getInstance("MD5").digest(bytes1);
 
         byte[] bytes2 = Files.readAllBytes(Paths.get(ReportGeneratorTests.class.getClassLoader().getResource("testIndex.html").toURI()));

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -37,7 +38,7 @@ public class HtmlReportGenerator implements ReportGenerator {
 
   @Override
   public void configure() {
-    File file = new File("../output");
+    File file = Manager.getOutputDirectory();
     if (file.exists()) {
       LOGGER.info("Report output folder is already exists.");
     } else {
@@ -72,9 +73,10 @@ public class HtmlReportGenerator implements ReportGenerator {
     StringWriter writer = new StringWriter();
     template.merge(context, writer);
     LOGGER.debug(writer.toString());
-    try (OutputStream outputStream = new FileOutputStream("../output/index.html");
+    try (OutputStream outputStream = new FileOutputStream(Manager.getOutputFile());
          Writer fileWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       template.merge(context, fileWriter);
+      LOGGER.info("Writed to {}", Manager.getOutputFile().getAbsolutePath());
     }
   }
 }

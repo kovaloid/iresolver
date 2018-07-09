@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Vectorizer;
+import com.koval.jresolver.manager.Manager;
 
 
 public class DocVectorizer implements Vectorizer {
@@ -53,11 +54,11 @@ public class DocVectorizer implements Vectorizer {
     }
   }
 
-  public void createFromDataset(String dataSetFileName) throws IOException {
-    try (InputStream inputStream = DocVectorizer.class.getClassLoader().getResourceAsStream(dataSetFileName)) {
+  public void createFromDataset() throws IOException {
+    try (InputStream inputStream = new FileInputStream(Manager.getDataSet())) {
       createFromInputStream(inputStream);
     } catch (IOException e) {
-      LOGGER.error("Could not find data set: " + dataSetFileName, e);
+      LOGGER.error("Could not find data set: " + Manager.getDataSet().getAbsolutePath(), e);
       throw e;
     }
   }
@@ -112,14 +113,14 @@ public class DocVectorizer implements Vectorizer {
   }
 
   @Override
-  public void save(String pathToSerializedFile) {
-    WordVectorSerializer.writeParagraphVectors(paragraphVectors, pathToSerializedFile);
+  public void save() {
+    WordVectorSerializer.writeParagraphVectors(paragraphVectors, Manager.getVectorModel().getAbsolutePath());
   }
 
   @Override
-  public void load(String pathToSerializedFile) {
+  public void load() {
     try {
-      paragraphVectors = WordVectorSerializer.readParagraphVectors(pathToSerializedFile);
+      paragraphVectors = WordVectorSerializer.readParagraphVectors(Manager.getVectorModel().getAbsolutePath());
       TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
       tokenizerFactory.setTokenPreProcessor(tokenPreprocessor);
       paragraphVectors.setTokenizerFactory(tokenizerFactory);

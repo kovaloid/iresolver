@@ -12,9 +12,9 @@ public interface Vectorizer {
 
   void createFromInputStream(InputStream inputStream) throws IOException;
 
-  void save(String pathToSerializedFile);
+  void save();
 
-  void load(String pathToSerializedFile);
+  void load();
 
   Collection<String> getNearestLabels(String rawText, int topN);
 }

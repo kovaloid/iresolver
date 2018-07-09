@@ -28,7 +28,7 @@ public final class Launcher {
       switch (args[0]) {
         case "history":
           LOGGER.info("Get history issues...");
-          jiraConnector.createHistoryIssuesDataSet("DataSet.txt");
+          jiraConnector.createHistoryIssuesDataSet();
           break;
         case "actual":
           LOGGER.info("Get actual issues...");

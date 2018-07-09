@@ -120,13 +120,12 @@ subprojects {
   sourceSets {
     main {
       resources {
-        srcDir '../data'
-		srcDir '../../data'
         srcDir '../src/main/resources'
         srcDir '../jira-connector/src/main/resources'
         srcDir '../classifier/src/main/resources'
         srcDir '../rule-engine/src/main/resources'
         srcDir '../report-generator/src/main/resources'
+		srcDir '../resource-manager/src/main/resources'
       }
     }
   }

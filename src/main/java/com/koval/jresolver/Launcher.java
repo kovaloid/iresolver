@@ -1,7 +1,6 @@
 package com.koval.jresolver;
 
 import java.io.*;
-import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.connector.JiraConnector;
 import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.manager.Manager;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
@@ -22,9 +22,6 @@ import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
-
-  private static final String DATASET_FILE_NAME = "DataSet.txt";
-  private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
 
   private static Classifier classifier;
   private static ReportGenerator reportGenerator;
@@ -76,12 +73,14 @@ public final class Launcher {
   }
 
   private static void prepare() throws Exception {
-    if (classifierCheckPrepare()) {
-      LOGGER.info("Skip classifier preparation.");
+    if (!checkDataSetFileNotExists()) {
+      LOGGER.info("Prepare stage skipped.");
       return;
     }
+    LOGGER.info("Prepare stage started!");
     createClassifier();
     classifier.prepare();
+    LOGGER.info("Prepare stage completed!");
   }
 
   private static void configure() throws Exception {
@@ -90,20 +89,21 @@ public final class Launcher {
       return;
     }
 
-    if (classifierCheckConfiguration() && reportGeneratorCheckConfiguration()) {
-      LOGGER.info("Skip configuration stage.");
+    if ((!checkVectorModelFileNotExists()) && checkReportGeneratorConfiguration()) {
+      LOGGER.info("Configuration stage skipped.");
       return;
     }
 
+    LOGGER.info("Configuration stage started!");
     if (classifier == null) {
       createClassifier();
     }
     classifier.configure();
-
     if (reportGenerator == null) {
       createReportGenerator();
     }
     reportGenerator.configure();
+    LOGGER.info("Configuration stage completed!");
   }
 
   private static void run() throws Exception {
@@ -111,6 +111,9 @@ public final class Launcher {
       LOGGER.error("There are no 'VectorModel.zip' file in 'data' folder. Run 'configure' phase.");
       return;
     }
+
+    LOGGER.info("Run stage started!");
+
     if (checkDroolsFileNotExists()) {
       LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
       return;
@@ -121,12 +124,12 @@ public final class Launcher {
       createReportGenerator();
     }
     reportGenerator.generate(jiraConnector.getActualIssues());
+    LOGGER.info("Run stage completed!");
   }
 
   private static String getPassword() throws Exception {
     Console console = System.console();
     if (console == null) {
-      //throw new RuntimeException("Could not get console instance.");
       BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
       return buffer.readLine();
     }
@@ -134,13 +137,11 @@ public final class Launcher {
   }
 
   private static boolean checkDataSetFileNotExists() {
-    URL dataSetResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
-    return dataSetResource == null;
+    return !Manager.getDataSet().exists();
   }
 
   private static boolean checkVectorModelFileNotExists() {
-    URL vectorModelResource = Launcher.class.getClassLoader().getResource("VectorModel.zip");
-    return vectorModelResource == null;
+    return !Manager.getVectorModel().exists();
   }
 
   private static boolean checkDroolsFileNotExists() throws IOException {
@@ -148,6 +149,10 @@ public final class Launcher {
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     Resource[] resources = resolver.getResources("classpath*:*.drl");
     return resources.length == 0;
+  }
+
+  private static boolean checkReportGeneratorConfiguration() {
+    return new File("../output").exists();
   }
 
   private static void createClassifier() throws Exception {
@@ -169,17 +174,5 @@ public final class Launcher {
       createClassifier();
     }
     reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
-  }
-
-  private static boolean classifierCheckPrepare() {
-    return Launcher.class.getClassLoader().getResource(DATASET_FILE_NAME) != null;
-  }
-
-  private static boolean classifierCheckConfiguration() {
-    return Launcher.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null;
-  }
-
-  private static boolean reportGeneratorCheckConfiguration() {
-    return new File("../output").exists();
   }
 }
