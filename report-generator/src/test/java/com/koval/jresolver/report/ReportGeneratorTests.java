@@ -31,6 +31,7 @@ public class ReportGeneratorTests {
     @Before
     public void setUp() {
         reportGenerator = new HtmlReportGenerator(mock(Classifier.class), mock(DroolsRuleEngine.class));
+        reportGenerator.configure(); //for totalResultTest, w/o it sometimes failed to write for /output, because it does`nt exist
     }
 
     @Test
@@ -39,18 +40,12 @@ public class ReportGeneratorTests {
         if (file.exists() && !FileUtil.deleteDirectory(file)) {
             return; //file system error, directory founded but not deleted.
         }
-        boolean flag = false;
-        reportGenerator.configure();
-        if (file.exists()) {
-            flag = true;
-        }
-        assertTrue(flag);
-        flag = false;
-        reportGenerator.configure();
-        if (file.exists()) {
-            flag = true;
-        }
-        assertTrue(flag);
+
+        reportGenerator.configure(); //no directory
+        assertTrue(file.exists());
+
+        reportGenerator.configure(); //with directory
+        assertTrue(file.exists());
     }
 
     @Test
