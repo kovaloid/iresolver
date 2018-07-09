@@ -24,5 +24,9 @@ jresolver configure
 ```
 Run tool:
 ```
-jresolver
+jresolver run
+```
+All three stages with password:
+```
+jresolver prepare configure run password
 ```

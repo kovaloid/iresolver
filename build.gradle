@@ -121,6 +121,7 @@ subprojects {
     main {
       resources {
         srcDir '../data'
+		srcDir '../../data'
         srcDir '../src/main/resources'
         srcDir '../jira-connector/src/main/resources'
         srcDir '../classifier/src/main/resources'
