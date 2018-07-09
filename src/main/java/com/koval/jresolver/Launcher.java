@@ -1,7 +1,9 @@
 package com.koval.jresolver;
 
+import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -94,10 +96,11 @@ public final class Launcher {
     reportGenerator.generate(jiraConnector.getActualIssues());
   }
 
-  private static char[] getPassword() {
+  private static char[] getPassword() throws Exception {
     Console console = System.console();
     if (console == null) {
-      throw new RuntimeException("Could not get console instance.");
+      BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+      return buffer.readLine().toCharArray();
     }
     return console.readPassword("Enter your Jira password: ");
   }
