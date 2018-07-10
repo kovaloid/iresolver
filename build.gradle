@@ -34,6 +34,80 @@ startScripts {
   }
 }
 
+task createPrepareScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'prepare'
+
+  createPrepareScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=prepare')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceFirst('APP_ARGS=', 'APP_ARGS=prepare+')
+    }
+  }
+}
+
+task createConfigureScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'configure'
+
+  createConfigureScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=configure')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceFirst('APP_ARGS=', 'APP_ARGS=configure+')
+    }
+  }
+}
+
+task createRunScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'run'
+
+  createRunScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+      windowsScriptFile.text = windowsScriptFile.text
+              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=run')
+      unixScriptFile.text = unixScriptFile.text
+              .replaceFirst('APP_ARGS=', 'APP_ARGS=run+')
+    }
+  }
+}
+
+applicationDistribution.into("bin") {
+  duplicatesStrategy= DuplicatesStrategy.EXCLUDE
+  from(createPrepareScript)
+  from(createConfigureScript)
+  from(createRunScript)
+  fileMode = 0755
+}
+
 jar {
   exclude('log4j.properties')
 }
