@@ -18,11 +18,12 @@ import com.koval.jresolver.connector.bean.JiraIssue;
 import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
-import com.koval.jresolver.manager.Manager;
 
 public class DocClassifier implements Classifier {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocClassifier.class);
+  private static final String DATASET_FILE_NAME = "DataSet.txt";
+  private static final String VECTOR_MODEL_FILE_NAME = "VectorModel.zip";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private DocVectorizer docVectorizer;
@@ -45,36 +46,37 @@ public class DocClassifier implements Classifier {
     this.jiraConnector = new JiraConnector(jiraProperties);
     this.jiraClient = new BasicJiraClient(jiraProperties.getUrl());
     this.docVectorizer = new DocVectorizer(classifierProperties);
-    this.workFolder = Manager.getDataDirectory();
+    this.workFolder = classifierProperties.getWorkFolder();
   }
 
   @Override
   public void prepare() throws IOException {
-    if (Manager.checkClassifierPrepare()) {
+    if (DocClassifier.class.getClassLoader().getResource(DATASET_FILE_NAME) != null) {
       LOGGER.info("Skip classifier preparation. File 'DataSet.txt' is already exists.");
       return;
     }
-    jiraConnector.createHistoryIssuesDataSet("DataSet.txt");
+    jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
   }
 
   @Override
   public void configure() throws IOException {
-    if (Manager.checkClassifierConfigure()) {
+    if (DocClassifier.class.getClassLoader().getResource(VECTOR_MODEL_FILE_NAME) != null) {
       LOGGER.info("Skip classifier configuration. File 'VectorModel.zip' is already exists.");
       return;
     }
-    docVectorizer.createFromDataset(workFolder + "DataSet.txt");
-    docVectorizer.save(workFolder + "VectorModel.zip");
+    docVectorizer.createFromDataset(DATASET_FILE_NAME);
+    docVectorizer.save(workFolder + VECTOR_MODEL_FILE_NAME);
   }
 
   @Override
-  public ClassifierResult execute(JiraIssue actualIssue, String vectorModelResource) throws URISyntaxException {
-    docVectorizer.load(vectorModelResource);
+  public ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException {
+    docVectorizer.load(workFolder + VECTOR_MODEL_FILE_NAME);
     Collection<String> keys = docVectorizer.getNearestLabels(actualIssue.getDescription(), NUMBER_OF_NEAREST_LABELS);
     List<String> labels = new ArrayList<>();
     List<String> users = new ArrayList<>();
     List<String> attachments = new ArrayList<>();
 
+    LOGGER.info("Nearest issues: " + keys);
     keys.forEach((key) -> {
       JiraIssue issue = jiraClient.getIssueByKey(key.trim());
       labels.addAll(issue.getLabels());
