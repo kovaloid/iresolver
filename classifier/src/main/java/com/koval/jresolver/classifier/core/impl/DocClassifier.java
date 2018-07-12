@@ -19,7 +19,6 @@ import com.koval.jresolver.connector.client.JiraClient;
 import com.koval.jresolver.connector.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.configuration.JiraProperties;
 
-
 public class DocClassifier implements Classifier {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocClassifier.class);
