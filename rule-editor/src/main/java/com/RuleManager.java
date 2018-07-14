@@ -10,7 +10,6 @@ public final class RuleManager {
   }
 
   public static void saveRule(Rule rule) {
-
   }
 
   public static List<Rule> getRules() {
@@ -19,10 +18,9 @@ public final class RuleManager {
     for (final File file : finder("rule-engine\\src\\main\\resources")) {
       System.out.println(file.getName());
       Rule rule = new Rule();
-      rule.file = file.getName();
-      try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+      rule.setFile(file.getName());
+      try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         String line = reader.readLine();
-        
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -34,12 +32,4 @@ public final class RuleManager {
     File dir = new File(dirName);
     return dir.listFiles((dir1, filename) -> filename.endsWith(".drl"));
   }
-
-}
-
-class Rule {
-  String file;
-  String name;
-  List<String> conditions;
-  List<String> recommendations;
 }

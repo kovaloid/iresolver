@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @ComponentScan
 //CHECKSTYLE:OFF
-public class SpringLauncher {
+public final class SpringLauncher {
     //CHECKSTYLE:ON
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringLauncher.class);
 
-    //SpringLauncher() { /*UTILITY*/ }
+    private SpringLauncher() { /*Utility*/ }
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(SpringLauncher.class, args);
