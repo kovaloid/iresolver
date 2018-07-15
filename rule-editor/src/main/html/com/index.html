@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Jresolver Rule Editor</title>
+
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/form-validation.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+
+    <div class="container">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="2">
+        <h2>Jresolver Rule Editor</h2>
+        <p class="lead">Rule editor for Jresolver</p>
+      </div>
+
+      <div class="row">
+	  
+	    <div class="col-md-3 text-center">
+		<!-- Здесь создание правил кнопкой + и вывод кнопок для правил, удобнее наверное через ng-repeat. 
+		Если создаете методы с другими названиями, меняйте здесь тоже. -->
+            <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createRule()">+</button><br>
+            <button type="button" class="btn btn-outline-secondary btn-block btn-space" ng-click="openRule()">Rule_1</button>
+		</div>
+	  
+        <div class="col-md-8 order-md-1">
+          <h4 class="mb-3">Conditions</h4>
+          <form class="needs-validation" novalidate>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с условиями. -->
+                <input type="text" class="form-control" ng-model="condition" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid condition is required.
+                </div>
+              </div>
+            </div>
+			
+			<!-- Кнопка добавления нового условия. -->
+			<button type="button" class="btn btn-primary btn-sm float-right" ng-click="addCondition()">+</button><br>
+
+            
+            <hr class="mb-4">
+            <h4 class="mb-3">Recommendations</h4>
+           
+		    <div class="row">
+              <div class="col-md-12 mb-3">
+			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с рекомендациями. -->
+                <input type="text" class="form-control" ng-model="recommendation" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid recommendation is required.
+                </div>
+              </div>
+            </div>
+			
+			<!-- Кнопка добавления новых рекомендаций. -->
+			<button type="button" class="btn btn-primary btn-sm float-right" ng-click="addRecommendation()">+</button><br>
+		   
+            <hr class="mb-4">
+			<!-- Кнопка сохранения. -->
+            <button class="btn btn-primary btn-lg btn-space float-right" type="submit" ng-click="save()">Save</button>
+          </form>
+		  <!-- Кнопка отмены. -->
+		  <button class="btn btn-primary btn-lg btn-space float-right" ng-click="cancel()">Cancel</button>
+        </div>
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2018 Jresolver</p>
+        <ul class="list-inline">
+		<!-- Ссылки на соответственно настройки и about. -->
+          <li class="list-inline-item"><a href="#">Settings</a></li>
+          <li class="list-inline-item"><a href="#">About</a></li>
+        </ul>
+      </footer>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/lib/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/lib/popper.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/holder.min.js"></script>
+	
+	<!-- Не удалять, это проверка на заполнение полей. -->
+	
+    <script>
+	
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function() {
+        'use strict';
+
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+    </script>
+  </body>
+</html>
