@@ -1,4 +1,4 @@
-package com;
+package com.jresolver.editor.service;
 
 import java.io.*;
 import java.util.LinkedList;
