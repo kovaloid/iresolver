@@ -23,19 +23,36 @@
 
       <div class="row">
 	  
-	    <div class="col-md-3 text-center">
-		<!-- Здесь создание правил кнопкой + и вывод кнопок для правил, удобнее наверное через ng-repeat. 
-		Если создаете методы с другими названиями, меняйте здесь тоже. -->
-            <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createRule()">+</button><br>
-            <button type="button" class="btn btn-outline-secondary btn-block btn-space" ng-click="openRule()">Rule_1</button>
-		</div>
+	<div class="col-md-3 text-center">
+	<!-- Здесь создание правил кнопкой + и вывод кнопок для правил, удобнее наверное через ng-repeat. 
+	Если создаете методы с другими названиями, меняйте здесь тоже. -->
+          <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createRule()">+</button><br>
+	  <hr class="mb-4">		
+	  <!-- repeat'ом все файлы и правила? -->
+	  <h4 class="mb-3 float-left">File_1</h4>
+          <button type="button" class="btn btn-outline-secondary btn-block btn-space" ng-click="openRule()">Rule_1</button>
+	</div>
 	  
         <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Conditions</h4>
+          <h4 class="mb-3">Attributes</h4>
           <form class="needs-validation" novalidate>
+           
+	    <div class="row">
+              <div class="col-md-12 mb-3">
+	      <!-- Здесь снова лучше ng-repeat'ом выводить поля с атрибутами. -->
+                <input type="text" class="form-control" ng-model="attribute" placeholder="" value="">              
+              </div>
+            </div>
+			
+	    <!-- Кнопка добавления новых атрибутов. -->
+	    <button type="button" class="btn btn-primary btn-sm float-right" ng-click="addAttribute()">+</button><br>
+		   
+            <hr class="mb-4">			
+	    <h4 class="mb-3">Conditions</h4>
+			
             <div class="row">
               <div class="col-md-12 mb-3">
-			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с условиями. -->
+		<!-- Здесь снова лучше ng-repeat'ом выводить поля с условиями. -->
                 <input type="text" class="form-control" ng-model="condition" placeholder="" value="" required>
                 <div class="invalid-feedback">
                   Valid condition is required.
@@ -43,39 +60,38 @@
               </div>
             </div>
 			
-			<!-- Кнопка добавления нового условия. -->
-			<button type="button" class="btn btn-primary btn-sm float-right" ng-click="addCondition()">+</button><br>
+	    <!-- Кнопка добавления нового условия. -->
+	    <button type="button" class="btn btn-primary btn-sm float-right" ng-click="addCondition()">+</button><br>
 
-            
             <hr class="mb-4">
             <h4 class="mb-3">Recommendations</h4>
            
-		    <div class="row">
+	    <div class="row">
               <div class="col-md-12 mb-3">
-			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с рекомендациями. -->
+	        <!-- Здесь снова лучше ng-repeat'ом выводить поля с рекомендациями. -->
                 <input type="text" class="form-control" ng-model="recommendation" placeholder="" value="" required>
                 <div class="invalid-feedback">
                   Valid recommendation is required.
                 </div>
               </div>
             </div>
-			
-			<!-- Кнопка добавления новых рекомендаций. -->
-			<button type="button" class="btn btn-primary btn-sm float-right" ng-click="addRecommendation()">+</button><br>
+		
+            <!-- Кнопка добавления новых рекомендаций. -->
+	    <button type="button" class="btn btn-primary btn-sm float-right" ng-click="addRecommendation()">+</button><br>
 		   
             <hr class="mb-4">
-			<!-- Кнопка сохранения. -->
+	    <!-- Кнопка сохранения. -->
             <button class="btn btn-primary btn-lg btn-space float-right" type="submit" ng-click="save()">Save</button>
           </form>
-		  <!-- Кнопка отмены. -->
-		  <button class="btn btn-primary btn-lg btn-space float-right" ng-click="cancel()">Cancel</button>
+	  <!-- Кнопка отмены. -->
+	  <button class="btn btn-primary btn-lg btn-space float-right" ng-click="cancel()">Cancel</button>
         </div>
       </div>
 
       <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2018 Jresolver</p>
         <ul class="list-inline">
-		<!-- Ссылки на соответственно настройки и about. -->
+	  <!-- Ссылки на соответственно настройки и about. -->
           <li class="list-inline-item"><a href="#">Settings</a></li>
           <li class="list-inline-item"><a href="#">About</a></li>
         </ul>
