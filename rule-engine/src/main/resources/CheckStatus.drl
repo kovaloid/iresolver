@@ -6,9 +6,9 @@ import com.koval.jresolver.connector.bean.JiraStatus;
 global com.koval.jresolver.rules.results.RulesResult results
 
 rule "Check status"
-    dialect "mvel"
-    when
-        JiraIssue( status == JiraStatus.CLOSED )
-    then
-        results.putAdvice("Status is closed");
+	dialect "mvel"
+	when
+		JiraIssue( status == JiraStatus.CLOSED )
+	then
+		results.putAdvice("Status is closed");
 end
