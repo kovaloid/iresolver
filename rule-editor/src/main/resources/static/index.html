@@ -27,12 +27,29 @@
 		<!-- Здесь создание правил кнопкой + и вывод кнопок для правил, удобнее наверное через ng-repeat. 
 		Если создаете методы с другими названиями, меняйте здесь тоже. -->
             <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createRule()">+</button><br>
+			 <hr class="mb-4">		
+			 <!-- repeat'ом все файлы и правила? -->
+			 <h4 class="mb-3 float-left">File_1</h4>
             <button type="button" class="btn btn-outline-secondary btn-block btn-space" ng-click="openRule()">Rule_1</button>
 		</div>
 	  
         <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Conditions</h4>
+          <h4 class="mb-3">Attributes</h4>
           <form class="needs-validation" novalidate>
+           
+		     <div class="row">
+              <div class="col-md-12 mb-3">
+			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с атрибутами. -->
+                <input type="text" class="form-control" ng-model="attribute" placeholder="" value="">              
+              </div>
+            </div>
+			
+			 <!-- Кнопка добавления новых атрибутов. -->
+			 <button type="button" class="btn btn-primary btn-sm float-right" ng-click="addAttribute()">+</button><br>
+		   
+            <hr class="mb-4">			
+			 <h4 class="mb-3">Conditions</h4>
+			
             <div class="row">
               <div class="col-md-12 mb-3">
 			  <!-- Здесь снова лучше ng-repeat'ом выводить поля с условиями. -->
