@@ -12,5 +12,14 @@
 
 .btn-space {
     margin-right: 5px;
+	margin-left: 3px;
 	margin-bottom: 1px;
+}
+
+.btn-space1 {
+	margin-left: 5px;
+}
+
+.btn-space2 {
+	margin-left: 8px;
 }
