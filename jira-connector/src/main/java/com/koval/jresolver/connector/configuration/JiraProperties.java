@@ -1,11 +1,8 @@
 package com.koval.jresolver.connector.configuration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import com.koval.jresolver.manager.Manager;
 
 
 public class JiraProperties {
@@ -20,6 +17,7 @@ public class JiraProperties {
   private int delayBetweenRequests = 3000;
   private int maxIssues = 10;
   private boolean appendToDataSet = true;
+  private String workFolder;
 
   public JiraProperties(String url, String historyJql, String actualJql) {
     this.url = url;
@@ -29,7 +27,10 @@ public class JiraProperties {
 
   public JiraProperties(String propertiesFileName) throws IOException {
     Properties properties = new Properties();
-    try (InputStream input = new FileInputStream(Manager.getConfigDirectory() + propertiesFileName)) {
+    try (InputStream input = JiraProperties.class.getClassLoader().getResourceAsStream(propertiesFileName)) {
+      if (input == null) {
+        throw new IOException("Could not find properties file: " + propertiesFileName);
+      }
       properties.load(input);
       url = properties.getProperty("url");
       username = properties.getProperty("username");
@@ -41,6 +42,7 @@ public class JiraProperties {
       delayBetweenRequests = Integer.parseInt(properties.getProperty("delayBetweenRequests"));
       maxIssues = Integer.parseInt(properties.getProperty("maxIssues"));
       appendToDataSet = Boolean.parseBoolean(properties.getProperty("appendToDataSet"));
+      workFolder = properties.getProperty("workFolder");
     }
   }
 
@@ -128,4 +130,11 @@ public class JiraProperties {
     return username == null || password == null || username.isEmpty() || password.isEmpty();
   }
 
+  public String getWorkFolder() {
+    return workFolder;
+  }
+
+  public void setWorkFolder(String workFolder) {
+    this.workFolder = workFolder;
+  }
 }

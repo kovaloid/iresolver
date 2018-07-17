@@ -9,7 +9,6 @@ ext {
 }
 
 dependencies {
-  compile project(':resource-manager')
   compile project(':jira-connector'),
           "org.kie:kie-api:$droolsVersion",
           "org.drools:drools-core:$droolsVersion",
