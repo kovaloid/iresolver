@@ -31,7 +31,7 @@
 	  <hr class="mb-4">		
 	  
 	  <!-- repeat'ом все файлы и правила? -->
-	  <button type="button" id="show" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space" data-toggle="collapse" data-target="#hide-file">Show</button>
+	  <input type="image" id="show" class="float-left btn-space" data-toggle="collapse" data-target="#hide-file" src="img/right.jpg"></input>
 	  <h3 class="mb-3 float-left">File_1</h3>
 	      
 	  <div class="btn-group btn-group-sm" >
@@ -95,7 +95,7 @@
 	  
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3 float-left">Attributes</h4>
-	  <button type="button" id="show1" class="btn btn-info btn-outline-secondary btn-sm btn-space" data-toggle="collapse" data-target="#hide-attributes">Show</button>
+	  <input type="image" id="show1" class="float-left btn-space" data-toggle="collapse" data-target="#hide-attributes" src="img/right.jpg"></image><br><br>
           <form class="needs-validation" novalidate>
             <div id="hide-attributes" class="collapse in">
 	      <div class="row">
@@ -103,7 +103,7 @@
 	        <!-- Здесь снова лучше ng-repeat'ом выводить поля с атрибутами. -->
                   <input type="text" class="form-control" ng-model="attribute" placeholder="" value="">
         	</div>
-		<button type="button" class="btn btn-danger btn-sm  btn-space2" ng-click="deleteAttribute()">&times;</button><br>		
+		<button type="button" class="btn btn-danger btn-sm  btn-space1" ng-click="deleteAttribute()">&times;</button><br>		
               </div>
 	      <!-- Кнопка добавления новых атрибутов. -->
 	      <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" ng-click="addAttribute()">+</button><br>
@@ -176,24 +176,20 @@
     <script>
       $(document).ready(function(){
       $('#show').on('click', function () {
-        var text=$('#show').text();
-        if(text === "Show"){
-          $(this).html('Hide');
-        } else{
-          $(this).text('Show');
-        }
+        var src = ($('#show').attr('src') === 'img/right.jpg')
+            ? 'img/down.jpg'
+            : 'img/right.jpg';
+         $('#show').attr('src', src);
       });
     });
     </script>
     <script>
       $(document).ready(function(){
       $('#show1').on('click', function () {
-        var text=$('#show1').text();
-        if(text === "Show"){
-          $(this).html('Hide');
-        } else{
-          $(this).text('Show');
-        }
+        var src = ($('#show1').attr('src') === 'img/right.jpg')
+            ? 'img/down.jpg'
+            : 'img/right.jpg';
+         $('#show1').attr('src', src);
       });
     });
     </script>
