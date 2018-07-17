@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public final class CreateController {
-
     @Autowired
     private RuleService ruleService;
 
