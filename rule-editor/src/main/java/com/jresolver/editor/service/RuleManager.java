@@ -1,44 +1,61 @@
 package com.jresolver.editor.service;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public final class RuleManager {
 
   private RuleManager() {
   }
 
-  public static void saveRule(List<Rule> rules) throws IOException {
-    File drl = new File(getRulesDir(), rules.get(0).file);
-    try (FileWriter writer = new FileWriter(drl)) {
-      writer.write("package com.koval.jresolver.rules\n" +
-          "\n" +
-          "import com.koval.jresolver.connector.bean.JiraIssue;\n" +
-          "import com.koval.jresolver.connector.bean.JiraStatus;\n" +
-          "\n" +
-          "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
-      for (final Rule rule : rules) {
-        writer.append("\nrule \"").append(rule.name).append("\"\n\t");
-        if (rule.attributes != null && rule.attributes.size() > 0) {
-          for (final String att : rule.attributes) {
-            writer.append(att).append("\n\t");
+//  public static void main(String[] args) throws IOException {
+//    saveRules(getRules());
+//  }  //test
+
+  public static void saveRules(List<Rule> rules) throws IOException {
+    Map<String, LinkedList<Rule>> filelist = new HashMap<>();
+    for (Rule rule : rules) {
+      filelist.putIfAbsent(rule.file, new LinkedList<>());
+      filelist.get(rule.file).add(rule);
+    }
+    for (String filename : filelist.keySet()) {
+      List<Rule> rulesFromOneFile = filelist.get(filename);
+      File drl = new File(getRulesDir(), rulesFromOneFile.get(0).file);
+      try (FileWriter writer = new FileWriter(drl)) {
+        writer.write("package com.koval.jresolver.rules\n" +
+            "\n" +
+            "import com.koval.jresolver.connector.bean.JiraIssue;\n" +
+            "import com.koval.jresolver.connector.bean.JiraStatus;\n" +
+            "\n" +
+            "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
+        for (final Rule rule : rulesFromOneFile) {
+          writer.append("\nrule \"").append(rule.name).append("\"\n\t");
+          if (rule.attributes != null && rule.attributes.size() > 0) {
+            for (final String att : rule.attributes) {
+              writer.append(att).append("\n\t");
+            }
           }
+          writer.append("when\n");
+          for (final String condition : rule.conditions) {
+            writer.append("\t\t").append(condition).append('\n');
+          }
+          writer.append("\tthen\n");
+          for (final String recommendation : rule.recommendations) {
+            writer.append("\t\t").append(recommendation).append('\n');
+          }
+          writer.append("end\n");
         }
-        writer.append("when\n");
-        for (final String condition : rule.conditions) {
-          writer.append("\t\t").append(condition).append('\n');
-        }
-        writer.append("\tthen\n");
-        for (final String recommendation : rule.recommendations) {
-          writer.append("\t\t").append(recommendation).append('\n');
-        }
-        writer.append("end\n");
       }
     }
   }
 
-  public static List<Rule> getRules() {
+  public static List<Rule> getRules() throws IOException {
     List<Rule> rules = new LinkedList<>();
 
     for (final File file : finder()) {
@@ -84,12 +101,22 @@ public final class RuleManager {
     return rules;
   }
 
-  private static File[] finder() {
+  private static File[] finder() throws IOException {
     return getRulesDir().listFiles((dir1, filename) -> filename.endsWith(".drl"));
   }
 
-  private static File getRulesDir() {
-    return new File("rule-engine\\src\\main\\resources");
+  private static File getRulesDir() throws IOException {
+    //todo: use resource-manager functions (not in project yet)
+    if (new File("rule-engine").exists()) {
+      return new File("rule-engine\\src\\main\\resources");
+    } else if (new File("..\\rule-engine").exists()) {
+      return new File("..\\rule-engine\\src\\main\\resources");
+    } else if (new File("rules").exists()) {
+      return new File("rules");
+    } else if (new File("..\\rules").exists()) {
+      return new File("..\\rules");
+    }
+   throw new IOException("Rules folder has not found");
   }
 }
 
