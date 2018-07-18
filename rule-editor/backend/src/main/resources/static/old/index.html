@@ -64,16 +64,16 @@
           </div>
 	  
 	  
-		<ul id="hide-file" class="connectedSortable collapse in">
-		<!-- Генерировать data-target и соответственно id у collapse in правил. -->
-  <li class="ui-state-default btn btn-outline-secondary" data-toggle="collapse" data-target="#open-rule1">Rule_1</li>
-</ul>
+	  <ul id="hide-file" class="connectedSortable collapse in">
+	  <!-- Генерировать data-target и соответственно id у collapse in правил, репитом правила. -->
+            <li class="ui-state-default btn btn-outline-secondary" data-toggle="collapse" data-target="#open-rule1">Rule_1</li>
+          </ul>
  
- <!-- !!!Демонстрация перетаскивания, удалить потом!!! -->
-<ul id="sortable2" class="connectedSortable">
-  <li class="ui-state-highlight">Item 1</li>
-  <li class="ui-state-highlight">Item 2</li>
-</ul>
+          <!-- !!!Демонстрация перетаскивания, удалить потом!!! -->
+          <ul id="sortable2" class="connectedSortable">
+            <li class="ui-state-highlight">Item 1</li>
+            <li class="ui-state-highlight">Item 2</li>
+          </ul>
 		<!-- Конец репита. -->
 	    
 		 
@@ -177,7 +177,7 @@
     <script src="app/app.controller.js"></script>
     <script src="app/app.service.js"></script>
 	
-	<script>
+    <script>
       $( function() {
         $( '#hide-file, #sortable2' ).sortable({
           connectWith: '.connectedSortable'
