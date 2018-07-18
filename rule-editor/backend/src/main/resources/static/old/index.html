@@ -8,8 +8,8 @@
     <title>Jresolver Rule Editor</title>
 
     <link href="css/lib/bootstrap.min.css" rel="stylesheet">
-
     <link href="css/form-validation.css" rel="stylesheet">
+  
   </head>
 
   <body class="bg-light">
@@ -30,7 +30,9 @@
           <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createFile()">+</button><br>
 	  <hr class="mb-4">		
 	  
-	  <!-- repeat'ом все файлы и правила? -->
+	  <!-- repeat'ом все файлы и правила?
+           Генерировать id для каждого файла и connectedSortable, 
+		   каким-то образом передавать эти id в скрипты внизу. -->
 	  <input type="image" id="show" class="float-left btn-space" data-toggle="collapse" data-target="#hide-file" src="img/right.jpg"></input>
 	  <h3 class="mb-3 float-left">File_1</h3>
 	      
@@ -61,17 +63,19 @@
             </div>
           </div>
 	  
-	  <div id="hide-file" class="collapse in">
-	    <br>
-	    <div class="btn-group " draggable="true" ondragstart="drag(event)" id="drag1">
-              <div class="btn-group">
-		<button type="button" class="btn btn-outline-secondary " ng-click="openRule()">Rule_1</button>
-	      </div>
-	      <div class="btn-group">
-		<button type="button" class="btn btn-info btn-outline-danger " data-toggle="modal" data-target="#deleteRuleModal">&times;</button>
-	      </div>
-	    </div> 
-	  </div>
+	  
+		<ul id="hide-file" class="connectedSortable collapse in">
+		<!-- Генерировать data-target и соответственно id у collapse in правил. -->
+  <li class="ui-state-default btn btn-outline-secondary" data-toggle="collapse" data-target="#open-rule1">Rule_1</li>
+</ul>
+ 
+ <!-- !!!Демонстрация перетаскивания, удалить потом!!! -->
+<ul id="sortable2" class="connectedSortable">
+  <li class="ui-state-highlight">Item 1</li>
+  <li class="ui-state-highlight">Item 2</li>
+</ul>
+		<!-- Конец репита. -->
+	    
 		 
 	  <div class="modal fade" id="deleteRuleModal" role="dialog">
             <div class="modal-dialog modal-bg">
@@ -93,7 +97,7 @@
 		
 	</div>
 	  
-        <div class="col-md-8 order-md-1">
+        <div id="open-rule1" class="col-md-8 order-md-1 collapse in">
           <h4 class="mb-3 float-left">Attributes</h4>
 	  <input type="image" id="show1" class="float-left btn-space" data-toggle="collapse" data-target="#hide-attributes" src="img/right.jpg"></image><br><br>
           <form class="needs-validation" novalidate>
@@ -103,7 +107,7 @@
 	        <!-- Здесь снова лучше ng-repeat'ом выводить поля с атрибутами. -->
                   <input type="text" class="form-control" ng-model="attribute" placeholder="" value="">
         	</div>
-		<button type="button" class="btn btn-danger btn-sm  btn-space1" ng-click="deleteAttribute()">&times;</button><br>		
+		<button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteAttribute()">&times;</button><br>		
               </div>
 	      <!-- Кнопка добавления новых атрибутов. -->
 	      <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" ng-click="addAttribute()">+</button><br>
@@ -120,7 +124,7 @@
                   Valid condition is required.
                 </div>
               </div>
-	      <button type="button" class="btn btn-danger btn-sm  btn-space1" ng-click="deleteCondition()">&times;</button><br>		
+	      <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteCondition()">&times;</button><br>		
             </div>
 			
 	    <!-- Кнопка добавления нового условия. -->
@@ -137,7 +141,7 @@
                   Valid recommendation is required.
                 </div>
               </div>
-	      <button type="button" class="btn btn-danger btn-sm  btn-space1" ng-click="deleteRecomendation()">&times;</button><br>		
+	      <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteRecomendation()">&times;</button><br>		
             </div>
 		
             <!-- Кнопка добавления новых рекомендаций. -->
@@ -147,8 +151,8 @@
 	    <!-- Кнопка сохранения. -->
             <button class="btn btn-primary btn-lg btn-space float-right" type="submit" ng-click="save()">Save</button>
           </form>
-	  <!-- Кнопка отмены. -->
-	  <button class="btn btn-primary btn-lg btn-space float-right" ng-click="cancel()">Cancel</button>
+	  <!-- Кнопка удаления правила. -->
+	  <button class="btn btn-primary btn-lg btn-space float-right" data-toggle="modal" data-target="#deleteRuleModal">Cancel</button>
         </div>
       </div>
 
@@ -162,9 +166,9 @@
       </footer>
     </div>
 
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="js/lib/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    	
     <script src="js/lib/popper.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/lib/holder.min.js"></script>
@@ -173,6 +177,14 @@
     <script src="app/app.controller.js"></script>
     <script src="app/app.service.js"></script>
 	
+	<script>
+      $( function() {
+        $( '#hide-file, #sortable2' ).sortable({
+          connectWith: '.connectedSortable'
+        }).disableSelection();
+      } );
+    </script>
+  
     <script>
       $(document).ready(function(){
       $('#show').on('click', function () {
