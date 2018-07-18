@@ -8,13 +8,19 @@ import { RuleService } from '../rule/rule.service';
   styleUrls: ['./rule-list.component.css']
 })
 export class RuleListComponent implements OnInit {
-rules: Array<any>;
+rule_categories: Array<any>;
 
 constructor(private ruleService: RuleService) { }
 
   ngOnInit() {
     this.ruleService.getAll().subscribe(data => {
-      this.rules = data;
+      this.rule_categories = data;
+    });
+  }
+
+  save() {
+    this.ruleService.save(this.rule_categories).subscribe(result => {
+      this.rule_categories = result;
     });
   }
 }
