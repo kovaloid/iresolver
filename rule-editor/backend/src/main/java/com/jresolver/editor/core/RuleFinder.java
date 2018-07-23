@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class RuleFinder {
+public final class RuleFinder {
+
+    private RuleFinder() { /*UTILITY*/ }
 
     public static  File[] finder() throws IOException {
         return getRulesDir().listFiles((dir1, filename) -> filename.endsWith(".drl"));

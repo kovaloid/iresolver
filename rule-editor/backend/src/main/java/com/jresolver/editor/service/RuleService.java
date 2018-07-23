@@ -1,20 +1,20 @@
 package com.jresolver.editor.service;
 
-import com.jresolver.editor.bean.DraftRule;
-import com.jresolver.editor.bean.Rule;
-import com.jresolver.editor.core.RuleFinder;
+import java.io.*;
+import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.*;
-
+import com.jresolver.editor.bean.DraftRule;
+import com.jresolver.editor.bean.Rule;
+import com.jresolver.editor.core.RuleFinder;
 
 @Service
 public class RuleService {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(RuleService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuleService.class);
 
     private List<Rule> ruleList;
     private Integer maxId;
@@ -48,21 +48,21 @@ public class RuleService {
                         rule.setName(line.substring(line.indexOf('"') + 1, line.length() - 1));
                         line = reader.readLine();
                         List<String> attributes = new LinkedList<>();
-                        while (!line.equals("\twhen")) {
+                        while (!"\twhen".equals(line)) {
                             attributes.add(line.substring(1));
                             line = reader.readLine();
                         }
                         rule.setAttributes(attributes);
                         line = reader.readLine();
                         List<String> conditions = new LinkedList<>();
-                        while (!line.equals("\tthen")) {
+                        while (!"\tthen".equals(line)) {
                             conditions.add(line.substring(2));
                             line = reader.readLine();
                         }
                         rule.setConditions(conditions);
                         line = reader.readLine();
                         List<String> recommendations = new LinkedList<>();
-                        while (!line.equals("end")) {
+                        while (!"end".equals(line)) {
                             recommendations.add(line.substring(2));
                             line = reader.readLine();
                         }
@@ -108,12 +108,12 @@ public class RuleService {
             List<Rule> rulesFromOneFile = filelist.get(filename);
             File drl = new File(RuleFinder.getRulesDir(), rulesFromOneFile.get(0).getFile());
             try (FileWriter writer = new FileWriter(drl)) {
-                writer.write("package com.koval.jresolver.rules\n" +
-                        "\n" +
-                        "import com.koval.jresolver.connector.bean.JiraIssue;\n" +
-                        "import com.koval.jresolver.connector.bean.JiraStatus;\n" +
-                        "\n" +
-                        "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
+                writer.write("package com.koval.jresolver.rules\n"
+                        + "\n"
+                        + "import com.koval.jresolver.connector.bean.JiraIssue;\n"
+                        + "import com.koval.jresolver.connector.bean.JiraStatus;\n"
+                        + "\n"
+                        + "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
                 for (final Rule rule : rulesFromOneFile) {
                     writer.append("\nrule \"").append(rule.getName()).append("\"\n\t");
                     if (rule.getAttributes() != null && rule.getAttributes().size() > 0) {
