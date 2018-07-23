@@ -2,6 +2,7 @@ package com.jresolver.editor.controller;
 
 import com.jresolver.editor.bean.DraftRule;
 import com.jresolver.editor.bean.Rule;
+import com.jresolver.editor.service.RuleManager;
 import com.jresolver.editor.service.RuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,6 +20,9 @@ public class RuleController {
     @Autowired
     private RuleService ruleService;
 
+    @Autowired
+    private RuleManager ruleManager;
+
     @RequestMapping(value = "/rest/rules/{ruleId}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Rule> getRule(@PathVariable("ruleId") int ruleId, HttpServletRequest request) {
         Rule rule = ruleService.getRuleById(ruleId);
@@ -25,8 +30,9 @@ public class RuleController {
     }
 
     @RequestMapping(value = "/rest/rules", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Rule>> getRules(HttpServletRequest request) {
-        List<Rule> rules = ruleService.getAllRules();
+    public ResponseEntity<List<Rule>> getRules(HttpServletRequest request) throws IOException {
+        //List<Rule> rules = ruleService.getAllRules();
+        List<Rule> rules = ruleManager.getRules();
         return new ResponseEntity<>(rules, HttpStatus.OK);
     }
 
