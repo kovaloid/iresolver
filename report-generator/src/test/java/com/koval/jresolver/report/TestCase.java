@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class testCase {
+public class TestCase {
 
     private static ReportGenerator reportGenerator;
 
@@ -80,7 +80,7 @@ public class testCase {
         byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
         byte[] hash1 = MessageDigest.getInstance("MD5").digest(bytes1);
 
-        byte[] bytes2 = Files.readAllBytes(Paths.get(testCase.class.getClassLoader().getResource("testIndex.html").toURI()));
+        byte[] bytes2 = Files.readAllBytes(Paths.get(TestCase.class.getClassLoader().getResource("testIndex.html").toURI()));
         byte[] hash2 = MessageDigest.getInstance("MD5").digest(bytes2);
 
         assertArrayEquals(hash1, hash2);

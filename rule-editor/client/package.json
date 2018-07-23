@@ -28,6 +28,7 @@
     "zone.js": "^0.8.19",
     "bootstrap": "4.0.x",
     "jquery": "^3.2.1",
+    "jquery-ui-dist": "^1.12.1",
     "popper.js": "^1.12.5",
     "holderjs": "2.9.4"
   },

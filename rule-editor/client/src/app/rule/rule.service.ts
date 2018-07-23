@@ -9,6 +9,10 @@ constructor(private http: HttpClient) {
   }
 
   getAll(): Observable<any> {
-    return this.http.get('//localhost:8080/cool-cars');
+    return this.http.get('//localhost:8080/rest/rules');
+  }
+
+  save(rule_categories: Array<any>): Observable<any> {
+    return this.http.post('//localhost:8080/rest/rules', rule_categories);
   }
 }
