@@ -1,19 +1,23 @@
 package com.jresolver.editor.controller;
 
-import com.jresolver.editor.service.RuleService;
+import com.jresolver.editor.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 public class SettingsController {
 
     @Autowired
-    private RuleService ruleService;
+    private LocationService locationService;
 
-    @RequestMapping("/rest/settings/location")
-    public String index() {
-        return "The location of newly created rules was saved";
+    @RequestMapping(value = "/rest/location", method = RequestMethod.POST)
+    public ResponseEntity<Void> changeLocation(@RequestParam(value = "path", required = false) String path) {
+        locationService.setPath(path);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }
