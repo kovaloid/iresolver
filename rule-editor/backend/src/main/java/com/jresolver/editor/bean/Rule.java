@@ -68,7 +68,7 @@ public class Rule {
         this.attributes = attributes;
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (o instanceof Rule) {
             if (((Rule) o).getId() == this.getId()) {
@@ -76,5 +76,5 @@ public class Rule {
             }
         }
         return false;
-    }
+    }*/
 }
