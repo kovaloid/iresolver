@@ -16,20 +16,34 @@ public class RuleService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RuleService.class);
 
+    private List<Rule> ruleList;
+    private Integer maxId;
+
+    public RuleService() throws IOException {
+        ruleList = this.getAllRules();
+    }
+
     public Rule getRuleById(int ruleId) {
         LOGGER.info("Retrieving the rule by id");
-        return new Rule();
+        for (Rule rule : ruleList) {
+            if (rule.getId() == ruleId) {
+                return rule;
+            }
+        }
+        return null;
     }
 
     public List<Rule> getAllRules() throws IOException {
         LOGGER.info("Retrieving all the rules in the system");
         List<Rule> rules = new LinkedList<>();
+        Integer i = 0;
         for (final File file : RuleFinder.finder()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line = reader.readLine();
                 while (line != null) {
                     if ((line.length() > 4) && line.substring(0, 4).equals("rule")) {
                         Rule rule = new Rule();
+                        rule.setId(i);
                         rule.setFile(file.getName());
                         rule.setName(line.substring(line.indexOf('"') + 1, line.length() - 1));
                         line = reader.readLine();
@@ -54,6 +68,7 @@ public class RuleService {
                         }
                         rule.setRecommendations(recommendations);
                         rules.add(rule);
+                        i++;
                     }
                     line = reader.readLine();
                 }
@@ -61,12 +76,21 @@ public class RuleService {
                 e.printStackTrace();
             }
         }
+        maxId = i;
         return rules;
     }
 
     public Rule updateRuleById(int ruleId, DraftRule payload) {
         LOGGER.info("Updating the rule by its id");
-        return new Rule();
+        for (Rule rule : ruleList) {
+            if (rule.getId() == ruleId) {
+                rule.setName(payload.getName());
+                rule.setConditions(payload.getConditions());
+                rule.setRecommendations(payload.getRecommendations());
+                return rule;
+            }
+        }
+        return null;
     }
 
     public Rule createRule(DraftRule payload) {
