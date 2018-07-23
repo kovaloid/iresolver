@@ -4,14 +4,15 @@
     <!-- Здесь создание правил кнопкой + и вывод кнопок для правил, удобнее наверное через ng-repeat.
     Если создаете методы с другими названиями, меняйте здесь тоже. -->
 
-    <button type="button" class="btn btn-primary btn-block btn-space" ng-click="createFile()">+</button><br>
+    <button type="button" class="btn btn-primary btn-block btn-space" (click)="createFile()">+</button><br>
     <hr class="mb-4">
+    <div *ngFor="let rule_category of rule_categories">
 
     <!-- repeat'ом все файлы и правила?
            Генерировать id для каждого файла и connectedSortable,
        каким-то образом передавать эти id в скрипты внизу. -->
-    <button type="button" id="show" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space" data-toggle="collapse" data-target="#hide-file">Show</button>
-    <h3 class="mb-3 float-left">File_1</h3>
+    <button type="button" id="show" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space" data-toggle="collapse" data-target="#rule_category.name">Show</button>
+    <h3 class="mb-3 float-left">{{rule_category.name}}</h3>
 
     <div class="btn-group btn-group-sm" >
       <div class="btn-group">
@@ -41,9 +42,9 @@
     </div>
 
 
-    <ul id="hide-file" class="collapse in">
+    <ul id="rule_category.name" class="connectedSortable collapse in" *ngFor="let rule of rule_category.rules">
       <!-- Генерировать data-target и соответственно id у collapse in правил, репитом правила. -->
-      <li class="ui-state-default btn btn-outline-secondary" data-toggle="collapse" data-target="#open-rule1">Rule_1</li>
+      <li class="ui-state-default btn btn-outline-secondary" data-toggle="collapse" data-target="#open-rule1" (click)="changeChosenRule(rule)">{{rule.name}}</li>
     </ul>
 
     <!-- !!!Демонстрация перетаскивания, удалить потом!!! -->
@@ -72,63 +73,11 @@
       </div>
     </div>
 
+    </div>
   </div>
-
   <div id="open-rule1" class="col-md-8 order-md-1 collapse in">
-    <h4 class="mb-3 float-left">Attributes</h4>
-    <button type="button" id="show1" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space" data-toggle="collapse" data-target="#hide-attributes">Show</button><br><br>
-    <form class="needs-validation" novalidate>
-      <div id="hide-attributes" class="collapse in">
-        <div class="row">
-          <div class="col-md-11 ">
-            <!-- Здесь снова лучше ng-repeat'ом выводить поля с атрибутами. -->
-            <input type="text" class="form-control" ng-model="attribute" placeholder="" value="">
-          </div>
-          <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteAttribute()">&times;</button><br>
-        </div>
-        <!-- Кнопка добавления новых атрибутов. -->
-        <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" ng-click="addAttribute()">+</button><br>
-      </div>
-
-      <hr class="mb-4">
-      <h4 class="mb-3">Conditions</h4>
-
-      <div class="row">
-        <div class="col-md-11 ">
-          <!-- Здесь снова лучше ng-repeat'ом выводить поля с условиями. -->
-          <input type="text" class="form-control" ng-model="condition" placeholder="" value="" required>
-          <div class="invalid-feedback">
-            Valid condition is required.
-          </div>
-        </div>
-        <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteCondition()">&times;</button><br>
-      </div>
-
-      <!-- Кнопка добавления нового условия. -->
-      <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" ng-click="addCondition()">+</button><br>
-
-      <hr class="mb-4">
-      <h4 class="mb-3">Recommendations</h4>
-
-      <div class="row">
-        <div class="col-md-11 ">
-          <!-- Здесь снова лучше ng-repeat'ом выводить поля с рекомендациями. -->
-          <input type="text" class="form-control" ng-model="recommendation" placeholder="" value="" required>
-          <div class="invalid-feedback">
-            Valid recommendation is required.
-          </div>
-        </div>
-        <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" ng-click="deleteRecomendation()">&times;</button><br>
-      </div>
-
-      <!-- Кнопка добавления новых рекомендаций. -->
-      <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" ng-click="addRecommendation()">+</button><br>
-
-      <hr class="mb-4">
-      <!-- Кнопка сохранения. -->
-      <button class="btn btn-primary btn-lg btn-space float-right" type="submit" ng-click="save()">Save</button>
-    </form>
-    <!-- Кнопка удаления правила. -->
-    <button class="btn btn-primary btn-lg btn-space float-right" data-toggle="modal" data-target="#deleteRuleModal">Cancel</button>
+<rule-edit [rule] = chosenRule ></rule-edit>
   </div>
+
+
 </div>
