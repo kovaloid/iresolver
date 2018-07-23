@@ -67,4 +67,14 @@ public class Rule {
     public void setAttributes(List<String> attributes) {
         this.attributes = attributes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Rule) {
+            if (((Rule) o).getId() == this.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
