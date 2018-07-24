@@ -12,16 +12,16 @@ constructor(private http: HttpClient) {
     return this.http.get('/rest/rules');
   }
 
-  saveAll(rule_categories: Array<any>): Observable<any> {
-    return this.http.post('/rest/rules', rule_categories);
+  saveAll(rule: any): Observable<any> {
+    return this.http.post('/rest/rules', rule);
   }
 
-  get(id: string) {
+  get(id: string): any {
     return this.http.get('/rest/rules/' + id);
   }
 
   save(rule: any, ruleId: string): Observable<any> {
-      return this.http.post('/rest/rules/' + ruleId, rule);
+      return this.http.put('/rest/rules/' + ruleId, rule);
   }
 
   remove(id: string) {

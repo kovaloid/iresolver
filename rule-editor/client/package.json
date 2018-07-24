@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy-dev.json",
+    "start": "ng serve",
     "buildToSpring": "ng build --op=../backend/src/main/resources/static",
     "test": "ng test",
     "lint": "ng lint",
