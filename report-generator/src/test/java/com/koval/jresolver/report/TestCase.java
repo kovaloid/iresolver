@@ -1,18 +1,5 @@
 package com.koval.jresolver.report;
 
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
-import com.koval.jresolver.classifier.core.Classifier;
-import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.report.core.ReportGenerator;
-import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
-import com.koval.jresolver.report.results.TotalResult;
-import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
-import com.koval.jresolver.rules.results.RulesResult;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -25,19 +12,33 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import com.koval.jresolver.classifier.configuration.ClassifierProperties;
+import com.koval.jresolver.classifier.core.Classifier;
+import com.koval.jresolver.classifier.core.impl.DocClassifier;
+import com.koval.jresolver.classifier.results.ClassifierResult;
+import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.report.core.ReportGenerator;
+import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
+import com.koval.jresolver.report.results.TotalResult;
+import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
+import com.koval.jresolver.rules.results.RulesResult;
+
 public class TestCase {
 
-    private static ReportGenerator reportGenerator;
+    private ReportGenerator reportGenerator;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
         Classifier classifier = new DocClassifier(classifierProperties);
         reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
     }
 
     @Test
-    public void configurationTest(){
+    public void configurationTest() {
         boolean flag = false;
         reportGenerator.configure();
         File file = new File("../output");
@@ -48,7 +49,7 @@ public class TestCase {
     }
 
     @Test
-    public void totalResultTest() throws Exception{
+    public void totalResultTest() throws Exception {
         Collection<String> collection = new HashSet<>();
         collection.add("testString");
         ClassifierResult classifierResult = new ClassifierResult();
