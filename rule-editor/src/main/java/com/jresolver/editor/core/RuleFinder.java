@@ -15,10 +15,10 @@ public final class RuleFinder {
     public static File getRulesDir() throws IOException {
         if (new File("rules").exists()) {
             return new File("rules");
-        } else if (new File("..\\rules").exists()) {
-            return new File("..\\rules");
         } else if (new File("src/main/resources/rules").exists()) {
             return new File("src/main/resources/rules");
+        } else if (new File("rule-engine/src/main/resources").exists()) {
+            return new File("rule-engine/src/main/resources");
         }
         throw new IOException("Rules folder has not found");
     }
