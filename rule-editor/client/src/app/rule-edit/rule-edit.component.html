@@ -6,7 +6,8 @@
 <input type="text" class="form-control" [(ngModel)]="rule.file"><br>
 
   <h4 class="mb-3 float-left">Attributes</h4>
-  <button type="button" id="show1" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space" data-toggle="collapse" data-target="#hide-attributes">Show</button><br><br>
+  <button type="button" id="show1" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space"
+          data-toggle="collapse" data-target="#hide-attributes" (click)="changeButtonValue('show1')">Show</button><br><br>
   <form class="needs-validation" novalidate>
     <div id="hide-attributes" class="collapse in">
       <div class="row" *ngFor="let attribute of rule.attributes; let i = index">

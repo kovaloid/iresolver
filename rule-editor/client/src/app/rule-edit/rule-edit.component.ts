@@ -57,4 +57,13 @@ constructor(private ruleService: RuleService) { }
   addRecommendation() {
     this.rule.recommendations.push('');
   }
+
+  changeButtonValue(id: string){
+    let currentValue: string = document.getElementById(id).innerHTML;
+    if (currentValue == "Show"){
+      document.getElementById(id).innerHTML = "Hide";
+    } else {
+      document.getElementById(id).innerHTML = "Show";
+    }
+  }
 }

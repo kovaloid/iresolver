@@ -30,4 +30,13 @@ constructor(private ruleService: RuleService) { }
       this.rules = result;
     });
   }
+
+  changeButtonValue(id: string){
+    let currentValue: string = document.getElementById(id).innerHTML;
+    if (currentValue == "Show"){
+      document.getElementById(id).innerHTML = "Hide";
+    } else {
+      document.getElementById(id).innerHTML = "Show";
+    }
+  }
 }
