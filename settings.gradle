@@ -4,8 +4,7 @@ include 'jira-connector'
 include 'classifier'
 include 'rule-engine'
 include 'report-generator'
-include 'rule-editor:backend'
-include 'rule-editor:client'
+include 'rule-editor'
 
 startParameter.excludedTaskNames = ['run']
 
