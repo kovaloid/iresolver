@@ -45,4 +45,17 @@ public class RuleController {
         Rule createdRule = ruleService.createRule(payload);
         return new ResponseEntity<>(createdRule, HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "/rest/rules/new", method = RequestMethod.GET, consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<Rule> getNewRule(HttpServletRequest request) {
+        return new ResponseEntity<>(ruleService.getNewRule(), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/rest/rules/{ruleId}", method = RequestMethod.DELETE, consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<List<Rule>> deleteRule(@PathVariable("ruleId") int ruleId, HttpServletRequest request) {
+        //TODO: add deleting rules
+        return new ResponseEntity<>(ruleService.getAllRules(), HttpStatus.ACCEPTED);
+    }
 }
