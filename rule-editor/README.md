@@ -7,19 +7,10 @@
 
 ## Getting Started
 
-Before loading:
+To launch the server on localhost:4200 just type
 ```
-gradlew rule-editor:client:npmInstall
+gradlew rule-editor:bootRun
 ```
-For standalone loading on localhost:8000
-```
-gradlew rule-editor:client:serveStandaloneClient
-```
-Or build in backend\src\main\resources\static for Loading from spring
-```
-gradlew rule-editor:client:buildClient
-```
-
 
 # Client
 

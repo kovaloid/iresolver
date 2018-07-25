@@ -1,7 +1,8 @@
 /node
 /node_modules
 package-lock.json
+src/main/resources/static
 
 # e2e
-/src/frontend/e2e/*.js
-/src/frontend/e2e/*.map
+e2e/*.js
+e2e/*.map
