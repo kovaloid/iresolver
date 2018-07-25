@@ -9,19 +9,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.jresolver.editor.bean.DraftRule;
+import com.jresolver.editor.bean.Metadata;
 import com.jresolver.editor.bean.Rule;
 import com.jresolver.editor.core.RuleFinder;
 
 @Service
+@SuppressWarnings("PMD") //Cyclomatic complexity ¯\_(ツ)_/¯
 public class RuleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RuleService.class);
 
-    private final List<Rule> ruleList;
+
+    private Map<Integer, Metadata> metadataMap;
+    private List<Rule> ruleList;
     private Integer maxId;
 
     public RuleService() throws IOException {
-        ruleList = this.getAllRules();
+        readRulesFromDrive();
     }
 
     public Rule getRuleById(int ruleId) {
@@ -34,8 +38,112 @@ public class RuleService {
         return null;
     }
 
-    public List<Rule> getAllRules() throws IOException {
+            //rename to getRulesList()
+    public List<Rule> getAllRules() {
+        return ruleList;
+    }
+
+    public Rule updateRuleById(int ruleId, DraftRule payload) {
+        LOGGER.info("Updating the rule by its id");
+        Metadata metadata = metadataMap.get(ruleId);
+        if (metadata.getFile() == null) {
+            //metadata.setFile(payload.getFile());
+            metadata.setModified(true);
+            Rule rule = new Rule();
+            rule.setId(ruleId);
+            updateRule(rule, payload);
+            ruleList.add(rule);
+            return rule;
+        } else {
+            for (Rule rule : ruleList) {
+                if (rule.getId() == ruleId) {
+                    updateRule(rule, payload);
+                    //metadata.setFile(payload.getFile());
+                    metadata.setModified(true);
+                    return rule;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void updateRule(Rule rule, DraftRule payload) {
+        rule.setName(payload.getName());
+        //rule.setFile(payload.getFile());
+        //rule.setAttributes(payload.getAttributes());
+        rule.setConditions(payload.getConditions());
+        rule.setRecommendations(payload.getRecommendations());
+    }
+
+    //del this
+    public Rule createRule(DraftRule payload) {
+        LOGGER.info("Creating new rule");
+        Rule rule = new Rule();
+        rule.setName(payload.getName());
+        rule.setFile(payload.getName() + ".drl");
+        rule.setConditions(payload.getConditions());
+        rule.setRecommendations(payload.getRecommendations());
+        rule.setId(++maxId);
+        ruleList.add(rule);
+        return rule;
+    } //del del del del del
+
+    public Rule getNewRule() {
+        Rule rule = new Rule();
+        rule.setId(++maxId);
+        metadataMap.put(maxId, new Metadata());
+        return rule;
+    }
+
+    private void saveRulesToDrive() throws IOException {
+        Map<String, LinkedList<Rule>> filelist = new HashMap<>();
+        for (Metadata metadata : metadataMap.values()) {
+            if (metadata.getFile() != null && metadata.isModified()) {
+                filelist.putIfAbsent(metadata.getFile(), new LinkedList<>());
+            }
+        }
+
+        for (Rule rule : ruleList) {
+            List<Rule> list = filelist.get(rule.getFile());
+            if (list != null) {
+                list.add(rule);
+            }
+        }
+
+        for (Map.Entry<String, LinkedList<Rule>> entryList : filelist.entrySet()) {
+            List<Rule> rulesFromOneFile = entryList.getValue();
+            File drl = new File(RuleFinder.getRulesDir(), rulesFromOneFile.get(0).getFile());
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(drl), StandardCharsets.UTF_8))) {
+                writer.write("package com.koval.jresolver.rules\n"
+                    + "\n"
+                    + "import com.koval.jresolver.connector.bean.JiraIssue;\n"
+                    + "import com.koval.jresolver.connector.bean.JiraStatus;\n"
+                    + "\n"
+                    + "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
+                for (final Rule rule : rulesFromOneFile) {
+                    writer.append("\nrule \"").append(rule.getName()).append("\"\n\t");
+                    if (rule.getAttributes() != null && rule.getAttributes().size() > 0) {
+                        for (final String att : rule.getAttributes()) {
+                            writer.append(att).append("\n\t");
+                        }
+                    }
+                    writer.append("when\n");
+                    for (final String condition : rule.getConditions()) {
+                        writer.append("\t\t").append(condition).append('\n');
+                    }
+                    writer.append("\tthen\n");
+                    for (final String recommendation : rule.getRecommendations()) {
+                        writer.append("\t\t").append(recommendation).append('\n');
+                    }
+                    writer.append("end\n");
+                }
+            }
+        }
+    }
+
+    private void readRulesFromDrive() throws IOException {
         LOGGER.info("Retrieving all the rules in the system");
+        Map<Integer, Metadata> data = new HashMap<>();
         List<Rule> rules = new LinkedList<>();
         Integer i = 0;
         for (final File file : RuleFinder.finder()) {
@@ -43,6 +151,9 @@ public class RuleService {
                 String line = reader.readLine();
                 while (line != null) {
                     if ((line.length() > 4) && line.substring(0, 4).equals("rule")) {
+                        Metadata metadata = new Metadata();
+                        metadata.setFile(file.getName());
+                        data.put(i, metadata);
                         Rule rule = new Rule();
                         rule.setId(i);
                         rule.setFile(file.getName());
@@ -73,73 +184,12 @@ public class RuleService {
                     }
                     line = reader.readLine();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         maxId = i;
-        return rules;
-    }
 
-    public Rule updateRuleById(int ruleId, DraftRule payload) {
-        LOGGER.info("Updating the rule by its id");
-        for (Rule rule : ruleList) {
-            if (rule.getId() == ruleId) {
-                rule.setName(payload.getName());
-                rule.setConditions(payload.getConditions());
-                rule.setRecommendations(payload.getRecommendations());
-                return rule;
-            }
-        }
-        return null;
-    }
-
-    public Rule createRule(DraftRule payload) {
-        LOGGER.info("Creating new rule");
-        Rule rule = new Rule();
-        rule.setName(payload.getName());
-        rule.setFile(payload.getName() + ".drl");
-        rule.setConditions(payload.getConditions());
-        rule.setRecommendations(payload.getRecommendations());
-        rule.setId(++maxId);
-        ruleList.add(rule);
-        return rule;
-    }
-
-    public void saveRules(List<Rule> rules) throws IOException {
-        Map<String, LinkedList<Rule>> filelist = new HashMap<>();
-        for (Rule rule : rules) {
-            filelist.putIfAbsent(rule.getFile(), new LinkedList<>());
-            filelist.get(rule.getFile()).add(rule);
-        }
-        for (Map.Entry<String, LinkedList<Rule>> entryList : filelist.entrySet()) {
-            List<Rule> rulesFromOneFile = entryList.getValue();
-            File drl = new File(RuleFinder.getRulesDir(), rulesFromOneFile.get(0).getFile());
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(drl), StandardCharsets.UTF_8))) {
-                writer.write("package com.koval.jresolver.rules\n"
-                        + "\n"
-                        + "import com.koval.jresolver.connector.bean.JiraIssue;\n"
-                        + "import com.koval.jresolver.connector.bean.JiraStatus;\n"
-                        + "\n"
-                        + "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
-                for (final Rule rule : rulesFromOneFile) {
-                    writer.append("\nrule \"").append(rule.getName()).append("\"\n\t");
-                    if (rule.getAttributes() != null && rule.getAttributes().size() > 0) {
-                        for (final String att : rule.getAttributes()) {
-                            writer.append(att).append("\n\t");
-                        }
-                    }
-                    writer.append("when\n");
-                    for (final String condition : rule.getConditions()) {
-                        writer.append("\t\t").append(condition).append('\n');
-                    }
-                    writer.append("\tthen\n");
-                    for (final String recommendation : rule.getRecommendations()) {
-                        writer.append("\t\t").append(recommendation).append('\n');
-                    }
-                    writer.append("end\n");
-                }
-            }
-        }
+        ruleList = rules;
+        metadataMap = data;
     }
 }
+
