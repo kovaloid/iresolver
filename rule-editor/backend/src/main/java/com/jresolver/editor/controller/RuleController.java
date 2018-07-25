@@ -26,9 +26,10 @@ public class RuleController {
         return new ResponseEntity<>(rule, HttpStatus.OK);
     }
 
+    //throws IOException? O_o
     @RequestMapping(value = "/rest/rules", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Rule>> getRules(HttpServletRequest request) throws IOException {
-        List<Rule> rules = ruleService.getAllRules();
+        List<Rule> rules = ruleService.getRulesList();
         return new ResponseEntity<>(rules, HttpStatus.OK);
     }
 
@@ -54,8 +55,9 @@ public class RuleController {
 
     @RequestMapping(value = "/rest/rules/{ruleId}", method = RequestMethod.DELETE, consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<List<Rule>> deleteRule(@PathVariable("ruleId") int ruleId, HttpServletRequest request) {
-        //TODO: add deleting rules
-        return new ResponseEntity<>(ruleService.getAllRules(), HttpStatus.ACCEPTED);
+    public ResponseEntity<Rule> deleteRule(@PathVariable("ruleId") int ruleId, HttpServletRequest request) {
+        return new ResponseEntity<>(ruleService.deleteRule(ruleId), HttpStatus.ACCEPTED);
     }
+
+    //TODO: add mapping to saveRulesToDrive()
 }
