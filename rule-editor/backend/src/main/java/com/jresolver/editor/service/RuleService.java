@@ -29,7 +29,7 @@ public class RuleService {
     }
 
     public Rule getRuleById(int ruleId) {
-        LOGGER.info("Retrieving the rule by id");
+        LOGGER.info("Retrieving the rule by id: {}", ruleId);
         for (Rule rule : ruleList) {
             if (rule.getId() == ruleId) {
                 return rule;
@@ -38,13 +38,12 @@ public class RuleService {
         return null;
     }
 
-            //rename to getRulesList()
-    public List<Rule> getAllRules() {
+    public List<Rule> getRulesList() {
         return ruleList;
     }
 
     public Rule updateRuleById(int ruleId, DraftRule payload) {
-        LOGGER.info("Updating the rule by its id");
+        LOGGER.info("Updating the rule by id: {}...", ruleId);
         Metadata metadata = metadataMap.get(ruleId);
         if (metadata.getFile() == null) {
             //metadata.setFile(payload.getFile());
@@ -53,6 +52,7 @@ public class RuleService {
             rule.setId(ruleId);
             updateRule(rule, payload);
             ruleList.add(rule);
+            LOGGER.info("...empty rule updated! Rule name: {}", rule.getName());
             return rule;
         } else {
             for (Rule rule : ruleList) {
@@ -60,6 +60,7 @@ public class RuleService {
                     updateRule(rule, payload);
                     //metadata.setFile(payload.getFile());
                     metadata.setModified(true);
+                    LOGGER.info("...rule updated! Rule name: {}", rule.getName());
                     return rule;
                 }
             }
@@ -67,35 +68,43 @@ public class RuleService {
         return null;
     }
 
-    private void updateRule(Rule rule, DraftRule payload) {
-        rule.setName(payload.getName());
-        //rule.setFile(payload.getFile());
-        //rule.setAttributes(payload.getAttributes());
-        rule.setConditions(payload.getConditions());
-        rule.setRecommendations(payload.getRecommendations());
-    }
-
-    //del this
     public Rule createRule(DraftRule payload) {
-        LOGGER.info("Creating new rule");
+        LOGGER.info("Creating rule from payload");
         Rule rule = new Rule();
-        rule.setName(payload.getName());
-        rule.setFile(payload.getName() + ".drl");
-        rule.setConditions(payload.getConditions());
-        rule.setRecommendations(payload.getRecommendations());
+        updateRule(rule, payload);
         rule.setId(++maxId);
         ruleList.add(rule);
+        Metadata metadata = new Metadata();
+        //metadata.setFile(payload.getFile());
+        metadata.setModified(true);
+        metadataMap.put(maxId, metadata);
         return rule;
-    } //del del del del del
+    }
 
     public Rule getNewRule() {
+        LOGGER.info("Creating new empty rule");
         Rule rule = new Rule();
         rule.setId(++maxId);
         metadataMap.put(maxId, new Metadata());
         return rule;
     }
 
-    private void saveRulesToDrive() throws IOException {
+    public Rule deleteRule(int ruleId) {
+        LOGGER.info("Deleting rule by id: {}", ruleId);
+        metadataMap.remove(ruleId);
+        for (Rule rule : ruleList) {
+            if (rule.getId() == ruleId) {
+                ruleList.remove(rule);
+                LOGGER.info("Deleted successful: ", rule.getName());
+                return rule;
+            }
+        }
+        return null;
+    }
+
+    public void saveRulesToDrive() throws IOException {
+        LOGGER.info("Saving rules to drive!");
+
         Map<String, LinkedList<Rule>> filelist = new HashMap<>();
         for (Metadata metadata : metadataMap.values()) {
             if (metadata.getFile() != null && metadata.isModified()) {
@@ -112,6 +121,7 @@ public class RuleService {
 
         for (Map.Entry<String, LinkedList<Rule>> entryList : filelist.entrySet()) {
             List<Rule> rulesFromOneFile = entryList.getValue();
+            LOGGER.debug("File: {}", entryList.getKey());
             File drl = new File(RuleFinder.getRulesDir(), rulesFromOneFile.get(0).getFile());
             try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(drl), StandardCharsets.UTF_8))) {
                 writer.write("package com.koval.jresolver.rules\n"
@@ -121,6 +131,7 @@ public class RuleService {
                     + "\n"
                     + "global com.koval.jresolver.rules.results.RulesResult results" + "\n");
                 for (final Rule rule : rulesFromOneFile) {
+                    LOGGER.debug("-rule: {}", rule.getName());
                     writer.append("\nrule \"").append(rule.getName()).append("\"\n\t");
                     if (rule.getAttributes() != null && rule.getAttributes().size() > 0) {
                         for (final String att : rule.getAttributes()) {
@@ -147,6 +158,7 @@ public class RuleService {
         List<Rule> rules = new LinkedList<>();
         Integer i = 0;
         for (final File file : RuleFinder.finder()) {
+            LOGGER.debug("File: {}", file.getName());
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 String line = reader.readLine();
                 while (line != null) {
@@ -180,6 +192,7 @@ public class RuleService {
                         }
                         rule.setRecommendations(recommendations);
                         rules.add(rule);
+                        LOGGER.debug("-rule: {}", rule.getName());
                         i++;
                     }
                     line = reader.readLine();
@@ -190,6 +203,14 @@ public class RuleService {
 
         ruleList = rules;
         metadataMap = data;
+    }
+
+    private void updateRule(Rule rule, DraftRule payload) {
+        rule.setName(payload.getName());
+        //rule.setFile(payload.getFile());
+        //rule.setAttributes(payload.getAttributes());
+        rule.setConditions(payload.getConditions());
+        rule.setRecommendations(payload.getRecommendations());
     }
 }
 
