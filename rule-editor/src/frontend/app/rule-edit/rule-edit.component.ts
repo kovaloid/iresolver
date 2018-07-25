@@ -66,4 +66,8 @@ constructor(private ruleService: RuleService) { }
       document.getElementById(id).innerHTML = "Show";
     }
   }
+
+  deleteRule(id: string){
+    this.ruleService.remove(id);
+  }
 }

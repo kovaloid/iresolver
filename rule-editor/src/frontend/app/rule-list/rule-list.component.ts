@@ -39,4 +39,14 @@ constructor(private ruleService: RuleService) { }
       document.getElementById(id).innerHTML = "Show";
     }
   }
+
+  testFunc(id: string){
+    for (let key in document.getElementById(id)){
+      console.log(key + " : " + typeof(key));
+    }
+  }
+
+  setRuleEditorVisible(){
+    document.getElementById("open-rule1").style.visibility = "visible";
+  }
 }

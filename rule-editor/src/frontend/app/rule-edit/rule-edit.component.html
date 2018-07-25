@@ -53,9 +53,31 @@
     <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addRecommendation()">+</button><br>
 
     <hr class="mb-4">
-    <!-- Save button. -->
-    <button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="save()">Save</button>
   </form>
-  <!-- Cancel button. -->
-  <button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="revertChanges()">Cancel</button>
+<!-- Delete button. -->
+<button class="btn btn-danger btn-lg btn-space float-right" type="submit"
+        data-toggle="modal" data-target="#deleteRuleModal">Delete</button>
+<!-- Cancel button. -->
+<button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="revertChanges()">Cancel</button>
+<!-- Save button. -->
+<button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="save()">Save</button>
+
+<div class="modal fade" id="deleteRuleModal" role="dialog">
+  <div class="modal-dialog modal-bg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Rule</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this rule:</p>
+        <p>{{rule.name}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="deleteRule('rule.id')">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
