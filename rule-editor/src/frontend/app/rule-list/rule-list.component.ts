@@ -25,10 +25,7 @@ constructor(private ruleService: RuleService) { }
   }
 
   createRule() {
-    this.rules.push(this.rules[0]);
-    this.ruleService.saveAll(this.rules[this.rules.length - 1]).subscribe(result => {
-      this.rules = result;
-    });
+    this.chosenRule.id = 'new';
   }
 
   changeButtonValue(id: string){
@@ -48,5 +45,11 @@ constructor(private ruleService: RuleService) { }
 
   setRuleEditorVisible(){
     document.getElementById("open-rule1").style.visibility = "visible";
+  }
+
+  updateRules() {
+    this.ruleService.getAll().subscribe(data => {
+      this.rules = data;
+    });
   }
 }
