@@ -1,0 +1,7 @@
+/node
+/node_modules
+package-lock.json
+
+# e2e
+/src/frontend/e2e/*.js
+/src/frontend/e2e/*.map

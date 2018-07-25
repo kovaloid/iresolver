@@ -1,11 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "client"
+    "name": "rule-editor"
   },
   "apps": [
     {
-      "root": "src",
+      "root": "src/frontend",
       "outDir": "dist",
       "assets": [
         "assets",
@@ -21,11 +21,11 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": ["../node_modules/jquery/dist/jquery.js",
-        "../node_modules/jquery-ui-dist/jquery-ui.js",
-        "../node_modules/popper.js/dist/umd/popper.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js",
-        "../node_modules/holderjs/holder.js",
+      "scripts": ["../../node_modules/jquery/dist/jquery.js",
+        "../../node_modules/jquery-ui-dist/jquery-ui.js",
+        "../../node_modules/popper.js/dist/umd/popper.js",
+        "../../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../../node_modules/holderjs/holder.js",
         "temp/js/temp.js"],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -41,11 +41,11 @@
   },
   "lint": [
     {
-      "project": "src/tsconfig.app.json",
+      "project": "tsconfig.app.json",
       "exclude": "**/node_modules/**"
     },
     {
-      "project": "src/tsconfig.spec.json",
+      "project": "tsconfig.spec.json",
       "exclude": "**/node_modules/**"
     },
     {

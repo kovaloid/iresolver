@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "buildToSpring": "ng build --op=../backend/src/main/resources/static",
+    "buildToSpring": "ng build --op=src/main/resources/static",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
