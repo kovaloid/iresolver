@@ -1,20 +1,15 @@
-[![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/kovaloid/jresolver.svg?branch=master)](https://travis-ci.org/kovaloid/jresolver)
-
 # Rule Editor for Jira Resolver
-
-...
 
 ## Getting Started
 
-To launch the server on localhost:4200 just type
+To start the server on localhost:4200 simply run
 ```
 gradlew rule-editor:bootRun
 ```
 
 # Client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+The client side of this project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
 ## Development server
 
