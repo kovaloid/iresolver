@@ -12,10 +12,6 @@ constructor(private http: HttpClient) {
     return this.http.get('/rest/rules');
   }
 
-  saveAll(rule: any): Observable<any> {
-    return this.http.post('/rest/rules', rule);
-  }
-
   get(id: string): any {
     return this.http.get('/rest/rules/' + id);
   }
@@ -24,7 +20,12 @@ constructor(private http: HttpClient) {
       return this.http.put('/rest/rules/' + ruleId, rule);
   }
 
+  saveNew(rule: any): any {
+      return this.http.post('/rest/rules', rule);
+  }
+
   remove(id: string) {
+console.log(id +'   ok');
     return this.http.delete('/rest/rules/' + id);
   }
 }
