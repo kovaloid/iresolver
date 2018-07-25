@@ -15,7 +15,7 @@
         </div>
         <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteAttribute(i)">&times;</button><br>
       </div>
-      <!-- Кнопка добавления новых атрибутов. -->
+      <!-- Button for new attributes addition. -->
       <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addAttribute()">+</button><br>
     </div>
 
@@ -32,7 +32,7 @@
       <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteCondition(i)">&times;</button><br>
     </div>
 
-    <!-- Кнопка добавления нового условия. -->
+    <!-- Button for new conditions addition. -->
     <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addCondition()">+</button><br>
 
     <hr class="mb-4">
@@ -40,7 +40,6 @@
 
     <div class="row" *ngFor="let recommendation of rule.recommendations; let i = index">
       <div class="col-md-11 ">
-        <!-- Здесь снова лучше ng-repeat'ом выводить поля с рекомендациями. -->
         <input type="text" class="form-control" [value]="rule.recommendations[i]" (keyup.enter)="rule.recommendations[i] = $event.target.value" required>
         <div class="invalid-feedback">
           Valid recommendation is required.
@@ -49,13 +48,13 @@
       <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteRecommendation(i)">&times;</button><br>
     </div>
 
-    <!-- Кнопка добавления новых рекомендаций. -->
+    <!-- Button for new recommendations addition. -->
     <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addRecommendation()">+</button><br>
 
     <hr class="mb-4">
-    <!-- Кнопка сохранения. -->
+    <!-- Save button. -->
     <button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="save()">Save</button>
   </form>
-  <!-- Кнопка удаления правила. -->
+  <!-- Cancel button. -->
   <button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="revertChanges()">Cancel</button>
 
