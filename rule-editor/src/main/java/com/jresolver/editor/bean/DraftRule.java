@@ -5,8 +5,10 @@ import java.util.List;
 public class DraftRule {
 
     private String name;
+    private String filename;
     private List<String> conditions;
     private List<String> recommendations;
+    private List<String> attributes;
 
     public String getName() {
         return name;
@@ -14,6 +16,14 @@ public class DraftRule {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFile() {
+      return filename;
+    }
+
+    public void setFile(String filename) {
+      this.filename = filename;
     }
 
     public List<String> getConditions() {
@@ -31,4 +41,12 @@ public class DraftRule {
     public void setRecommendations(List<String> recommendations) {
         this.recommendations = recommendations;
     }
+
+    public List<String> getAttributes() {
+    return attributes;
+  }
+
+    public void setAttributes(List<String> attributes) {
+    this.attributes = attributes;
+  }
 }

@@ -46,7 +46,7 @@ public class RuleService {
         LOGGER.info("Updating the rule by id: {}...", ruleId);
         Metadata metadata = metadataMap.get(ruleId);
         if (metadata.getFile() == null) {
-            //metadata.setFile(payload.getFile());
+            metadata.setFile(payload.getFile());
             metadata.setModified(true);
             Rule rule = new Rule();
             rule.setId(ruleId);
@@ -58,7 +58,7 @@ public class RuleService {
             for (Rule rule : ruleList) {
                 if (rule.getId() == ruleId) {
                     updateRule(rule, payload);
-                    //metadata.setFile(payload.getFile());
+                    metadata.setFile(payload.getFile());
                     metadata.setModified(true);
                     LOGGER.info("...rule updated! Rule name: {}", rule.getName());
                     return rule;
@@ -207,8 +207,8 @@ public class RuleService {
 
     private void updateRule(Rule rule, DraftRule payload) {
         rule.setName(payload.getName());
-        //rule.setFile(payload.getFile());
-        //rule.setAttributes(payload.getAttributes());
+        rule.setFile(payload.getFile());
+        rule.setAttributes(payload.getAttributes());
         rule.setConditions(payload.getConditions());
         rule.setRecommendations(payload.getRecommendations());
     }
