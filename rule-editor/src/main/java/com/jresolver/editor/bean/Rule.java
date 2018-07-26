@@ -12,7 +12,17 @@ public class Rule {
     private String file;
     private List<String> attributes;
 
-    public int getId() {
+  public Rule() {
+
+  }
+
+  public Rule(String name, List<String> conditions, List<String> recommendations) {
+    this.name = name;
+    this.conditions = conditions;
+    this.recommendations = recommendations;
+  }
+
+  public int getId() {
         return id;
     }
 
