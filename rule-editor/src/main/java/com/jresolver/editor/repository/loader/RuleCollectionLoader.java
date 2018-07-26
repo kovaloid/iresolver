@@ -32,8 +32,9 @@ public class RuleCollectionLoader {
     if (filePath.exists()) {
       List<File> files = Arrays.stream(Objects.requireNonNull(filePath.listFiles((dir1, filename) -> filename.endsWith(".drl")))).collect(Collectors.toList());
       ruleCollections = extractFileSystemRuleObjectsFromFiles(files);
+    } else {
+      throw new IOException("Could not find the rules folder: " + path);
     }
-    throw new IOException("Could not find the rules folder: " + path);
   }
 
   private List<RuleCollection> extractFileSystemRuleObjectsFromFiles(List<File> files) {
