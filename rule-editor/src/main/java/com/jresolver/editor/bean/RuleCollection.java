@@ -1,27 +1,37 @@
-package com.jresolver.editor.core;
-
-import com.jresolver.editor.bean.Rule;
+package com.jresolver.editor.bean;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
-public class FileSystemRule {
 
+public class RuleCollection {
+
+  private UUID id;
   private File file;
   private String pack;
   private List<String> imports;
   private List<String> globals;
   private List<Rule> rules;
 
-  public FileSystemRule() {
+  public RuleCollection() {
   }
 
-  public FileSystemRule(File file, String pack, List<String> imports, List<String> globals, List<Rule> rules) {
+  public RuleCollection(UUID id, File file, String pack, List<String> imports, List<String> globals, List<Rule> rules) {
+    this.id = id;
     this.file = file;
     this.pack = pack;
     this.imports = imports;
     this.globals = globals;
     this.rules = rules;
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   public File getFile() {

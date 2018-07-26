@@ -1,64 +1,69 @@
-package com.jresolver.editor.repository;
+package com.jresolver.editor.repository.loader;
 
 import com.jresolver.editor.bean.Rule;
-import com.jresolver.editor.core.FileSystemRule;
+import com.jresolver.editor.bean.RuleCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RuleLoader {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RuleLoader.class);
+@Component
+public class RuleCollectionLoader {
 
-  private final String PATH = "src/main/resources/rules";
+  private static final Logger LOGGER = LoggerFactory.getLogger(RuleCollectionLoader.class);
 
-  public void init() throws IOException {
+  private List<RuleCollection> ruleCollections;
 
-    File filePath = new File(PATH);
+  @Value("${rules.path}")
+  private String path;
+
+  @PostConstruct
+  public void reload() throws IOException {
+    File filePath = new File(path);
     if (filePath.exists()) {
       List<File> files = Arrays.stream(Objects.requireNonNull(filePath.listFiles((dir1, filename) -> filename.endsWith(".drl")))).collect(Collectors.toList());
-      extractFileSystemRuleObjectsFromFiles(files);
+      ruleCollections = extractFileSystemRuleObjectsFromFiles(files);
     }
-    throw new IOException("Could not find the rules folder: " + PATH);
+    throw new IOException("Could not find the rules folder: " + path);
   }
 
-  private List<FileSystemRule> extractFileSystemRuleObjectsFromFiles(List<File> files) {
+  private List<RuleCollection> extractFileSystemRuleObjectsFromFiles(List<File> files) {
     LOGGER.info("Retrieving all the rules from the file system");
-    List<FileSystemRule> fileSystemRules = new ArrayList<>();
+    List<RuleCollection> ruleCollections = new ArrayList<>();
     files.forEach(file -> {
       try {
-        FileSystemRule fileSystemRule = extractFileSystemRuleObjectFromFile(file);
-        fileSystemRules.add(fileSystemRule);
+        RuleCollection ruleCollection = extractFileSystemRuleObjectFromFile(file);
+        ruleCollections.add(ruleCollection);
       } catch (IOException e) {
         LOGGER.error("Could not extract FileSystemObject from the file with name: " + file.getAbsolutePath(), e);
       }
     });
-    return fileSystemRules;
+    return ruleCollections;
   }
 
-  private FileSystemRule extractFileSystemRuleObjectFromFile(File file) throws IOException {
+  private RuleCollection extractFileSystemRuleObjectFromFile(File file) throws IOException {
     byte[] bytes = Files.readAllBytes(file.toPath());
     String ruleFileContent = new String(bytes, StandardCharsets.UTF_8);
     String[] tokens = ruleFileContent.split("\\s+");
     Iterator<String> iterator = Arrays.stream(tokens).iterator();
-
     boolean whenCompleted = false;
     boolean thenCompleted = false;
-
     String pack = null;
     List<String> imports = new ArrayList<>();
     List<String> globals = new ArrayList<>();
     List<Rule> rules = new ArrayList<>();
-
     String rule = null;
     List<String> when = new ArrayList<>();
     List<String> then = new ArrayList<>();
-
     while (iterator.hasNext()) {
       String token = iterator.next();
       switch (token) {
@@ -96,7 +101,22 @@ public class RuleLoader {
           break;
       }
     }
+    return new RuleCollection(UUID.nameUUIDFromBytes(bytes), file, pack, imports, globals, rules);
+  }
 
-    return new FileSystemRule(file, pack, imports, globals, rules);
+  private Iterator<String> getTokenIterator(File file) throws IOException {
+    byte[] bytes = Files.readAllBytes(file.toPath());
+    String ruleFileContent = new String(bytes, StandardCharsets.UTF_8);
+    String[] tokens = ruleFileContent.split("\\s+");
+    return Arrays.stream(tokens).iterator();
+  }
+
+  private String getStringFromList(List<String> stringList) {
+    String result = "";
+    return stringList.stream().reduce(result, String::concat);
+  }
+
+  public List<RuleCollection> getRuleCollections() {
+    return ruleCollections;
   }
 }
