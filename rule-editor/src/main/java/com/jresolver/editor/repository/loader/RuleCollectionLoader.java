@@ -1,7 +1,6 @@
 package com.jresolver.editor.repository.loader;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.jresolver.editor.bean.Rule;
 import com.jresolver.editor.bean.RuleCollection;
+import com.jresolver.editor.util.RuleParser;
 
 
 @Component
@@ -37,7 +37,7 @@ public class RuleCollectionLoader {
         ruleCollections = new ArrayList<>();
       } else {
         List<File> fileList = Arrays.stream(files).filter(file -> file.getName().endsWith(".drl")).collect(Collectors.toList());
-        ruleCollections = extractFileSystemRuleObjectsFromFiles(fileList);
+        ruleCollections = extractRuleCollectionObjectsFromFiles(fileList);
       }
     } else {
       LOGGER.error("Could not find the rules folder: " + path);
@@ -47,12 +47,12 @@ public class RuleCollectionLoader {
     }
   }
 
-  private List<RuleCollection> extractFileSystemRuleObjectsFromFiles(List<File> files) {
+  private List<RuleCollection> extractRuleCollectionObjectsFromFiles(List<File> files) {
     LOGGER.info("Retrieving all the rules from the file system");
     List<RuleCollection> result = new ArrayList<>();
     files.forEach(file -> {
       try {
-        RuleCollection ruleCollection = extractFileSystemRuleObjectFromFile(file);
+        RuleCollection ruleCollection = extractRuleCollectionObjectFromFile(file);
         result.add(ruleCollection);
       } catch (IOException e) {
         LOGGER.error("Could not extract FileSystemObject from the file with name: " + file.getAbsolutePath(), e);
@@ -61,71 +61,68 @@ public class RuleCollectionLoader {
     return result;
   }
 
-  @SuppressWarnings("PMD")
-  private RuleCollection extractFileSystemRuleObjectFromFile(File file) throws IOException {
-    byte[] bytes = Files.readAllBytes(file.toPath());
-    String ruleFileContent = new String(bytes, StandardCharsets.UTF_8);
-    String[] tokens = ruleFileContent.split("\\s+");
-    Iterator<String> iterator = Arrays.stream(tokens).iterator();
-    boolean whenCompleted = false;
-    boolean thenCompleted = false;
-    String pack = null;
-    List<String> imports = new ArrayList<>();
-    List<String> globals = new ArrayList<>();
-    List<Rule> rules = new ArrayList<>();
-    String rule = null;
-    List<String> when = new ArrayList<>();
-    List<String> then = new ArrayList<>();
-    while (iterator.hasNext()) {
-      String token = iterator.next();
-      switch (token) {
-        case "package":
-          pack = iterator.next();
-          break;
-        case "import":
-          imports.add(iterator.next());
-          break;
-        case "global":
-          globals.add(iterator.next());
-          break;
-        case "rule":
-          rule = iterator.next();
-          break;
-        case "when":
-          when.add(iterator.next());
-          whenCompleted = false;
-          break;
-        case "then":
-          whenCompleted = true;
-          then.add(iterator.next());
-          thenCompleted = false;
-          break;
-        case "end":
-          thenCompleted = true;
-          rules.add(new Rule(rule, when, then));
-          break;
-        default:
-          if (!whenCompleted) {
-            when.add(iterator.next());
-          } else if (!thenCompleted) {
-            then.add(iterator.next());
-          }
-          break;
+  private RuleCollection extractRuleCollectionObjectFromFile(File file) throws IOException {
+    try (InputStream inputStream = new FileInputStream(file);
+         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+         BufferedReader reader = new BufferedReader(inputStreamReader)) {
+      String line = reader.readLine();
+
+      RuleCollection ruleCollection = new RuleCollection(getIdForRuleCollection(file), file);
+      List<String> imports = new ArrayList<>();
+      List<String> globals = new ArrayList<>();
+      List<Rule> rules = new ArrayList<>();
+
+      while (line != null) {
+        if (line.contains("package")) {
+          ruleCollection.setPack(RuleParser.getPackage(line));
+        } else if (line.contains("import")) {
+          imports.add(RuleParser.getImport(line));
+        } else if (line.contains("global")) {
+          globals.add(RuleParser.getGlobal(line));
+        } else if (line.contains("rule")) {
+          Rule rule = new Rule(RuleParser.getRuleName(line));
+          fillRule(reader, rule);
+          rules.add(rule);
+        }
+        line = reader.readLine();
       }
+
+      ruleCollection.setImports(imports);
+      ruleCollection.setGlobals(globals);
+      ruleCollection.setRules(rules);
+      return ruleCollection;
     }
-    return new RuleCollection(UUID.nameUUIDFromBytes(bytes), file, pack, imports, globals, rules);
   }
 
-  private Iterator<String> getTokenIterator(File file) throws IOException {
+  private void fillRule(BufferedReader reader, Rule rule) throws IOException {
+    String line = reader.readLine();
+
+    List<String> attributes = new ArrayList<>();
+    while (line != null && !line.contains("when")) {
+      attributes.add(line.trim());
+      line = reader.readLine();
+    }
+
+    List<String> when = new ArrayList<>();
+    while (line != null && !line.contains("then")) {
+      when.add(line.trim());
+      line = reader.readLine();
+    }
+
+    List<String> then = new ArrayList<>();
+    while (line != null && !line.contains("end")) {
+      then.add(line.trim());
+      line = reader.readLine();
+    }
+
+    rule.setAttributes(attributes);
+    rule.setConditions(RuleParser.getWhen(when));
+    rule.setRecommendations(RuleParser.getThen(then));
+  }
+
+  private UUID getIdForRuleCollection(File file) throws IOException {
     byte[] bytes = Files.readAllBytes(file.toPath());
-    String ruleFileContent = new String(bytes, StandardCharsets.UTF_8);
-    String[] tokens = ruleFileContent.split("\\s+");
-    return Arrays.stream(tokens).iterator();
-  }
-
-  private String getStringFromList(List<String> stringList) {
-    String result = "";
-    return stringList.stream().reduce(result, String::concat);
+    return UUID.nameUUIDFromBytes(bytes);
   }
 
   public List<RuleCollection> getRuleCollections() {

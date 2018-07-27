@@ -16,8 +16,13 @@ public class Rule {
 
   }
 
-  public Rule(String name, List<String> conditions, List<String> recommendations) {
+  public Rule(String name) {
     this.name = name;
+  }
+
+  public Rule(String name, List<String> attributes, List<String> conditions, List<String> recommendations) {
+    this.name = name;
+    this.attributes = attributes;
     this.conditions = conditions;
     this.recommendations = recommendations;
   }

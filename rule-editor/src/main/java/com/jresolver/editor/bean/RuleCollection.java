@@ -17,13 +17,9 @@ public class RuleCollection {
   public RuleCollection() {
   }
 
-  public RuleCollection(UUID id, File file, String pack, List<String> imports, List<String> globals, List<Rule> rules) {
+  public RuleCollection(UUID id, File file) {
     this.id = id;
     this.file = file;
-    this.pack = pack;
-    this.imports = imports;
-    this.globals = globals;
-    this.rules = rules;
   }
 
   public UUID getId() {
