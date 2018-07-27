@@ -113,17 +113,11 @@ public class RuleService {
       }
     }
 
-    for (Rule rule : ruleList) {
-      List<Rule> list = filelist.get(rule.getFile());
-      if (list != null) {
-        list.add(rule);
-      }
-    }
 
     for (Map.Entry<String, LinkedList<Rule>> entryList : filelist.entrySet()) {
       List<Rule> rulesFromOneFile = entryList.getValue();
       LOGGER.debug("File: {}", entryList.getKey());
-      File drl = new File(RuleFinder.getRulesDir(), rulesFromOneFile.get(0).getFile());
+      File drl = new File(RuleFinder.getRulesDir(), "src/main/resources/rules/file.drl");
       try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(drl), StandardCharsets.UTF_8))) {
         writer.write("package com.koval.jresolver.rules\n"
           + "\n"
@@ -170,7 +164,6 @@ public class RuleService {
             data.put(i, metadata);
             Rule rule = new Rule();
             rule.setId(i);
-            rule.setFile(file.getName());
             rule.setName(line.substring(line.indexOf('"') + 1, line.length() - 1));
             line = reader.readLine();
             List<String> attributes = new LinkedList<>();
@@ -208,7 +201,6 @@ public class RuleService {
 
   private void updateRule(Rule rule, DraftRule payload) {
     rule.setName(payload.getName());
-    rule.setFile(payload.getFile());
     rule.setAttributes(payload.getAttributes());
     rule.setConditions(payload.getConditions());
     rule.setRecommendations(payload.getRecommendations());
