@@ -24,31 +24,30 @@ public class RuleCollectionSaver {
         try {
           writer.write("import  " + i + "\n");
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.error("Could not write 'import' declarations", e);
         }
       });
       ruleCollection.getGlobals().forEach(global -> {
         try {
           writer.write("global  " + global + "\n");
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.error("Could not write 'global' declarations", e);
         }
       });
       ruleCollection.getRules().forEach(rule -> {
         try {
           writer.write("rule  " + rule.getName() + "\n");
-          writer.write("    when\n");
-          writer.write("        " + rule.getConditions() + "\n");
-          writer.write("    then\n");
-          writer.write("        " + rule.getRecommendations() + "\n");
-          writer.write("    end\n\n");
+          writer.write("  when\n");
+          writer.write("    " + rule.getConditions() + "\n");
+          writer.write("  then\n");
+          writer.write("    " + rule.getRecommendations() + "\n");
+          writer.write("end\n\n");
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.error("Could not write 'rule' declaration: " + rule.getName(), e);
         }
       });
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error("Could not get file with rule collection: " + file.getAbsolutePath(), e);
     }
-
   }
 }

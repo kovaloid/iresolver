@@ -4,12 +4,12 @@ import java.util.List;
 
 public class Rule {
 
-    private int id;
+    private int id; //TODO: change to UUID or remove due to unnecessary
     private String name;
-    private String location;
+    private String location; //TODO: remove
     private List<String> conditions;
     private List<String> recommendations;
-    private String file;
+    private String file; //TODO: remove
     private List<String> attributes;
 
   public Rule() {

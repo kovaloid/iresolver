@@ -28,7 +28,7 @@ public class RuleCollectionRepository {
   private List<RuleCollection> ruleCollections;
 
   @PostConstruct
-  private void init() throws IOException {
+  private void init() {
     this.ruleCollections = ruleCollectionLoader.getRuleCollections();
   }
 
@@ -38,9 +38,7 @@ public class RuleCollectionRepository {
   }
 
   public Iterable<RuleCollection> saveAll(Iterable<RuleCollection> entities) {
-    entities.forEach(entity -> {
-      ruleCollectionSaver.save(entity);
-    });
+    entities.forEach(entity -> ruleCollectionSaver.save(entity));
     return entities;
   }
 
@@ -106,13 +104,6 @@ public class RuleCollectionRepository {
   }
 
   public void deleteAll() {
-    ruleCollections.forEach(ruleCollection -> {
-      String path = ruleCollection.getFile().getAbsolutePath();
-      if (ruleCollection.getFile().delete()) {
-        LOGGER.info("Rule collection file was removed: {}", path);
-      } else {
-        LOGGER.warn("Could not remove rule collection file: {}", path);
-      }
-    });
+    deleteAll(ruleCollections);
   }
 }
