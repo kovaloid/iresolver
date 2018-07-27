@@ -1,14 +1,13 @@
 package com.jresolver.editor.repository.saver;
 
-import com.jresolver.editor.bean.RuleCollection;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import com.jresolver.editor.bean.RuleCollection;
 
 
 @Component
@@ -18,8 +17,9 @@ public class RuleCollectionSaver {
 
   public void save(RuleCollection ruleCollection) {
     File file = ruleCollection.getFile();
-    try (Writer writer = new FileWriter(file)) {
-      writer.write("package " + ruleCollection.getPackage() + "\n");
+    try (OutputStream outputStream = new FileOutputStream(file);
+         Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+      writer.write("package " + ruleCollection.getPack() + "\n");
       ruleCollection.getImports().forEach(i -> {
         try {
           writer.write("import  " + i + "\n");

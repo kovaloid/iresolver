@@ -1,17 +1,18 @@
 package com.jresolver.editor.repository;
 
-import com.jresolver.editor.bean.RuleCollection;
-import com.jresolver.editor.repository.loader.RuleCollectionLoader;
-import com.jresolver.editor.repository.saver.RuleCollectionSaver;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.jresolver.editor.bean.RuleCollection;
+import com.jresolver.editor.repository.loader.RuleCollectionLoader;
+import com.jresolver.editor.repository.saver.RuleCollectionSaver;
 
 
 @Repository

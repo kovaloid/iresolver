@@ -42,11 +42,11 @@ public class RuleCollection {
     this.file = file;
   }
 
-  public String getPackage() {
+  public String getPack() {
     return pack;
   }
 
-  public void setPackage(String pack) {
+  public void setPack(String pack) {
     this.pack = pack;
   }
 

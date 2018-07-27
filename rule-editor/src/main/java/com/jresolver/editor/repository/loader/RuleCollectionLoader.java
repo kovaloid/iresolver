@@ -1,19 +1,21 @@
 package com.jresolver.editor.repository.loader;
 
-import com.jresolver.editor.bean.Rule;
-import com.jresolver.editor.bean.RuleCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.jresolver.editor.bean.Rule;
+import com.jresolver.editor.bean.RuleCollection;
 
 
 @Component
@@ -30,8 +32,13 @@ public class RuleCollectionLoader {
   public void reload() {
     File filePath = new File(path);
     if (filePath.exists()) {
-      List<File> files = Arrays.stream(Objects.requireNonNull(filePath.listFiles((dir1, filename) -> filename.endsWith(".drl")))).collect(Collectors.toList());
-      ruleCollections = extractFileSystemRuleObjectsFromFiles(files);
+      File[] files = filePath.listFiles();
+      if (files == null) {
+        ruleCollections = new ArrayList<>();
+      } else {
+        List<File> fileList = Arrays.stream(files).filter(file -> file.getName().endsWith(".drl")).collect(Collectors.toList());
+        ruleCollections = extractFileSystemRuleObjectsFromFiles(fileList);
+      }
     } else {
       LOGGER.error("Could not find the rules folder: " + path);
       if (filePath.mkdirs()) {
@@ -42,18 +49,19 @@ public class RuleCollectionLoader {
 
   private List<RuleCollection> extractFileSystemRuleObjectsFromFiles(List<File> files) {
     LOGGER.info("Retrieving all the rules from the file system");
-    List<RuleCollection> ruleCollections = new ArrayList<>();
+    List<RuleCollection> result = new ArrayList<>();
     files.forEach(file -> {
       try {
         RuleCollection ruleCollection = extractFileSystemRuleObjectFromFile(file);
-        ruleCollections.add(ruleCollection);
+        result.add(ruleCollection);
       } catch (IOException e) {
         LOGGER.error("Could not extract FileSystemObject from the file with name: " + file.getAbsolutePath(), e);
       }
     });
-    return ruleCollections;
+    return result;
   }
 
+  @SuppressWarnings("PMD")
   private RuleCollection extractFileSystemRuleObjectFromFile(File file) throws IOException {
     byte[] bytes = Files.readAllBytes(file.toPath());
     String ruleFileContent = new String(bytes, StandardCharsets.UTF_8);

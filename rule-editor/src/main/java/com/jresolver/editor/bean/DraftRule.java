@@ -5,7 +5,7 @@ import java.util.List;
 public class DraftRule {
 
     private String name;
-    private String filename;
+    private String file;
     private List<String> conditions;
     private List<String> recommendations;
     private List<String> attributes;
@@ -19,11 +19,11 @@ public class DraftRule {
     }
 
     public String getFile() {
-      return filename;
+      return file;
     }
 
-    public void setFile(String filename) {
-      this.filename = filename;
+    public void setFile(String file) {
+      this.file = file;
     }
 
     public List<String> getConditions() {
