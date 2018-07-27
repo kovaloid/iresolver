@@ -19,28 +19,30 @@ public class RuleCollectionSaver {
     File file = ruleCollection.getFile();
     try (OutputStream outputStream = new FileOutputStream(file);
          Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
-      writer.write("package " + ruleCollection.getPack() + "\n");
+      writer.write("package " + ruleCollection.getPack() + "\n\n");
       ruleCollection.getImports().forEach(i -> {
         try {
-          writer.write("import  " + i + "\n");
+          writer.write("import " + i + "\n");
         } catch (IOException e) {
           LOGGER.error("Could not write 'import' declarations", e);
         }
       });
+      writer.write("\n");
       ruleCollection.getGlobals().forEach(global -> {
         try {
-          writer.write("global  " + global + "\n");
+          writer.write("global " + global + "\n");
         } catch (IOException e) {
           LOGGER.error("Could not write 'global' declarations", e);
         }
       });
+      writer.write("\n");
       ruleCollection.getRules().forEach(rule -> {
         try {
-          writer.write("rule  " + rule.getName() + "\n");
+          writer.write("rule \"" + rule.getName() + "\"\n");
           writer.write("  when\n");
-          writer.write("    " + rule.getConditions() + "\n");
+          writer.write("    $issue : JiraIssue( " + rule.getConditions() + " )\n");
           writer.write("  then\n");
-          writer.write("    " + rule.getRecommendations() + "\n");
+          writer.write("    results.putAdvice(\"" + rule.getRecommendations() + "\");\n");
           writer.write("end\n\n");
         } catch (IOException e) {
           LOGGER.error("Could not write 'rule' declaration: " + rule.getName(), e);
