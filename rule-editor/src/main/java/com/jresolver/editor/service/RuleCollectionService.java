@@ -23,16 +23,18 @@ public class RuleCollectionService {
   private RuleCollectionRepository ruleCollectionRepository;
 
   public RuleCollection getById(UUID ruleCollectionId) {
+    ruleCollectionRepository.refreshRepository();
     Optional<RuleCollection> optional = ruleCollectionRepository.findById(ruleCollectionId);
     if (optional.isPresent()) {
       LOGGER.debug("Rule collection with id {} was found", ruleCollectionId.toString());
-      return ruleCollectionRepository.findById(ruleCollectionId).get();
+      return optional.get();
     }
     LOGGER.debug("Could not find any rule collection with id {}", ruleCollectionId.toString());
     return new RuleCollection();
   }
 
   public List<RuleCollection> getAll() {
+    ruleCollectionRepository.refreshRepository();
     List<RuleCollection> target = new ArrayList<>();
     ruleCollectionRepository.findAll().forEach(target::add);
     return target;
@@ -41,17 +43,20 @@ public class RuleCollectionService {
   public RuleCollection updateById(UUID ruleCollectionId, RuleCollection payload) {
     payload.setId(ruleCollectionId);
     ruleCollectionRepository.save(payload);
+    ruleCollectionRepository.refreshRepository();
     return payload;
   }
 
   public RuleCollection create(RuleCollection payload) {
     ruleCollectionRepository.save(payload);
+    ruleCollectionRepository.refreshRepository();
     return payload;
   }
 
   public RuleCollection deleteById(UUID ruleCollectionId) {
     RuleCollection ruleCollection = ruleCollectionRepository.findById(ruleCollectionId).orElse(null);
     ruleCollectionRepository.deleteById(ruleCollectionId);
+    ruleCollectionRepository.refreshRepository();
     return ruleCollection;
   }
 }

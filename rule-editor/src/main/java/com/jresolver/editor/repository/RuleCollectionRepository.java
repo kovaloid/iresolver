@@ -33,6 +33,11 @@ public class RuleCollectionRepository {
     this.ruleCollections = ruleCollectionLoader.getRuleCollections();
   }
 
+  public void refreshRepository() {
+    ruleCollectionLoader.reload();
+    ruleCollections = ruleCollectionLoader.getRuleCollections();
+  }
+
   public RuleCollection save(RuleCollection entity) {
     ruleCollectionSaver.save(entity);
     return entity;
