@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { RuleService } from '../rule/rule.service';
+import { RuleCollectionService } from '../rule-service/rule-collection.service';
 
 @Component({
   selector: 'rule-list',
@@ -9,14 +9,14 @@ import { RuleService } from '../rule/rule.service';
 })
 export class RuleListComponent implements OnInit {
 
-rules: Array<any>;
-chosenRule: any;
+  ruleCollections: Array<any>;
+  chosenRule: any;
 
-constructor(private ruleService: RuleService) { }
+  constructor(private ruleCollectionService: RuleCollectionService) { }
 
   ngOnInit() {
-    this.ruleService.getAll().subscribe(data => {
-      this.rules = data;
+    this.ruleCollectionService.getAll().subscribe(data => {
+      this.ruleCollections = data;
     });
   }
 
@@ -25,10 +25,14 @@ constructor(private ruleService: RuleService) { }
   }
 
   createRule() {
-    this.chosenRule.id = 'new';
+    this.chosenRule = {
+      name: '',
+      file: '',
+      globals: []
+    };
   }
 
-  changeButtonValue(id: string){
+  changeButtonValue(id: string) {
     let currentValue: string = document.getElementById(id).innerHTML;
     if (currentValue == "Show"){
       document.getElementById(id).innerHTML = "Hide";
@@ -37,19 +41,13 @@ constructor(private ruleService: RuleService) { }
     }
   }
 
-  testFunc(id: string){
-    for (let key in document.getElementById(id)){
-      console.log(key + " : " + typeof(key));
-    }
-  }
-
   setRuleEditorVisible(){
     document.getElementById("open-rule1").style.visibility = "visible";
   }
 
   updateRules() {
-    this.ruleService.getAll().subscribe(data => {
-      this.rules = data;
+    this.ruleCollectionService.getAll().subscribe(data => {
+      this.ruleCollections = data;
     });
   }
 }

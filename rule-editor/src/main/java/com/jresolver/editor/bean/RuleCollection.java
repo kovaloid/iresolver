@@ -8,6 +8,7 @@ import java.util.UUID;
 public class RuleCollection {
 
   private UUID id;
+  private String name;
   private File file;
   private String pack;
   private List<String> imports;
@@ -17,8 +18,9 @@ public class RuleCollection {
   public RuleCollection() {
   }
 
-  public RuleCollection(UUID id, File file) {
+  public RuleCollection(UUID id, String name, File file) {
     this.id = id;
+    this.name = name;
     this.file = file;
   }
 
@@ -28,6 +30,14 @@ public class RuleCollection {
 
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public File getFile() {

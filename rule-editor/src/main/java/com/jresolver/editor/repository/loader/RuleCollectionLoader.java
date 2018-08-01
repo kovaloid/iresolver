@@ -67,7 +67,8 @@ public class RuleCollectionLoader {
          BufferedReader reader = new BufferedReader(inputStreamReader)) {
       String line = reader.readLine();
 
-      RuleCollection ruleCollection = new RuleCollection(getIdForRuleCollection(file), file);
+      String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
+      RuleCollection ruleCollection = new RuleCollection(getIdForRuleCollection(file), fileName, file);
       List<String> imports = new ArrayList<>();
       List<String> globals = new ArrayList<>();
       List<Rule> rules = new ArrayList<>();

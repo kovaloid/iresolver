@@ -5,8 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { RuleListComponent } from './rule-list/rule-list.component';
-import { RuleEditComponent } from './rule-edit/rule-edit.component';
-import { RuleService } from './rule/rule.service';
+import { RuleContentComponent } from './rule-content/rule-content.component';
+import { RuleCollectionService } from './rule-service/rule-collection.service';
 
 @NgModule({
   imports: [
@@ -17,9 +17,9 @@ import { RuleService } from './rule/rule.service';
   declarations: [
     AppComponent,
     RuleListComponent,
-    RuleEditComponent
+    RuleContentComponent
   ],
-  providers: [ RuleService ],
+  providers: [ RuleCollectionService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

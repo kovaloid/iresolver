@@ -1,14 +1,84 @@
+<h4 class="mb-3 float-left">Metadata</h4>
+<button type="button" id="show1" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space"
+        data-toggle="collapse" data-target="#hide-attributes" (click)="changeButtonValue('show1')">Show
+</button><br><br>
+
+<div id="hide-attributes" class="collapse in">
+  <hr class="mb-4">
+  <h4 class="mb-3">File Name</h4>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.name"><br>
+
+  <h4 class="mb-3">File Path</h4>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.file"><br>
+
+  <h4 class="mb-3">Package</h4>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.pack"><br>
+
+  <h4 class="mb-3">Imports</h4>
+  <div *ngFor="let import of selectedRuleCollection.imports">
+    {{ import }}
+  </div>
+
+  <h4 class="mb-3">Globals</h4>
+  <div *ngFor="let global of selectedRuleCollection.globals">
+    {{ global }}
+  </div>
+</div>
+
+
+<hr/>
+<!--<form class="needs-validation" novalidate>-->
+<div *ngFor="let rule of selectedRuleCollection.rules">
+
+
+  <h4 class="mb-3">Conditions</h4>
+  <div class="row" *ngFor="let condition of rule.conditions; let i = index">
+    <div class="col-md-11">
+      <input type="text" class="form-control" name="cond-{{i}}" [ngModel]="rule.conditions[i]"
+             (change)="rule.conditions[i] = $event.target.value">
+    </div>
+    <button type="button" class="btn btn-outline-danger btn-sm btn-space1" (click)="deleteCondition(condition)">
+      &times;
+    </button>
+    <br>
+  </div>
+  <br>
+  <button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addCondition()">+</button>
+  <br>
+
+
+  <h4 class="mb-3">Recommendations</h4>
+  <div class="row" *ngFor="let recommendation of rule.recommendations; let i = index">
+    <div class="col-md-11">
+      <input type="text" class="form-control" name="rec-{{i}}" [ngModel]="rule.recommendations[i]"
+             (change)="rule.recommendations[i] = $event.target.value">
+    </div>
+    <button type="button" class="btn btn-outline-danger btn-sm  btn-space1"
+            (click)="deleteRecommendation(recommendation)">&times;
+    </button>
+    <br>
+  </div>
+  <br>
+  <button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addRecommendation()">+</button>
+  <br>
+
+
+</div>
+<!--
+</form>
+-->
+
+<hr/>
+<hr/>
+<hr/>
+<!--
+
 <hr class="mb-4">
-<h4 class="mb-3">Name</h4>
-<input type="text" class="form-control" [(ngModel)]="rule.name"><br>
-
-<h4 class="mb-3">FileName</h4>
-<input type="text" class="form-control" [(ngModel)]="rule.file"><br>
-
   <h4 class="mb-3 float-left">Attributes</h4>
   <button type="button" id="show1" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space"
           data-toggle="collapse" data-target="#hide-attributes" (click)="changeButtonValue('show1')">Show</button><br><br>
-  <form class="needs-validation" novalidate>
+
+<form class="needs-validation" novalidate>
     <div id="hide-attributes" class="collapse in">
       <div class="row" *ngFor="let attribute of rule.attributes; let i = index">
         <div class="col-md-11 ">
@@ -16,7 +86,7 @@
         </div>
         <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteAttribute(i)">&times;</button><br>
       </div>
-      <!-- Button for new attributes addition. -->
+      &lt;!&ndash; Button for new attributes addition. &ndash;&gt;
       <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addAttribute()">+</button><br>
     </div>
 
@@ -33,7 +103,7 @@
       <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteCondition(i)">&times;</button><br>
     </div>
 
-    <!-- Button for new conditions addition. -->
+    &lt;!&ndash; Button for new conditions addition. &ndash;&gt;
     <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addCondition()">+</button><br>
 
     <hr class="mb-4">
@@ -49,14 +119,18 @@
       <button type="button" class="btn btn-outline-danger btn-sm  btn-space1" (click)="deleteRecommendation(i)">&times;</button><br>
     </div>
 
-    <!-- Button for new recommendations addition. -->
+    &lt;!&ndash; Button for new recommendations addition. &ndash;&gt;
     <br><button type="button" class="btn btn-primary btn-sm float-right btn-space" (click)="addRecommendation()">+</button><br>
 
     <hr class="mb-4">
   </form>
+-->
+
+
 <!-- Delete button. -->
 <button class="btn btn-danger btn-lg btn-space float-right" type="submit"
-        data-toggle="modal" data-target="#deleteRuleModal">Delete</button>
+        data-toggle="modal" data-target="#deleteRuleModal">Delete
+</button>
 <!-- Cancel button. -->
 <button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="revertChanges()">Cancel</button>
 <!-- Save button. -->
@@ -71,7 +145,7 @@
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete this rule:</p>
-        <p>{{rule.name}}</p>
+        <p>{{selectedRuleCollection.name}}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
@@ -80,4 +154,3 @@
     </div>
   </div>
 </div>
-

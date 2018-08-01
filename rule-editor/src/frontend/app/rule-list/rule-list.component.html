@@ -2,27 +2,30 @@
 
   <div class="col-md-3 text-center">
 
-    <button type="button" class="btn btn-primary btn-block btn-space" (click)="ngOnInit()">Update rules</button><br>
+    <button type="button" class="btn btn-primary btn-block btn-space" (click)="ngOnInit()">Update rules</button>
+    <br>
     <hr class="mb-4">
 
-    <h3 class="mb-3 text center">List of rules</h3>
+    <h3 class="mb-3 text center">List of rule files</h3>
 
-    <div class="btn-group btn-group-sm" >
-        <button type="button" id="show" class="btn  btn-info btn-outline-secondary btn-sm float-left btn-space"
-                data-toggle="collapse" data-target="#rule.name"
-                (click)="changeButtonValue('show'); testFunc('open-rule1')">Show</button>
-        <button type="button" class="btn btn-outline-primary btn-sm float-right btn-space"
-                (click)="createRule()">+</button>
-        <button type="button" class="btn btn-info btn-outline-danger btn-sm float-right btn-space"
-                data-toggle="modal" data-target="#deleteModal">&times;</button>
+    <div class="btn-group btn-group-sm">
+      <button type="button" id="show" class="btn btn-info btn-outline-secondary btn-sm float-left btn-space"
+              data-toggle="collapse" data-target="#ruleCollection.name"
+              (click)="changeButtonValue('show')">Show
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm float-right btn-space"
+              (click)="createRule()">+
+      </button>
+      <button type="button" class="btn btn-info btn-outline-danger btn-sm float-right btn-space"
+              data-toggle="modal" data-target="#deleteModal">&times;
+      </button>
     </div>
 
-    <p></p>
-
-    <div *ngFor="let rule of rules">
-      <ul id="rule.name" class="connectedSortable collapse">
+    <div *ngFor="let ruleCollection of ruleCollections">
+      <ul id="ruleCollection.name" class="connectedSortable collapse">
         <li class="btn btn-outline-secondary text-center"
-            (click)="changeChosenRule(rule); setRuleEditorVisible()">{{rule.name}}</li>
+            (click)="changeChosenRule(ruleCollection); setRuleEditorVisible()">{{ruleCollection.name}}
+        </li>
       </ul>
     </div>
 
@@ -44,17 +47,9 @@
       </div>
     </div>
 
-    <!-- !!! Drag&drop demonstration. Could be deleted afterwards!!!
-      <ul id="sortable2" class="connectedSortable">
-        <li class="ui-state-highlight">Item 11</li>
-        <li class="ui-state-highlight">Item 2</li>
-      </ul>
-    -->
-
   </div>
 
-  <rule-edit id="open-rule1" class="col-md-8 order-md-1"
-             [ruleId] = chosenRule.id [ruleName] = chosenRule.name (updated) = "updateRules($event)"></rule-edit>
-
+  <rule-content *ngIf="!!chosenRule" id="open-rule1" class="col-md-8 order-md-1" [selectedRuleCollection]="chosenRule"
+                (updated)="updateRules($event)"></rule-content>
 
 </div>
