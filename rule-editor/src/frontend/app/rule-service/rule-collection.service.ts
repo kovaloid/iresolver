@@ -16,8 +16,8 @@ export class RuleCollectionService {
     return this.http.get('/rest/rule-collections/' + id);
   }
 
-  update(ruleCollection: any, ruleCollectionId: string): Observable<any> {
-    return this.http.put('/rest/rule-collections/' + ruleCollectionId, ruleCollection);
+  update(ruleCollection: any): Observable<any> {
+    return this.http.put('/rest/rule-collections/' + ruleCollection.id, ruleCollection);
   }
 
   create(ruleCollection: any): any {

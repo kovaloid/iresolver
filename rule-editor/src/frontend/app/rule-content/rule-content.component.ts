@@ -10,9 +10,6 @@ import { RuleCollectionService } from '../rule-service/rule-collection.service';
 })
 export class RuleContentComponent implements OnChanges {
 
-  rule: any;
-  ruleId: string = '-1';
-  ruleName: string;
   @Input() selectedRuleCollection: any;
   @Output() updated = new EventEmitter<boolean>();
 
@@ -23,6 +20,7 @@ export class RuleContentComponent implements OnChanges {
     //console.log(this.selectedRuleCollection);
 
     console.log('changes');
+
     /*if (this.ruleId != 'new') {
       this.ruleCollectionService.get(changes.ruleId.currentValue).subscribe(data => {
         this.rule = data;
@@ -40,54 +38,66 @@ export class RuleContentComponent implements OnChanges {
   }
 
   save() {
-    if (this.ruleId != 'new') {
+    //if (this.ruleId != 'new') {
       //this.ruleCollectionService.save(this.rule, this.ruleId).subscribe(result => {
       //  this.rule = result;
       //  this.updated.emit();
      // });
-      } else {
+    //  } else {
      // this.ruleCollectionService.saveNew(this.rule).subscribe(result => {
      //   this.rule = result;
      //   this.updated.emit();
      //   console.log(result);
      // });
+   // }
+
+    if (this.selectedRuleCollection.id === null) {
+      this.ruleCollectionService.create(this.selectedRuleCollection).subscribe(data => {
+        console.log(data);
+      });
+    } else {
+      this.ruleCollectionService.update(this.selectedRuleCollection).subscribe(data => {
+        console.log(data);
+      });
     }
+  }
 
-    console.log(this.selectedRuleCollection);
-
-    this.ruleCollectionService.update(this.selectedRuleCollection, this.selectedRuleCollection.id).subscribe(data => {
-      console.log(data);
+  addRule() {
+    this.selectedRuleCollection.rules.push({
+      name: '',
+      conditions: [],
+      recommendations: []
     });
   }
 
   revertChanges(){
-    this.ruleCollectionService.get(this.ruleId).subscribe(data => {
-      this.rule = data;
+    this.ruleCollectionService.get(this.selectedRuleCollection.id).subscribe(data => {
+      this.selectedRuleCollection = data;
     });
   }
 
-  deleteCondition(i: number) {
-    this.rule.conditions.splice(i, 1);
+  deleteCondition(ruleIndex: number, conditionIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].conditions.splice(conditionIndex, 1);
   }
 
-  addCondition() {
-    this.rule.conditions.push('');
+  addCondition(ruleIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].conditions.push('');
   }
 
-  deleteAttribute(i: number) {
-    this.rule.attributes.splice(i, 1);
+/*  deleteAttribute(i: number) {
+    this.selectedRuleCollection.rules[0].attributes.splice(i, 1);
   }
 
   addAttribute() {
-    this.rule.attributes.push('');
+    this.selectedRuleCollection.rules[0].attributes.push('');
+  }*/
+
+  deleteRecommendation(ruleIndex: number, recommendationIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].recommendations.splice(recommendationIndex, 1);
   }
 
-  deleteRecommendation(i: number) {
-    this.rule.recommendations.splice(i, 1);
-  }
-
-  addRecommendation() {
-    this.rule.recommendations.push('');
+  addRecommendation(ruleIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].recommendations.push('');
   }
 
   changeButtonValue(id: string) {
@@ -101,8 +111,8 @@ export class RuleContentComponent implements OnChanges {
 
   deleteRule() {
     console.log('ne ok');
-    this.ruleCollectionService.remove(this.ruleId).subscribe(result => {
-      this.ruleId = '0';
+    this.ruleCollectionService.remove(this.selectedRuleCollection.id).subscribe(result => {
+      console.log(result);
     });
     this.updated.emit();
   }

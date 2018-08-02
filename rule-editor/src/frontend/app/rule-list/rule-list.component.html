@@ -24,7 +24,7 @@
     <div *ngFor="let ruleCollection of ruleCollections">
       <ul id="ruleCollection.name" class="connectedSortable collapse">
         <li class="btn btn-outline-secondary text-center"
-            (click)="changeChosenRule(ruleCollection); setRuleEditorVisible()">{{ruleCollection.name}}
+            (click)="changeChosenRule(ruleCollection)">{{ruleCollection.name}}
         </li>
       </ul>
     </div>
