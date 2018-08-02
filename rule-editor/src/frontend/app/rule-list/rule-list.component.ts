@@ -27,7 +27,6 @@ export class RuleListComponent implements OnInit {
   createRule() {
     this.chosenRule = {
       id: null,
-      file: 'C:\\Users\\kovaleva\\Desktop\\jresolver\\rule-editor\\src\\main\\resources\\rules\\NewRuleCollection.drl',
       pack:'com.koval.jresolver.rules',
       imports: ['com.koval.jresolver.connector.bean.JiraIssue;', 'com.koval.jresolver.connector.bean.JiraStatus;'],
       globals: ['com.koval.jresolver.rules.results.RulesResult results'],

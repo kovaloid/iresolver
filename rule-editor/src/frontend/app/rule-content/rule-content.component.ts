@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core'
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
 
 import { RuleCollectionService } from '../rule-service/rule-collection.service';
 
@@ -16,48 +15,19 @@ export class RuleContentComponent implements OnChanges {
   constructor(private ruleCollectionService: RuleCollectionService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    //console.log(this.selectedRuleCollection);
-
-    console.log('changes');
-
-    /*if (this.ruleId != 'new') {
-      this.ruleCollectionService.get(changes.ruleId.currentValue).subscribe(data => {
-        this.rule = data;
-      });
-    } else {
-      this.rule = {
-        name:	"New rule",
-        location:	null,
-        conditions: [],
-        recommendations: ['results.putAdvice(\"Your advice");'],
-        file:	"defaullt.drl",
-        attributes:	[]
-      };
-    }*/
+    console.log('Change selected rule collection: ', changes.selectedRuleCollection.currentValue);
   }
 
   save() {
-    //if (this.ruleId != 'new') {
-      //this.ruleCollectionService.save(this.rule, this.ruleId).subscribe(result => {
-      //  this.rule = result;
-      //  this.updated.emit();
-     // });
-    //  } else {
-     // this.ruleCollectionService.saveNew(this.rule).subscribe(result => {
-     //   this.rule = result;
-     //   this.updated.emit();
-     //   console.log(result);
-     // });
-   // }
-
     if (this.selectedRuleCollection.id === null) {
       this.ruleCollectionService.create(this.selectedRuleCollection).subscribe(data => {
         console.log(data);
+        this.updated.emit();
       });
     } else {
       this.ruleCollectionService.update(this.selectedRuleCollection).subscribe(data => {
         console.log(data);
+        this.updated.emit();
       });
     }
   }
@@ -65,6 +35,7 @@ export class RuleContentComponent implements OnChanges {
   addRule() {
     this.selectedRuleCollection.rules.push({
       name: '',
+      attributes: [],
       conditions: [],
       recommendations: []
     });
@@ -84,13 +55,13 @@ export class RuleContentComponent implements OnChanges {
     this.selectedRuleCollection.rules[ruleIndex].conditions.push('');
   }
 
-/*  deleteAttribute(i: number) {
-    this.selectedRuleCollection.rules[0].attributes.splice(i, 1);
+  deleteAttribute(ruleIndex: number, attributeIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].attributes.splice(attributeIndex, 1);
   }
 
-  addAttribute() {
-    this.selectedRuleCollection.rules[0].attributes.push('');
-  }*/
+  addAttribute(ruleIndex: number) {
+    this.selectedRuleCollection.rules[ruleIndex].attributes.push('');
+  }
 
   deleteRecommendation(ruleIndex: number, recommendationIndex: number) {
     this.selectedRuleCollection.rules[ruleIndex].recommendations.splice(recommendationIndex, 1);
@@ -110,7 +81,6 @@ export class RuleContentComponent implements OnChanges {
   }
 
   deleteRule() {
-    console.log('ne ok');
     this.ruleCollectionService.remove(this.selectedRuleCollection.id).subscribe(result => {
       console.log(result);
     });
