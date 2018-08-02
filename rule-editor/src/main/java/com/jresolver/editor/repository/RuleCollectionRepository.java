@@ -1,5 +1,9 @@
 package com.jresolver.editor.repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,6 +12,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.jresolver.editor.bean.RuleCollection;
@@ -26,6 +31,9 @@ public class RuleCollectionRepository {
   @Autowired
   private RuleCollectionSaver ruleCollectionSaver;
 
+  @Value("${rules.path}")
+  private String path;
+
   private List<RuleCollection> ruleCollections;
 
   @PostConstruct
@@ -40,6 +48,7 @@ public class RuleCollectionRepository {
 
   public RuleCollection save(RuleCollection entity) {
     ruleCollectionSaver.save(entity);
+    entity.setId(UUID.randomUUID());
     return entity;
   }
 
@@ -78,8 +87,8 @@ public class RuleCollectionRepository {
   public void deleteById(UUID id) {
     Optional<RuleCollection> ruleCollection = ruleCollections.stream().filter(rc -> id.equals(rc.getId())).findFirst();
     if (ruleCollection.isPresent()) {
-      String path = ruleCollection.get().getFile().getAbsolutePath();
-      if (ruleCollection.get().getFile().delete()) {
+      File file = new File(path, ruleCollection.get().getName() + ".drl");
+      if (file.delete()) {
         LOGGER.info("Rule collection file was removed: {}", path);
       } else {
         LOGGER.warn("Could not remove rule collection file: {}", path);
@@ -90,8 +99,8 @@ public class RuleCollectionRepository {
   }
 
   public void delete(RuleCollection entity) {
-    String path = entity.getFile().getAbsolutePath();
-    if (entity.getFile().delete()) {
+    File file = new File(path, entity.getName() + ".drl");
+    if (file.delete()) {
       LOGGER.info("Rule collection file was removed: {}", path);
     } else {
       LOGGER.warn("Could not remove rule collection file: {}", path);
@@ -100,8 +109,8 @@ public class RuleCollectionRepository {
 
   public void deleteAll(Iterable<RuleCollection> entities) {
     entities.forEach(ruleCollection -> {
-      String path = ruleCollection.getFile().getAbsolutePath();
-      if (ruleCollection.getFile().delete()) {
+      File file = new File(path, ruleCollection.getName() + ".drl");
+      if (file.delete()) {
         LOGGER.info("Rule collection file was removed: {}", path);
       } else {
         LOGGER.warn("Could not remove rule collection file: {}", path);

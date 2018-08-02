@@ -18,19 +18,23 @@ public final class RuleParser {
   }
 
   public static String getPackage(String line) {
-    return line.trim().substring(PACKAGE.length()).trim();
+    return getRestStringAfterWord(line, PACKAGE);
   }
 
   public static String getImport(String line) {
-    return line.trim().substring(IMPORT.length()).trim();
+    return getRestStringAfterWord(line, IMPORT);
   }
 
   public static String getGlobal(String line) {
-    return line.trim().substring(GLOBAL.length()).trim();
+    return getRestStringAfterWord(line, GLOBAL);
   }
 
   public static String getRuleName(String line) {
-    return line.trim().substring(RULE.length()).trim().replace("\"", "");
+    return getRestStringAfterWord(line, RULE).replace("\"", "");
+  }
+
+  private static String getRestStringAfterWord(String line, String word) {
+    return line.trim().substring(word.length()).trim();
   }
 
   public static List<String> getWhen(List<String> lines) {

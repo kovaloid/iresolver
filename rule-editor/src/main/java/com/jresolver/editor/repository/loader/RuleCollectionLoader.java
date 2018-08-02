@@ -53,6 +53,7 @@ public class RuleCollectionLoader {
     files.forEach(file -> {
       try {
         RuleCollection ruleCollection = extractRuleCollectionObjectFromFile(file);
+        LOGGER.info("Rule collection was extracted: {}" + ruleCollection);
         result.add(ruleCollection);
       } catch (IOException e) {
         LOGGER.error("Could not extract FileSystemObject from the file with name: " + file.getAbsolutePath(), e);
@@ -68,7 +69,7 @@ public class RuleCollectionLoader {
       String line = reader.readLine();
 
       String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
-      RuleCollection ruleCollection = new RuleCollection(getIdForRuleCollection(file), fileName, file);
+      RuleCollection ruleCollection = new RuleCollection(getIdForRuleCollection(file), fileName);
       List<String> imports = new ArrayList<>();
       List<String> globals = new ArrayList<>();
       List<Rule> rules = new ArrayList<>();

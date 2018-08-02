@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.jresolver.editor.bean.RuleCollection;
@@ -15,8 +16,11 @@ public class RuleCollectionSaver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RuleCollectionSaver.class);
 
+  @Value("${rules.path}")
+  private String path;
+
   public void save(RuleCollection ruleCollection) {
-    File file = ruleCollection.getFile();
+    File file = new File(path, ruleCollection.getName() + ".drl");
     try (OutputStream outputStream = new FileOutputStream(file);
          Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       writer.write("package " + ruleCollection.getPack() + "\n\n");
@@ -40,9 +44,21 @@ public class RuleCollectionSaver {
         try {
           writer.write("rule \"" + rule.getName() + "\"\n");
           writer.write("  when\n");
-          writer.write("    $issue : JiraIssue( " + rule.getConditions() + " )\n");
+          StringBuilder conditions = new StringBuilder();
+          rule.getConditions().forEach(condition -> {
+            conditions.append(condition);
+            conditions.append(", ");
+          });
+          conditions.delete(conditions.lastIndexOf(", "), conditions.length());
+          writer.write("    $issue : JiraIssue( " + conditions.toString() + " )\n");
           writer.write("  then\n");
-          writer.write("    results.putAdvice(\"" + rule.getRecommendations() + "\");\n");
+          rule.getRecommendations().forEach(recommendation -> {
+            try {
+              writer.write("    results.putAdvice(\"" + recommendation + "\");\n");
+            } catch (IOException e) {
+              LOGGER.error("Could not write recommendations", e);
+            }
+          });
           writer.write("end\n\n");
         } catch (IOException e) {
           LOGGER.error("Could not write 'rule' declaration: " + rule.getName(), e);

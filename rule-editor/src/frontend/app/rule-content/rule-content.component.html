@@ -7,10 +7,7 @@
   <hr class="mb-4">
 
   <h5 class="mb-3">File Name</h5>
-  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.name" disabled><br>
-
-  <h5 class="mb-3">File Path</h5>
-  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.file" disabled><br>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.name"><br>
 
   <h5 class="mb-3">Package</h5>
   <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.pack" disabled><br>
@@ -46,6 +43,8 @@
 
   <div *ngFor="let rule of selectedRuleCollection.rules; let ruleIndex = index">
 
+    <h5 class="mb-3">Name</h5>
+    <input type="text" class="form-control" [(ngModel)]="rule.name"><br>
 
     <h5 class="mb-3">Conditions</h5>
     <div class="row" *ngFor="let condition of rule.conditions; let i = index">

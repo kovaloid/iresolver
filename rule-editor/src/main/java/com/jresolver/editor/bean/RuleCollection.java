@@ -9,7 +9,6 @@ public class RuleCollection {
 
   private UUID id;
   private String name;
-  private File file;
   private String pack;
   private List<String> imports;
   private List<String> globals;
@@ -18,10 +17,9 @@ public class RuleCollection {
   public RuleCollection() {
   }
 
-  public RuleCollection(UUID id, String name, File file) {
+  public RuleCollection(UUID id, String name) {
     this.id = id;
     this.name = name;
-    this.file = file;
   }
 
   public UUID getId() {
@@ -38,14 +36,6 @@ public class RuleCollection {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public File getFile() {
-    return file;
-  }
-
-  public void setFile(File file) {
-    this.file = file;
   }
 
   public String getPack() {
@@ -78,5 +68,17 @@ public class RuleCollection {
 
   public void setRules(List<Rule> rules) {
     this.rules = rules;
+  }
+
+  @Override
+  public String toString() {
+    return "RuleCollection{" +
+      "id=" + id +
+      ", name='" + name + '\'' +
+      ", pack='" + pack + '\'' +
+      ", imports=" + imports +
+      ", globals=" + globals +
+      ", rules=" + rules +
+      '}';
   }
 }

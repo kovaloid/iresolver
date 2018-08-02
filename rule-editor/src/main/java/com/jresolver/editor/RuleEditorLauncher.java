@@ -3,7 +3,8 @@ package com.jresolver.editor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//CHECKSTYLE:OFF
+
+//C!!!HECKSTYLE:OFF
 @SpringBootApplication
 public class RuleEditorLauncher {
 
@@ -11,4 +12,4 @@ public class RuleEditorLauncher {
         SpringApplication.run(RuleEditorLauncher.class, args);
     }
 }
-//CHECKSTYLE:ON
+//C!!!HECKSTYLE:ON

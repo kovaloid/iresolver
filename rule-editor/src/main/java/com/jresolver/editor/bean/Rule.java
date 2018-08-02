@@ -5,26 +5,16 @@ import java.util.List;
 
 public class Rule {
 
-  private int id; // TODO: remove
   private String name;
   private List<String> attributes;
   private List<String> conditions;
   private List<String> recommendations;
 
   public Rule() {
-
   }
 
   public Rule(String name) {
     this.name = name;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 
   public String getName() {
@@ -57,5 +47,15 @@ public class Rule {
 
   public void setRecommendations(List<String> recommendations) {
     this.recommendations = recommendations;
+  }
+
+  @Override
+  public String toString() {
+    return "Rule{" +
+      "name='" + name + '\'' +
+      ", attributes=" + attributes +
+      ", conditions=" + conditions +
+      ", recommendations=" + recommendations +
+      '}';
   }
 }

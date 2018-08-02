@@ -26,14 +26,14 @@ public class RuleCollectionController {
     produces = "application/json")
   public ResponseEntity<RuleCollection> getRuleCollection(@PathVariable("ruleCollectionId") UUID ruleCollectionId) {
     RuleCollection retrievedRuleCollection = ruleCollectionService.getById(ruleCollectionId);
-    LOGGER.debug("The rule collection with id {} was retrieved", ruleCollectionId.toString());
+    LOGGER.info("The rule collection with id {} was retrieved", ruleCollectionId.toString());
     return new ResponseEntity<>(retrievedRuleCollection, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/rest/rule-collections", method = RequestMethod.GET, produces = "application/json")
   public ResponseEntity<List<RuleCollection>> getRuleCollections() {
     List<RuleCollection> retrievedRuleCollections = ruleCollectionService.getAll();
-    LOGGER.debug("All the rule collections were retrieved");
+    LOGGER.info("All the rule collections were retrieved");
     return new ResponseEntity<>(retrievedRuleCollections, HttpStatus.OK);
   }
 
@@ -42,7 +42,7 @@ public class RuleCollectionController {
   public ResponseEntity<RuleCollection> updateRuleCollection(@PathVariable("ruleCollectionId") UUID ruleCollectionId,
                                                              @RequestBody RuleCollection payload) {
     RuleCollection updatedRuleCollection = ruleCollectionService.updateById(ruleCollectionId, payload);
-    LOGGER.debug("The rule collection with id {} was updated", ruleCollectionId.toString());
+    LOGGER.info("The rule collection with id {} was updated", ruleCollectionId.toString());
     return new ResponseEntity<>(updatedRuleCollection, HttpStatus.OK);
   }
 
@@ -50,7 +50,7 @@ public class RuleCollectionController {
     produces = "application/json")
   public ResponseEntity<RuleCollection> createRuleCollection(@RequestBody RuleCollection payload) {
     RuleCollection createdRuleCollection = ruleCollectionService.create(payload);
-    LOGGER.debug("The rule collection with id {} was created", createdRuleCollection.toString());
+    LOGGER.info("The rule collection with id {} was created", createdRuleCollection.toString());
     return new ResponseEntity<>(createdRuleCollection, HttpStatus.CREATED);
   }
 
@@ -58,7 +58,7 @@ public class RuleCollectionController {
     consumes = "application/json", produces = "application/json")
   public ResponseEntity<RuleCollection> deleteRuleCollection(@PathVariable("ruleCollectionId") UUID ruleCollectionId) {
     RuleCollection deletedRuleCollection = ruleCollectionService.deleteById(ruleCollectionId);
-    LOGGER.debug("The rule collection with id {} was deleted", ruleCollectionId.toString());
+    LOGGER.info("The rule collection with id {} was deleted", ruleCollectionId.toString());
     return new ResponseEntity<>(deletedRuleCollection, HttpStatus.OK);
   }
 }
