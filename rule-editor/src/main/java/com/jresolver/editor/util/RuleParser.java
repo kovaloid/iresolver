@@ -12,6 +12,7 @@ public final class RuleParser {
   public static final String RULE = "rule";
   public static final String WHEN = "when";
   public static final String THEN = "then";
+  public static final String END = "end";
 
   private RuleParser() {
 

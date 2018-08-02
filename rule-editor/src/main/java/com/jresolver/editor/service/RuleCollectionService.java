@@ -26,10 +26,10 @@ public class RuleCollectionService {
     ruleCollectionRepository.refreshRepository();
     Optional<RuleCollection> optional = ruleCollectionRepository.findById(ruleCollectionId);
     if (optional.isPresent()) {
-      LOGGER.debug("Rule collection with id {} was found", ruleCollectionId.toString());
+      LOGGER.info("Rule collection with id {} was found", ruleCollectionId.toString());
       return optional.get();
     }
-    LOGGER.debug("Could not find any rule collection with id {}", ruleCollectionId.toString());
+    LOGGER.info("Could not find any rule collection with id {}", ruleCollectionId.toString());
     return new RuleCollection();
   }
 

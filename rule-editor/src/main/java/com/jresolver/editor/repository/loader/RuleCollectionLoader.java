@@ -53,7 +53,7 @@ public class RuleCollectionLoader {
     files.forEach(file -> {
       try {
         RuleCollection ruleCollection = extractRuleCollectionObjectFromFile(file);
-        LOGGER.info("Rule collection was extracted: {}" + ruleCollection);
+        LOGGER.info("Rule collection was extracted: {}", ruleCollection);
         result.add(ruleCollection);
       } catch (IOException e) {
         LOGGER.error("Could not extract FileSystemObject from the file with name: " + file.getAbsolutePath(), e);
@@ -75,13 +75,13 @@ public class RuleCollectionLoader {
       List<Rule> rules = new ArrayList<>();
 
       while (line != null) {
-        if (line.contains("package")) {
+        if (line.contains(RuleParser.PACKAGE)) {
           ruleCollection.setPack(RuleParser.getPackage(line));
-        } else if (line.contains("import")) {
+        } else if (line.contains(RuleParser.IMPORT)) {
           imports.add(RuleParser.getImport(line));
-        } else if (line.contains("global")) {
+        } else if (line.contains(RuleParser.GLOBAL)) {
           globals.add(RuleParser.getGlobal(line));
-        } else if (line.contains("rule")) {
+        } else if (line.contains(RuleParser.RULE)) {
           Rule rule = new Rule(RuleParser.getRuleName(line));
           fillRule(reader, rule);
           rules.add(rule);
@@ -100,19 +100,19 @@ public class RuleCollectionLoader {
     String line = reader.readLine();
 
     List<String> attributes = new ArrayList<>();
-    while (line != null && !line.contains("when")) {
+    while (line != null && !line.contains(RuleParser.WHEN)) {
       attributes.add(line.trim());
       line = reader.readLine();
     }
 
     List<String> when = new ArrayList<>();
-    while (line != null && !line.contains("then")) {
+    while (line != null && !line.contains(RuleParser.THEN)) {
       when.add(line.trim());
       line = reader.readLine();
     }
 
     List<String> then = new ArrayList<>();
-    while (line != null && !line.contains("end")) {
+    while (line != null && !line.contains(RuleParser.END)) {
       then.add(line.trim());
       line = reader.readLine();
     }
