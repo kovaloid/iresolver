@@ -1,6 +1,5 @@
 package com.jresolver.editor.bean;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,13 +71,13 @@ public class RuleCollection {
 
   @Override
   public String toString() {
-    return "RuleCollection{" +
-      "id=" + id +
-      ", name='" + name + '\'' +
-      ", pack='" + pack + '\'' +
-      ", imports=" + imports +
-      ", globals=" + globals +
-      ", rules=" + rules +
-      '}';
+    return "RuleCollection{"
+      + "id=" + id
+      + ", name='" + name + '\''
+      + ", pack='" + pack + '\''
+      + ", imports=" + imports
+      + ", globals=" + globals
+      + ", rules=" + rules
+      + '}';
   }
 }

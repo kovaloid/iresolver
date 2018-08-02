@@ -4,12 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-//C!!!HECKSTYLE:OFF
+//CHECKSTYLE:OFF
 @SpringBootApplication
 public class RuleEditorLauncher {
 
-    public static void main(String[] args) {
-        SpringApplication.run(RuleEditorLauncher.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(RuleEditorLauncher.class, args);
+  }
 }
-//C!!!HECKSTYLE:ON
+//CHECKSTYLE:ON

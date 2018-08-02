@@ -51,11 +51,11 @@ public class Rule {
 
   @Override
   public String toString() {
-    return "Rule{" +
-      "name='" + name + '\'' +
-      ", attributes=" + attributes +
-      ", conditions=" + conditions +
-      ", recommendations=" + recommendations +
-      '}';
+    return "Rule{"
+      + "name='" + name + '\''
+      + ", attributes=" + attributes
+      + ", conditions=" + conditions
+      + ", recommendations=" + recommendations
+      + '}';
   }
 }
