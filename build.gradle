@@ -5,8 +5,8 @@ dependencies {
   compile project(':report-generator')
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.6'
+wrapper {
+  gradleVersion = '5.2.1'
 }
 
 distributions {
@@ -113,10 +113,6 @@ jar {
 }
 
 defaultTasks 'build'
-
-task openGithubRepo << {
-  java.awt.Desktop.desktop.browse "https://github.com/kovaloid/jresolver".toURI()
-}
 
 allprojects {
   apply plugin: 'java'

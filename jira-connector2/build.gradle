@@ -1,13 +1,13 @@
 apply plugin: 'application'
 
-task createResolvedDataSet(type:JavaExec) {
+task createResolvedDataSet(type: JavaExec) {
   group 'application'
   main = 'com.koval.jresolver.connector2.Launcher'
   classpath = sourceSets.main.runtimeClasspath
   args = ['resolved']
 }
 
-task getUnresolvedIssues(type:JavaExec) {
+task getUnresolvedIssues(type: JavaExec) {
   group 'application'
   main = 'com.koval.jresolver.connector2.Launcher'
   classpath = sourceSets.main.runtimeClasspath
