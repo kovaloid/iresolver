@@ -11,6 +11,7 @@ import com.atlassian.util.concurrent.Promise;
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.connector.jira.bean.JiraSearchResult;
 import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,15 +20,15 @@ import java.util.HashSet;
 
 public class BasicJiraClient implements JiraClient {
 
-  private static final JiraRestClientFactory FACTORY = new AsynchronousJiraRestClientFactory();
+  private final JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
   private final JiraRestClient restClient;
 
-  public BasicJiraClient(String host, String username, String password) throws URISyntaxException {
-    restClient = FACTORY.createWithBasicHttpAuthentication(new URI(host), username, password);
+  public BasicJiraClient(String host, Credentials credentials) throws URISyntaxException {
+    restClient = factory.createWithBasicHttpAuthentication(new URI(host), credentials.getUsername(), credentials.getPassword());
   }
 
   public BasicJiraClient(String host) throws URISyntaxException {
-    restClient = FACTORY.create(new URI(host), new AnonymousAuthenticationHandler());
+    restClient = factory.create(new URI(host), new AnonymousAuthenticationHandler());
   }
 
   @Override

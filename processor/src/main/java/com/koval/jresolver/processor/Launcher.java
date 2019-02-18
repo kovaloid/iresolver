@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 
 

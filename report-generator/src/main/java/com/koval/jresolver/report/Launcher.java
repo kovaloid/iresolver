@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.report.core.ReportGenerator;

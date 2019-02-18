@@ -12,16 +12,16 @@ public class ConnectorProperties {
   private boolean isLoaded;
 
   private String url;
-  private String username;
-  private String password;
+  private boolean isAnonymous;
   private String resolvedJql;
   private String unresolvedJql;
   private int startAtIssue;
+  private int finishAtIssue;
   private int issuesPerRequest = 10;
   private int delayBetweenRequests = 3000;
-  private int maxIssues = 10;
-  private boolean appendToDataSet = true;
+  private String searchFields;
   private String workFolder = "../data/";
+  private String dataSetFileName = "DataSet.txt";
 
   public ConnectorProperties() throws IOException {
     if (!isLoaded) {
@@ -34,16 +34,16 @@ public class ConnectorProperties {
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONNECTOR_PROPERTIES_FILE)) {
       properties.load(input);
       url = properties.getProperty("url");
-      username = properties.getProperty("username");
-      password = properties.getProperty("password");
+      isAnonymous = Boolean.parseBoolean(properties.getProperty("isAnonymous"));
       resolvedJql = properties.getProperty("resolvedJql");
       unresolvedJql = properties.getProperty("unresolvedJql");
       startAtIssue = Integer.parseInt(properties.getProperty("startAtIssue"));
+      finishAtIssue = Integer.parseInt(properties.getProperty("finishAtIssue"));
       issuesPerRequest = Integer.parseInt(properties.getProperty("issuesPerRequest"));
       delayBetweenRequests = Integer.parseInt(properties.getProperty("delayBetweenRequests"));
-      maxIssues = Integer.parseInt(properties.getProperty("maxIssues"));
-      appendToDataSet = Boolean.parseBoolean(properties.getProperty("appendToDataSet"));
+      searchFields = properties.getProperty("searchFields");
       workFolder = properties.getProperty("workFolder");
+      dataSetFileName = properties.getProperty("dataSetFileName");
       isLoaded = true;
     }
   }
@@ -56,20 +56,12 @@ public class ConnectorProperties {
     this.url = url;
   }
 
-  public String getUsername() {
-    return username;
+  public boolean isAnonymous() {
+    return isAnonymous;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void setAnonymous(boolean anonymous) {
+    isAnonymous = anonymous;
   }
 
   public String getResolvedJql() {
@@ -88,20 +80,28 @@ public class ConnectorProperties {
     this.unresolvedJql = unresolvedJql;
   }
 
-  public int getIssuesPerRequest() {
-    return issuesPerRequest;
-  }
-
-  public void setIssuesPerRequest(int issuesPerRequest) {
-    this.issuesPerRequest = issuesPerRequest;
-  }
-
   public int getStartAtIssue() {
     return startAtIssue;
   }
 
   public void setStartAtIssue(int startAtIssue) {
     this.startAtIssue = startAtIssue;
+  }
+
+  public int getFinishAtIssue() {
+    return finishAtIssue;
+  }
+
+  public void setFinishAtIssue(int finishAtIssue) {
+    this.finishAtIssue = finishAtIssue;
+  }
+
+  public int getIssuesPerRequest() {
+    return issuesPerRequest;
+  }
+
+  public void setIssuesPerRequest(int issuesPerRequest) {
+    this.issuesPerRequest = issuesPerRequest;
   }
 
   public int getDelayBetweenRequests() {
@@ -112,24 +112,12 @@ public class ConnectorProperties {
     this.delayBetweenRequests = delayBetweenRequests;
   }
 
-  public int getMaxIssues() {
-    return maxIssues;
+  public String getSearchFields() {
+    return searchFields;
   }
 
-  public void setMaxIssues(int maxIssues) {
-    this.maxIssues = maxIssues;
-  }
-
-  public boolean isAppendToDataSet() {
-    return appendToDataSet;
-  }
-
-  public void setAppendToDataSet(boolean appendToDataSet) {
-    this.appendToDataSet = appendToDataSet;
-  }
-
-  public boolean isAnonymous() {
-    return username == null || username.isEmpty();
+  public void setSearchFields(String searchFields) {
+    this.searchFields = searchFields;
   }
 
   public String getWorkFolder() {
@@ -138,5 +126,13 @@ public class ConnectorProperties {
 
   public void setWorkFolder(String workFolder) {
     this.workFolder = workFolder;
+  }
+
+  public String getDataSetFileName() {
+    return dataSetFileName;
+  }
+
+  public void setDataSetFileName(String dataSetFileName) {
+    this.dataSetFileName = dataSetFileName;
   }
 }

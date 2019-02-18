@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -14,7 +19,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
@@ -32,6 +37,32 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws Exception {
+    /*ConnectorProperties connectorProperties = new ConnectorProperties();
+    JiraClient jiraClient;
+    if (connectorProperties.isAnonymousAuthentication()) {
+      jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    } else {
+      CredentialsProtector protector = new CredentialsProtector();
+      CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties);
+      Credentials credentials;
+      if (keeper.isStored()) {
+        credentials = keeper.load();
+      } else {
+        String username = getUsername();
+        String password = getPassword();
+        credentials = new Credentials(username, password);
+        keeper.store(credentials);
+      }
+      jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
+    }
+    JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
+
+    jiraConnector.createResolvedDataSet();
+    jiraConnector.getUnresolvedIssues();
+
+    List<SimilarityProcessorResult> similarityProcessorResultList;
+    List<RuleEngineProcessorResult> ruleEngineProcessorResultList;*/
+
     char[] password = getPassword();
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
     if (password == null || password.length == 0) {
@@ -89,9 +120,9 @@ public final class Launcher {
       LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
       return;
     }
-    ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
-    JiraConnector jiraConnector = new JiraConnector(connectorProperties);
-    reportGenerator.generate(jiraConnector.getUnresolvedIssues());
+    //ConnectorProperties connectorProperties = new ConnectorProperties();
+    //JiraConnector jiraConnector = new JiraConnector(connectorProperties);
+    //reportGenerator.generate(jiraConnector.getUnresolvedIssues());
   }
 
   private static char[] getPassword() {

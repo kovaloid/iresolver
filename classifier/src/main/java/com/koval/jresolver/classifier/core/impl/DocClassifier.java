@@ -13,7 +13,7 @@ import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.Vectorizer;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;

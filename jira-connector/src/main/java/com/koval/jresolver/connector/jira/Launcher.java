@@ -2,8 +2,17 @@ package com.koval.jresolver.connector.jira;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +27,9 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    JiraConnector jiraConnector = new JiraConnector();
+    ConnectorProperties connectorProperties = new ConnectorProperties();
+    JiraClient jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'resolved' or 'unresolved'.");
     } else if (args.length == 1) {
@@ -29,7 +40,7 @@ public final class Launcher {
           break;
         case "unresolved":
           LOGGER.info("Start getting unresolved issues...");
-          List<JiraIssue> unresolvedIssues = jiraConnector.getUnresolvedIssues();
+          Collection<Issue> unresolvedIssues = jiraConnector.getUnresolvedIssues();
           unresolvedIssues.forEach((issue) -> LOGGER.info(issue.getKey()));
           break;
         default:
