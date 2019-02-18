@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 
 
@@ -12,7 +13,7 @@ public class JiraSearchResult {
   private int startIndex;
   private int maxResults;
   private int total;
-  private Collection<BasicIssue> issues;
+  private Collection<Issue> issues;
 
   public JiraSearchResult() {
   }
@@ -24,8 +25,8 @@ public class JiraSearchResult {
     this.issues = issuesToCollection(searchResult.getIssues());
   }
 
-  private Collection<BasicIssue> issuesToCollection(final Iterable<? extends BasicIssue> iterable) {
-    Collection<BasicIssue> result = new ArrayList<>();
+  private Collection<Issue> issuesToCollection(final Iterable<? extends Issue> iterable) {
+    Collection<Issue> result = new ArrayList<>();
     iterable.forEach(result::add);
     return result;
   }
@@ -54,11 +55,11 @@ public class JiraSearchResult {
     this.total = total;
   }
 
-  public Collection<BasicIssue> getIssues() {
+  public Collection<Issue> getIssues() {
     return issues;
   }
 
-  public void setIssues(Collection<BasicIssue> issues) {
+  public void setIssues(Collection<Issue> issues) {
     this.issues = issues;
   }
 }

@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.jira.process.impl;
 
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.connector.jira.bean.JiraSearchResult;
 import com.koval.jresolver.connector.jira.client.JiraClient;
@@ -45,7 +46,7 @@ public class BasicDataRetriever implements DataRetriever {
     while (!isComplete) {
       JiraSearchResult searchResult = jiraClient.searchByJql(jql, maxResults, startAt);
 
-      Iterator<BasicIssue> issueIterator = searchResult.getIssues().iterator();
+      Iterator<Issue> issueIterator = searchResult.getIssues().iterator();
 
       if (!issueIterator.hasNext()) {
         LOGGER.info("All data was collected. Stop receiving.");

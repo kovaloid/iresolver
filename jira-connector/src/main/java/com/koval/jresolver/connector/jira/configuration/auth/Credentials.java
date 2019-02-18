@@ -1,11 +1,11 @@
 package com.koval.jresolver.connector.jira.configuration.auth;
 
-public class EncryptedCredentials {
+public class Credentials {
 
   private String username;
   private String password;
 
-  public EncryptedCredentials(String username, String password) {
+  public Credentials(String username, String password) {
     this.username = username;
     this.password = password;
   }
@@ -16,13 +16,5 @@ public class EncryptedCredentials {
 
   public String getPassword() {
     return password;
-  }
-
-  @Override
-  public String toString() {
-    return "EncryptedCredentials{" +
-        "username='" + username + '\'' +
-        ", password='" + password + '\'' +
-        '}';
   }
 }
