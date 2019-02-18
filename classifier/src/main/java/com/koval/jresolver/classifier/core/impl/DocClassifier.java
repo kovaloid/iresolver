@@ -13,11 +13,11 @@ import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.Vectorizer;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.JiraConnector;
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.client.JiraClient;
-import com.koval.jresolver.connector.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 
 public class DocClassifier implements Classifier {
 
@@ -32,19 +32,19 @@ public class DocClassifier implements Classifier {
   private String workFolder;
 
   public DocClassifier(ClassifierProperties classifierProperties) throws URISyntaxException, IOException {
-    JiraProperties jiraProperties = new JiraProperties("connector.properties");
-    init(jiraProperties, classifierProperties);
+    ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
+    init(connectorProperties, classifierProperties);
   }
 
   public DocClassifier(ClassifierProperties classifierProperties, String password) throws URISyntaxException, IOException {
-    JiraProperties jiraProperties = new JiraProperties("connector.properties");
-    jiraProperties.setPassword(password);
-    init(jiraProperties, classifierProperties);
+    ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
+    connectorProperties.setPassword(password);
+    init(connectorProperties, classifierProperties);
   }
 
-  private void init(JiraProperties jiraProperties, ClassifierProperties classifierProperties) throws URISyntaxException {
-    this.jiraConnector = new JiraConnector(jiraProperties);
-    this.jiraClient = new BasicJiraClient(jiraProperties.getUrl());
+  private void init(ConnectorProperties connectorProperties, ClassifierProperties classifierProperties) throws URISyntaxException {
+    this.jiraConnector = new JiraConnector(connectorProperties);
+    this.jiraClient = new BasicJiraClient(connectorProperties.getUrl());
     this.docVectorizer = new DocVectorizer(classifierProperties);
     this.workFolder = classifierProperties.getWorkFolder();
   }
@@ -55,7 +55,7 @@ public class DocClassifier implements Classifier {
       LOGGER.info("Skip classifier preparation. File 'DataSet.txt' is already exists.");
       return;
     }
-    jiraConnector.createHistoryIssuesDataSet(DATASET_FILE_NAME);
+    jiraConnector.createResolvedDataSet();
   }
 
   @Override

@@ -13,13 +13,12 @@ import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIte
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.client.JiraClient;
-import com.koval.jresolver.connector.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.configuration.JiraProperties;
-import com.koval.jresolver.processor.similarity.configuration.Doc2VecProperties;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.results.SimilarityResult;
-import com.koval.jresolver.shared.Constants;
 
 
 public class SimilarityProcessor {
@@ -32,10 +31,10 @@ public class SimilarityProcessor {
   private VectorModelSerializer vectorModelSerializer;
   private JiraClient jiraClient;
 
-  public SimilarityProcessor(Doc2VecProperties doc2vecProperties) throws URISyntaxException, IOException {
-    this.vectorModelCreator = new VectorModelCreator(doc2vecProperties);
-    this.vectorModelSerializer = new VectorModelSerializer();
-    this.jiraClient = new BasicJiraClient(new JiraProperties("connector.properties").getUrl());
+  public SimilarityProcessor(SimilarityProcessorProperties similarityProcessorProperties) throws URISyntaxException, IOException {
+    this.vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
+    this.vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
+    this.jiraClient = new BasicJiraClient(new ConnectorProperties().getUrl());
   }
 
   public void train() throws IOException {
@@ -52,7 +51,7 @@ public class SimilarityProcessor {
       LOGGER.info("Skip prediction phase. File 'VectorModel.zip' does not exist.");
       return new ArrayList<>();
     }
-    VectorModel vectorModel = vectorModelSerializer.deserialize(new File(Constants.DATA_PATH, Constants.VECTOR_MODEL_FILE));
+    VectorModel vectorModel = vectorModelSerializer.deserialize(new File("../data/", "VectorModel.zip"));
     return getSimilarIssues(vectorModel);
   }
 

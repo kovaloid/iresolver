@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 
 
 public interface Classifier {

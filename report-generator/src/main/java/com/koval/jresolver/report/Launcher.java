@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.JiraConnector;
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -31,8 +31,8 @@ public final class Launcher {
 
   public static void main(String[] args) throws Exception {
     try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
-      JiraProperties jiraProperties = new JiraProperties("connector.properties");
-      jiraConnector = new JiraConnector(jiraProperties);
+      ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
+      jiraConnector = new JiraConnector(connectorProperties);
       ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
       classifier = new DocClassifier(classifierProperties);
       reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
@@ -47,7 +47,7 @@ public final class Launcher {
   }
 
   private static void generate() throws Exception {
-    List<JiraIssue> actualIssues = jiraConnector.getActualIssues();
+    List<JiraIssue> actualIssues = jiraConnector.getUnresolvedIssues();
     LOGGER.info("Retrieving actual issues was completed.");
     reportGenerator.generate(actualIssues);
   }

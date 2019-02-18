@@ -14,8 +14,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.JiraConnector;
-import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
@@ -89,9 +89,9 @@ public final class Launcher {
       LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
       return;
     }
-    JiraProperties jiraProperties = new JiraProperties("connector.properties");
-    JiraConnector jiraConnector = new JiraConnector(jiraProperties);
-    reportGenerator.generate(jiraConnector.getActualIssues());
+    ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
+    JiraConnector jiraConnector = new JiraConnector(connectorProperties);
+    reportGenerator.generate(jiraConnector.getUnresolvedIssues());
   }
 
   private static char[] getPassword() {

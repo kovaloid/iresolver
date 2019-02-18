@@ -7,7 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.processor.similarity.configuration.Doc2VecProperties;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.core.SimilarityProcessor;
 import com.koval.jresolver.processor.similarity.results.SimilarityResult;
 
@@ -20,8 +20,8 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    Doc2VecProperties doc2vecProperties = new Doc2VecProperties();
-    SimilarityProcessor similarityProcessor = new SimilarityProcessor(doc2vecProperties);
+    SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
+    SimilarityProcessor similarityProcessor = new SimilarityProcessor(similarityProcessorProperties);
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'train' or 'predict'.");
     } else if (args.length == 1) {

@@ -5,14 +5,14 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koval.jresolver.connector.JiraConnector;
-import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 
 
 public class Launcher {
   public static void main(String[] args) throws InterruptedException, URISyntaxException, IOException {
-    JiraConnector jiraConnector = new JiraConnector(new JiraProperties("connector.properties"));
-    jiraConnector.getActualIssues();
+    JiraConnector jiraConnector = new JiraConnector(new ConnectorProperties("connector.properties"));
+    jiraConnector.getUnresolvedIssues();
 
     List<Processor> processors = new ArrayList<>();
     // processors.add(new SimilarityProcessor());

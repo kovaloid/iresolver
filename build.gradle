@@ -119,7 +119,7 @@ allprojects {
   apply plugin: 'idea'
   apply plugin: 'eclipse'
 
-  group = 'com.koval'
+  group = 'com.koval.jresolver'
   version = '0.0.1'
   sourceCompatibility = 1.8
 
@@ -179,8 +179,8 @@ allprojects {
 
   jacocoTestReport {
     reports {
-      xml.enabled false
-      csv.enabled false
+      xml.enabled = false
+      csv.enabled = false
       html.destination file('build/reports/jacoco/jacoco.html')
     }
   }

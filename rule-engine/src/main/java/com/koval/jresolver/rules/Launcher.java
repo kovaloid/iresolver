@@ -7,9 +7,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.JiraConnector;
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.configuration.JiraProperties;
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
@@ -23,9 +23,9 @@ public final class Launcher {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    JiraProperties jiraProperties = new JiraProperties("connector.properties");
-    JiraConnector jiraConnector = new JiraConnector(jiraProperties);
-    List<JiraIssue> issues = jiraConnector.getActualIssues();
+    ConnectorProperties connectorProperties = new ConnectorProperties();
+    JiraConnector jiraConnector = new JiraConnector(connectorProperties);
+    List<JiraIssue> issues = jiraConnector.getUnresolvedIssues();
 
     try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
       issues.forEach((issue) -> {

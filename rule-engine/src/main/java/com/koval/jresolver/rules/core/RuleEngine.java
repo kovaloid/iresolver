@@ -1,6 +1,6 @@
 package com.koval.jresolver.rules.core;
 
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.rules.results.RulesResult;
 
 

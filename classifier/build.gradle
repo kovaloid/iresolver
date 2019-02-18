@@ -1,3 +1,6 @@
+apply plugin: 'application'
+mainClassName = 'com.koval.jresolver.classifier.Launcher'
+
 task runClassifierPrepare(type:JavaExec) {
   group 'application'
   main = 'com.koval.jresolver.classifier.Launcher'

@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.RuleEngine;

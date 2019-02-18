@@ -23,7 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
 

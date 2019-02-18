@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;

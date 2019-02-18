@@ -18,7 +18,7 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.processor.similarity.configuration.Doc2VecProperties;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
 public class VectorModelCreator {
@@ -27,16 +27,16 @@ public class VectorModelCreator {
 
   private TokenPreProcess tokenPreprocessor;
   private List<String> stopWords;
-  private Doc2VecProperties doc2vecProperties;
+  private SimilarityProcessorProperties similarityProcessorProperties;
 
-  public VectorModelCreator(Doc2VecProperties doc2vecProperties) {
-    this(new StemmingPreprocessor(), StopWords.getStopWords(), doc2vecProperties);
+  public VectorModelCreator(SimilarityProcessorProperties similarityProcessorProperties) {
+    this(new StemmingPreprocessor(similarityProcessorProperties), StopWords.getStopWords(), similarityProcessorProperties);
   }
 
-  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, Doc2VecProperties doc2vecProperties) {
+  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, SimilarityProcessorProperties similarityProcessorProperties) {
     this.tokenPreprocessor = tokenPreprocessor;
     this.stopWords = stopWords;
-    this.doc2vecProperties = doc2vecProperties;
+    this.similarityProcessorProperties = similarityProcessorProperties;
   }
 
   public VectorModel createFromFile(File inputFile) throws IOException {
@@ -63,14 +63,14 @@ public class VectorModelCreator {
     tokenizerFactory.setTokenPreProcessor(tokenPreprocessor);
 
     ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
-        .minWordFrequency(doc2vecProperties.getMinWordFrequency())
-        .iterations(doc2vecProperties.getIterations())
-        .epochs(doc2vecProperties.getEpochs())
-        .layerSize(doc2vecProperties.getLayerSize())
-        .learningRate(doc2vecProperties.getLearningRate())
-        .windowSize(doc2vecProperties.getWindowSize())
-        .trainWordVectors(doc2vecProperties.isTrainWordVectors())
-        .sampling(doc2vecProperties.getSampling())
+        .minWordFrequency(similarityProcessorProperties.getMinWordFrequency())
+        .iterations(similarityProcessorProperties.getIterations())
+        .epochs(similarityProcessorProperties.getEpochs())
+        .layerSize(similarityProcessorProperties.getLayerSize())
+        .learningRate(similarityProcessorProperties.getLearningRate())
+        .windowSize(similarityProcessorProperties.getWindowSize())
+        .trainWordVectors(similarityProcessorProperties.isTrainWordVectors())
+        .sampling(similarityProcessorProperties.getSampling())
         .iterate(iterator)
         .vocabCache(cache)
         .tokenizerFactory(tokenizerFactory)

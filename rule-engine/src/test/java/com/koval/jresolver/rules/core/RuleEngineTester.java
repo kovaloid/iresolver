@@ -12,7 +12,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
 
-import com.koval.jresolver.connector.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 public class RuleEngineTester {

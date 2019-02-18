@@ -5,29 +5,40 @@ import java.io.IOException;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
+import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
-import com.koval.jresolver.shared.Constants;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
 class VectorModelSerializer {
 
-  File serialize(VectorModel vectorModel) {
-    File vectorModelFile = new File(Constants.DATA_PATH, Constants.VECTOR_MODEL_FILE);
+  private final TokenPreProcess preProcessor;
+  private final String vectorModelPath;
+  private final String vectorModelFileName;
+
+  public VectorModelSerializer(SimilarityProcessorProperties similarityProcessorProperties) {
+    this.preProcessor = new StemmingPreprocessor(similarityProcessorProperties);
+    this.vectorModelPath = similarityProcessorProperties.getWorkFolder();
+    this.vectorModelFileName = similarityProcessorProperties.getVectorModelFileName();
+  }
+
+  public File serialize(VectorModel vectorModel) {
+    File vectorModelFile = new File(vectorModelPath, vectorModelFileName);
     WordVectorSerializer.writeParagraphVectors(vectorModel.getParagraphVectors(), vectorModelFile);
     return vectorModelFile;
   }
 
-  VectorModel deserialize(File vectorModelFile) throws IOException {
+  public VectorModel deserialize(File vectorModelFile) throws IOException {
     ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(vectorModelFile);
     TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
-    tokenizerFactory.setTokenPreProcessor(new StemmingPreprocessor());
+    tokenizerFactory.setTokenPreProcessor(preProcessor);
     paragraphVectors.setTokenizerFactory(tokenizerFactory);
     return new VectorModel(paragraphVectors);
   }
 
-  boolean isSerializedFileExist() {
-    return getClass().getClassLoader().getResource(Constants.VECTOR_MODEL_FILE) != null;
+  public boolean isSerializedFileExist() {
+    return getClass().getClassLoader().getResource(vectorModelFileName) != null;
   }
 }

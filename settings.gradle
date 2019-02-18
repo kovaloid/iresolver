@@ -10,7 +10,5 @@ include 'processor'
 include 'similarity-processor'
 include 'rule-engine-processor'
 include 'documentation-processor'
-include 'shared'
-include 'jira-connector2'
 
 startParameter.excludedTaskNames = ['run']
