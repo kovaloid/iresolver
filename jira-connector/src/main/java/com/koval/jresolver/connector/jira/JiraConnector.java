@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.koval.jresolver.connector.jira.process.IssueHandler;
+import com.koval.jresolver.connector.jira.process.IssueReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +81,10 @@ public class JiraConnector {
   }
 
   public List<JiraIssue> getUnresolvedIssues() {
+
+    IssueReceiver(jiraClient, new IssueHandler(), new ConnectorProperties(), true);
+
+
     List<JiraIssue> result = new ArrayList<>();
     DataConsumer dataConsumer = new ListDataConsumer(result);
     dataRetriever = getRetriever(actualJql, dataConsumer);
