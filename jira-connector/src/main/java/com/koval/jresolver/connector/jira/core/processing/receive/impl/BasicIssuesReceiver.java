@@ -1,19 +1,21 @@
-package com.koval.jresolver.connector.jira.core.processing;
-
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.koval.jresolver.connector.jira.bean.JiraSearchResult;
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-
+package com.koval.jresolver.connector.jira.core.processing.receive.impl;
 
 import java.util.Collection;
 
-public class IssuesReceiver {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesReceiver.class);
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.core.processing.receive.IssuesReceiver;
+import com.koval.jresolver.connector.jira.util.CollectionsUtil;
+
+
+public class BasicIssuesReceiver implements IssuesReceiver {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BasicIssuesReceiver.class);
 
   private final JiraClient client;
   private final String query;
@@ -23,7 +25,7 @@ public class IssuesReceiver {
   private final int delayAfterEveryRequest;
   private final int totalIssues;
 
-  public IssuesReceiver(JiraClient client, ConnectorProperties properties, boolean isResolvedMode) {
+  public BasicIssuesReceiver(JiraClient client, ConnectorProperties properties, boolean isResolvedMode) {
     this.client = client;
     this.query = isResolvedMode ? properties.getResolvedJql() :  properties.getUnresolvedJql();
     this.issuesPerRequest = properties.getIssuesPerRequest();
@@ -40,13 +42,15 @@ public class IssuesReceiver {
     return client.searchByJql(query, 0, 0).getTotal();
   }
 
-  public boolean hasNext() {
+  @Override
+  public boolean hasNextIssues() {
     return currentIssueIndex < finishIssueIndex;
   }
 
+  @Override
   public Collection<Issue> getNextIssues() {
-    JiraSearchResult searchResult = client.searchByJql(query, issuesPerRequest, currentIssueIndex);
-    Collection<Issue> issues = searchResult.getIssues();
+    SearchResult searchResult = client.searchByJql(query, issuesPerRequest, currentIssueIndex);
+    Collection<Issue> issues = CollectionsUtil.convert(searchResult.getIssues());
     LOGGER.info("Progress: " + currentIssueIndex + "/" + totalIssues + " Issues: " + issues.toString());
     currentIssueIndex += issuesPerRequest;
     delay();

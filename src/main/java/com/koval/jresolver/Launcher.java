@@ -5,11 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -19,8 +14,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.jira.core.JiraConnector;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
@@ -63,13 +56,8 @@ public final class Launcher {
     List<SimilarityProcessorResult> similarityProcessorResultList;
     List<RuleEngineProcessorResult> ruleEngineProcessorResultList;*/
 
-    char[] password = getPassword();
     ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    if (password == null || password.length == 0) {
-      classifier = new DocClassifier(classifierProperties);
-    } else {
-      classifier = new DocClassifier(classifierProperties, String.valueOf(password));
-    }
+    classifier = new DocClassifier(classifierProperties);
     reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
 
     if (args.length == 0) {

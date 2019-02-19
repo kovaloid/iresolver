@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.velocity.Template;
@@ -14,9 +15,9 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -50,9 +51,9 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   @Override
-  public void generate(List<JiraIssue> actualIssues) throws IOException, URISyntaxException {
+  public void generate(Collection<Issue> actualIssues) throws IOException, URISyntaxException {
     List<TotalResult> results = new ArrayList<>();
-    for (JiraIssue actualIssue : actualIssues) {
+    for (Issue actualIssue : actualIssues) {
       ClassifierResult classifierResult = classifier.execute(actualIssue);
       RulesResult ruleResult = ruleEngine.execute(actualIssue);
       TotalResult totalResult = new TotalResult(actualIssue, classifierResult, ruleResult);

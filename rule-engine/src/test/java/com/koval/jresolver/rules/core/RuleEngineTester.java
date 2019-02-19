@@ -1,22 +1,7 @@
 package com.koval.jresolver.rules.core;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-
-
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
-import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
-
 public class RuleEngineTester {
-
+/*
     @SuppressWarnings("VisibilityModifier")
     private final InputStream stream = new ByteArrayInputStream("global com.koval.jresolver.rules.results.RulesResult results".getBytes(StandardCharsets.UTF_8));
     private final InputStream badStream = new ByteArrayInputStream("test syntax mistake in rule".getBytes(StandardCharsets.UTF_8));
@@ -108,5 +93,5 @@ public class RuleEngineTester {
         }
 
         assertTrue(flag);
-    }
+    }*/
 }

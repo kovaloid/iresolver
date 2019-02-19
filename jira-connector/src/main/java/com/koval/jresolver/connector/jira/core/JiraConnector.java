@@ -1,34 +1,35 @@
 package com.koval.jresolver.connector.jira.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.connector.jira.core.processing.impl.FileIssuesGenerator;
-import com.koval.jresolver.connector.jira.core.processing.impl.ObjectIssuesGenerator;
-import com.koval.jresolver.connector.jira.core.processing.IssuesGenerator;
-import com.koval.jresolver.connector.jira.core.processing.IssuesReceiver;
-import com.koval.jresolver.connector.jira.core.processing.IssuesReceiverFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.core.processing.generate.IssuesGenerator;
+import com.koval.jresolver.connector.jira.core.processing.generate.impl.CollectionIssuesGenerator;
+import com.koval.jresolver.connector.jira.core.processing.generate.impl.FileIssuesGenerator;
+import com.koval.jresolver.connector.jira.core.processing.receive.IssuesReceiver;
+import com.koval.jresolver.connector.jira.core.processing.receive.impl.IssuesReceiverFactory;
 
 
 public class JiraConnector {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraConnector.class);
 
-  private JiraClient jiraClient;
-  private ConnectorProperties connectorProperties;
+  private final JiraClient jiraClient;
+  private final ConnectorProperties connectorProperties;
 
   public JiraConnector(JiraClient jiraClient, ConnectorProperties connectorProperties) {
     this.jiraClient = jiraClient;
     this.connectorProperties = connectorProperties;
+    createWorkFolder();
+  }
+
+  private void createWorkFolder() {
     String workFolderPath = connectorProperties.getWorkFolder();
     File folder = new File(workFolderPath);
     if (folder.exists()) {
@@ -50,7 +51,7 @@ public class JiraConnector {
 
   public Collection<Issue> getUnresolvedIssues() {
     IssuesReceiver receiver = IssuesReceiverFactory.forUnresolvedIssues(jiraClient, connectorProperties);
-    IssuesGenerator<Collection<Issue>> generator = new ObjectIssuesGenerator(receiver);
+    IssuesGenerator<Collection<Issue>> generator = new CollectionIssuesGenerator(receiver);
     generator.launch();
     return generator.getResults();
   }

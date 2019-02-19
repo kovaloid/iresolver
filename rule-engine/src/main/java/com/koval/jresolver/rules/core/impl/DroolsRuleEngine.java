@@ -23,7 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
 
@@ -91,7 +91,7 @@ public class DroolsRuleEngine implements RuleEngine {
   }
 
   @Override
-  public RulesResult execute(JiraIssue actualIssue) {
+  public RulesResult execute(Issue actualIssue) {
     RulesResult results = new RulesResult();
     kieSession.setGlobal("results", results);
     // insert facts into the session

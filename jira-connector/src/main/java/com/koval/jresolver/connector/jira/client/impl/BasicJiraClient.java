@@ -1,21 +1,17 @@
 package com.koval.jresolver.connector.jira.client.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
-
-import com.atlassian.util.concurrent.Promise;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
-import com.koval.jresolver.connector.jira.bean.JiraSearchResult;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
 
 
 public class BasicJiraClient implements JiraClient {
@@ -32,14 +28,12 @@ public class BasicJiraClient implements JiraClient {
   }
 
   @Override
-  public JiraSearchResult searchByJql(String jql, int maxResults, int startAt) {
-    Promise<SearchResult> searchResultPromise = restClient.getSearchClient().searchJql(jql, maxResults, startAt, new HashSet<>());
-    return new JiraSearchResult(searchResultPromise.claim());
+  public SearchResult searchByJql(String jql, int maxResults, int startAt) {
+    return restClient.getSearchClient().searchJql(jql, maxResults, startAt, new HashSet<>()).claim();
   }
 
   @Override
-  public JiraIssue getIssueByKey(String issueKey) {
-    Promise<Issue> issuePromise = restClient.getIssueClient().getIssue(issueKey);
-    return new JiraIssue(issuePromise.claim());
+  public Issue getIssueByKey(String issueKey) {
+    return restClient.getIssueClient().getIssue(issueKey).claim();
   }
 }

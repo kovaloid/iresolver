@@ -3,16 +3,25 @@ mainClassName = 'com.koval.jresolver.connector.jira.Launcher'
 
 task createResolvedDataSet(type: JavaExec) {
   group 'application'
-  main = 'com.koval.jresolver.connector.jira.Launcher'
+  main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
   args = ['resolved']
 }
 
 task getUnresolvedIssues(type: JavaExec) {
   group 'application'
-  main = 'com.koval.jresolver.connector.jira.Launcher'
+  main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
   args = ['unresolved']
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': "$mainClassName"
+  }
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
 }
 
 dependencies {

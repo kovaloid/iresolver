@@ -1,11 +1,12 @@
 package com.koval.jresolver.connector.jira.client;
 
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
-import com.koval.jresolver.connector.jira.bean.JiraSearchResult;
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.SearchResult;
+
 
 public interface JiraClient {
 
-  JiraSearchResult searchByJql(String jql, int maxResults, int startAt);
+  SearchResult searchByJql(String jql, int maxResults, int startAt);
 
-  JiraIssue getIssueByKey(String issueKey);
+  Issue getIssueByKey(String issueKey);
 }

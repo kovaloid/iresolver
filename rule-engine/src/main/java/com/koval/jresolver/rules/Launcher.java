@@ -2,14 +2,16 @@ package com.koval.jresolver.rules;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.jira.core.JiraConnector;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;
@@ -24,8 +26,9 @@ public final class Launcher {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
     ConnectorProperties connectorProperties = new ConnectorProperties();
-    JiraConnector jiraConnector = new JiraConnector(connectorProperties);
-    List<JiraIssue> issues = jiraConnector.getUnresolvedIssues();
+    JiraClient jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
+    Collection<Issue> issues = jiraConnector.getUnresolvedIssues();
 
     try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
       issues.forEach((issue) -> {

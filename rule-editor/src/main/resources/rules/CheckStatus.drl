@@ -1,14 +1,13 @@
 package com.koval.jresolver.rules
 
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
-import com.koval.jresolver.connector.jira.bean.JiraStatus;
 
 global com.koval.jresolver.rules.results.RulesResult results
 
 rule "Check status"
 	dialect "mvel"
 	when
-		JiraIssue( status == JiraStatus.CLOSED )
+		JiraIssue( status == "CLOSED" )
 	then
 		results.putAdvice("Status is closed");
 end

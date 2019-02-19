@@ -9,8 +9,6 @@ public class ConnectorProperties {
 
   private static final String CONNECTOR_PROPERTIES_FILE = "connector.properties";
 
-  private boolean isLoaded;
-
   private String url;
   private boolean isAnonymous;
   private String resolvedJql;
@@ -24,9 +22,7 @@ public class ConnectorProperties {
   private String dataSetFileName = "DataSet.txt";
 
   public ConnectorProperties() throws IOException {
-    if (!isLoaded) {
-      loadProperties();
-    }
+    loadProperties();
   }
 
   private void loadProperties() throws IOException {
@@ -44,7 +40,6 @@ public class ConnectorProperties {
       searchFields = properties.getProperty("searchFields");
       workFolder = properties.getProperty("workFolder");
       dataSetFileName = properties.getProperty("dataSetFileName");
-      isLoaded = true;
     }
   }
 

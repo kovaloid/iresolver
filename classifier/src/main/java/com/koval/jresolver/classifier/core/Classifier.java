@@ -3,8 +3,8 @@ package com.koval.jresolver.classifier.core;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
 
 
 public interface Classifier {
@@ -13,7 +13,7 @@ public interface Classifier {
 
   void configure() throws IOException;
 
-  ClassifierResult execute(JiraIssue actualIssue) throws URISyntaxException;
+  ClassifierResult execute(Issue actualIssue) throws URISyntaxException;
 
   Vectorizer getVectorizer();
 }

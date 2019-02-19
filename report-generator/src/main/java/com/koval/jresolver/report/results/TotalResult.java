@@ -3,21 +3,21 @@ package com.koval.jresolver.report.results;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.classifier.results.ClassifierResult;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.rules.results.RulesResult;
 
 
 public class TotalResult {
 
-  private JiraIssue issue;
+  private Issue issue;
   private Set<String> issues;
   private Set<String> labels;
   private Set<String> users;
   private Set<String> attachments;
   private Set<String> advices;
 
-  public TotalResult(JiraIssue issue, SimilarityProcessorResult classifierResult, RulesResult ruleResult) {
+  public TotalResult(Issue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
     this.issue = issue;
     this.issues = new HashSet<>(classifierResult.getIssues());
     this.labels = new HashSet<>(classifierResult.getLabels());
@@ -26,11 +26,11 @@ public class TotalResult {
     this.advices = new HashSet<>(ruleResult.getAdvices());
   }
 
-  public JiraIssue getIssue() {
+  public Issue getIssue() {
     return issue;
   }
 
-  public void setIssue(JiraIssue issue) {
+  public void setIssue(Issue issue) {
     this.issue = issue;
   }
 

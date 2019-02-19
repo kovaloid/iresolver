@@ -2,11 +2,15 @@ package com.koval.jresolver.connector.jira.configuration.auth;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+
 
 public class CredentialsKeeper {
 
@@ -28,15 +32,16 @@ public class CredentialsKeeper {
     if (!isStored()) {
       credentialsFile.createNewFile();
     }
-    try (PrintWriter fileWriter = new PrintWriter(credentialsFile)) {
+    try (PrintWriter fileWriter = new PrintWriter(credentialsFile, StandardCharsets.UTF_8.name())) {
       fileWriter.println(protector.encrypt(credentials.getUsername()));
       fileWriter.println(protector.encrypt(credentials.getPassword()));
     }
   }
 
   public Credentials load() throws IOException {
-    try (FileReader fileReader = new FileReader(credentialsFile);
-         BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+    try (InputStream inputStream = new FileInputStream(credentialsFile);
+         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+         BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
       String username = protector.decrypt(bufferedReader.readLine());
       String password = protector.decrypt(bufferedReader.readLine());
       // if (encryptedUsername != null) {

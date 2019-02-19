@@ -1,9 +1,10 @@
 package com.koval.jresolver.connector.jira.configuration.auth;
 
+
 public class Credentials {
 
-  private String username;
-  private String password;
+  private final String username;
+  private final String password;
 
   public Credentials(String username, String password) {
     this.username = username;

@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareListSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
@@ -75,7 +75,7 @@ public class SimilarityProcessor {
 
     LOGGER.info("Nearest issues: " + keys);
     keys.forEach((key) -> {
-      JiraIssue issue = jiraClient.getIssueByKey(key.trim());
+      Issue issue = jiraClient.getIssueByKey(key.trim());
       labels.addAll(issue.getLabels());
       if (issue.getAssignee() != null) {
         users.add(issue.getAssignee().getName());

@@ -1,17 +1,19 @@
 package com.koval.jresolver.report;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.classifier.configuration.ClassifierProperties;
 import com.koval.jresolver.classifier.core.Classifier;
 import com.koval.jresolver.classifier.core.impl.DocClassifier;
-import com.koval.jresolver.connector.jira.core.JiraConnector;
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.core.JiraConnector;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -31,8 +33,9 @@ public final class Launcher {
 
   public static void main(String[] args) throws Exception {
     try (RuleEngine ruleEngine = new DroolsRuleEngine()) {
-      ConnectorProperties connectorProperties = new ConnectorProperties("connector.properties");
-      jiraConnector = new JiraConnector(connectorProperties);
+      ConnectorProperties connectorProperties = new ConnectorProperties();
+      JiraClient jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+      jiraConnector = new JiraConnector(jiraClient, connectorProperties);
       ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
       classifier = new DocClassifier(classifierProperties);
       reportGenerator = new HtmlReportGenerator(classifier, ruleEngine);
@@ -47,7 +50,7 @@ public final class Launcher {
   }
 
   private static void generate() throws Exception {
-    List<JiraIssue> actualIssues = jiraConnector.getUnresolvedIssues();
+    Collection<Issue> actualIssues = jiraConnector.getUnresolvedIssues();
     LOGGER.info("Retrieving actual issues was completed.");
     reportGenerator.generate(actualIssues);
   }

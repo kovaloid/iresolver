@@ -2,8 +2,11 @@ package com.koval.jresolver.connector.jira;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 import java.util.Collection;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.client.JiraClient;
@@ -13,10 +16,7 @@ import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
 import com.koval.jresolver.connector.jira.core.JiraConnector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.koval.jresolver.connector.jira.bean.JiraIssue;
+import com.koval.jresolver.connector.jira.util.CommandLineUtil;
 
 
 public final class Launcher {
@@ -26,10 +26,35 @@ public final class Launcher {
   private Launcher() {
   }
 
-  public static void main(String[] args) throws IOException, URISyntaxException {
+  public static void main(String[] args) throws IOException, URISyntaxException, GeneralSecurityException {
+
     ConnectorProperties connectorProperties = new ConnectorProperties();
-    JiraClient jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    JiraClient jiraClient;
+    if (connectorProperties.isAnonymous()) {
+      jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    } else {
+      CredentialsProtector protector = new CredentialsProtector();
+      CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties);
+      Credentials credentials;
+      if (keeper.isStored()) {
+        credentials = keeper.load();
+      } else {
+        String username = CommandLineUtil.getUsername();
+        String password = CommandLineUtil.getPassword();
+        credentials = new Credentials(username, password);
+        keeper.store(credentials);
+      }
+      jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
+    }
     JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
+
+
+
+
+
+    //ConnectorProperties connectorProperties = new ConnectorProperties();
+    //JiraClient jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+    //JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
     if (args.length == 0) {
       LOGGER.warn("No arguments. Please use 'resolved' or 'unresolved'.");
     } else if (args.length == 1) {

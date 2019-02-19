@@ -9,8 +9,6 @@ public class SimilarityProcessorProperties {
 
   private static final String SIMILARITY_PROCESSOR_PROPERTIES_FILE = "similarity-processor.properties";
 
-  private boolean isLoaded;
-
   private int minWordFrequency = 1;
   private int iterations = 5;
   private int epochs = 1;
@@ -24,9 +22,7 @@ public class SimilarityProcessorProperties {
   private String vectorModelFileName;
 
   public SimilarityProcessorProperties() throws IOException {
-    if (!isLoaded) {
-      loadProperties();
-    }
+    loadProperties();
   }
 
   private void loadProperties() throws IOException {
@@ -43,7 +39,6 @@ public class SimilarityProcessorProperties {
       sampling = Integer.parseInt(properties.getProperty("sampling"));
       language = properties.getProperty("language");
       workFolder = properties.getProperty("workFolder");
-      isLoaded = true;
     }
   }
 
