@@ -4,35 +4,45 @@ import java.io.Console;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import com.koval.jresolver.connector.jira.JiraConnector;
+import com.koval.jresolver.connector.jira.client.JiraClient;
+import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
+import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
+import com.koval.jresolver.connector.jira.core.IssuesReceiver;
+import com.koval.jresolver.connector.jira.util.CommandLineUtil;
+import com.koval.jresolver.processor.IssueProcessingResult;
+import com.koval.jresolver.processor.ProcessExecutor;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.processor.similarity.SimilarityProcessor;
+import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import com.koval.jresolver.classifier.configuration.ClassifierProperties;
-import com.koval.jresolver.classifier.core.Classifier;
-import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.report.core.ReportGenerator;
-import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
-import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
-  private static Classifier classifier;
   private static ReportGenerator reportGenerator;
 
   private Launcher() {
   }
 
   public static void main(String[] args) throws Exception {
-    /*ConnectorProperties connectorProperties = new ConnectorProperties();
+    ConnectorProperties connectorProperties = new ConnectorProperties();
     JiraClient jiraClient;
-    if (connectorProperties.isAnonymousAuthentication()) {
+    if (connectorProperties.isAnonymous()) {
       jiraClient = new BasicJiraClient(connectorProperties.getUrl());
     } else {
       CredentialsProtector protector = new CredentialsProtector();
@@ -41,24 +51,33 @@ public final class Launcher {
       if (keeper.isStored()) {
         credentials = keeper.load();
       } else {
-        String username = getUsername();
-        String password = getPassword();
+        String username = CommandLineUtil.getUsername();
+        String password = CommandLineUtil.getPassword();
         credentials = new Credentials(username, password);
         keeper.store(credentials);
       }
       jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
     }
     JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
+    IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
-    jiraConnector.createResolvedDataSet();
-    jiraConnector.getUnresolvedIssues();
+    ProcessExecutor executor = new ProcessExecutor()
+        .add(new SimilarityProcessor(new SimilarityProcessorProperties()));
+    Collection<IssueProcessingResult> results = new ArrayList<>();
 
-    List<SimilarityProcessorResult> similarityProcessorResultList;
-    List<RuleEngineProcessorResult> ruleEngineProcessorResultList;*/
+    while (receiver.hasNextIssues()) {
+      results.addAll(executor.execute(receiver.getNextIssues()));
+    }
 
-    ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    classifier = new DocClassifier(classifierProperties);
-    reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
+    ReportGenerator generator = new HtmlReportGenerator();
+    generator.generate(results);
+
+
+
+
+    // ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
+    // classifier = new DocClassifier(classifierProperties);
+    // reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
 
     if (args.length == 0) {
       LOGGER.info("There are no arguments. Phase 'run' will be started.");
@@ -87,7 +106,7 @@ public final class Launcher {
   }
 
   private static void prepare() throws URISyntaxException, IOException {
-    classifier.prepare();
+    // classifier.prepare();
   }
 
   private static void configure() throws URISyntaxException, IOException {
@@ -95,7 +114,7 @@ public final class Launcher {
       LOGGER.error("There are no 'DataSet.txt' file in 'data' folder. Run 'prepare' phase.");
       return;
     }
-    classifier.configure();
+    // classifier.configure();
     reportGenerator.configure();
   }
 

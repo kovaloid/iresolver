@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.rules.results.RulesResult;
 
 
@@ -17,14 +16,14 @@ public class TotalResult {
   private Set<String> attachments;
   private Set<String> advices;
 
-  public TotalResult(Issue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
+  /*public TotalResult(Issue issue, ClassifierResult classifierResult, RulesResult ruleResult) {
     this.issue = issue;
     this.issues = new HashSet<>(classifierResult.getIssues());
     this.labels = new HashSet<>(classifierResult.getLabels());
     this.users = new HashSet<>(classifierResult.getUsers());
     this.attachments = new HashSet<>(classifierResult.getAttachments());
     this.advices = new HashSet<>(ruleResult.getAdvices());
-  }
+  }*/
 
   public Issue getIssue() {
     return issue;

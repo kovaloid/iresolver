@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.koval.jresolver.processor.IssueProcessingResult;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.deeplearning4j.nn.api.Classifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.classifier.core.Classifier;
-import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.results.TotalResult;
 import com.koval.jresolver.rules.core.RuleEngine;
@@ -27,14 +27,6 @@ import com.koval.jresolver.rules.results.RulesResult;
 public class HtmlReportGenerator implements ReportGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
-
-  private final Classifier classifier;
-  private final RuleEngine ruleEngine;
-
-  public HtmlReportGenerator(Classifier classifier, RuleEngine ruleEngine) {
-    this.classifier = classifier;
-    this.ruleEngine = ruleEngine;
-  }
 
   @Override
   public void configure() {
@@ -51,18 +43,15 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   @Override
-  public void generate(Collection<Issue> actualIssues) throws IOException, URISyntaxException {
-    List<TotalResult> results = new ArrayList<>();
-    for (Issue actualIssue : actualIssues) {
-      ClassifierResult classifierResult = classifier.execute(actualIssue);
-      RulesResult ruleResult = ruleEngine.execute(actualIssue);
-      TotalResult totalResult = new TotalResult(actualIssue, classifierResult, ruleResult);
-      results.add(totalResult);
+  public void generate(Collection<IssueProcessingResult> results) {
+    try {
+      fillTemplate(results);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    fillTemplate(results);
   }
 
-  private void fillTemplate(List<TotalResult> results) throws IOException {
+  private void fillTemplate(Collection<IssueProcessingResult> results) throws IOException {
     VelocityEngine velocityEngine = new VelocityEngine();
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());

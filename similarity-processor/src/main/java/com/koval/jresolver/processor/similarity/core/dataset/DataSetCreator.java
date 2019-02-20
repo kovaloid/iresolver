@@ -1,29 +1,26 @@
-package com.koval.jresolver.connector.jira.core.processing.generate.impl;
+package com.koval.jresolver.processor.similarity.core.dataset;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.connector.jira.core.processing.generate.IssuesGenerator;
-import com.koval.jresolver.connector.jira.core.processing.handle.impl.FileIssuesHandler;
-import com.koval.jresolver.connector.jira.core.processing.receive.IssuesReceiver;
+import com.koval.jresolver.connector.jira.core.IssuesReceiver;
 
-
-public class FileIssuesGenerator implements IssuesGenerator<File> {
+public class DataSetCreator {
 
   private static final String SEPARATOR = " | ";
   private static final String DATASET_FILE_NAME = "DataSet.txt";
 
   private final IssuesReceiver receiver;
 
-  public FileIssuesGenerator(IssuesReceiver receiver) {
+  public DataSetCreator(IssuesReceiver receiver) {
     this.receiver = receiver;
   }
 
-  @Override
-  public void launch() {
-    FileIssuesHandler handler = new FileIssuesHandler();
+  public void create() {
     File dataSetFile = new File(DATASET_FILE_NAME);
     //LOGGER.info("New data set dataSetFile will be created: {}", this.dataSetFile.getAbsolutePath());
 
@@ -41,7 +38,7 @@ public class FileIssuesGenerator implements IssuesGenerator<File> {
         issues.forEach(issue -> {
           output.print(issue.getKey());
           output.print(SEPARATOR);
-          output.println(handler.extractTextData(issue));
+          output.println(extractTextData(issue));
         });
         output.flush();
       }
@@ -51,8 +48,11 @@ public class FileIssuesGenerator implements IssuesGenerator<File> {
     }
   }
 
-  @Override
-  public File getResults() {
-    return new File(DATASET_FILE_NAME);
+  private String extractTextData(Issue issue) {
+    String text = "";
+    if (issue.getDescription() != null) {
+      text = issue.getSummary() + " " + issue.getDescription().trim().replaceAll("[^A-Za-z0-9]", " ").replaceAll(" +", " ");
+    }
+    return text;
   }
 }

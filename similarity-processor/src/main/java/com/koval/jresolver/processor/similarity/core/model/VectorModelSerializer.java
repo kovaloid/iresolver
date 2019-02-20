@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.core;
+package com.koval.jresolver.processor.similarity.core.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
-class VectorModelSerializer {
+public class VectorModelSerializer {
 
   private final TokenPreProcess preProcessor;
   private final String vectorModelPath;

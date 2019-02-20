@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.core;
+package com.koval.jresolver.processor.similarity.core.model;
 
 import java.io.File;
 import java.io.FileInputStream;

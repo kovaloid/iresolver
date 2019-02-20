@@ -1,13 +1,13 @@
 rootProject.name = 'jresolver'
 
 include 'jira-connector'
-include 'classifier'
-include 'rule-engine'
+
 include 'report-generator'
 include 'rule-editor'
 
 include 'processor'
-// include 'similarity-processor'
+include 'similarity-processor'
+include 'rule-engine-processor'
 // include 'rule-engine-processor'
 // include 'documentation-processor'
 

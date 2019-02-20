@@ -5,12 +5,13 @@ task runReportGenerator(type:JavaExec) {
 }
 
 dependencies {
-  compile(project(':classifier')) {
+  compile(project(':similarity-processor')) {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
-  compile project(':rule-engine'),
+  compile project(':rule-engine-processor'),
           'org.apache.velocity:velocity:1.7'
           'org.apache.velocity:velocity-tools:2.0'
 
   compile 'org.mockito:mockito-core:2.19.0'
+  compile project(':processor')
 }

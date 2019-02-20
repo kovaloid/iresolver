@@ -2,7 +2,9 @@ apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
 dependencies {
-  compile project(':report-generator')
+  compile project(':report-generator'),
+      project(':processor'),
+      project(':similarity-processor')
 }
 
 wrapper {
@@ -14,7 +16,7 @@ distributions {
     baseName = 'jresolver'
     contents {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
-      from('classifier/src/main/resources/classifier.properties') { into 'config' }
+      // from('classifier/src/main/resources/classifier.properties') { into 'config' }
       from('report-generator/src/main/resources') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
       from('rule-engine/src/main/resources') { into 'rules' }
@@ -193,7 +195,7 @@ subprojects {
         srcDir '../data'
         srcDir '../src/main/resources'
         srcDir '../jira-connector/src/main/resources'
-        srcDir '../classifier/src/main/resources'
+        // srcDir '../classifier/src/main/resources'
         srcDir '../rule-engine/src/main/resources'
         srcDir '../report-generator/src/main/resources'
       }

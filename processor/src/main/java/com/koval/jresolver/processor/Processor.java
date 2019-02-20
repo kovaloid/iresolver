@@ -1,11 +1,9 @@
 package com.koval.jresolver.processor;
 
-import java.util.List;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 
 
 public interface Processor {
 
-  void prepare();
-
-  List<?> execute();
+  void run(Issue issue, IssueProcessingResult result);
 }

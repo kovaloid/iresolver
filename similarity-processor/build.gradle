@@ -1,25 +1,11 @@
-apply plugin: 'application'
-
-task train(type: JavaExec) {
-  group 'application'
-  main = 'com.koval.jresolver.processor.similarity.Launcher'
-  classpath = sourceSets.main.runtimeClasspath
-  args = ['train']
-}
-
-task predict(type: JavaExec) {
-  group 'application'
-  main = 'com.koval.jresolver.processor.similarity.Launcher'
-  classpath = sourceSets.main.runtimeClasspath
-  args = ['predict']
-}
 
 dependencies {
   compile 'org.deeplearning4j:deeplearning4j-core:0.8.0',
           'org.deeplearning4j:deeplearning4j-nlp:0.8.0',
           'org.nd4j:nd4j-native-platform:0.8.0',
           'org.datavec:datavec-data-nlp:0.8.0',
-          project(':jira-connector')
+          project(':jira-connector'),
+          project(':processor')
   /*compile(project(':jira-connector')) {
     exclude group: 'org.slf4j', module: 'slf4j-log4j12'
   }*/
