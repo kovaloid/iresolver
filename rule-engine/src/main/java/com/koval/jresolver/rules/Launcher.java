@@ -11,7 +11,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.core.JiraConnector;
+import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.rules.core.RuleEngine;
 import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 import com.koval.jresolver.rules.results.RulesResult;

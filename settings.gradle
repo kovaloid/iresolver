@@ -6,7 +6,7 @@ include 'rule-engine'
 include 'report-generator'
 include 'rule-editor'
 
-// include 'processor'
+include 'processor'
 // include 'similarity-processor'
 // include 'rule-engine-processor'
 // include 'documentation-processor'

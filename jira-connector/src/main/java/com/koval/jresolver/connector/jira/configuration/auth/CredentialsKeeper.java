@@ -21,7 +21,7 @@ public class CredentialsKeeper {
 
   public CredentialsKeeper(CredentialsProtector protector, ConnectorProperties properties) {
     this.protector = protector;
-    this.credentialsFile = new File(properties.getWorkFolder(), CREDENTIALS_FILE_NAME);
+    this.credentialsFile = new File(properties.getCredentialsFolder(), CREDENTIALS_FILE_NAME);
   }
 
   public boolean isStored() {

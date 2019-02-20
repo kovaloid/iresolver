@@ -13,7 +13,7 @@ import com.koval.jresolver.classifier.core.impl.DocClassifier;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.core.JiraConnector;
+import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.report.core.ReportGenerator;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.core.RuleEngine;

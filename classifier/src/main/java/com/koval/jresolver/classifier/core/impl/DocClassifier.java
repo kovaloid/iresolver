@@ -17,7 +17,7 @@ import com.koval.jresolver.classifier.results.ClassifierResult;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.core.JiraConnector;
+import com.koval.jresolver.connector.jira.JiraConnector;
 
 
 public class DocClassifier implements Classifier {

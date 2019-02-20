@@ -1,4 +1,4 @@
-package com.koval.jresolver.connector.jira.core.processing.receive;
+package com.koval.jresolver.connector.jira.core;
 
 import java.util.Collection;
 
