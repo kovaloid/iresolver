@@ -1,13 +1,12 @@
 package com.koval.jresolver.rules
 
-import com.koval.jresolver.connector.bean.JiraIssue;
-import com.koval.jresolver.connector.bean.JiraStatus;
+import com.atlassian.jira.rest.client.api.domain.Issue;
 
 global com.koval.jresolver.rules.results.RulesResult results
 
 rule "Description size should be more than 100 characters"
 	when
-		$issue : JiraIssue( description.length < 100 )
+		$issue : Issue( description.length < 100 )
 	then
 		results.putAdvice("Description size should be more than 100 characters");
 end
@@ -15,7 +14,7 @@ end
 
 rule "Description contains word 'file'"
 	when
-		$issue : JiraIssue( description contains "file" )
+		$issue : Issue( description contains "file" )
 	then
 		results.putAdvice("Description contains word 'file', hence the issue should contain attachments");
 end

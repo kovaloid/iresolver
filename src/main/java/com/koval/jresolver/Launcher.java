@@ -21,6 +21,7 @@ import com.koval.jresolver.processor.ProcessExecutor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.SimilarityProcessor;
 import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
+import com.koval.jresolver.rules.RuleEngineProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -62,7 +63,8 @@ public final class Launcher {
     IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
     ProcessExecutor executor = new ProcessExecutor()
-        .add(new SimilarityProcessor(new SimilarityProcessorProperties()));
+        .add(new SimilarityProcessor(new SimilarityProcessorProperties()))
+        .add(new RuleEngineProcessor());
     Collection<IssueProcessingResult> results = new ArrayList<>();
 
     while (receiver.hasNextIssues()) {
