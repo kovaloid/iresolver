@@ -1,9 +1,9 @@
-package com.koval.jresolver.rules.core;
+package com.koval.jresolver.processor.rules.core;
 
 public class RuleEngineTester {
 /*
     @SuppressWarnings("VisibilityModifier")
-    private final InputStream stream = new ByteArrayInputStream("global com.koval.jresolver.rules.results.RulesResult results".getBytes(StandardCharsets.UTF_8));
+    private final InputStream stream = new ByteArrayInputStream("global RulesResult results".getBytes(StandardCharsets.UTF_8));
     private final InputStream badStream = new ByteArrayInputStream("test syntax mistake in rule".getBytes(StandardCharsets.UTF_8));
 
     @Test

@@ -2,7 +2,7 @@ package com.koval.jresolver.rules
 
 import com.koval.jresolver.connector.jira.bean.JiraIssue;
 
-global com.koval.jresolver.rules.results.RulesResult results
+global RulesResult results
 
 rule "Check status"
 	dialect "mvel"

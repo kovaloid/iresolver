@@ -24,6 +24,9 @@ public class ConnectorProperties {
   private void loadProperties() throws IOException {
     Properties properties = new Properties();
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONNECTOR_PROPERTIES_FILE)) {
+      if (input == null) {
+        throw new IOException("Could not find connector properties file");
+      }
       properties.load(input);
       url = properties.getProperty("url");
       anonymous = Boolean.parseBoolean(properties.getProperty("anonymous"));

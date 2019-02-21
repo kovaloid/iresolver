@@ -16,8 +16,8 @@ import com.atlassian.jira.rest.client.api.domain.User;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.processor.IssueProcessingResult;
-import com.koval.jresolver.processor.Processor;
+import com.koval.jresolver.processor.api.Processor;
+import com.koval.jresolver.processor.result.IssueProcessingResult;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
@@ -31,10 +31,11 @@ public class SimilarityProcessor implements Processor {
   private final JiraClient jiraClient;
   private final VectorModel vectorModel;
 
-  public SimilarityProcessor(SimilarityProcessorProperties similarityProcessorProperties) throws URISyntaxException, IOException {
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
+  public SimilarityProcessor(SimilarityProcessorProperties properties) throws URISyntaxException, IOException {
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
     this.jiraClient = new BasicJiraClient(new ConnectorProperties().getUrl());
-    vectorModel = vectorModelSerializer.deserialize(new File("../data/", "VectorModel.zip"));
+    File vectorModelFile = new File(properties.getWorkFolder(), properties.getVectorModelFileName());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile);
   }
 
   @Override
@@ -57,9 +58,11 @@ public class SimilarityProcessor implements Processor {
         users.add(relatedIssue.getReporter());
       }
       relatedIssue.getComments().forEach((comment) -> {
-        if (comment.getAuthor() != null) {
-          // users.add(comment.getAuthor());
-        }
+        // if (comment.getAuthor() != null) {
+          /* BasicUser author = comment.getAuthor();
+          users.add(new User(author.getSelf(), author.getName(), author.getDisplayName(), "",
+              new ExpandableProperty<>(0), new HashMap<>(), "")); */
+        // }
       });
       relatedIssue.getAttachments().forEach(attachments::add);
     });

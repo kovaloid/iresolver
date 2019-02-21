@@ -11,6 +11,7 @@ dependencies {
           'org.deeplearning4j:deeplearning4j-nlp:0.8.0',
           'org.nd4j:nd4j-native-platform:0.8.0',
           'org.datavec:datavec-data-nlp:0.8.0',
+          'commons-io:commons-io:2.6',
           project(':jira-connector'),
           project(':processor')
   /*compile(project(':jira-connector')) {

@@ -1,4 +1,4 @@
-package com.koval.jresolver.rules.core.impl;
+package com.koval.jresolver.processor.rules.core.impl;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -24,8 +24,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.rules.core.RuleEngine;
-import com.koval.jresolver.rules.results.RulesResult;
+import com.koval.jresolver.processor.rules.core.RuleEngine;
+import com.koval.jresolver.processor.rules.results.RulesResult;
 
 
 public class DroolsRuleEngine implements RuleEngine {

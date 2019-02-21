@@ -16,8 +16,9 @@ import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
 import com.koval.jresolver.connector.jira.core.IssuesReceiver;
-import com.koval.jresolver.processor.IssueProcessingResult;
 import com.koval.jresolver.processor.ProcessExecutor;
+import com.koval.jresolver.processor.result.IssueProcessingResult;
+import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.similarity.SimilarityProcessor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
@@ -26,7 +27,6 @@ import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
 import com.koval.jresolver.report.ReportGenerator;
 import com.koval.jresolver.report.impl.HtmlReportGenerator;
-import com.koval.jresolver.rules.RuleEngineProcessor;
 import com.koval.jresolver.util.CommandLineUtil;
 
 
@@ -61,21 +61,6 @@ public final class Launcher {
     }
     jiraConnector = new JiraConnector(jiraClient, connectorProperties);
     similarityProcessorProperties = new SimilarityProcessorProperties();
-    /*IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
-
-    ProcessExecutor executor = new ProcessExecutor()
-        .add(new SimilarityProcessor(new SimilarityProcessorProperties()))
-        .add(new RuleEngineProcessor());
-    Collection<IssueProcessingResult> results = new ArrayList<>();
-
-    while (receiver.hasNextIssues()) {
-      results.addAll(executor.execute(receiver.getNextIssues()));
-    }
-
-    ReportGenerator generator = new HtmlReportGenerator();
-    generator.generate(results);*/
-
-
 
     if (args.length == 0) {
       LOGGER.info("There are no arguments. Phase 'run' will be started.");
@@ -105,19 +90,23 @@ public final class Launcher {
 
   private static void prepare() {
     DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver(), similarityProcessorProperties);
-    dataSetCreator.create();
+    try {
+      dataSetCreator.create();
+    } catch (IOException e) {
+      LOGGER.error("Could not create data set", e);
+    }
   }
 
-  private static void configure() throws IOException {
-    /*if (checkDataSetFileNotExists()) {
-      LOGGER.error("There are no 'DataSet.txt' file in 'data' folder. Run 'prepare' phase.");
-      return;
-    }*/
+  private static void configure() {
     VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
-    VectorModel vectorModel = vectorModelCreator.createFromFile(new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName()));
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
-    vectorModelSerializer.serialize(vectorModel);
-
+    File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
+    try {
+      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
+      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
+      vectorModelSerializer.serialize(vectorModel);
+    } catch (IOException e) {
+      LOGGER.error("There are no " + dataSetFile.getAbsolutePath() + " file. Run 'prepare' phase.", e);
+    }
   }
 
   private static void run() throws Exception {
@@ -133,7 +122,7 @@ public final class Launcher {
     IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
     ProcessExecutor executor = new ProcessExecutor()
-        .add(new SimilarityProcessor(new SimilarityProcessorProperties()))
+        .add(new SimilarityProcessor(similarityProcessorProperties))
         .add(new RuleEngineProcessor());
     Collection<IssueProcessingResult> results = new ArrayList<>();
 
@@ -145,15 +134,7 @@ public final class Launcher {
     generator.generate(results);
   }
 
-  /*private static char[] getPassword() {
-    Console console = System.console();
-    if (console == null) {
-      throw new RuntimeException("Could not get console instance.");
-    }
-    return console.readPassword("Enter your Jira password: ");
-  }
-
-  private static boolean checkDataSetFileNotExists() {
+  /*private static boolean checkDataSetFileNotExists() {
     URL dataSetResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
     return dataSetResource == null;
   }

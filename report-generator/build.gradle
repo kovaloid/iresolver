@@ -4,8 +4,9 @@ dependencies {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
   }*/
   compile project(':processor'),
-          'org.apache.velocity:velocity:1.7'
-          'org.apache.velocity:velocity-tools:2.0'
+          'org.apache.velocity:velocity:1.7',
+          'org.apache.velocity:velocity-tools:2.0',
+          'commons-io:commons-io:2.6'
   testCompile 'junit:junit:4.12',
               'org.mockito:mockito-core:2.19.0'
 }

@@ -1,10 +1,11 @@
-package com.koval.jresolver.rules;
+package com.koval.jresolver.processor.rules;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.processor.IssueProcessingResult;
-import com.koval.jresolver.processor.Processor;
-import com.koval.jresolver.rules.core.RuleEngine;
-import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
+import com.koval.jresolver.processor.api.Processor;
+import com.koval.jresolver.processor.result.IssueProcessingResult;
+import com.koval.jresolver.processor.rules.core.RuleEngine;
+import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
+
 
 public class RuleEngineProcessor implements Processor {
 

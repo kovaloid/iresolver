@@ -44,15 +44,7 @@ public class CredentialsKeeper {
          BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
       String username = protector.decrypt(bufferedReader.readLine());
       String password = protector.decrypt(bufferedReader.readLine());
-      // if (encryptedUsername != null) {
-      // }
-      // if (encryptedPassword != null) {
-      // }
       return new Credentials(username, password);
     }
-  }
-
-  public void remove() {
-    credentialsFile.delete();
   }
 }

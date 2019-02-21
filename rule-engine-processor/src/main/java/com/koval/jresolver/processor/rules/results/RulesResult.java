@@ -1,4 +1,4 @@
-package com.koval.jresolver.rules.results;
+package com.koval.jresolver.processor.rules.results;
 
 import java.util.ArrayList;
 import java.util.List;

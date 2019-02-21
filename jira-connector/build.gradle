@@ -4,5 +4,5 @@ dependencies {
           'com.atlassian.fugue:fugue:2.6.1',
           'org.slf4j:slf4j-api:1.7.25',
           'org.slf4j:slf4j-log4j12:1.7.25'
-  testCompile 'junit:junit:4.11'
+  testCompile 'junit:junit:4.12'
 }

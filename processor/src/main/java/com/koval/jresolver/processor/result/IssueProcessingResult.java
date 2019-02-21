@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor;
+package com.koval.jresolver.processor.result;
 
 import java.util.Collection;
 

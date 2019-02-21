@@ -2,7 +2,7 @@ package com.koval.jresolver.rules
 
 import com.koval.jresolver.connector.jira.bean.Issue;
 
-global com.koval.jresolver.rules.results.RulesResult results
+global com.koval.jresolver.processor.rules.results.RulesResult results
 
 rule "Comments size should contain at least one comment"
 	when

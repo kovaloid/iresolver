@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.koval.jresolver.processor.api.Processor;
+import com.koval.jresolver.processor.result.IssueProcessingResult;
+
 
 public class ProcessExecutor {
 

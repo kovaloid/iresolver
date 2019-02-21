@@ -29,6 +29,9 @@ public class SimilarityProcessorProperties {
   private void loadProperties() throws IOException {
     Properties properties = new Properties();
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(SIMILARITY_PROCESSOR_PROPERTIES_FILE)) {
+      if (input == null) {
+        throw new IOException("Could not find connector properties file");
+      }
       properties.load(input);
       minWordFrequency = Integer.parseInt(properties.getProperty("minWordFrequency"));
       iterations = Integer.parseInt(properties.getProperty("iterations"));

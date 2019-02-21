@@ -34,7 +34,7 @@ public class CredentialsProtector {
   }
 
   public String encrypt(String decryptedText) {
-    LOGGER.info("encryption performed");
+    LOGGER.info("Encryption performed");
     String encryptedString = null;
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -49,7 +49,7 @@ public class CredentialsProtector {
 
 
   public String decrypt(String encryptedString) {
-    LOGGER.info("decryption performed");
+    LOGGER.info("Decryption performed");
     String decryptedText = null;
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);

@@ -6,13 +6,13 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.core.IssuesReceiver;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-import com.koval.jresolver.processor.similarity.util.FilesUtil;
 
 
 public class DataSetCreator {
@@ -28,23 +28,11 @@ public class DataSetCreator {
     this.properties = properties;
   }
 
-  public void create() {
+  public void create() throws IOException {
     File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
-    try {
-      FilesUtil.createFile(dataSetFile);
-    } catch (IOException e) {
-      LOGGER.error("Could not create data set file.", e);
-    }
-    //LOGGER.info("New data set dataSetFile will be created: {}", this.dataSetFile.getAbsolutePath());
-
-    /*File dataSetFile = new File(workFolder, "DataSet.txt");
-    if (!appendToDataSet) {
-      if (dataSetFile.exists()) {
-        dataSetFile.delete();
-      }
-      dataSetFile.createNewFile();
-    }*/
-
+    FileUtils.forceMkdir(dataSetFile.getParentFile());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getAbsolutePath());
+    LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
     try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name())) {
       while (receiver.hasNextIssues()) {
         Collection<Issue> issues = receiver.getNextIssues();
@@ -52,13 +40,12 @@ public class DataSetCreator {
           output.print(issue.getKey());
           output.print(SEPARATOR);
           output.println(extractTextData(issue));
+          LOGGER.info("Issue with key {} was added to data set", issue.getKey());
         });
         output.flush();
       }
-    } catch (IOException e) {
-
-      // LOGGER.error("Could not write issue: " + issue.getKey() + " in dataSetFile: " + dataSetFile.getName(), e);
     }
+    LOGGER.info("Data set file was created: {}", dataSetFile.getAbsolutePath());
   }
 
   private String extractTextData(Issue issue) {
