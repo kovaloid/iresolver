@@ -2,6 +2,9 @@ package com.koval.jresolver.connector.jira.configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Properties;
 
 
@@ -15,6 +18,7 @@ public class ConnectorProperties {
   private String unresolvedQuery;
   private int batchSize = 10;
   private int batchDelay = 3000;
+  private Collection<String> issueTextFields = new HashSet<>();
   private String credentialsFolder = "../data/";
 
   public ConnectorProperties() throws IOException {
@@ -34,6 +38,7 @@ public class ConnectorProperties {
       unresolvedQuery = properties.getProperty("unresolvedQuery");
       batchSize = Integer.parseInt(properties.getProperty("batchSize"));
       batchDelay = Integer.parseInt(properties.getProperty("batchDelay"));
+      issueTextFields = Arrays.asList(properties.getProperty("issueTextFields").split(","));
       credentialsFolder = properties.getProperty("credentialsFolder");
     }
   }
@@ -84,6 +89,14 @@ public class ConnectorProperties {
 
   public void setBatchDelay(int batchDelay) {
     this.batchDelay = batchDelay;
+  }
+
+  public Collection<String> getIssueTextFields() {
+    return issueTextFields;
+  }
+
+  public void setIssueTextFields(Collection<String> issueTextFields) {
+    this.issueTextFields = issueTextFields;
   }
 
   public String getCredentialsFolder() {
