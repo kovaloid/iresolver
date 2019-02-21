@@ -1,11 +1,12 @@
 package com.koval.jresolver;
 
-import java.io.Console;
+import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraClient;
@@ -15,27 +16,26 @@ import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
 import com.koval.jresolver.connector.jira.core.IssuesReceiver;
-import com.koval.jresolver.connector.jira.util.CommandLineUtil;
 import com.koval.jresolver.processor.IssueProcessingResult;
 import com.koval.jresolver.processor.ProcessExecutor;
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 import com.koval.jresolver.processor.similarity.SimilarityProcessor;
-import com.koval.jresolver.report.core.impl.HtmlReportGenerator;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
+import com.koval.jresolver.processor.similarity.core.model.VectorModel;
+import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
+import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
+import com.koval.jresolver.report.ReportGenerator;
+import com.koval.jresolver.report.impl.HtmlReportGenerator;
 import com.koval.jresolver.rules.RuleEngineProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-
-import com.koval.jresolver.report.core.ReportGenerator;
+import com.koval.jresolver.util.CommandLineUtil;
 
 
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
-  private static ReportGenerator reportGenerator;
+  private static JiraConnector jiraConnector;
+  private static SimilarityProcessorProperties similarityProcessorProperties;
 
   private Launcher() {
   }
@@ -59,8 +59,9 @@ public final class Launcher {
       }
       jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
     }
-    JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
-    IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
+    jiraConnector = new JiraConnector(jiraClient, connectorProperties);
+    similarityProcessorProperties = new SimilarityProcessorProperties();
+    /*IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
     ProcessExecutor executor = new ProcessExecutor()
         .add(new SimilarityProcessor(new SimilarityProcessorProperties()))
@@ -72,14 +73,9 @@ public final class Launcher {
     }
 
     ReportGenerator generator = new HtmlReportGenerator();
-    generator.generate(results);
+    generator.generate(results);*/
 
 
-
-
-    // ClassifierProperties classifierProperties = new ClassifierProperties("classifier.properties");
-    // classifier = new DocClassifier(classifierProperties);
-    // reportGenerator = new HtmlReportGenerator(classifier, new DroolsRuleEngine());
 
     if (args.length == 0) {
       LOGGER.info("There are no arguments. Phase 'run' will be started.");
@@ -107,34 +103,49 @@ public final class Launcher {
     }
   }
 
-  private static void prepare() throws URISyntaxException, IOException {
-    // classifier.prepare();
+  private static void prepare() {
+    DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver());
+    dataSetCreator.create();
   }
 
-  private static void configure() throws URISyntaxException, IOException {
-    if (checkDataSetFileNotExists()) {
+  private static void configure() throws IOException {
+    /*if (checkDataSetFileNotExists()) {
       LOGGER.error("There are no 'DataSet.txt' file in 'data' folder. Run 'prepare' phase.");
       return;
-    }
-    // classifier.configure();
-    reportGenerator.configure();
+    }*/
+    VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
+    VectorModel vectorModel = vectorModelCreator.createFromFile(new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName()));
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
+    vectorModelSerializer.serialize(vectorModel);
+
   }
 
   private static void run() throws Exception {
-    if (checkVectorModelFileNotExists()) {
+    /*if (checkVectorModelFileNotExists()) {
       LOGGER.error("There are no 'VectorModel.zip' file in 'data' folder. Run 'configure' phase.");
       return;
     }
     if (checkDroolsFileNotExists()) {
       LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
       return;
+    }*/
+
+    IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
+
+    ProcessExecutor executor = new ProcessExecutor()
+        .add(new SimilarityProcessor(new SimilarityProcessorProperties()))
+        .add(new RuleEngineProcessor());
+    Collection<IssueProcessingResult> results = new ArrayList<>();
+
+    while (receiver.hasNextIssues()) {
+      results.addAll(executor.execute(receiver.getNextIssues()));
     }
-    //ConnectorProperties connectorProperties = new ConnectorProperties();
-    //JiraConnector jiraConnector = new JiraConnector(connectorProperties);
-    //reportGenerator.generate(jiraConnector.getUnresolvedIssues());
+
+    ReportGenerator generator = new HtmlReportGenerator();
+    generator.generate(results);
   }
 
-  private static char[] getPassword() {
+  /*private static char[] getPassword() {
     Console console = System.console();
     if (console == null) {
       throw new RuntimeException("Could not get console instance.");
@@ -157,5 +168,5 @@ public final class Launcher {
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     Resource[] resources = resolver.getResources("classpath*:*.drl");
     return resources.length == 0;
-  }
+  }*/
 }

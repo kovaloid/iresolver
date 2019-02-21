@@ -13,7 +13,7 @@ public class StemmingPreprocessor extends CommonPreprocessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StemmingPreprocessor.class);
 
-  private SimilarityProcessorProperties similarityProcessorProperties;
+  private final SimilarityProcessorProperties similarityProcessorProperties;
 
   public StemmingPreprocessor(SimilarityProcessorProperties similarityProcessorProperties) {
     this.similarityProcessorProperties = similarityProcessorProperties;
@@ -33,7 +33,7 @@ public class StemmingPreprocessor extends CommonPreprocessor {
     try {
       String stemmerClassName = "org.tartarus.snowball.ext." + similarityProcessorProperties.getLanguage() + "Stemmer";
       Class stemmerClass = Class.forName(stemmerClassName);
-      stemmer = (SnowballProgram) stemmerClass.newInstance();
+      stemmer = (SnowballProgram)stemmerClass.newInstance();
     } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
       LOGGER.error("Could not get appropriate class for stemming", e);
     }

@@ -1,5 +1,6 @@
 dependencies {
-  compile(project(':jira-connector')) {
+  /*compile(project(':jira-connector')) {
     exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-  }
+  }*/
+  compile 'com.atlassian.jira:jira-rest-java-client-core:4.0.0'
 }

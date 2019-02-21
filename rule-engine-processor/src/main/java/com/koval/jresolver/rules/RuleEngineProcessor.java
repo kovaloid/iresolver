@@ -8,7 +8,7 @@ import com.koval.jresolver.rules.core.impl.DroolsRuleEngine;
 
 public class RuleEngineProcessor implements Processor {
 
-  private RuleEngine ruleEngine;
+  private final RuleEngine ruleEngine;
 
   public RuleEngineProcessor() throws Exception {
     ruleEngine = new DroolsRuleEngine();

@@ -19,7 +19,8 @@ public class SimilarityProcessorProperties {
   private int sampling;
   private String language = "English";
   private String workFolder = "../data/";
-  private String vectorModelFileName;
+  private String vectorModelFileName = "VectorModel.zip";
+  private String dataSetFileName = "DataSet.txt";
 
   public SimilarityProcessorProperties() throws IOException {
     loadProperties();
@@ -39,6 +40,8 @@ public class SimilarityProcessorProperties {
       sampling = Integer.parseInt(properties.getProperty("sampling"));
       language = properties.getProperty("language");
       workFolder = properties.getProperty("workFolder");
+      vectorModelFileName = properties.getProperty("vectorModelFileName");
+      dataSetFileName = properties.getProperty("dataSetFileName");
     }
   }
 
@@ -128,5 +131,13 @@ public class SimilarityProcessorProperties {
 
   public void setVectorModelFileName(String vectorModelFileName) {
     this.vectorModelFileName = vectorModelFileName;
+  }
+
+  public String getDataSetFileName() {
+    return dataSetFileName;
+  }
+
+  public void setDataSetFileName(String dataSetFileName) {
+    this.dataSetFileName = dataSetFileName;
   }
 }

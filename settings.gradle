@@ -2,13 +2,12 @@ rootProject.name = 'jresolver'
 
 include 'jira-connector'
 
-include 'report-generator'
-include 'rule-editor'
-
 include 'processor'
 include 'similarity-processor'
 include 'rule-engine-processor'
-// include 'rule-engine-processor'
 // include 'documentation-processor'
+
+include 'report-generator'
+include 'rule-editor'
 
 startParameter.excludedTaskNames = ['run']

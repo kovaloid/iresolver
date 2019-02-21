@@ -2,9 +2,12 @@ apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
 dependencies {
-  compile project(':report-generator'),
+  compile project(':jira-connector'),
       project(':processor'),
-      project(':similarity-processor')
+      project(':similarity-processor'),
+      project(':rule-engine-processor'),
+      // project(':documentation-processor'),
+      project(':report-generator')
 }
 
 wrapper {
@@ -19,7 +22,7 @@ distributions {
       // from('classifier/src/main/resources/classifier.properties') { into 'config' }
       from('report-generator/src/main/resources') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
-      from('rule-engine/src/main/resources') { into 'rules' }
+      from('rule-engine-processor/src/main/resources') { into 'rules' }
     }
   }
 }
@@ -196,7 +199,7 @@ subprojects {
         srcDir '../src/main/resources'
         srcDir '../jira-connector/src/main/resources'
         // srcDir '../classifier/src/main/resources'
-        srcDir '../rule-engine/src/main/resources'
+        srcDir '../rule-engine-processor/src/main/resources'
         srcDir '../report-generator/src/main/resources'
       }
     }
@@ -205,6 +208,6 @@ subprojects {
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
             'connector.properties', 'classifier.properties',
-			'template.vm', '*.drl')
+            'template.vm', '*.drl')
   }
 }

@@ -8,7 +8,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 
 public class ProcessExecutor {
 
-  private List<Processor> processors = new ArrayList<>();
+  private final List<Processor> processors = new ArrayList<>();
 
   public ProcessExecutor add(Processor processor) {
     processors.add(processor);

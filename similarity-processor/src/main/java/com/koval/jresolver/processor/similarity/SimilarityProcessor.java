@@ -2,39 +2,34 @@ package com.koval.jresolver.processor.similarity;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.atlassian.jira.rest.client.api.domain.Attachment;
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.User;
-import com.koval.jresolver.processor.IssueProcessingResult;
-import com.koval.jresolver.processor.Processor;
-import com.koval.jresolver.processor.similarity.core.model.VectorModel;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
-import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareListSentenceIterator;
-import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.rest.client.api.domain.Attachment;
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.User;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
+import com.koval.jresolver.processor.IssueProcessingResult;
+import com.koval.jresolver.processor.Processor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.processor.similarity.core.model.VectorModel;
+import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
 
 
 public class SimilarityProcessor implements Processor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimilarityProcessor.class);
-  private static final String DATASET_FILE_NAME = "DataSet.txt";
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
-  private JiraClient jiraClient;
-  private VectorModel vectorModel;
+  private final JiraClient jiraClient;
+  private final VectorModel vectorModel;
 
   public SimilarityProcessor(SimilarityProcessorProperties similarityProcessorProperties) throws URISyntaxException, IOException {
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);

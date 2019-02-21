@@ -1,4 +1,4 @@
-package com.koval.jresolver.connector.jira.util;
+package com.koval.jresolver.util;
 
 import java.io.Console;
 import java.util.Arrays;

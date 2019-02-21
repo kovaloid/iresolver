@@ -7,7 +7,7 @@ import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 
 public class VectorModel {
 
-  private ParagraphVectors paragraphVectors;
+  private final ParagraphVectors paragraphVectors;
 
   public VectorModel(ParagraphVectors paragraphVectors) {
     this.paragraphVectors = paragraphVectors;
