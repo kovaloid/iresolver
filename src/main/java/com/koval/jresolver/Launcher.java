@@ -2,6 +2,7 @@ package com.koval.jresolver;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -109,16 +110,7 @@ public final class Launcher {
     }
   }
 
-  private static void run() throws Exception {
-    /*if (checkVectorModelFileNotExists()) {
-      LOGGER.error("There are no 'VectorModel.zip' file in 'data' folder. Run 'configure' phase.");
-      return;
-    }
-    if (checkDroolsFileNotExists()) {
-      LOGGER.error("There are no '*.drl' files in 'rules' folder. Add '*.drl' files.");
-      return;
-    }*/
-
+  private static void run() throws IOException, URISyntaxException {
     IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
     ProcessExecutor executor = new ProcessExecutor()
@@ -133,21 +125,4 @@ public final class Launcher {
     ReportGenerator generator = new HtmlReportGenerator();
     generator.generate(results);
   }
-
-  /*private static boolean checkDataSetFileNotExists() {
-    URL dataSetResource = Launcher.class.getClassLoader().getResource("DataSet.txt");
-    return dataSetResource == null;
-  }
-
-  private static boolean checkVectorModelFileNotExists() {
-    URL vectorModelResource = Launcher.class.getClassLoader().getResource("VectorModel.zip");
-    return vectorModelResource == null;
-  }
-
-  private static boolean checkDroolsFileNotExists() throws IOException {
-    ClassLoader classLoader = Launcher.class.getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    Resource[] resources = resolver.getResources("classpath*:*.drl");
-    return resources.length == 0;
-  }*/
 }

@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.FileUtils;
+
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 
 
@@ -30,6 +32,7 @@ public class CredentialsKeeper {
 
   public void store(Credentials credentials) throws IOException {
     if (!isStored()) {
+      FileUtils.forceMkdir(credentialsFile.getParentFile());
       credentialsFile.createNewFile();
     }
     try (PrintWriter fileWriter = new PrintWriter(credentialsFile, StandardCharsets.UTF_8.name())) {

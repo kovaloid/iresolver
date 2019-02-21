@@ -1,10 +1,13 @@
+jar {
+  exclude('*.drl')
+}
+
 ext {
   droolsVersion = '7.7.0.Final'
 }
 
 dependencies {
-  compile project(':jira-connector'),
-          project(':processor'),
+  compile project(':processor'),
           "org.kie:kie-api:$droolsVersion",
           "org.drools:drools-core:$droolsVersion",
           "org.drools:drools-compiler:$droolsVersion",

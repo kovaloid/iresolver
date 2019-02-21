@@ -33,7 +33,7 @@ public class DroolsRuleEngine implements RuleEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
-  public DroolsRuleEngine(Resource[] resources) throws Exception {
+  public DroolsRuleEngine(Resource[] resources) throws IOException {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder, resources);
     checkForErrors(knowledgeBuilder);
@@ -41,11 +41,11 @@ public class DroolsRuleEngine implements RuleEngine {
     LOGGER.info("Kie session was created.");
   }
 
-  public DroolsRuleEngine() throws Exception {
+  public DroolsRuleEngine() throws IOException {
       this(getDefaultResources());
   }
 
-  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws IOException, RuntimeException {
+  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws IOException {
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any *.drl files.");
     }

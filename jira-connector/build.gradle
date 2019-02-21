@@ -1,8 +1,12 @@
+jar {
+  exclude('connector.properties')
+}
 
 dependencies {
   compile 'com.atlassian.jira:jira-rest-java-client-core:4.0.0',
           'com.atlassian.fugue:fugue:2.6.1',
           'org.slf4j:slf4j-api:1.7.25',
-          'org.slf4j:slf4j-log4j12:1.7.25'
+          'org.slf4j:slf4j-log4j12:1.7.25',
+          'commons-io:commons-io:2.6'
   testCompile 'junit:junit:4.12'
 }

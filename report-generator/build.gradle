@@ -1,3 +1,6 @@
+jar {
+  exclude('template.vm')
+}
 
 dependencies {
 /*  compile(project(':similarity-processor')) {

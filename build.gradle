@@ -1,30 +1,51 @@
 apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
-task runPrepare(type: JavaExec) {
+run {
+  workingDir = file('src')
+}
+
+task createDataSet(type: JavaExec) {
   group 'application'
   main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
   args = ['prepare']
 }
 
-task runConfigure(type: JavaExec) {
+task createVectorModel(type: JavaExec) {
   group 'application'
   main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
   args = ['configure']
 }
 
+sourceSets {
+  main {
+    resources {
+      srcDir 'data'
+      srcDir 'src/main/resources'
+      srcDir 'jira-connector/src/main/resources'
+      srcDir 'similarity-processor/src/main/resources'
+      srcDir 'rule-engine-processor/src/main/resources'
+      srcDir 'report-generator/src/main/resources'
+    }
+  }
+}
+
 dependencies {
-  compile project(':jira-connector'),
+  /*compile project(':jira-connector'),
       project(':processor'),
       project(':similarity-processor'),
       project(':rule-engine-processor'),
-      // project(':documentation-processor'),
+      project(':report-generator')*/
+  compile project(':similarity-processor'),
+      project(':rule-engine-processor'),
       project(':report-generator')
-/*compile(project(':jira-connector')) {
+  /*compile(project(':jira-connector')) {
   exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-}*/
+  }*/
 }
 
 wrapper {
@@ -36,7 +57,7 @@ distributions {
     baseName = 'jresolver'
     contents {
       from('jira-connector/src/main/resources/connector.properties') { into 'config' }
-      // from('classifier/src/main/resources/classifier.properties') { into 'config' }
+      from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
       from('report-generator/src/main/resources') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
@@ -67,13 +88,13 @@ task createPrepareScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       unixScriptFile.text = unixScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=prepare')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=prepare')
       unixScriptFile.text = unixScriptFile.text
-              .replaceFirst('APP_ARGS=', 'APP_ARGS=prepare+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=prepare+')
     }
   }
 }
@@ -89,13 +110,13 @@ task createConfigureScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       unixScriptFile.text = unixScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=configure')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=configure')
       unixScriptFile.text = unixScriptFile.text
-              .replaceFirst('APP_ARGS=', 'APP_ARGS=configure+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=configure+')
     }
   }
 }
@@ -111,19 +132,19 @@ task createRunScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       unixScriptFile.text = unixScriptFile.text
-              .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-              .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=run')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=run')
       unixScriptFile.text = unixScriptFile.text
-              .replaceFirst('APP_ARGS=', 'APP_ARGS=run+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=run+')
     }
   }
 }
 
-applicationDistribution.into("bin") {
-  duplicatesStrategy= DuplicatesStrategy.EXCLUDE
+applicationDistribution.into('bin') {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   from(createPrepareScript)
   from(createConfigureScript)
   from(createRunScript)
@@ -142,7 +163,6 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.koval.jresolver'
-  version = '0.0.1'
   sourceCompatibility = 1.8
 
   repositories {
@@ -208,6 +228,7 @@ allprojects {
   }
 }
 
+/*
 subprojects {
   sourceSets {
     main {
@@ -215,7 +236,7 @@ subprojects {
         srcDir '../data'
         srcDir '../src/main/resources'
         srcDir '../jira-connector/src/main/resources'
-        // srcDir '../classifier/src/main/resources'
+        srcDir '../similarity-processor/src/main/resources'
         srcDir '../rule-engine-processor/src/main/resources'
         srcDir '../report-generator/src/main/resources'
       }
@@ -224,7 +245,8 @@ subprojects {
 
   jar {
     exclude('log4j.properties', 'VectorModel.zip', 'DataSet.txt',
-            'connector.properties', 'classifier.properties',
-            'template.vm', '*.drl')
+        'connector.properties', 'classifier.properties',
+        'template.vm', '*.drl')
   }
 }
+*/
