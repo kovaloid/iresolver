@@ -6,6 +6,7 @@ import com.atlassian.jira.rest.client.api.domain.Attachment;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.User;
 
+
 public class IssueProcessingResult {
 
   private Issue issue;

@@ -3,6 +3,7 @@ package com.koval.jresolver.processor.rules.results;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class RulesResult {
 
   private final List<String> advices = new ArrayList<>();

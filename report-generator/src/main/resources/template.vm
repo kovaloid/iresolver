@@ -43,7 +43,7 @@
             <br/>
             issues:<br/>
             #foreach ($issue in $result.getIssues())
-                <span>$issue</span><br/>
+                <span>$issue.getKey()</span><br/>
             #end
             <br/>
             labels:<br/>

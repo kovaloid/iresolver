@@ -21,6 +21,16 @@ task createVectorModel(type: JavaExec) {
   args = ['configure']
 }
 
+task cleanWorkFolders(type: Delete) {
+  group 'application'
+  fileTree (dir: 'data').each { File file ->
+    delete(file)
+  }
+  fileTree (dir: 'output').each { File file ->
+    delete(file)
+  }
+}
+
 sourceSets {
   main {
     resources {
