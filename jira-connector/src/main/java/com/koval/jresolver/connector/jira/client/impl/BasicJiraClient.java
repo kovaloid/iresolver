@@ -1,5 +1,6 @@
 package com.koval.jresolver.connector.jira.client.impl;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -35,5 +36,10 @@ public class BasicJiraClient implements JiraClient {
   @Override
   public Issue getIssueByKey(String issueKey) {
     return restClient.getIssueClient().getIssue(issueKey).claim();
+  }
+
+  @Override
+  public void close() throws IOException {
+    restClient.close();
   }
 }

@@ -2,7 +2,6 @@ package com.koval.jresolver.processor.similarity;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,8 +13,6 @@ import com.atlassian.jira.rest.client.api.domain.Attachment;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.User;
 import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.processor.api.Processor;
 import com.koval.jresolver.processor.result.IssueProcessingResult;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
@@ -31,9 +28,9 @@ public class SimilarityProcessor implements Processor {
   private final JiraClient jiraClient;
   private final VectorModel vectorModel;
 
-  public SimilarityProcessor(SimilarityProcessorProperties properties) throws URISyntaxException, IOException {
+  public SimilarityProcessor(JiraClient jiraClient, SimilarityProcessorProperties properties) throws IOException {
+    this.jiraClient = jiraClient;
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
-    this.jiraClient = new BasicJiraClient(new ConnectorProperties().getUrl());
     File vectorModelFile = new File(properties.getWorkFolder(), properties.getVectorModelFileName());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile);
   }

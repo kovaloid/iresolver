@@ -2,7 +2,6 @@ package com.koval.jresolver;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -35,9 +34,6 @@ public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
-  private static JiraConnector jiraConnector;
-  private static SimilarityProcessorProperties similarityProcessorProperties;
-
   private Launcher() {
   }
 
@@ -60,36 +56,36 @@ public final class Launcher {
       }
       jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
     }
-    jiraConnector = new JiraConnector(jiraClient, connectorProperties);
-    similarityProcessorProperties = new SimilarityProcessorProperties();
-
-    if (args.length == 0) {
-      LOGGER.info("There are no arguments. Phase 'run' will be started.");
-      run();
-    } else if (args.length == 1) {
-      switch (args[0]) {
-        case "prepare":
-          LOGGER.info("Classifier preparation phase started.");
-          prepare();
-          break;
-        case "configure":
-          LOGGER.info("Classifier and report configuration phase started.");
-          configure();
-          break;
-        case "run":
-          LOGGER.info("Report generation phase started.");
-          run();
-          break;
-        default:
-          LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'run'.");
-          break;
+    try (JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties)) {
+      SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
+      if (args.length == 0) {
+        LOGGER.info("There are no arguments. Phase 'run' will be started.");
+        run(jiraConnector, jiraClient, similarityProcessorProperties);
+      } else if (args.length == 1) {
+        switch (args[0]) {
+          case "prepare":
+            LOGGER.info("Classifier preparation phase started.");
+            prepare(jiraConnector, similarityProcessorProperties);
+            break;
+          case "configure":
+            LOGGER.info("Classifier and report configuration phase started.");
+            configure(similarityProcessorProperties);
+            break;
+          case "run":
+            LOGGER.info("Report generation phase started.");
+            run(jiraConnector, jiraClient, similarityProcessorProperties);
+            break;
+          default:
+            LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'run'.");
+            break;
+        }
+      } else {
+        LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'run'.");
       }
-    } else {
-      LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'run'.");
     }
   }
 
-  private static void prepare() {
+  private static void prepare(JiraConnector jiraConnector, SimilarityProcessorProperties similarityProcessorProperties) {
     DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver(), similarityProcessorProperties);
     try {
       dataSetCreator.create();
@@ -98,7 +94,7 @@ public final class Launcher {
     }
   }
 
-  private static void configure() {
+  private static void configure(SimilarityProcessorProperties similarityProcessorProperties) {
     VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
     File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
     try {
@@ -110,11 +106,12 @@ public final class Launcher {
     }
   }
 
-  private static void run() throws IOException, URISyntaxException {
+  private static void run(JiraConnector jiraConnector, JiraClient jiraClient,
+                          SimilarityProcessorProperties similarityProcessorProperties) throws IOException {
     IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
 
     ProcessExecutor executor = new ProcessExecutor()
-        .add(new SimilarityProcessor(similarityProcessorProperties))
+        .add(new SimilarityProcessor(jiraClient, similarityProcessorProperties))
         .add(new RuleEngineProcessor());
     Collection<IssueProcessingResult> results = new ArrayList<>();
 

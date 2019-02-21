@@ -1,10 +1,12 @@
 package com.koval.jresolver.connector.jira.client;
 
+import java.io.Closeable;
+
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 
 
-public interface JiraClient {
+public interface JiraClient extends Closeable {
 
   SearchResult searchByJql(String jql, int maxResults, int startAt);
 
