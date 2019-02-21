@@ -61,6 +61,8 @@ distributions {
       from('report-generator/src/main/resources') { into 'config' }
       from('src/main/resources/log4j.properties') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
+      exclude('**/opencv*.jar')
+      exclude('**/logback*.jar')
     }
   }
 }
