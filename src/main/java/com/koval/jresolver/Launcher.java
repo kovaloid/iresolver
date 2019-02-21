@@ -104,7 +104,7 @@ public final class Launcher {
   }
 
   private static void prepare() {
-    DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver());
+    DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver(), similarityProcessorProperties);
     dataSetCreator.create();
   }
 

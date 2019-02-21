@@ -1,4 +1,11 @@
 
+/*jar {
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}*/
+
+
 dependencies {
   compile 'org.deeplearning4j:deeplearning4j-core:0.8.0',
           'org.deeplearning4j:deeplearning4j-nlp:0.8.0',

@@ -6,17 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.tartarus.snowball.SnowballProgram;
 import org.tartarus.snowball.ext.PorterStemmer;
 
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-
 
 public class StemmingPreprocessor extends CommonPreprocessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StemmingPreprocessor.class);
 
-  private final SimilarityProcessorProperties similarityProcessorProperties;
+  private String language = "English";
 
-  public StemmingPreprocessor(SimilarityProcessorProperties similarityProcessorProperties) {
-    this.similarityProcessorProperties = similarityProcessorProperties;
+  public StemmingPreprocessor setLanguage(String lang) {
+    this.language = lang;
+    return this;
   }
 
   @Override
@@ -31,7 +30,7 @@ public class StemmingPreprocessor extends CommonPreprocessor {
   private SnowballProgram getAppropriateStemmerInstance() {
     SnowballProgram stemmer = new PorterStemmer();
     try {
-      String stemmerClassName = "org.tartarus.snowball.ext." + similarityProcessorProperties.getLanguage() + "Stemmer";
+      String stemmerClassName = "org.tartarus.snowball.ext." + language + "Stemmer";
       Class stemmerClass = Class.forName(stemmerClassName);
       stemmer = (SnowballProgram)stemmerClass.newInstance();
     } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {

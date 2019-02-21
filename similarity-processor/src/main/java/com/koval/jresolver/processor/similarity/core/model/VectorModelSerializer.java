@@ -19,7 +19,7 @@ public class VectorModelSerializer {
   private final String vectorModelFileName;
 
   public VectorModelSerializer(SimilarityProcessorProperties similarityProcessorProperties) {
-    this.preProcessor = new StemmingPreprocessor(similarityProcessorProperties);
+    this.preProcessor = new StemmingPreprocessor().setLanguage(similarityProcessorProperties.getLanguage());
     this.vectorModelPath = similarityProcessorProperties.getWorkFolder();
     this.vectorModelFileName = similarityProcessorProperties.getVectorModelFileName();
   }

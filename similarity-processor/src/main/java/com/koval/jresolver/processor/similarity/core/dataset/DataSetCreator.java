@@ -6,22 +6,35 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.koval.jresolver.connector.jira.core.IssuesReceiver;
+import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.processor.similarity.util.FilesUtil;
+
 
 public class DataSetCreator {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataSetCreator.class);
   private static final String SEPARATOR = " | ";
-  private static final String DATASET_FILE_NAME = "DataSet.txt";
 
   private final IssuesReceiver receiver;
+  private final SimilarityProcessorProperties properties;
 
-  public DataSetCreator(IssuesReceiver receiver) {
+  public DataSetCreator(IssuesReceiver receiver, SimilarityProcessorProperties properties) {
     this.receiver = receiver;
+    this.properties = properties;
   }
 
   public void create() {
-    File dataSetFile = new File(DATASET_FILE_NAME);
+    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    try {
+      FilesUtil.createFile(dataSetFile);
+    } catch (IOException e) {
+      LOGGER.error("Could not create data set file.", e);
+    }
     //LOGGER.info("New data set dataSetFile will be created: {}", this.dataSetFile.getAbsolutePath());
 
     /*File dataSetFile = new File(workFolder, "DataSet.txt");

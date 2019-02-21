@@ -30,7 +30,8 @@ public class VectorModelCreator {
   private SimilarityProcessorProperties similarityProcessorProperties;
 
   public VectorModelCreator(SimilarityProcessorProperties similarityProcessorProperties) {
-    this(new StemmingPreprocessor(similarityProcessorProperties), StopWords.getStopWords(), similarityProcessorProperties);
+    this(new StemmingPreprocessor().setLanguage(similarityProcessorProperties.getLanguage()), StopWords.getStopWords(),
+        similarityProcessorProperties);
   }
 
   public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, SimilarityProcessorProperties similarityProcessorProperties) {
