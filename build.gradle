@@ -68,6 +68,7 @@ distributions {
 
 startScripts {
   classpath += files('config')
+  applicationName = 'run'
   doLast {
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile = file getUnixScript()
@@ -78,13 +79,13 @@ startScripts {
   }
 }
 
-task createPrepareScript(type: CreateStartScripts) {
+task createDataSetScript(type: CreateStartScripts) {
   mainClassName = startScripts.mainClassName
   classpath = startScripts.classpath
   outputDir = startScripts.outputDir
-  applicationName = 'prepare'
+  applicationName = 'create-data-set'
 
-  createPrepareScript {
+  createDataSetScript {
     doLast {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
@@ -93,20 +94,20 @@ task createPrepareScript(type: CreateStartScripts) {
       unixScriptFile.text = unixScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=prepare')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-data-set')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=prepare+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-data-set+')
     }
   }
 }
 
-task createConfigureScript(type: CreateStartScripts) {
+task createVectorModelScript(type: CreateStartScripts) {
   mainClassName = startScripts.mainClassName
   classpath = startScripts.classpath
   outputDir = startScripts.outputDir
-  applicationName = 'configure'
+  applicationName = 'create-vector-model'
 
-  createConfigureScript {
+  createVectorModelScript {
     doLast {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
@@ -115,20 +116,20 @@ task createConfigureScript(type: CreateStartScripts) {
       unixScriptFile.text = unixScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=configure')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-vector-model')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=configure+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-vector-model+')
     }
   }
 }
 
-task createRunScript(type: CreateStartScripts) {
+task cleanScript(type: CreateStartScripts) {
   mainClassName = startScripts.mainClassName
   classpath = startScripts.classpath
   outputDir = startScripts.outputDir
-  applicationName = 'run'
+  applicationName = 'clean'
 
-  createRunScript {
+  cleanScript {
     doLast {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
@@ -137,18 +138,18 @@ task createRunScript(type: CreateStartScripts) {
       unixScriptFile.text = unixScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=run')
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=clean')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=run+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=clean+')
     }
   }
 }
 
 applicationDistribution.into('bin') {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  from(createPrepareScript)
-  from(createConfigureScript)
-  from(createRunScript)
+  from(createDataSetScript)
+  from(createVectorModelScript)
+  from(cleanScript)
   fileMode = 0755
 }
 
