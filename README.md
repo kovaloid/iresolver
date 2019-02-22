@@ -7,27 +7,31 @@ The goal of this project is to make life easier for Jira users.
 
 ## Getting Started
 
-In order to compile the distribution, enter in the console:
+In order to build the distribution, enter in the console:
 ```sh
 gradlew
 ```
 
-After build will be created the archive in next path
+After the distribution is built, it is located in the following path:
 ```
 build/distributuions
 ```
 
-Unzip the distribution, launch cmd and go to bin directory.
+Unzip the distribution, go to the bin folder and launch one of the scripts below.
 
 Create dataset:
 ```sh
-jresolver prepare
+create-data-set[.bat]
 ```
 Create doc2vec model:
 ```sh
-jresolver configure
+create-vector-model[.bat]
 ```
-Run tool:
+Clean work folder with dataset and model:
 ```sh
-jresolver
+clean[.bat]
+```
+Run the tool:
+```sh
+run[.bat]
 ```
