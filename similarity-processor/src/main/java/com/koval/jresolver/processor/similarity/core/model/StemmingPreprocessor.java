@@ -34,7 +34,7 @@ public class StemmingPreprocessor extends CommonPreprocessor {
       Class stemmerClass = Class.forName(stemmerClassName);
       stemmer = (SnowballProgram)stemmerClass.newInstance();
     } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-      LOGGER.error("Could not get appropriate class for stemming", e);
+      LOGGER.error("Could not get appropriate class for stemming. The default one will be used.", e);
     }
     return stemmer;
   }

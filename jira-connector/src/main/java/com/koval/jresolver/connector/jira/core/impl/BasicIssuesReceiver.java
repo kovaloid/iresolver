@@ -58,7 +58,8 @@ public class BasicIssuesReceiver implements IssuesReceiver {
     try {
       LOGGER.info("Waiting for " + batchDelay + "ms ...");
       Thread.sleep(batchDelay);
-    } catch (InterruptedException ignored) {
+    } catch (InterruptedException e) {
+      LOGGER.error("Delay between batch requests was interrupted.", e);
     }
   }
 }

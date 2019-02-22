@@ -101,7 +101,7 @@ public class DroolsRuleEngine implements RuleEngine {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     kieSession.dispose();
     LOGGER.info("Kie session was disposed.");
   }

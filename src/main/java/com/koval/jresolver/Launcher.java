@@ -1,125 +1,49 @@
 package com.koval.jresolver;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.connector.jira.JiraConnector;
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
-import com.koval.jresolver.connector.jira.core.IssuesReceiver;
-import com.koval.jresolver.processor.ProcessExecutor;
-import com.koval.jresolver.processor.result.IssueProcessingResult;
-import com.koval.jresolver.processor.rules.RuleEngineProcessor;
-import com.koval.jresolver.processor.similarity.SimilarityProcessor;
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
-import com.koval.jresolver.processor.similarity.core.model.VectorModel;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
-import com.koval.jresolver.report.ReportGenerator;
-import com.koval.jresolver.report.impl.HtmlReportGenerator;
-import com.koval.jresolver.util.CommandLineUtil;
+import com.koval.jresolver.util.LaunchUtil;
 
 
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
+  private static final String CREATE_DATA_SET = "create-data-set";
+  private static final String CREATE_VECTOR_MODEL = "create-vector-model";
+  private static final String CLEAN = "clean";
+  private static final String HELP_TIP = "Please use " + CREATE_DATA_SET + ", " + CREATE_VECTOR_MODEL + " or " + CLEAN + ".";
+
   private Launcher() {
   }
 
-  public static void main(String[] args) throws Exception {
-    ConnectorProperties connectorProperties = new ConnectorProperties();
-    JiraClient jiraClient;
-    if (connectorProperties.isAnonymous()) {
-      jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+  public static void main(String[] args) {
+    if (args.length == 0) {
+      LOGGER.info("Start processing issues.");
+      LaunchUtil.run();
+    } else if (args.length == 1) {
+      switch (args[0]) {
+        case CREATE_DATA_SET:
+          LOGGER.info("Start creating data set.");
+          LaunchUtil.createDataSet();
+          break;
+        case CREATE_VECTOR_MODEL:
+          LOGGER.info("Start creating vector model.");
+          LaunchUtil.createVectorModel();
+          break;
+        case CLEAN:
+          LOGGER.info("Start cleaning work folder.");
+          LaunchUtil.clean();
+          break;
+        default:
+          LOGGER.warn("Wrong arguments.");
+          LOGGER.warn(HELP_TIP);
+          break;
+      }
     } else {
-      CredentialsProtector protector = new CredentialsProtector();
-      CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties);
-      Credentials credentials;
-      if (keeper.isStored()) {
-        credentials = keeper.load();
-      } else {
-        String username = CommandLineUtil.getUsername();
-        String password = CommandLineUtil.getPassword();
-        credentials = new Credentials(username, password);
-        keeper.store(credentials);
-      }
-      jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
+      LOGGER.warn("Too much arguments.");
+      LOGGER.warn(HELP_TIP);
     }
-    try (JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties)) {
-      SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
-      if (args.length == 0) {
-        LOGGER.info("There are no arguments. Phase 'run' will be started.");
-        run(jiraConnector, jiraClient, similarityProcessorProperties);
-      } else if (args.length == 1) {
-        switch (args[0]) {
-          case "prepare":
-            LOGGER.info("Classifier preparation phase started.");
-            prepare(jiraConnector, similarityProcessorProperties);
-            break;
-          case "configure":
-            LOGGER.info("Classifier and report configuration phase started.");
-            configure(similarityProcessorProperties);
-            break;
-          case "run":
-            LOGGER.info("Report generation phase started.");
-            run(jiraConnector, jiraClient, similarityProcessorProperties);
-            break;
-          default:
-            LOGGER.warn("Wrong arguments. Please use 'prepare', 'configure' or 'run'.");
-            break;
-        }
-      } else {
-        LOGGER.warn("Too much arguments. Please use 'prepare', 'configure' or 'run'.");
-      }
-    }
-  }
-
-  private static void prepare(JiraConnector jiraConnector, SimilarityProcessorProperties similarityProcessorProperties) {
-    DataSetCreator dataSetCreator = new DataSetCreator(jiraConnector.getResolvedIssuesReceiver(), similarityProcessorProperties);
-    try {
-      dataSetCreator.create();
-    } catch (IOException e) {
-      LOGGER.error("Could not create data set", e);
-    }
-  }
-
-  private static void configure(SimilarityProcessorProperties similarityProcessorProperties) {
-    VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
-    File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
-    try {
-      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
-      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
-      vectorModelSerializer.serialize(vectorModel);
-    } catch (IOException e) {
-      LOGGER.error("There are no " + dataSetFile.getAbsolutePath() + " file. Run 'prepare' phase.", e);
-    }
-  }
-
-  private static void run(JiraConnector jiraConnector, JiraClient jiraClient,
-                          SimilarityProcessorProperties similarityProcessorProperties) throws IOException {
-    IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
-
-    ProcessExecutor executor = new ProcessExecutor()
-        .add(new SimilarityProcessor(jiraClient, similarityProcessorProperties))
-        .add(new RuleEngineProcessor());
-    Collection<IssueProcessingResult> results = new ArrayList<>();
-
-    while (receiver.hasNextIssues()) {
-      results.addAll(executor.execute(receiver.getNextIssues()));
-    }
-
-    ReportGenerator generator = new HtmlReportGenerator();
-    generator.generate(results);
   }
 }

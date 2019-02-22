@@ -10,7 +10,7 @@ task createDataSet(type: JavaExec) {
   main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
   workingDir = file('src')
-  args = ['prepare']
+  args = ['create-data-set']
 }
 
 task createVectorModel(type: JavaExec) {
@@ -18,17 +18,15 @@ task createVectorModel(type: JavaExec) {
   main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
   workingDir = file('src')
-  args = ['configure']
+  args = ['create-vector-model']
 }
 
-task cleanWorkFolders(type: Delete) {
+task cleanWorkFolders(type: JavaExec) {
   group 'application'
-  fileTree (dir: 'data').each { File file ->
-    delete(file)
-  }
-  fileTree (dir: 'output').each { File file ->
-    delete(file)
-  }
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['clean']
 }
 
 sourceSets {

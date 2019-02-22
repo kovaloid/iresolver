@@ -13,6 +13,7 @@ import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
+import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 
 
 public class BasicJiraClient implements JiraClient {
@@ -20,12 +21,20 @@ public class BasicJiraClient implements JiraClient {
   private final JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
   private final JiraRestClient restClient;
 
-  public BasicJiraClient(String host, Credentials credentials) throws URISyntaxException {
-    restClient = factory.createWithBasicHttpAuthentication(new URI(host), credentials.getUsername(), credentials.getPassword());
+  public BasicJiraClient(String host, Credentials credentials) throws JiraConnectorException {
+    restClient = factory.createWithBasicHttpAuthentication(getURI(host), credentials.getUsername(), credentials.getPassword());
   }
 
-  public BasicJiraClient(String host) throws URISyntaxException {
-    restClient = factory.create(new URI(host), new AnonymousAuthenticationHandler());
+  public BasicJiraClient(String host) throws JiraConnectorException {
+    restClient = factory.create(getURI(host), new AnonymousAuthenticationHandler());
+  }
+
+  private URI getURI(String host) throws JiraConnectorException {
+    try {
+      return new URI(host);
+    } catch (URISyntaxException e) {
+      throw new JiraConnectorException("Could not initialize URI for host: " + host, e);
+    }
   }
 
   @Override

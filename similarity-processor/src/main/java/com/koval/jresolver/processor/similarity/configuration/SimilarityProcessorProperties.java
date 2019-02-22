@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class SimilarityProcessorProperties {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimilarityProcessorProperties.class);
 
   private static final String SIMILARITY_PROCESSOR_PROPERTIES_FILE = "similarity-processor.properties";
 
@@ -22,15 +27,15 @@ public class SimilarityProcessorProperties {
   private String vectorModelFileName = "VectorModel.zip";
   private String dataSetFileName = "DataSet.txt";
 
-  public SimilarityProcessorProperties() throws IOException {
+  public SimilarityProcessorProperties() {
     loadProperties();
   }
 
-  private void loadProperties() throws IOException {
+  private void loadProperties() {
     Properties properties = new Properties();
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(SIMILARITY_PROCESSOR_PROPERTIES_FILE)) {
       if (input == null) {
-        throw new IOException("Could not find connector properties file");
+        throw new IOException("Could not find the " + SIMILARITY_PROCESSOR_PROPERTIES_FILE + " file at the classpath");
       }
       properties.load(input);
       minWordFrequency = Integer.parseInt(properties.getProperty("minWordFrequency"));
@@ -45,6 +50,8 @@ public class SimilarityProcessorProperties {
       workFolder = properties.getProperty("workFolder");
       vectorModelFileName = properties.getProperty("vectorModelFileName");
       dataSetFileName = properties.getProperty("dataSetFileName");
+    } catch (IOException e) {
+      LOGGER.error("Could not load the similarity processor properties. The default properties will be used.", e);
     }
   }
 

@@ -7,9 +7,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ConnectorProperties {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConnectorProperties.class);
   private static final String CONNECTOR_PROPERTIES_FILE = "connector.properties";
 
   private String url;
@@ -21,15 +25,15 @@ public class ConnectorProperties {
   private Collection<String> issueTextFields = new HashSet<>();
   private String credentialsFolder = "../data/";
 
-  public ConnectorProperties() throws IOException {
+  public ConnectorProperties() {
     loadProperties();
   }
 
-  private void loadProperties() throws IOException {
+  private void loadProperties() {
     Properties properties = new Properties();
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONNECTOR_PROPERTIES_FILE)) {
       if (input == null) {
-        throw new IOException("Could not find connector properties file");
+        throw new IOException("Could not find the " + CONNECTOR_PROPERTIES_FILE + " file at the classpath");
       }
       properties.load(input);
       url = properties.getProperty("url");
@@ -40,6 +44,8 @@ public class ConnectorProperties {
       batchDelay = Integer.parseInt(properties.getProperty("batchDelay"));
       issueTextFields = Arrays.asList(properties.getProperty("issueTextFields").split(","));
       credentialsFolder = properties.getProperty("credentialsFolder");
+    } catch (IOException e) {
+      LOGGER.error("Could not load the connector properties. The default properties will be used.", e);
     }
   }
 

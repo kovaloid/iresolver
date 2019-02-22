@@ -11,9 +11,7 @@ addons:
       - oracle-java8-installer
 install: true
 before_install:
-  - sudo rm /etc/mavenrc
-  - export M2_HOME=/usr/local/maven
-  - export MAVEN_OPTS="-Dmaven.repo.local=$HOME/.m2/repository -Xms1024m -Xmx3072m -XX:PermSize=512m"
+  - export JAVA_OPTS=-Xms1024m -Xmx3072m -XX:PermSize=512m
 before_script:
   - chmod +x gradlew
 script: ./gradlew --no-daemon
