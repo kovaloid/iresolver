@@ -34,6 +34,7 @@ public class BasicIssuesReceiver implements IssuesReceiver {
   }
 
   private int getTotalIssues() {
+    LOGGER.info("Getting total issues...");
     return client.searchByJql(query, 0, 0).getTotal();
   }
 
