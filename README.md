@@ -14,7 +14,7 @@ gradlew
 
 After the distribution is built, it is located in the following path:
 ```
-build/distributuions
+build/distributions
 ```
 
 Unzip the distribution, go to the bin folder and launch one of the scripts below.
