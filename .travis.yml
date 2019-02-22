@@ -11,7 +11,7 @@ addons:
       - oracle-java8-installer
 install: true
 before_install:
-  - export JAVA_OPTS=-"Xms1024m -Xmx1024m -XX:PermSize=512m"
+  - export JAVA_OPTS="-Xms1024m -Xmx1024m"
 before_script:
   - chmod +x gradlew
 script: ./gradlew --no-daemon
