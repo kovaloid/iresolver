@@ -24,7 +24,7 @@ public class BasicJiraClient implements JiraClient {
   private static final Logger LOGGER = LoggerFactory.getLogger(BasicJiraClient.class);
 
   private final JiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
-  private final JiraRestClient restClient;
+  private JiraRestClient restClient;
 
   public BasicJiraClient(String host, Credentials credentials) throws JiraConnectorException {
     restClient = factory.createWithBasicHttpAuthentication(getURI(host), credentials.getUsername(), credentials.getPassword());
@@ -42,6 +42,10 @@ public class BasicJiraClient implements JiraClient {
     } catch (URISyntaxException e) {
       throw new JiraConnectorException("Could not initialize URI for host: " + host, e);
     }
+  }
+
+  public void setCustomRestClient(JiraRestClient restClient) {
+    this.restClient = restClient;
   }
 
   @Override
