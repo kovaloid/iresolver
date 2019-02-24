@@ -44,8 +44,8 @@ public class BasicJiraClient implements JiraClient {
     }
   }
 
-  public void setCustomRestClient(JiraRestClient restClient) {
-    this.restClient = restClient;
+  public void setCustomRestClient(JiraRestClient customRestClient) {
+    this.restClient = customRestClient;
   }
 
   @Override
