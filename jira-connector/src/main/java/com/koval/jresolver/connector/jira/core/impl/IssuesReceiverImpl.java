@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.jira.core.impl;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
 
   private final JiraClient client;
   private final String query;
+  private final Set<String> fields;
   private final int batchSize;
   private int currentIndex;
   private final int finishIndex;
@@ -27,6 +29,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
   public IssuesReceiverImpl(JiraClient client, ConnectorProperties properties, boolean isResolvedMode) {
     this.client = client;
     this.query = isResolvedMode ? properties.getResolvedQuery() : properties.getUnresolvedQuery();
+    this.fields = isResolvedMode ? properties.getResolvedIssueFields() : properties.getUnresolvedIssueFields();
     this.batchSize = properties.getBatchSize();
     this.batchDelay = properties.getBatchDelay();
     this.currentIndex = 0;
@@ -45,7 +48,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
 
   @Override
   public Collection<Issue> getNextIssues() {
-    SearchResult searchResult = client.searchByJql(query, batchSize, currentIndex);
+    SearchResult searchResult = client.searchByJql(query, batchSize, currentIndex, fields);
     searchResult.getIssues().forEach(issue -> LOGGER.info("{}: {}", issue.getKey(), issue.getSummary()));
     currentIndex += batchSize;
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);

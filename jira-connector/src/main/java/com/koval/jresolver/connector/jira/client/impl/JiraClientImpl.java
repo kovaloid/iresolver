@@ -28,9 +28,15 @@ public class JiraClientImpl implements JiraClient {
 
   @Override
   public SearchResult searchByJql(String jql, int maxResults, int startAt) {
+    return searchByJql(jql, maxResults, startAt, new HashSet<>());
+  }
+
+  @Override
+  public SearchResult searchByJql(String jql, int maxResults, int startAt, final Set<String> fields) {
     LOGGER.debug("Send search request: JQL = '{}' MaxResults = '{}' StartAt = '{}'.", jql, maxResults, startAt);
-    Set<String> fields = new HashSet<>();
-    fields.add("*all");
+    if (fields.isEmpty()) {
+      fields.add("*all");
+    }
     return checkRestExceptions(() -> restClient.getSearchClient().searchJql(jql, maxResults, startAt, fields).claim(),
         "Could not search by JQL.");
   }
