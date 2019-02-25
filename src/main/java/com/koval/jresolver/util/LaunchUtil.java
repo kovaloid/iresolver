@@ -1,7 +1,9 @@
 package com.koval.jresolver.util;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -96,9 +98,21 @@ public final class LaunchUtil {
     try {
       ReportGenerator generator = new HtmlReportGenerator();
       generator.generate(results);
+      openReport();
     } catch (IOException e) {
       LOGGER.error("Could not initialize report generator.", e);
     }
+  }
+
+  private static void openReport() throws IOException {
+    File file = new File("../output/index.html");
+    Desktop.getDesktop().browse(getUriFromFile(file));
+  }
+
+  private static URI getUriFromFile(File file) throws IOException {
+    String prefix = "file:///";
+    String path = file.getCanonicalPath().replace('\\', '/');
+    return URI.create(prefix + path);
   }
 
   private static JiraClient getJiraClientInstance(ConnectorProperties connectorProperties) {
