@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.JiraClientFactory;
+import com.koval.jresolver.connector.jira.client.factory.JiraClientFactory;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;

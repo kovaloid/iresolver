@@ -1,4 +1,4 @@
-package com.koval.jresolver.connector.jira.client;
+package com.koval.jresolver.connector.jira.client.factory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,6 +10,7 @@ import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
 import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
+import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.impl.JiraClientImpl;
 import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;

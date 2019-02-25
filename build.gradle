@@ -216,16 +216,6 @@ allprojects {
     }
   }
 
-  apply plugin: 'jacoco'
-  jacoco {
-    reportsDir = file('build/reports/jacoco')
-  }
-
-  jacocoTestReport {
-    reports {
-      xml.enabled = false
-      csv.enabled = false
-      html.destination file('build/reports/jacoco/jacoco.html')
-    }
-  }
+  apply from: rootProject.file('jdepend.gradle')
+  apply from: rootProject.file('coverage.gradle')
 }
