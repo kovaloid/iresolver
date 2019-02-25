@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.jira.client.impl;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -34,11 +35,18 @@ public class JiraClientImpl implements JiraClient {
   @Override
   public SearchResult searchByJql(String jql, int maxResults, int startAt, final Set<String> fields) {
     LOGGER.debug("Send search request: JQL = '{}' MaxResults = '{}' StartAt = '{}'.", jql, maxResults, startAt);
+    if (!fields.isEmpty()) {
+      fields.addAll(getRequiredFields());
+    }
     if (fields.isEmpty()) {
       fields.add("*all");
     }
     return checkRestExceptions(() -> restClient.getSearchClient().searchJql(jql, maxResults, startAt, fields).claim(),
         "Could not search by JQL.");
+  }
+
+  private Set<String> getRequiredFields() {
+    return new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status"));
   }
 
   @Override
