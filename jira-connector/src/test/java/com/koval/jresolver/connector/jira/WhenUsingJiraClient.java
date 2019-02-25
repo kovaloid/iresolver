@@ -19,11 +19,10 @@ import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.util.concurrent.Promise;
 import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
-import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
+import com.koval.jresolver.connector.jira.client.impl.JiraClientImpl;
 
 
-public class WhenUsingJiraClientInAnonymousMode {
+public class WhenUsingJiraClient {
 
   private JiraClient jiraClient;
 
@@ -35,10 +34,9 @@ public class WhenUsingJiraClientInAnonymousMode {
   private Promise<Issue> issuePromise;
 
   @Before
-  public void init() throws JiraConnectorException {
+  public void init() {
     MockitoAnnotations.initMocks(this);
-    jiraClient = new BasicJiraClient("http://test.com");
-    ((BasicJiraClient)jiraClient).setCustomRestClient(jiraRestClient);
+    jiraClient = new JiraClientImpl(jiraRestClient);
   }
 
   @Test

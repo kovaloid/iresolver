@@ -1,7 +1,8 @@
 package com.koval.jresolver.util;
 
 import java.io.Console;
-import java.util.Arrays;
+
+import com.koval.jresolver.exception.JresolverException;
 
 
 public final class CommandLineUtil {
@@ -20,8 +21,8 @@ public final class CommandLineUtil {
   private static String getStringFromConsole(String question) {
     Console console = System.console();
     if (console == null) {
-      throw new RuntimeException("Could not get console instance.");
+      throw new JresolverException("Could not get console instance.");
     }
-    return Arrays.toString(console.readPassword(question));
+    return new String(console.readPassword(question));
   }
 }

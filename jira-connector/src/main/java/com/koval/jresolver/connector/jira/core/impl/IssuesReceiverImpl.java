@@ -13,9 +13,9 @@ import com.koval.jresolver.connector.jira.core.IssuesReceiver;
 import com.koval.jresolver.connector.jira.util.CollectionsUtil;
 
 
-public class BasicIssuesReceiver implements IssuesReceiver {
+public class IssuesReceiverImpl implements IssuesReceiver {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BasicIssuesReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesReceiverImpl.class);
 
   private final JiraClient client;
   private final String query;
@@ -24,7 +24,7 @@ public class BasicIssuesReceiver implements IssuesReceiver {
   private final int finishIndex;
   private final int batchDelay;
 
-  public BasicIssuesReceiver(JiraClient client, ConnectorProperties properties, boolean isResolvedMode) {
+  public IssuesReceiverImpl(JiraClient client, ConnectorProperties properties, boolean isResolvedMode) {
     this.client = client;
     this.query = isResolvedMode ? properties.getResolvedQuery() : properties.getUnresolvedQuery();
     this.batchSize = properties.getBatchSize();

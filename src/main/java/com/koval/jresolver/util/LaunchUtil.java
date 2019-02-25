@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.impl.BasicJiraClient;
+import com.koval.jresolver.connector.jira.client.JiraClientFactory;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
 import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
@@ -105,7 +105,7 @@ public final class LaunchUtil {
     JiraClient jiraClient;
     try {
       if (connectorProperties.isAnonymous()) {
-        jiraClient = new BasicJiraClient(connectorProperties.getUrl());
+        jiraClient = JiraClientFactory.getAnonymousJiraClient(connectorProperties.getUrl());
       } else {
         CredentialsProtector protector = new CredentialsProtector();
         CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties);
@@ -118,7 +118,7 @@ public final class LaunchUtil {
           credentials = new Credentials(username, password);
           keeper.store(credentials);
         }
-        jiraClient = new BasicJiraClient(connectorProperties.getUrl(), credentials);
+        jiraClient = JiraClientFactory.getBasicJiraClient(connectorProperties.getUrl(), credentials);
       }
     } catch (JiraConnectorException e) {
       throw new JresolverException("Could not initialize Jira client.", e);

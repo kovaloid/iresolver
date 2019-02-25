@@ -3,7 +3,7 @@ package com.koval.jresolver.connector.jira;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
 import com.koval.jresolver.connector.jira.core.IssuesReceiver;
-import com.koval.jresolver.connector.jira.core.impl.BasicIssuesReceiver;
+import com.koval.jresolver.connector.jira.core.impl.IssuesReceiverImpl;
 
 
 public class JiraConnector {
@@ -17,10 +17,10 @@ public class JiraConnector {
   }
 
   public IssuesReceiver getResolvedIssuesReceiver() {
-    return new BasicIssuesReceiver(jiraClient, connectorProperties, true);
+    return new IssuesReceiverImpl(jiraClient, connectorProperties, true);
   }
 
   public IssuesReceiver getUnresolvedIssuesReceiver() {
-    return new BasicIssuesReceiver(jiraClient, connectorProperties, false);
+    return new IssuesReceiverImpl(jiraClient, connectorProperties, false);
   }
 }
