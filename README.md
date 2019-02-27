@@ -17,9 +17,11 @@ After the distribution is built, it is located in the following path:
 build/distributions
 ```
 
+The last release version of distribution can be downloaded from [the release tab of the repository](https://github.com/kovaloid/jresolver/releases).
+
 Unzip the distribution, go to the bin folder and launch one of the scripts below.
 
-Create dataset:
+Create data set:
 ```sh
 create-data-set[.bat]
 ```
@@ -27,11 +29,11 @@ Create doc2vec model:
 ```sh
 create-vector-model[.bat]
 ```
-Clean work folder with dataset and model:
-```sh
-clean[.bat]
-```
 Run the tool:
 ```sh
 run[.bat]
+```
+Clean work folder with data set and model:
+```sh
+clean[.bat]
 ```
