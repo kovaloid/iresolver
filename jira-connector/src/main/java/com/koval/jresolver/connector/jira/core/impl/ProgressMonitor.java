@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.jira.core.impl;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 
 public class ProgressMonitor {
@@ -30,6 +31,6 @@ public class ProgressMonitor {
   }
 
   public DateTime getRemainingTime(int currentIndex) {
-    return new DateTime((end - start) * (finishIndex - currentIndex) / batchSize);
+    return new DateTime((end - start) * (finishIndex - currentIndex) / batchSize).withZone(DateTimeZone.UTC);
   }
 }
