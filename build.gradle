@@ -218,4 +218,10 @@ allprojects {
 
   apply from: rootProject.file('jdepend.gradle')
   apply from: rootProject.file('coverage.gradle')
+
+  task cleanOut(type: Delete) {
+    group 'build'
+    delete "${projectDir}/out"
+  }
+  tasks.clean.dependsOn(cleanOut)
 }

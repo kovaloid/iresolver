@@ -20,6 +20,7 @@ public class DataSetCreator {
   private static final Logger LOGGER = LoggerFactory.getLogger(DataSetCreator.class);
   private static final String SEPARATOR = " | ";
 
+  private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final IssuesReceiver receiver;
   private final SimilarityProcessorProperties properties;
 
@@ -37,22 +38,19 @@ public class DataSetCreator {
       while (receiver.hasNextIssues()) {
         Collection<Issue> issues = receiver.getNextIssues();
         issues.forEach(issue -> {
-          output.print(issue.getKey());
-          output.print(SEPARATOR);
-          output.println(extractTextData(issue));
-          LOGGER.info("Issue with key {} was added to data set", issue.getKey());
+          String textData = textDataExtractor.extract(issue);
+          if (textData.isEmpty()) {
+            LOGGER.info("Issue with key {} was ignored due to empty body", issue.getKey());
+          } else {
+            output.print(issue.getKey());
+            output.print(SEPARATOR);
+            output.println(textData);
+            LOGGER.info("Issue with key {} was added to data set", issue.getKey());
+          }
         });
         output.flush();
       }
     }
     LOGGER.info("Data set file was created: {}", dataSetFile.getAbsolutePath());
-  }
-
-  private String extractTextData(Issue issue) {
-    String text = "";
-    if (issue.getDescription() != null) {
-      text = issue.getSummary() + " " + issue.getDescription().trim().replaceAll("[^A-Za-z0-9]", " ").replaceAll(" +", " ");
-    }
-    return text;
   }
 }

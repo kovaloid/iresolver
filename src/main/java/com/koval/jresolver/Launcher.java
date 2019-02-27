@@ -1,5 +1,7 @@
 package com.koval.jresolver;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,12 @@ public final class Launcher {
     } else {
       LOGGER.warn("Too much arguments.");
       LOGGER.warn(HELP_TIP);
+    }
+
+    LOGGER.info("Press any key to continue . . . ");
+    try {
+      System.in.read();
+    } catch (IOException ignored) {
     }
   }
 }

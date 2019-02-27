@@ -16,6 +16,7 @@ import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.processor.api.Processor;
 import com.koval.jresolver.processor.result.IssueProcessingResult;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.processor.similarity.core.dataset.TextDataExtractor;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
 
@@ -25,6 +26,7 @@ public class SimilarityProcessor implements Processor {
   private static final Logger LOGGER = LoggerFactory.getLogger(SimilarityProcessor.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
+  private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final JiraClient jiraClient;
   private final VectorModel vectorModel;
 
@@ -37,13 +39,13 @@ public class SimilarityProcessor implements Processor {
 
   @Override
   public void run(Issue issue, IssueProcessingResult result) {
-    Collection<String> keys = vectorModel.getNearestLabels(issue.getDescription(), NUMBER_OF_NEAREST_LABELS);
+    Collection<String> keys = vectorModel.getNearestLabels(textDataExtractor.extract(issue), NUMBER_OF_NEAREST_LABELS);
     List<Issue> issues = new ArrayList<>();
     List<String> labels = new ArrayList<>();
     List<User> users = new ArrayList<>();
     List<Attachment> attachments = new ArrayList<>();
 
-    LOGGER.info("Nearest issues: " + keys);
+    LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), keys);
     keys.forEach((key) -> {
       Issue relatedIssue = jiraClient.getIssueByKey(key.trim());
       issues.add(relatedIssue);

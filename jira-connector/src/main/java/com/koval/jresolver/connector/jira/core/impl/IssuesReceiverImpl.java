@@ -18,6 +18,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuesReceiverImpl.class);
 
+  private final ProgressMonitor progressMonitor;
   private final JiraClient client;
   private final String query;
   private final Set<String> fields;
@@ -34,6 +35,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
     this.batchDelay = properties.getBatchDelay();
     this.currentIndex = 0;
     this.finishIndex = getTotalIssues();
+    this.progressMonitor = new ProgressMonitor(batchSize, finishIndex);
   }
 
   private int getTotalIssues() {
@@ -48,10 +50,13 @@ public class IssuesReceiverImpl implements IssuesReceiver {
 
   @Override
   public Collection<Issue> getNextIssues() {
+    progressMonitor.startMeasuringTime();
     SearchResult searchResult = client.searchByJql(query, batchSize, currentIndex, fields);
     searchResult.getIssues().forEach(issue -> LOGGER.info("{}: {}", issue.getKey(), issue.getSummary()));
     currentIndex += batchSize;
+    progressMonitor.endMeasuringTime();
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
+    LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime((currentIndex > finishIndex) ? finishIndex : currentIndex));
     if (batchDelay != 0) {
       delay();
     }
