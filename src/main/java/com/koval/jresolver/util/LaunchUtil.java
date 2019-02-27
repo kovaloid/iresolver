@@ -72,7 +72,13 @@ public final class LaunchUtil {
   public static void clean() {
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
     try {
-      FileUtils.cleanDirectory(new File(similarityProcessorProperties.getWorkFolder()));
+      File folder = new File(similarityProcessorProperties.getWorkFolder());
+      if (folder.exists()) {
+        FileUtils.cleanDirectory(new File(similarityProcessorProperties.getWorkFolder()));
+        LOGGER.info("Folder {} was cleaned", similarityProcessorProperties.getWorkFolder());
+      } else {
+        LOGGER.warn("Folder {} does not exist", similarityProcessorProperties.getWorkFolder());
+      }
     } catch (IOException e) {
       LOGGER.error("Could not clean folder: " + similarityProcessorProperties.getWorkFolder(), e);
     }
