@@ -1,6 +1,9 @@
 apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
+def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/;\\$APP_HOME/lib/*;\\$APP_HOME/config;\\$APP_HOME/rules;\\$APP_HOME/data'
+def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
+
 run {
   workingDir = file('src')
 }
@@ -73,9 +76,9 @@ startScripts {
     def windowsScriptFile = file getWindowsScript()
     def unixScriptFile = file getUnixScript()
     windowsScriptFile.text = windowsScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+        .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
     unixScriptFile.text = unixScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+        .replaceAll(/CLASSPATH=\S+/, unixClassPath)
   }
 }
 
@@ -90,9 +93,9 @@ task createDataSetScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-data-set')
       unixScriptFile.text = unixScriptFile.text
@@ -112,9 +115,9 @@ task createVectorModelScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-vector-model')
       unixScriptFile.text = unixScriptFile.text
@@ -134,9 +137,9 @@ task cleanScript(type: CreateStartScripts) {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
       windowsScriptFile.text = windowsScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data')
+          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=clean')
       unixScriptFile.text = unixScriptFile.text
