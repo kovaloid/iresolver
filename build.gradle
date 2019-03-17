@@ -1,7 +1,7 @@
 apply plugin: 'application'
 mainClassName = 'com.koval.jresolver.Launcher'
 
-def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/;\\$APP_HOME/lib/*;\\$APP_HOME/config;\\$APP_HOME/rules;\\$APP_HOME/data'
+def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME/config:\\$APP_HOME/rules:\\$APP_HOME/data'
 def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
 
 run {
@@ -78,7 +78,7 @@ startScripts {
     windowsScriptFile.text = windowsScriptFile.text
         .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
     unixScriptFile.text = unixScriptFile.text
-        .replaceAll(/CLASSPATH=\S+/, unixClassPath)
+        .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
   }
 }
 
@@ -95,11 +95,11 @@ task createDataSetScript(type: CreateStartScripts) {
       windowsScriptFile.text = windowsScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-data-set')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-data-set+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-data-set')
     }
   }
 }
@@ -117,11 +117,11 @@ task createVectorModelScript(type: CreateStartScripts) {
       windowsScriptFile.text = windowsScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-vector-model')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-vector-model+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-vector-model')
     }
   }
 }
@@ -139,11 +139,11 @@ task cleanScript(type: CreateStartScripts) {
       windowsScriptFile.text = windowsScriptFile.text
           .replaceAll(/CLASSPATH=\S+/, windowsClassPath)
       unixScriptFile.text = unixScriptFile.text
-          .replaceAll(/CLASSPATH=\S+/, unixClassPath)
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
       windowsScriptFile.text = windowsScriptFile.text
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=clean')
       unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=clean+')
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=clean')
     }
   }
 }
