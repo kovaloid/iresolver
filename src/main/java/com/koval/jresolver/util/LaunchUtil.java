@@ -112,7 +112,11 @@ public final class LaunchUtil {
 
   private static void openReport() throws IOException {
     File file = new File("../output/index.html");
-    Desktop.getDesktop().browse(getUriFromFile(file));
+    try {
+      Desktop.getDesktop().browse(getUriFromFile(file));
+    } catch (UnsupportedOperationException e) {
+      LOGGER.warn("Could not open browser on the current platform", e);
+    }
   }
 
   private static URI getUriFromFile(File file) throws IOException {
