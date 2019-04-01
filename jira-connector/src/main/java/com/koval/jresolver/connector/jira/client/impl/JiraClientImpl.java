@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.rest.client.api.domain.Field;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
@@ -54,6 +55,12 @@ public class JiraClientImpl implements JiraClient {
     LOGGER.debug("Send issue request: IssueKey = '{}'.", issueKey);
     return checkRestExceptions(() -> restClient.getIssueClient().getIssue(issueKey).claim(),
         "Could not get issue by key.");
+  }
+
+  @Override
+  public Iterable<Field> getFields() {
+    return checkRestExceptions(() -> restClient.getMetadataClient().getFields().claim(),
+            "Could not get fields.");
   }
 
   @SuppressWarnings("PMD.PreserveStackTrace")

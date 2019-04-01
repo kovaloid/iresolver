@@ -15,7 +15,9 @@ public final class Launcher {
   private static final String CREATE_DATA_SET = "create-data-set";
   private static final String CREATE_VECTOR_MODEL = "create-vector-model";
   private static final String CLEAN = "clean";
-  private static final String HELP_TIP = "Please use " + CREATE_DATA_SET + ", " + CREATE_VECTOR_MODEL + " or " + CLEAN + ".";
+  private static final String FIELDS = "fields";
+  private static final String HELP_TIP = "Please use " + CREATE_DATA_SET + ", " + CREATE_VECTOR_MODEL + ", " + CLEAN
+          + " or " + FIELDS + ".";
 
   private Launcher() {
   }
@@ -37,6 +39,10 @@ public final class Launcher {
         case CLEAN:
           LOGGER.info("Start cleaning work folder.");
           LaunchUtil.clean();
+          break;
+        case FIELDS:
+          LOGGER.info("Start printing fields.");
+          LaunchUtil.printFields();
           break;
         default:
           LOGGER.warn("Wrong arguments.");
