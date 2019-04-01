@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.Field;
-
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraClient;
 import com.koval.jresolver.connector.jira.client.factory.JiraClientFactory;
@@ -116,9 +115,9 @@ public final class LaunchUtil {
     ConnectorProperties connectorProperties = new ConnectorProperties();
     try (JiraClient jiraClient = getJiraClientInstance(connectorProperties)) {
       Iterable<Field> fields = jiraClient.getFields();
-      if (fields.iterator().hasNext()){
+      if (fields.iterator().hasNext()) {
         LOGGER.info("Available fields:");
-        fields.forEach( field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
+        fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
       } else {
         LOGGER.info("Not exists available fields.");
       }
