@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
+import org.deeplearning4j.models.embeddings.learning.impl.sequence.DBOW;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
+import org.deeplearning4j.models.sequencevectors.enums.ListenerEvent;
+import org.deeplearning4j.models.sequencevectors.listeners.SimilarityListener;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.wordstore.inmemory.AbstractCache;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareListSentenceIterator;
@@ -64,6 +68,10 @@ public class VectorModelCreator {
     tokenizerFactory.setTokenPreProcessor(tokenPreprocessor);
 
     ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
+        .sequenceLearningAlgorithm(new DBOW<>())
+        .setVectorsListeners(Arrays.asList(
+            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "incomplet", "alloc"),
+            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "fear", "truststorepassword")))
         .minWordFrequency(similarityProcessorProperties.getMinWordFrequency())
         .iterations(similarityProcessorProperties.getIterations())
         .epochs(similarityProcessorProperties.getEpochs())
