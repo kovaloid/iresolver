@@ -32,6 +32,14 @@ task cleanWorkFolders(type: JavaExec) {
   args = ['clean']
 }
 
+task printFields(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['fields']
+}
+
 sourceSets {
   main {
     resources {

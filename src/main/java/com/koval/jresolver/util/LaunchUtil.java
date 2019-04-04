@@ -114,12 +114,12 @@ public final class LaunchUtil {
   public static void printFields() {
     ConnectorProperties connectorProperties = new ConnectorProperties();
     try (JiraClient jiraClient = getJiraClientInstance(connectorProperties)) {
-      Iterable<Field> fields = jiraClient.getFields();
-      if (fields.iterator().hasNext()) {
+      Collection<Field> fields = jiraClient.getFields();
+      if (fields.isEmpty()) {
+        LOGGER.info("Not exists available fields.");
+      } else {
         LOGGER.info("Available fields:");
         fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
-      } else {
-        LOGGER.info("Not exists available fields.");
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);

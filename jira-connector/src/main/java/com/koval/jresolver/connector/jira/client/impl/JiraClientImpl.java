@@ -2,9 +2,12 @@ package com.koval.jresolver.connector.jira.client.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +61,12 @@ public class JiraClientImpl implements JiraClient {
   }
 
   @Override
-  public Iterable<Field> getFields() {
-    return checkRestExceptions(() -> restClient.getMetadataClient().getFields().claim(),
-            "Could not get fields.");
+  public Collection<Field> getFields() {
+    return checkRestExceptions(() -> {
+      Iterable<Field> fields = restClient.getMetadataClient().getFields().claim();
+      return StreamSupport.stream(fields.spliterator(), false)
+          .collect(Collectors.toList());
+    }, "Could not get fields.");
   }
 
   @SuppressWarnings("PMD.PreserveStackTrace")

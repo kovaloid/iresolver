@@ -1,6 +1,7 @@
 package com.koval.jresolver.connector.jira.client;
 
 import java.io.Closeable;
+import java.util.Collection;
 import java.util.Set;
 
 import com.atlassian.jira.rest.client.api.domain.Field;
@@ -16,5 +17,5 @@ public interface JiraClient extends Closeable {
 
   Issue getIssueByKey(String issueKey);
 
-  Iterable<Field> getFields();
+  Collection<Field> getFields();
 }
