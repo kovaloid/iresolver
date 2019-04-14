@@ -1,11 +1,9 @@
 rootProject.name = 'jresolver'
 
 include 'jira-connector'
-include 'classifier'
-include 'rule-engine'
+include 'processor'
+include 'similarity-processor'
+include 'rule-engine-processor'
+include 'documentation-processor'
 include 'report-generator'
-include 'rule-editor:backend'
-include 'rule-editor:client'
-
-startParameter.excludedTaskNames = ['run']
-
+// include 'rule-editor'

@@ -1,0 +1,55 @@
+<div class="row">
+
+  <div class="col-md-3 text-center">
+
+    <button type="button" class="btn btn-primary btn-block btn-space" (click)="ngOnInit()">Update rules</button>
+    <br>
+    <hr class="mb-4">
+
+    <h3 class="mb-3 text center">List of rule files</h3>
+
+    <div class="btn-group btn-group-sm">
+      <button type="button" id="show" class="btn btn-info btn-outline-secondary btn-sm float-left btn-space"
+              data-toggle="collapse" data-target="#ruleCollection.name"
+              (click)="changeButtonValue('show')">Show
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm float-right btn-space"
+              (click)="createRule()">+
+      </button>
+      <button type="button" class="btn btn-info btn-outline-danger btn-sm float-right btn-space"
+              data-toggle="modal" data-target="#deleteModal">&times;
+      </button>
+    </div>
+
+    <div *ngFor="let ruleCollection of ruleCollections">
+      <ul id="ruleCollection.name" class="connectedSortable collapse">
+        <li class="btn btn-outline-secondary text-center"
+            (click)="changeChosenRule(ruleCollection)">{{ruleCollection.name}}
+        </li>
+      </ul>
+    </div>
+
+    <div class="modal fade" id="deleteModal" role="dialog">
+      <div class="modal-dialog modal-bg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete File</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete all these rules!?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="deleteFile()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <rule-content *ngIf="!!chosenRule" id="open-rule1" class="col-md-8 order-md-1" [selectedRuleCollection]="chosenRule"
+                (updated)="updateRules($event)"></rule-content>
+
+</div>

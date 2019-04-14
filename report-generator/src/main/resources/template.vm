@@ -43,7 +43,7 @@
             <br/>
             issues:<br/>
             #foreach ($issue in $result.getIssues())
-                <span>$issue</span><br/>
+                <span>$issue.getKey()</span><br/>
             #end
             <br/>
             labels:<br/>
@@ -53,12 +53,12 @@
             <br/>
             users:<br/>
             #foreach ($user in $result.getUsers())
-                <span>$user</span><br/>
+                <span>$user.getDisplayName()</span><br/>
             #end
             <br/>
             attachments:<br/>
             #foreach ($attachment in $result.getAttachments())
-                <span>$attachment</span><br/>
+                <span>$attachment.getFilename()</span><br/>
             #end
             <br/>
             advices:<br/>

@@ -7,22 +7,33 @@ The goal of this project is to make life easier for Jira users.
 
 ## Getting Started
 
-In order to compile the distribution, enter in the console:
-```
+In order to build the distribution, enter in the console:
+```sh
 gradlew
 ```
 
-Unzip the distribution, launch cmd and go to bin directory.
-
-Create dataset:
+After the distribution is built, it is located in the following path:
 ```
-jresolver prepare
+build/distributions
+```
+
+The last release version of distribution can be downloaded from [the release tab of the repository](https://github.com/kovaloid/jresolver/releases).
+
+Unzip the distribution, go to the bin folder and launch one of the scripts below.
+
+Create data set:
+```sh
+create-data-set[.bat]
 ```
 Create doc2vec model:
+```sh
+create-vector-model[.bat]
 ```
-jresolver configure
+Run the tool:
+```sh
+run[.bat]
 ```
-Run tool:
-```
-jresolver
+Clean work folder with data set and model:
+```sh
+clean[.bat]
 ```

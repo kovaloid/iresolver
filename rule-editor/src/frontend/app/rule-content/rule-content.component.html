@@ -1,0 +1,118 @@
+<h2 class="mb-3 float-left">Metadata</h2>
+<button type="button" id="show1" class="btn btn-info btn-outline-secondary btn-sm float-left btn-space"
+        data-toggle="collapse" data-target="#metadata-dropdown" (click)="changeButtonValue('show1')">Show
+</button><br><br>
+
+<div id="metadata-dropdown" class="collapse in">
+  <hr class="mb-4">
+
+  <h5 class="mb-3">File Name</h5>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.name"><br>
+
+  <h5 class="mb-3">Package</h5>
+  <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.pack" disabled><br>
+
+  <h5 class="mb-3">Imports</h5>
+  <div *ngFor="let import of selectedRuleCollection.imports; let i = index">
+    <input type="text" class="form-control" name="import-{{i}}" [(ngModel)]="selectedRuleCollection.imports[i]"
+           disabled><br>
+  </div>
+
+  <h5 class="mb-3">Globals</h5>
+  <div *ngFor="let global of selectedRuleCollection.globals; let i = index">
+    <input type="text" class="form-control" [(ngModel)]="selectedRuleCollection.globals[i]" disabled><br>
+  </div>
+</div>
+
+
+<hr/>
+
+
+<h2 class="mb-3 float-left">Rules</h2>
+<button type="button" id="show2" class="btn btn-info btn-outline-secondary btn-sm float-left btn-space"
+        data-toggle="collapse" data-target="#rules-dropdown" (click)="changeButtonValue('show2')">Show
+</button>
+
+<button type="button" class="btn btn-primary btn-sm float-right" (click)="addRule()">+</button>
+<br><br>
+
+
+
+<div id="rules-dropdown" class="collapse in">
+  <hr class="mb-4">
+
+  <div *ngFor="let rule of selectedRuleCollection.rules; let ruleIndex = index">
+
+    <h5 class="mb-3">Name</h5>
+    <input type="text" class="form-control" [(ngModel)]="rule.name"><br>
+
+    <h5 class="mb-3">Conditions</h5>
+    <div class="row" *ngFor="let condition of rule.conditions; let i = index">
+      <div class="col-md-11">
+        <input type="text" class="form-control" name="condition-{{i}}" [ngModel]="rule.conditions[i]"
+               (change)="rule.conditions[i] = $event.target.value" required>
+        <div class="invalid-feedback">
+          Valid condition is required.
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteCondition(ruleIndex, i)">
+        &times;
+      </button>
+      <br>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary btn-sm float-right" (click)="addCondition(ruleIndex)">+</button>
+    <br>
+
+
+    <h5 class="mb-3">Recommendations</h5>
+    <div class="row" *ngFor="let recommendation of rule.recommendations; let i = index">
+      <div class="col-md-11">
+        <input type="text" class="form-control" name="recommendation-{{i}}" [ngModel]="rule.recommendations[i]"
+               (change)="rule.recommendations[i] = $event.target.value" required>
+        <div class="invalid-feedback">
+          Valid recommendation is required.
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteRecommendation(ruleIndex, i)">
+        &times;
+      </button>
+      <br>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary btn-sm float-right" (click)="addRecommendation(ruleIndex)">+</button>
+    <br>
+    <hr class="mb-4">
+
+
+  </div>
+
+</div>
+
+<!-- Delete button. -->
+<button class="btn btn-danger btn-lg btn-space float-right" type="submit"
+        data-toggle="modal" data-target="#deleteRuleModal">Delete
+</button>
+<!-- Cancel button. -->
+<button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="revertChanges()">Cancel</button>
+<!-- Save button. -->
+<button class="btn btn-primary btn-lg btn-space float-right" type="submit" (click)="save()">Save</button>
+
+<div class="modal fade" id="deleteRuleModal" role="dialog">
+  <div class="modal-dialog modal-bg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Rule</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this rule collection:</p>
+        <p>{{selectedRuleCollection.name}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="deleteRule()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
