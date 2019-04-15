@@ -1,5 +1,35 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.github.breadmoirai:github-release:2.2.8"
+  }
+}
+
+apply plugin: "com.github.breadmoirai.github-release"
 apply plugin: 'application'
+
 mainClassName = 'com.koval.jresolver.Launcher'
+
+task sendRelease {
+    githubRelease {
+        token ""
+        owner "kovaloid"
+        repo "jresolver"
+        tagName "v0.1.0"
+        targetCommitish "master"
+        releaseName "v0.1.0"
+        body ""
+        draft false
+        prerelease false
+        releaseAssets "build/distributions/jresolver.zip"
+        overwrite true
+        apiEndpoint "https://api.github.com"
+    }
+}
 
 def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME/config:\\$APP_HOME/rules:\\$APP_HOME/data'
 def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
