@@ -34,7 +34,7 @@
     <root level="all">
         <appender-ref ref="FILE" />
     </root>
-    <logger name="com.koval.jresolver.Launcher" level="info" >
+    <root level="INFO">
         <appender-ref ref="stdout" />
-    </logger>
+    </root>
 </configuration>
