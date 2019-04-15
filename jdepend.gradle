@@ -1,0 +1,42 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'guru.nidi:jdepend:2.9.5'
+  }
+}
+
+import jdepend.framework.JDepend
+
+task jdepend {
+  enabled = !sourceSets.main.allJava.isEmpty()
+  inputs.files sourceSets.main.output
+  doLast {
+    JDepend jdepend = new JDepend()
+    sourceSets.main.output.classesDirs.each { dir ->
+      jdepend.addDirectory(dir.path)
+    }
+    def packages = jdepend.analyze()
+    if (jdepend.containsCycles()) {
+      def allCyclicPackages = []
+      packages.each { p ->
+        if (!allCyclicPackages.contains(p) && p.containsCycle()) {
+          def cycles = []
+          p.collectAllCycles(cycles)
+          if (cycles[-1] == p) {
+            logger.quiet 'Package cycle detected:'
+            cycles.each {
+              logger.quiet "- $it.name"
+              allCyclicPackages.add it
+            }
+          }
+        }
+      }
+      logger.quiet 'Found cyclic dependencies between packages'
+      throw new GradleException('Found cyclic dependencies between packages')
+    }
+  }
+}
+
+check.dependsOn jdepend

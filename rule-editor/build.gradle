@@ -1,0 +1,73 @@
+buildscript {
+    ext {
+        gradleNodeVersion = '1.2.0'
+        gradleSpringVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "com.moowork.gradle:gradle-node-plugin:$gradleNodeVersion",
+                  "org.springframework.boot:spring-boot-gradle-plugin:$gradleSpringVersion"
+    }
+}
+
+apply plugin: 'com.moowork.node'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+mainClassName = 'com.jresolver.editor.RuleEditorLauncher'
+
+node {
+    version = '8.11.3'
+    npmVersion = '5.6.0'
+    download = true
+    workDir = file("${rootDir}/rule-editor/node")
+    nodeModulesDir = file("${rootDir}/rule-editor")
+}
+
+task npmUpdate {
+    group 'build client'
+    dependsOn 'npm_update'
+}
+
+task serveStandaloneClient(type: NpmTask, dependsOn: npmInstall) {
+    group 'build client'
+    description = "Compile client side folder for production"
+    args = ['start']
+}
+
+task buildClient(type: NpmTask, dependsOn: npmInstall) {
+    group 'build client'
+    description = 'Compile client side folder for development'
+    args = ['run', 'buildToSpring']
+}
+
+jar {
+    baseName = 'gs-spring-boot'
+    version =  '0.1.0'
+}
+
+bootJar {
+    baseName = 'rule-editor'
+    version = '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+bootRun.dependsOn buildClient

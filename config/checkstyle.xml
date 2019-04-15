@@ -27,6 +27,7 @@
 
     <module name="TreeWalker">
         <!-- Needed for SuppressWarningsFilter -->
+        <module name="SuppressionCommentFilter"/>
         <module name="SuppressWarningsHolder" />
 
         <!-- Needed for SuppressionCommentFilter -->
