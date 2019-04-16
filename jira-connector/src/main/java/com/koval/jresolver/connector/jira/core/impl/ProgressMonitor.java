@@ -36,7 +36,13 @@ public class ProgressMonitor {
   }
 
   public DateTime getRemainingTime(int currentIndex) {
+    if (batchSize == 0) {
+      return new DateTime(0).withZone(DateTimeZone.UTC);
+    }
     int iterations = currentIndex / batchSize;
+    if (iterations == 0) {
+      return new DateTime(0).withZone(DateTimeZone.UTC);
+    }
     long averageBatchTime = (batchEnd - totalStart) / iterations;
     return new DateTime(averageBatchTime * (finishIndex - currentIndex) / batchSize).withZone(DateTimeZone.UTC);
   }
