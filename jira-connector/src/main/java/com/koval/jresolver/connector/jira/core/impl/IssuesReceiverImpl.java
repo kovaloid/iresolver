@@ -36,6 +36,7 @@ public class IssuesReceiverImpl implements IssuesReceiver {
     this.currentIndex = 0;
     this.finishIndex = getTotalIssues();
     this.progressMonitor = new ProgressMonitor(batchSize, finishIndex);
+    this.progressMonitor.startMeasuringTotalTime();
   }
 
   private int getTotalIssues() {
@@ -46,24 +47,28 @@ public class IssuesReceiverImpl implements IssuesReceiver {
 
   @Override
   public boolean hasNextIssues() {
-    return currentIndex < finishIndex;
+    boolean result = currentIndex < finishIndex;
+    if (!result) {
+      progressMonitor.endMeasuringTotalTime();
+      LOGGER.info("Time spent: {}", progressMonitor.getFormattedSpentTime());
+    }
+    return result;
   }
 
   @Override
   public Collection<Issue> getNextIssues() {
-    progressMonitor.startMeasuringTime();
     SearchResult searchResult = client.searchByJql(query, batchSize, currentIndex, fields);
     searchResult.getIssues().forEach(issue ->
         LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
             countWords(issue.getSummary()), countWords(issue.getDescription()),
             CollectionsUtil.convert(issue.getComments()).size(), CollectionsUtil.convert(issue.getAttachments()).size()));
     currentIndex += batchSize;
-    progressMonitor.endMeasuringTime();
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
-    LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime((currentIndex > finishIndex) ? finishIndex : currentIndex));
     if (batchDelay != 0) {
       delay();
     }
+    progressMonitor.endMeasuringBatchTime();
+    LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime((currentIndex > finishIndex) ? finishIndex : currentIndex));
     return CollectionsUtil.convert(searchResult.getIssues());
   }
 
