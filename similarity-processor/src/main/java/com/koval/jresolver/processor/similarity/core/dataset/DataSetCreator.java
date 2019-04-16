@@ -32,7 +32,7 @@ public class DataSetCreator {
   public void create() throws IOException {
     File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
-    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getAbsolutePath());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
     try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name())) {
       while (receiver.hasNextIssues()) {
@@ -51,6 +51,6 @@ public class DataSetCreator {
         output.flush();
       }
     }
-    LOGGER.info("Data set file was created: {}", dataSetFile.getAbsolutePath());
+    LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
   }
 }

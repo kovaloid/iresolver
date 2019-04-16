@@ -39,8 +39,9 @@ public class IssuesReceiverImpl implements IssuesReceiver {
   }
 
   private int getTotalIssues() {
-    LOGGER.info("Getting total issues...");
-    return client.searchByJql(query, 0, 0).getTotal();
+    int total = client.searchByJql(query, 0, 0).getTotal();
+    LOGGER.info("Total number of issues: {}", total);
+    return total;
   }
 
   @Override
@@ -52,7 +53,10 @@ public class IssuesReceiverImpl implements IssuesReceiver {
   public Collection<Issue> getNextIssues() {
     progressMonitor.startMeasuringTime();
     SearchResult searchResult = client.searchByJql(query, batchSize, currentIndex, fields);
-    searchResult.getIssues().forEach(issue -> LOGGER.info("{}: {}", issue.getKey(), issue.getSummary()));
+    searchResult.getIssues().forEach(issue ->
+        LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
+            countWords(issue.getSummary()), countWords(issue.getDescription()),
+            CollectionsUtil.convert(issue.getComments()).size(), CollectionsUtil.convert(issue.getAttachments()).size()));
     currentIndex += batchSize;
     progressMonitor.endMeasuringTime();
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
@@ -61,6 +65,17 @@ public class IssuesReceiverImpl implements IssuesReceiver {
       delay();
     }
     return CollectionsUtil.convert(searchResult.getIssues());
+  }
+
+  private int countWords(String text) {
+    if (text == null) {
+      return 0;
+    }
+    String trimmedText = text.trim();
+    if (trimmedText.isEmpty()) {
+      return 0;
+    }
+    return trimmedText.split("\\s+").length;
   }
 
   private void delay() {

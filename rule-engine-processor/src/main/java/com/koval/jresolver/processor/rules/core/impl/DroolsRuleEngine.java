@@ -53,7 +53,7 @@ public class DroolsRuleEngine implements RuleEngine {
     for (Resource resource: resources) {
       if (!rules.contains(resource.getFilename())) {
         if (resource instanceof FileSystemResource) {
-          String filePath = resource.getFile().getAbsolutePath();
+          String filePath = resource.getFile().getCanonicalPath();
           LOGGER.info("Add file to rule engine builder: {}", filePath);
           knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
         } else if (resource instanceof InputStreamResource) {

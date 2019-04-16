@@ -10,10 +10,10 @@ public final class CollectionsUtil {
   }
 
   public static <T> Collection<T> convert(final Iterable<T> iterable) {
-    if (iterable == null) {
-      return null;
-    }
     Collection<T> result = new ArrayList<>();
+    if (iterable == null) {
+      return result;
+    }
     iterable.forEach(result::add);
     return result;
   }
