@@ -3,7 +3,7 @@ package com.koval.jresolver.common.api;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.jresolver.common.api.component.IssueProcessor;
+import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,9 +1,7 @@
 package com.koval.jresolver.common.api.auth;
 
-import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
+import com.koval.jresolver.common.api.exception.ConnectorException;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -17,13 +15,12 @@ import java.security.spec.KeySpec;
 
 public class CredentialsProtector {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsProtector.class);
   private static final Charset CHARSET = StandardCharsets.UTF_8;
 
   private Cipher cipher;
   private SecretKey key;
 
-  public CredentialsProtector() throws JiraConnectorException {
+  public CredentialsProtector() throws ConnectorException {
     String encryptionKey = "6veuxBtJA9IodvM9pLlWl0bffmWB8PWDBXGZaUAizkebHWvjSdv9sZBM1d3YweOj";
     String encryptionSchema = "DESede";
     byte[] arrayBytes = encryptionKey.getBytes(CHARSET);
@@ -33,12 +30,11 @@ public class CredentialsProtector {
       cipher = Cipher.getInstance(encryptionSchema);
       key = secretKeyFactory.generateSecret(keySpec);
     } catch (GeneralSecurityException e) {
-      throw new JiraConnectorException("Could not initialize credential protector.", e);
+      throw new ConnectorException("Could not initialize credential protector.", e);
     }
   }
 
-  public String encrypt(String decryptedText) throws JiraConnectorException {
-    LOGGER.info("Encryption performed");
+  public String encrypt(String decryptedText) throws ConnectorException {
     String encryptedString;
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -46,14 +42,13 @@ public class CredentialsProtector {
       byte[] encryptedText = cipher.doFinal(plainText);
       encryptedString = new String(Base64.encodeBase64(encryptedText), CHARSET);
     } catch (GeneralSecurityException e) {
-      throw new JiraConnectorException("Could not encrypt data: " + decryptedText, e);
+      throw new ConnectorException("Could not encrypt data: " + decryptedText, e);
     }
     return encryptedString;
   }
 
 
-  public String decrypt(String encryptedString) throws JiraConnectorException {
-    LOGGER.info("Decryption performed");
+  public String decrypt(String encryptedString) throws ConnectorException {
     String decryptedText;
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);
@@ -61,7 +56,7 @@ public class CredentialsProtector {
       byte[] plainText = cipher.doFinal(encryptedText);
       decryptedText = new String(plainText, CHARSET);
     } catch (GeneralSecurityException e) {
-      throw new JiraConnectorException("Could not decrypt data: " + encryptedString, e);
+      throw new ConnectorException("Could not decrypt data: " + encryptedString, e);
     }
     return decryptedText;
   }

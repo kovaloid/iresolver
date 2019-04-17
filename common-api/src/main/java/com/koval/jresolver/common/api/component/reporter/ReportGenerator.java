@@ -1,4 +1,4 @@
-package com.koval.jresolver.common.api.component;
+package com.koval.jresolver.common.api.component.reporter;
 
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 

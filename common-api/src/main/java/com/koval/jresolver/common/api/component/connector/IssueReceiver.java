@@ -1,4 +1,4 @@
-package com.koval.jresolver.common.api.component;
+package com.koval.jresolver.common.api.component.connector;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 
