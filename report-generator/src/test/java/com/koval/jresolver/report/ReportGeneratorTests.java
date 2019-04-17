@@ -15,7 +15,7 @@ public class ReportGeneratorTests {
 
     @Test
     public void configurationTest() throws Exception {
-        /*File file = new File("../output");
+        /*File file = new File("../result");
         if (file.exists() && !FileUtil.deleteDirectory(file)) {
             return; //file system error, directory founded but not deleted.
         }
@@ -73,7 +73,7 @@ public class ReportGeneratorTests {
         method.setAccessible(true);
         method.invoke(reportGenerator, results);
 
-        byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
+        byte[] bytes1 = Files.readAllBytes(Paths.get("../result/index.html"));
         byte[] hash = MessageDigest.getInstance("MD5").digest(bytes1);
 
         byte[] bytes2 = Files.readAllBytes(Paths.get(ReportGeneratorTests.class.getClassLoader().getResource("testIndex.html").toURI()));

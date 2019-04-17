@@ -28,7 +28,7 @@ public class HtmlReportGenerator implements ReportGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
 
   public HtmlReportGenerator() throws IOException {
-    FileUtils.forceMkdir(new File("../output"));
+    FileUtils.forceMkdir(new File("../result"));
   }
 
   @Override
@@ -51,7 +51,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     StringWriter writer = new StringWriter();
     template.merge(context, writer);
     LOGGER.debug(writer.toString());
-    try (OutputStream outputStream = new FileOutputStream("../output/index.html");
+    try (OutputStream outputStream = new FileOutputStream("../result/index.html");
          Writer fileWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       template.merge(context, fileWriter);
     }

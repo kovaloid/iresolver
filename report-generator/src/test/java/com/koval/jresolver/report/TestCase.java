@@ -19,7 +19,7 @@ public class TestCase {
     public void configurationTest() {
        /* boolean flag = false;
         reportGenerator.configure();
-        File file = new File("../output");
+        File file = new File("../result");
         if (file.exists()) {
             flag = true;
         }
@@ -56,7 +56,7 @@ public class TestCase {
         method.setAccessible(true);
         method.invoke(reportGenerator, results);
 
-        byte[] bytes1 = Files.readAllBytes(Paths.get("../output/index.html"));
+        byte[] bytes1 = Files.readAllBytes(Paths.get("../result/index.html"));
         byte[] hash1 = MessageDigest.getInstance("MD5").digest(bytes1);
 
         byte[] bytes2 = Files.readAllBytes(Paths.get(TestCase.class.getClassLoader().getResource("testIndex.html").toURI()));

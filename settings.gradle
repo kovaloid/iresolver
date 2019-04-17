@@ -1,5 +1,6 @@
 rootProject.name = 'jresolver'
 
+include 'common-api'
 include 'connector-api'
 include 'jira-connector'
 include 'processor'
