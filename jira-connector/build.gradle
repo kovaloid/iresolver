@@ -3,7 +3,8 @@ jar {
 }
 
 dependencies {
-  compile 'com.atlassian.jira:jira-rest-java-client-core:4.0.0',
+  compile project(':connector-api'),
+          'com.atlassian.jira:jira-rest-java-client-core:4.0.0',
           'com.atlassian.fugue:fugue:2.6.1',
           'org.slf4j:slf4j-api:1.7.25',
           'ch.qos.logback:logback-core:1.2.3',
