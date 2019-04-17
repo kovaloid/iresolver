@@ -6,5 +6,5 @@ import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 
 public interface IssueProcessor {
 
-  void process(Issue issue, IssueAnalysingResult result);
+  void run(Issue issue, IssueAnalysingResult result);
 }
