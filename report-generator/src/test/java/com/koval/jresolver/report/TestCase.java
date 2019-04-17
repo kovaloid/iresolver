@@ -31,7 +31,7 @@ public class TestCase {
         /*Collection<String> collection = new HashSet<>();
         collection.add("testString");
         ClassifierResult classifierResult = new ClassifierResult();
-        classifierResult.setIssues(collection);
+        classifierResult.setSimilarIssues(collection);
         classifierResult.setLabels(collection);
         classifierResult.setUsers(collection);
         classifierResult.setAttachments(collection);
@@ -46,7 +46,7 @@ public class TestCase {
         TotalResult totalResult = new TotalResult(testIssue, classifierResult, ruleResult);
 
         assertEquals(testIssue, totalResult.getIssue());
-        assertTrue(totalResult.getIssues().containsAll(collection));
+        assertTrue(totalResult.getSimilarIssues().containsAll(collection));
         assertTrue(totalResult.getAdvices().containsAll(ruleResult.getAdvices()));
 
         List<TotalResult> results = new ArrayList<>();

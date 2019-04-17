@@ -41,9 +41,9 @@
         <div class="item">
             <h3>$result.getIssue().getKey()</h3>
             <br/>
-            issues:<br/>
-            #foreach ($issue in $result.getIssues())
-                <span>$issue.getKey()</span><br/>
+            similar issues:<br/>
+            #foreach ($issue in $result.getSimilarIssues())
+                <span><a href="https://issues.apache.org/jira/browse/$issue.getKey()" target="_blank">$issue.getKey()</a> : $issue.getSummary()</span><br/>
             #end
             <br/>
             labels:<br/>

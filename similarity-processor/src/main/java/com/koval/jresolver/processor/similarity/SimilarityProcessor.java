@@ -66,7 +66,7 @@ public class SimilarityProcessor implements Processor {
       relatedIssue.getAttachments().forEach(attachments::add);
     });
     result.setIssue(issue);
-    result.setIssues(issues);
+    result.setSimilarIssues(issues);
     result.setAttachments(attachments);
     result.setUsers(users);
     result.setLabels(labels);

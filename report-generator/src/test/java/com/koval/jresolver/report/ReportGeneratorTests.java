@@ -38,7 +38,7 @@ public class ReportGeneratorTests {
         /*Collection<String> collection = new HashSet<>();
         collection.add("test1");
         ClassifierResult classifierResult = new ClassifierResult();
-        classifierResult.setIssues(collection);
+        classifierResult.setSimilarIssues(collection);
         classifierResult.setLabels(collection);
         classifierResult.setUsers(collection);
         classifierResult.setAttachments(collection);
@@ -52,7 +52,7 @@ public class ReportGeneratorTests {
         TotalResult totalResult = new TotalResult(testIssue, classifierResult, ruleResult);
 
         assertEquals(testIssue, totalResult.getIssue());
-        assertTrue(totalResult.getIssues().containsAll(collection));
+        assertTrue(totalResult.getSimilarIssues().containsAll(collection));
         assertTrue(totalResult.getAdvices().containsAll(ruleResult.getAdvices()));
 
         Set<String> set = new HashSet<>();
@@ -61,7 +61,7 @@ public class ReportGeneratorTests {
         totalResult.setAdvices(new HashSet<String>() { { add("testAdvice"); } });
         testIssue.setDescription("testDesc");
         totalResult.setIssue(testIssue);
-        totalResult.setIssues(set);
+        totalResult.setSimilarIssues(set);
         totalResult.setLabels(set);
         totalResult.setUsers(set);
         totalResult.setAttachments(set);

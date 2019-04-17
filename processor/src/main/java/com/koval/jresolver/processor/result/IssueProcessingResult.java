@@ -10,7 +10,7 @@ import com.atlassian.jira.rest.client.api.domain.User;
 public class IssueProcessingResult {
 
   private Issue issue;
-  private Collection<Issue> issues;
+  private Collection<Issue> similarIssues;
   private Collection<String> labels;
   private Collection<User> users;
   private Collection<Attachment> attachments;
@@ -24,12 +24,12 @@ public class IssueProcessingResult {
     this.issue = issue;
   }
 
-  public Collection<Issue> getIssues() {
-    return issues;
+  public Collection<Issue> getSimilarIssues() {
+    return similarIssues;
   }
 
-  public void setIssues(Collection<Issue> issues) {
-    this.issues = issues;
+  public void setSimilarIssues(Collection<Issue> similarIssues) {
+    this.similarIssues = similarIssues;
   }
 
   public Collection<String> getLabels() {
