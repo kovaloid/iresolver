@@ -8,6 +8,14 @@ public class IssueLink {
   private String targetIssueKey;
   private URI targetIssueUri;
 
+  public IssueLink() {
+  }
+
+  public IssueLink(String targetIssueKey, URI targetIssueUri) {
+    this.targetIssueKey = targetIssueKey;
+    this.targetIssueUri = targetIssueUri;
+  }
+
   public String getTargetIssueKey() {
     return targetIssueKey;
   }

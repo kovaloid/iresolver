@@ -11,6 +11,17 @@ public class SubTask {
   private IssueType issueType;
   private String status;
 
+  public SubTask() {
+  }
+
+  public SubTask(String issueKey, URI issueUri, String summary, IssueType issueType, String status) {
+    this.issueKey = issueKey;
+    this.issueUri = issueUri;
+    this.summary = summary;
+    this.issueType = issueType;
+    this.status = status;
+  }
+
   public String getIssueKey() {
     return issueKey;
   }

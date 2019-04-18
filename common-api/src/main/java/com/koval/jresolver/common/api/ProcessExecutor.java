@@ -1,13 +1,12 @@
 package com.koval.jresolver.common.api;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 public class ProcessExecutor {
@@ -43,14 +42,5 @@ public class ProcessExecutor {
     Collection<IssueAnalysingResult> results = new ArrayList<>();
     issues.parallelStream().forEach(issue -> results.add(parallelExecute(issue)));
     return results;
-  }
-
-  private void launchThreads(List<Thread> threads) throws InterruptedException {
-    for (Thread thread: threads) {
-      thread.start();
-    }
-    for (Thread thread: threads) {
-      thread.join();
-    }
   }
 }

@@ -5,25 +5,26 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.jira.rest.client.api.domain.Field;
+import com.koval.jresolver.common.api.ProcessExecutor;
+import com.koval.jresolver.common.api.auth.Credentials;
+import com.koval.jresolver.common.api.auth.CredentialsKeeper;
+import com.koval.jresolver.common.api.auth.CredentialsProtector;
+import com.koval.jresolver.common.api.bean.issue.IssueField;
+import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.jresolver.common.api.component.connector.IssueClient;
+import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
 import com.koval.jresolver.connector.jira.JiraConnector;
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.client.factory.JiraClientFactory;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.configuration.auth.Credentials;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsKeeper;
-import com.koval.jresolver.connector.jira.configuration.auth.CredentialsProtector;
-import com.koval.jresolver.connector.jira.core.IssuesReceiver;
+import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
+import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
-import com.koval.jresolver.exception.JresolverException;
-import com.koval.jresolver.processor.ProcessExecutor;
-import com.koval.jresolver.processor.result.IssueProcessingResult;
+import com.koval.jresolver.exception.ResolverException;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
 import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
@@ -33,8 +34,7 @@ import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
-import com.koval.jresolver.report.ReportGenerator;
-import com.koval.jresolver.report.impl.HtmlReportGenerator;
+import com.koval.jresolver.report.HtmlReportGenerator;
 
 
 public final class LaunchUtil {
@@ -45,11 +45,11 @@ public final class LaunchUtil {
   }
 
   public static void createDataSet() {
-    ConnectorProperties connectorProperties = new ConnectorProperties();
+    JiraConnectorProperties connectorProperties = new JiraConnectorProperties();
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
-    try (JiraClient jiraClient = getJiraClientInstance(connectorProperties)) {
+    try (IssueClient jiraClient = getJiraClientInstance(connectorProperties)) {
       JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
-      IssuesReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
+      IssueReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
       DataSetCreator dataSetCreator = new DataSetCreator(receiver, similarityProcessorProperties);
       dataSetCreator.create();
     } catch (IOException e) {
@@ -86,13 +86,13 @@ public final class LaunchUtil {
   }
 
   public static void run() {
-    ConnectorProperties connectorProperties = new ConnectorProperties();
+    JiraConnectorProperties connectorProperties = new JiraConnectorProperties();
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
-    Collection<IssueProcessingResult> results = new ArrayList<>();
-    try (JiraClient jiraClient = getJiraClientInstance(connectorProperties);
+    List<IssueAnalysingResult> results = new ArrayList<>();
+    try (IssueClient jiraClient = getJiraClientInstance(connectorProperties);
          RuleEngine ruleEngine = new DroolsRuleEngine()) {
       JiraConnector jiraConnector = new JiraConnector(jiraClient, connectorProperties);
-      IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
+      IssueReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
       ProcessExecutor executor = new ProcessExecutor()
           .add(new SimilarityProcessor(jiraClient, similarityProcessorProperties))
           .add(new RuleEngineProcessor(ruleEngine));
@@ -112,9 +112,9 @@ public final class LaunchUtil {
   }
 
   public static void printFields() {
-    ConnectorProperties connectorProperties = new ConnectorProperties();
-    try (JiraClient jiraClient = getJiraClientInstance(connectorProperties)) {
-      Collection<Field> fields = jiraClient.getFields();
+    JiraConnectorProperties connectorProperties = new JiraConnectorProperties();
+    try (IssueClient jiraClient = getJiraClientInstance(connectorProperties)) {
+      List<IssueField> fields = jiraClient.getIssueFields();
       if (fields.isEmpty()) {
         LOGGER.info("Not exists available fields.");
       } else {
@@ -141,14 +141,15 @@ public final class LaunchUtil {
     return URI.create(prefix + path);
   }
 
-  private static JiraClient getJiraClientInstance(ConnectorProperties connectorProperties) {
-    JiraClient jiraClient;
+  private static IssueClient getJiraClientInstance(JiraConnectorProperties connectorProperties) {
+    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
+    IssueClient jiraClient;
     try {
       if (connectorProperties.isAnonymous()) {
-        jiraClient = JiraClientFactory.getAnonymousJiraClient(connectorProperties.getUrl());
+        jiraClient = jiraIssueClientFactory.getAnonymousClient(connectorProperties.getUrl());
       } else {
         CredentialsProtector protector = new CredentialsProtector();
-        CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties);
+        CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties.getCredentialsFolder());
         Credentials credentials;
         if (keeper.isStored()) {
           credentials = keeper.load();
@@ -158,10 +159,10 @@ public final class LaunchUtil {
           credentials = new Credentials(username, password);
           keeper.store(credentials);
         }
-        jiraClient = JiraClientFactory.getBasicJiraClient(connectorProperties.getUrl(), credentials);
+        jiraClient = jiraIssueClientFactory.getBasicClient(connectorProperties.getUrl(), credentials);
       }
     } catch (JiraConnectorException e) {
-      throw new JresolverException("Could not initialize Jira client.", e);
+      throw new ResolverException("Could not initialize Jira client.", e);
     }
     return jiraClient;
   }

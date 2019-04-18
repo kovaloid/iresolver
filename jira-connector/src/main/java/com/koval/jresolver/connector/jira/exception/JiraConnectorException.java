@@ -1,6 +1,9 @@
 package com.koval.jresolver.connector.jira.exception;
 
-public class JiraConnectorException extends Exception {
+import com.koval.jresolver.common.api.exception.ConnectorException;
+
+
+public class JiraConnectorException extends ConnectorException {
 
   public JiraConnectorException(String message, Throwable cause) {
     super(message, cause);

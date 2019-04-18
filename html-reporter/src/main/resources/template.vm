@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Issue Report</title>
+    <style type="text/css">
+        body {
+            background-color: #F5F5F5;
+            margin: 0;
+            padding: 0;
+        }
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+        span {
+            padding-left: 40px;
+        }
+        .container {
+            margin: 40px auto;
+            background-color: #FFFFFF;
+            border: 1px solid #DDDDDD;
+            border-radius: 4px;
+            width: 600px;
+            padding: 20px;
+        }
+        .item {
+            background-color: #E5E5E5;
+            border: 1px solid #CCCCCC;
+            color: #404040;
+            font-family: Helvetica;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    #foreach ($result in $results)
+        <div class="item">
+            <h3>$result.getOriginalIssue().getKey()</h3>
+            <br/>
+            similar issues:<br/>
+            #foreach ($issue in $result.getSimilarIssues())
+                <span><a href="https://issues.apache.org/jira/browse/$issue.getKey().getKey()" target="_blank">$issue.getKey().getKey()</a> : $issue.getKey().getSummary()</span><br/>
+            #end
+            <br/>
+            labels:<br/>
+            #foreach ($probableLabel in $result.getProbableLabels())
+                <span>$probableLabel.getKey()</span><br/>
+            #end
+            <br/>
+            users:<br/>
+            #foreach ($qualifiedUser in $result.getQualifiedUsers())
+                <span>$qualifiedUser.getKey().getDisplayName()</span><br/>
+            #end
+            <br/>
+            attachments:<br/>
+            #foreach ($probableAttachment in $result.getProbableAttachments())
+                <span>$probableAttachment.getKey().getFilename()</span><br/>
+            #end
+            <br/>
+            advices:<br/>
+            #foreach ($proposal in $result.getProposals())
+                <span>$proposal</span><br/>
+            #end
+        </div>
+    #end
+</div>
+</body>
+</html>

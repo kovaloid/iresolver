@@ -11,6 +11,17 @@ public class Version {
   private boolean isReleased;
   private DateTime releaseDate;
 
+  public Version() {
+  }
+
+  public Version(String name, String description, boolean isArchived, boolean isReleased, DateTime releaseDate) {
+    this.name = name;
+    this.description = description;
+    this.isArchived = isArchived;
+    this.isReleased = isReleased;
+    this.releaseDate = releaseDate;
+  }
+
   public String getName() {
     return name;
   }

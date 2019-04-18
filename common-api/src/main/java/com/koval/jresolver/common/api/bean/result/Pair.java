@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Pair<K, V> {
 
   private final K key;
-  private final V value;
+  private V value;
 
   public Pair(K k, V v) {
     key = k;
@@ -21,17 +21,21 @@ public class Pair<K, V> {
     return value;
   }
 
+  public void setValue(V value) {
+    this.value = value;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Pair)) {
-      return false;
+    if (o instanceof Pair) {
+      Pair<?, ?> oP = (Pair<?, ?>)o;
+      return (Objects.equals(key, oP.key))
+          && (Objects.equals(value, oP.value));
     } else {
-      Pair<?, ?> oP = (Pair<?, ?>) o;
-      return (Objects.equals(key, oP.key)) &&
-          (Objects.equals(value, oP.value));
+      return false;
     }
   }
 

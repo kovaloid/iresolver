@@ -1,13 +1,13 @@
 package com.koval.jresolver.rules
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.koval.jresolver.common.api.bean.issue.Issue;
 
-global com.koval.jresolver.processor.rules.results.RulesResult results
+global java.util.List results
 
 rule "Check status"
 	dialect "mvel"
 	when
 		Issue( status == "CLOSED" )
 	then
-		results.putAdvice("Status is closed");
+		results.add("Status is closed");
 end

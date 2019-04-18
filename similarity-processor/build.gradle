@@ -19,6 +19,5 @@ dependencies {
   // compile 'org.datavec:datavec-data-nlp:0.9.1'
   compile 'org.nd4j:nd4j-native-platform:0.9.1',
           'org.apache.lucene:lucene-snowball:3.0.3',
-          'commons-io:commons-io:2.6',
-          project(':processor')
+          project(':common-api')
 }

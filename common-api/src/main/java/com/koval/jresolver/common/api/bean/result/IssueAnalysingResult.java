@@ -1,10 +1,10 @@
 package com.koval.jresolver.common.api.bean.result;
 
+import java.util.List;
+
 import com.koval.jresolver.common.api.bean.issue.Attachment;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
-
-import java.util.List;
 
 
 public class IssueAnalysingResult {

@@ -8,6 +8,16 @@ public class IssueField {
   private String type;
   private Object value;
 
+  public IssueField() {
+  }
+
+  public IssueField(String id, String name, String type, Object value) {
+    this.id = id;
+    this.name = name;
+    this.type = type;
+    this.value = value;
+  }
+
   public String getId() {
     return id;
   }

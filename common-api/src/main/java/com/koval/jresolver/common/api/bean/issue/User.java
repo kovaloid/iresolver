@@ -13,6 +13,18 @@ public class User {
   private URI avatarUri;
   private URI smallAvatarUri;
 
+  public User() {
+  }
+
+  public User(String name, String displayName, String emailAddress, List<String> groups, URI avatarUri, URI smallAvatarUri) {
+    this.name = name;
+    this.displayName = displayName;
+    this.emailAddress = emailAddress;
+    this.groups = groups;
+    this.avatarUri = avatarUri;
+    this.smallAvatarUri = smallAvatarUri;
+  }
+
   public String getName() {
     return name;
   }

@@ -1,8 +1,8 @@
 package com.koval.jresolver.common.api.component.connector;
 
-import com.koval.jresolver.common.api.bean.issue.Issue;
-
 import java.util.List;
+
+import com.koval.jresolver.common.api.bean.issue.Issue;
 
 
 public interface IssueReceiver {

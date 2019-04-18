@@ -11,6 +11,17 @@ public class Comment {
   private DateTime updateDate;
   private String body;
 
+  public Comment() {
+  }
+
+  public Comment(User author, User updateAuthor, DateTime creationDate, DateTime updateDate, String body) {
+    this.author = author;
+    this.updateAuthor = updateAuthor;
+    this.creationDate = creationDate;
+    this.updateDate = updateDate;
+    this.body = body;
+  }
+
   public User getAuthor() {
     return author;
   }

@@ -7,7 +7,7 @@ ext {
 }
 
 dependencies {
-  compile project(':processor'),
+  compile project(':common-api'),
           "org.kie:kie-api:$droolsVersion",
           "org.drools:drools-core:$droolsVersion",
           "org.drools:drools-compiler:$droolsVersion",

@@ -6,6 +6,14 @@ public class Project {
   private String key;
   private String name;
 
+  public Project() {
+  }
+
+  public Project(String key, String name) {
+    this.key = key;
+    this.name = name;
+  }
+
   public String getKey() {
     return key;
   }

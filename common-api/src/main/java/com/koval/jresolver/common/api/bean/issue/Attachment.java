@@ -1,8 +1,8 @@
 package com.koval.jresolver.common.api.bean.issue;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
+
+import org.joda.time.DateTime;
 
 
 public class Attachment {
@@ -13,6 +13,18 @@ public class Attachment {
   private int size;
   private String mimeType;
   private URI contentUri;
+
+  public Attachment() {
+  }
+
+  public Attachment(String fileName, User author, DateTime creationDate, int size, String mimeType, URI contentUri) {
+    this.fileName = fileName;
+    this.author = author;
+    this.creationDate = creationDate;
+    this.size = size;
+    this.mimeType = mimeType;
+    this.contentUri = contentUri;
+  }
 
   public String getFileName() {
     return fileName;

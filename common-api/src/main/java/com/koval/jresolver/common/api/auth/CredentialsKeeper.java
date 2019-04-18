@@ -1,11 +1,20 @@
 package com.koval.jresolver.common.api.auth;
 
-import com.koval.jresolver.common.api.exception.ConnectorException;
-import org.apache.commons.io.FileUtils;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.FileUtils;
+
+import com.koval.jresolver.common.api.exception.CredentialException;
 
 
 public class CredentialsKeeper {
@@ -25,26 +34,26 @@ public class CredentialsKeeper {
     return credentialsFile.exists();
   }
 
-  public void store(Credentials credentials) throws ConnectorException {
+  public void store(Credentials credentials) throws CredentialException {
     if (!isStored()) {
       try {
         FileUtils.forceMkdir(credentialsFile.getParentFile());
         credentialsFile.createNewFile();
       } catch (IOException e) {
-        throw new ConnectorException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
+        throw new CredentialException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
       }
     }
     try (PrintWriter fileWriter = new PrintWriter(credentialsFile, charset.name())) {
       fileWriter.println(protector.encrypt(credentials.getUsername()));
       fileWriter.println(protector.encrypt(credentials.getPassword()));
     } catch (FileNotFoundException e) {
-      throw new ConnectorException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
+      throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
     } catch (UnsupportedEncodingException e) {
-      throw new ConnectorException("Charset " + charset.name() + " does not supported.", e);
+      throw new CredentialException("Charset " + charset.name() + " does not supported.", e);
     }
   }
 
-  public Credentials load() throws ConnectorException {
+  public Credentials load() throws CredentialException {
     try (InputStream inputStream = new FileInputStream(credentialsFile);
          InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
          BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
@@ -52,9 +61,9 @@ public class CredentialsKeeper {
       String password = protector.decrypt(bufferedReader.readLine());
       return new Credentials(username, password);
     } catch (FileNotFoundException e) {
-      throw new ConnectorException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
+      throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
     } catch (IOException e) {
-      throw new ConnectorException("Could not load credentials from the file: " + credentialsFile.getAbsolutePath(), e);
+      throw new CredentialException("Could not load credentials from the file: " + credentialsFile.getAbsolutePath(), e);
     }
   }
 }

@@ -1,14 +1,16 @@
 package com.koval.jresolver.common.api.bean.issue;
 
-import org.joda.time.DateTime;
-
 import java.net.URI;
 import java.util.List;
 
+import org.joda.time.DateTime;
 
+
+@SuppressWarnings("PMD.TooManyFields")
 public class Issue {
 
   private URI link;
+  private String key;
   private String summary;
   private String description;
   private String resolution;
@@ -38,6 +40,14 @@ public class Issue {
 
   public void setLink(URI link) {
     this.link = link;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public void setKey(String key) {
+    this.key = key;
   }
 
   public String getSummary() {
