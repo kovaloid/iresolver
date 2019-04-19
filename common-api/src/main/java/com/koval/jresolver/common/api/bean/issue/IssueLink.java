@@ -6,13 +6,15 @@ import java.net.URI;
 public class IssueLink {
 
   private String targetIssueKey;
+  private String issueLinkType;
   private URI targetIssueUri;
 
   public IssueLink() {
   }
 
-  public IssueLink(String targetIssueKey, URI targetIssueUri) {
+  public IssueLink(String targetIssueKey, String issueLinkType, URI targetIssueUri) {
     this.targetIssueKey = targetIssueKey;
+    this.issueLinkType = issueLinkType;
     this.targetIssueUri = targetIssueUri;
   }
 
@@ -22,6 +24,14 @@ public class IssueLink {
 
   public void setTargetIssueKey(String targetIssueKey) {
     this.targetIssueKey = targetIssueKey;
+  }
+
+  public String getIssueLinkType() {
+    return issueLinkType;
+  }
+
+  public void setIssueLinkType(String issueLinkType) {
+    this.issueLinkType = issueLinkType;
   }
 
   public URI getTargetIssueUri() {

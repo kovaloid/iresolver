@@ -1,4 +1,4 @@
 package com.koval.jresolver.connector.bugzilla.configuration;
 
-public class BugZillaConnectorConfiguration {
+public class BugZillaConnectorProperties {
 }

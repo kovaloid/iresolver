@@ -1,4 +1,4 @@
-package com.koval.jresolver.report;
+package com.koval.jresolver.reporter.html;
 
 import java.io.File;
 import java.io.FileOutputStream;

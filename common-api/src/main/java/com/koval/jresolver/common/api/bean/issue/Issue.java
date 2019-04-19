@@ -30,7 +30,6 @@ public class Issue {
   private List<Comment> comments;
   private List<IssueLink> issueLinks;
   private List<Attachment> attachments;
-  private List<User> watchers;
   private List<SubTask> subTasks;
   private List<IssueField> issueFields;
 
@@ -200,14 +199,6 @@ public class Issue {
 
   public void setAttachments(List<Attachment> attachments) {
     this.attachments = attachments;
-  }
-
-  public List<User> getWatchers() {
-    return watchers;
-  }
-
-  public void setWatchers(List<User> watchers) {
-    this.watchers = watchers;
   }
 
   public List<SubTask> getSubTasks() {

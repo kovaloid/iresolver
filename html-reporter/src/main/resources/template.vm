@@ -43,22 +43,22 @@
             <br/>
             similar issues:<br/>
             #foreach ($issue in $result.getSimilarIssues())
-                <span><a href="https://issues.apache.org/jira/browse/$issue.getKey().getKey()" target="_blank">$issue.getKey().getKey()</a> : $issue.getKey().getSummary()</span><br/>
+                <span><a href="https://issues.apache.org/jira/browse/$issue.getEntity().getKey()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
             #end
             <br/>
             labels:<br/>
             #foreach ($probableLabel in $result.getProbableLabels())
-                <span>$probableLabel.getKey()</span><br/>
+                <span>$probableLabel.getEntity()</span><br/>
             #end
             <br/>
             users:<br/>
             #foreach ($qualifiedUser in $result.getQualifiedUsers())
-                <span>$qualifiedUser.getKey().getDisplayName()</span><br/>
+                <span>$qualifiedUser.getEntity().getDisplayName()</span><br/>
             #end
             <br/>
             attachments:<br/>
             #foreach ($probableAttachment in $result.getProbableAttachments())
-                <span>$probableAttachment.getKey().getFilename()</span><br/>
+                <span>$probableAttachment.getEntity().getFileName()</span><br/>
             #end
             <br/>
             advices:<br/>

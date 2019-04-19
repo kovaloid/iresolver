@@ -1,4 +1,4 @@
-package com.koval.jresolver.report;
+package com.koval.jresolver.reporter.html;
 
 import org.junit.Before;
 import org.junit.Test;

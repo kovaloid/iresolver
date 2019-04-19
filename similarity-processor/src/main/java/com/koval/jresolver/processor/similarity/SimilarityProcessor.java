@@ -57,9 +57,9 @@ public class SimilarityProcessor implements IssueProcessor {
 
       /*similarIssue.getLabels().forEach(newProbableLabel -> {
         probableLabelsWithCounter.forEach(existingProbableLabelWithCounter -> {
-          if (existingProbableLabelWithCounter.getKey().equals(newProbableLabel)) {
-            Integer numberOfLabels = existingProbableLabelWithCounter.getValue();
-            existingProbableLabelWithCounter.setValue(numberOfLabels + 1);
+          if (existingProbableLabelWithCounter.getEntity().equals(newProbableLabel)) {
+            Integer numberOfLabels = existingProbableLabelWithCounter.getMetric();
+            existingProbableLabelWithCounter.setMetric(numberOfLabels + 1);
           } else {
             probableLabelsWithCounter.add(new Pair<>(newProbableLabel, 1));
           }

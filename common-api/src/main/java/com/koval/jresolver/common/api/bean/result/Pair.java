@@ -3,26 +3,26 @@ package com.koval.jresolver.common.api.bean.result;
 import java.util.Objects;
 
 
-public class Pair<K, V> {
+public class Pair<E, M> {
 
-  private final K key;
-  private V value;
+  private final E entity;
+  private M metric;
 
-  public Pair(K k, V v) {
-    key = k;
-    value = v;
+  public Pair(E entity, M metric) {
+    this.entity = entity;
+    this.metric = metric;
   }
 
-  public K getKey() {
-    return key;
+  public E getEntity() {
+    return entity;
   }
 
-  public V getValue() {
-    return value;
+  public M getMetric() {
+    return metric;
   }
 
-  public void setValue(V value) {
-    this.value = value;
+  public void setMetric(M metric) {
+    this.metric = metric;
   }
 
   @Override
@@ -32,8 +32,8 @@ public class Pair<K, V> {
     }
     if (o instanceof Pair) {
       Pair<?, ?> oP = (Pair<?, ?>)o;
-      return (Objects.equals(key, oP.key))
-          && (Objects.equals(value, oP.value));
+      return (Objects.equals(entity, oP.entity))
+          && (Objects.equals(metric, oP.metric));
     } else {
       return false;
     }
@@ -41,14 +41,14 @@ public class Pair<K, V> {
 
   @Override
   public int hashCode() {
-    int result = key == null ? 0 : key.hashCode();
-    final int h = value == null ? 0 : value.hashCode();
+    int result = entity == null ? 0 : entity.hashCode();
+    final int h = metric == null ? 0 : metric.hashCode();
     result = 37 * result + h ^ (h >>> 16);
     return result;
   }
 
   @Override
   public String toString() {
-    return "[" + key + ", " + value + "]";
+    return "[" + entity + ", " + metric + "]";
   }
 }

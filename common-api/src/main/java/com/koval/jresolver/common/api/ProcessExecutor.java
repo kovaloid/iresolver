@@ -13,9 +13,8 @@ public class ProcessExecutor {
 
   private final List<IssueProcessor> processors = new ArrayList<>();
 
-  public ProcessExecutor add(IssueProcessor processor) {
+  public void add(IssueProcessor processor) {
     processors.add(processor);
-    return this;
   }
 
   public IssueAnalysingResult execute(Issue issue) {

@@ -61,7 +61,8 @@ dependencies {
           project(':similarity-processor'),
           project(':rule-engine-processor'),
           project(':documentation-processor'),
-          project(':html-reporter')
+          project(':html-reporter'),
+          project(':text-reporter')
 }
 
 wrapper {
