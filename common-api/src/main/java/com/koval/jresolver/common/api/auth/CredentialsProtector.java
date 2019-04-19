@@ -36,7 +36,7 @@ public class CredentialsProtector {
     }
   }
 
-  public String encrypt(String decryptedText) throws CredentialException {
+  String encrypt(String decryptedText) throws CredentialException {
     String encryptedString;
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -50,7 +50,7 @@ public class CredentialsProtector {
   }
 
 
-  public String decrypt(String encryptedString) throws CredentialException {
+  String decrypt(String encryptedString) throws CredentialException {
     String decryptedText;
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);

@@ -1,6 +1,9 @@
 package com.koval.jresolver.connector.jira.exception;
 
-public class JiraClientException extends RuntimeException {
+import com.koval.jresolver.common.api.exception.ClientException;
+
+
+public class JiraClientException extends ClientException {
 
   public JiraClientException(String message) {
     super(message);

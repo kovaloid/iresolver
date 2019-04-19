@@ -8,9 +8,9 @@ ext {
 
 dependencies {
   compile project(':common-api'),
-          "org.kie:kie-api:$droolsVersion",
-          "org.drools:drools-core:$droolsVersion",
-          "org.drools:drools-compiler:$droolsVersion",
-          'org.springframework:spring-core:5.0.5.RELEASE'
+      "org.kie:kie-api:$droolsVersion",
+      "org.drools:drools-core:$droolsVersion",
+      "org.drools:drools-compiler:$droolsVersion",
+      'org.springframework:spring-core:5.0.5.RELEASE'
   testCompile 'junit:junit:4.12'
 }

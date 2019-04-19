@@ -34,7 +34,7 @@ public class CredentialsKeeper {
     return credentialsFile.exists();
   }
 
-  public void store(Credentials credentials) throws CredentialException {
+  public void store(Credentials credentials) {
     if (!isStored()) {
       try {
         FileUtils.forceMkdir(credentialsFile.getParentFile());
@@ -53,7 +53,7 @@ public class CredentialsKeeper {
     }
   }
 
-  public Credentials load() throws CredentialException {
+  public Credentials load() {
     try (InputStream inputStream = new FileInputStream(credentialsFile);
          InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
          BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {

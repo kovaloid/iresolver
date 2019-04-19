@@ -17,10 +17,12 @@ public class JiraConnector implements Connector {
     this.connectorProperties = connectorProperties;
   }
 
+  @Override
   public IssueReceiver getResolvedIssuesReceiver() {
     return new JiraIssueReceiver(issueClient, connectorProperties, true);
   }
 
+  @Override
   public IssueReceiver getUnresolvedIssuesReceiver() {
     return new JiraIssueReceiver(issueClient, connectorProperties, false);
   }

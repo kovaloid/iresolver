@@ -68,7 +68,8 @@ public class JiraIssueReceiver implements IssueReceiver {
       delay();
     }
     progressMonitor.endMeasuringBatchTime();
-    LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime((currentIndex > finishIndex) ? finishIndex : currentIndex));
+    LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime(
+        (currentIndex > finishIndex) ? finishIndex : currentIndex));
     return searchResult;
   }
 
@@ -76,11 +77,11 @@ public class JiraIssueReceiver implements IssueReceiver {
     if (text == null) {
       return 0;
     }
-    String trimmedText = text.trim();
-    if (trimmedText.isEmpty()) {
+    String blankText = text.trim();
+    if (blankText.isEmpty()) {
       return 0;
     }
-    return trimmedText.split("\\s+").length;
+    return blankText.split("\\s+").length;
   }
 
   private void delay() {

@@ -57,12 +57,12 @@ sourceSets {
 
 dependencies {
   compile project(':jira-connector'),
-          project(':bugzilla-connector'),
-          project(':similarity-processor'),
-          project(':rule-engine-processor'),
-          project(':documentation-processor'),
-          project(':html-reporter'),
-          project(':text-reporter')
+      project(':bugzilla-connector'),
+      project(':similarity-processor'),
+      project(':rule-engine-processor'),
+      project(':documentation-processor'),
+      project(':html-reporter'),
+      project(':text-reporter')
 }
 
 wrapper {
@@ -78,6 +78,7 @@ distributions {
       from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
       from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
+      from('src/main/resources/control.properties') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
       exclude('**/*-android-*.jar')
       exclude('**/*-macosx-*.jar')

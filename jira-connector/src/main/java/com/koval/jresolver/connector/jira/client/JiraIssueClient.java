@@ -1,7 +1,11 @@
 package com.koval.jresolver.connector.jira.client;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -26,16 +30,16 @@ public class JiraIssueClient implements IssueClient {
   private final JiraRestClient restClient;
   private final IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> issueTransformer;
 
-  public JiraIssueClient(JiraRestClient restClient) {
-    this.restClient =  restClient;
+  JiraIssueClient(JiraRestClient restClient) {
+    this.restClient = restClient;
     this.issueTransformer = new JiraIssueTransformer();
   }
 
   @Override
   public int getTotalIssues(String query) {
     LOGGER.debug("Send total issues request: Query = '{}'.", query);
-    SearchResult searchResult = checkRestExceptions(() ->
-        restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
+    SearchResult searchResult = checkRestExceptions(
+        () -> restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
         "Could not get total issues.");
     return searchResult.getTotal();
   }
@@ -50,8 +54,8 @@ public class JiraIssueClient implements IssueClient {
       fields.addAll(getRequiredFields());
     }
     final Set<String> uniqueFields = new HashSet<>(fields);
-    SearchResult searchResult = checkRestExceptions(() ->
-        restClient.getSearchClient().searchJql(query, maxResults, startAt, uniqueFields).claim(),
+    SearchResult searchResult = checkRestExceptions(
+        () -> restClient.getSearchClient().searchJql(query, maxResults, startAt, uniqueFields).claim(),
         "Could not search by JQL.");
     return issueTransformer.transform(CollectionsUtil.convert(searchResult.getIssues()));
   }
@@ -63,16 +67,16 @@ public class JiraIssueClient implements IssueClient {
   @Override
   public Issue getIssueByKey(String issueKey) {
     LOGGER.debug("Send issue request: IssueKey = '{}'.", issueKey);
-    com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(() ->
-        restClient.getIssueClient().getIssue(issueKey).claim(),
+    com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
+        () -> restClient.getIssueClient().getIssue(issueKey).claim(),
         "Could not get issue by key.");
     return issueTransformer.transform(issue);
   }
 
   @Override
   public List<IssueField> getIssueFields() {
-    Iterable<Field> fields = checkRestExceptions(() ->
-        restClient.getMetadataClient().getFields().claim(),
+    Iterable<Field> fields = checkRestExceptions(
+        () -> restClient.getMetadataClient().getFields().claim(),
         "Could not get fields.");
     List<IssueField> issueFields = new ArrayList<>();
     fields.forEach(field -> {

@@ -40,7 +40,8 @@ public class SimilarityProcessor implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
-    Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue), NUMBER_OF_NEAREST_LABELS);
+    Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
+        NUMBER_OF_NEAREST_LABELS);
     List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
     List<Pair<String, Integer>> probableLabelsWithCounter = new ArrayList<>();
     List<Pair<User, Integer>> qualifiedUsersWithCounter = new ArrayList<>();

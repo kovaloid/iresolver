@@ -1,7 +1,7 @@
 package com.koval.jresolver.processor.similarity.core.dataset;
 
-
 import com.koval.jresolver.common.api.bean.issue.Issue;
+
 
 public class TextDataExtractor {
 

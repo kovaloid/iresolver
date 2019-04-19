@@ -10,6 +10,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.exception.ConfigurationException;
+
 
 public class JiraConnectorProperties {
 
@@ -47,8 +49,9 @@ public class JiraConnectorProperties {
       unresolvedIssueFields = new HashSet<>(Arrays.asList(properties.getProperty("unresolvedIssueFields").split(",")));
       credentialsFolder = properties.getProperty("credentialsFolder");
     } catch (IOException e) {
-      LOGGER.error("Could not load the connector properties. The default properties will be used.", e);
+      throw new ConfigurationException("Could not load the connector properties.", e);
     }
+    LOGGER.debug("Jira connector configuration was loaded successfully.");
   }
 
   public String getUrl() {
@@ -121,5 +124,20 @@ public class JiraConnectorProperties {
 
   public void setCredentialsFolder(String credentialsFolder) {
     this.credentialsFolder = credentialsFolder;
+  }
+
+  @Override
+  public String toString() {
+    return "JiraConnectorProperties{"
+        + "url='" + url + '\''
+        + ", anonymous=" + anonymous
+        + ", resolvedQuery='" + resolvedQuery + '\''
+        + ", unresolvedQuery='" + unresolvedQuery + '\''
+        + ", batchSize=" + batchSize
+        + ", batchDelay=" + batchDelay
+        + ", resolvedIssueFields=" + resolvedIssueFields
+        + ", unresolvedIssueFields=" + unresolvedIssueFields
+        + ", credentialsFolder='" + credentialsFolder + '\''
+        + '}';
   }
 }

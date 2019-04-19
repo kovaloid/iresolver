@@ -36,6 +36,7 @@ import java.net.URL;
 import com.koval.jresolver.common.api.component.connector.Connector;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
 
+
 public class BugZillaConnector implements Connector {
 
   @Override

@@ -17,23 +17,15 @@ public class ProcessExecutor {
     processors.add(processor);
   }
 
-  public IssueAnalysingResult execute(Issue issue) {
-    IssueAnalysingResult result = new IssueAnalysingResult();
-    processors.forEach(processor -> processor.run(issue, result));
-    return result;
-  }
-
   public Collection<IssueAnalysingResult> execute(Collection<Issue> issues) {
     Collection<IssueAnalysingResult> results = new ArrayList<>();
     issues.forEach(issue -> results.add(execute(issue)));
     return results;
   }
 
-  public IssueAnalysingResult parallelExecute(Issue issue) {
+  private IssueAnalysingResult execute(Issue issue) {
     IssueAnalysingResult result = new IssueAnalysingResult();
-    processors.parallelStream().forEach(processor -> {
-      processor.run(issue, result);
-    });
+    processors.forEach(processor -> processor.run(issue, result));
     return result;
   }
 
@@ -41,5 +33,13 @@ public class ProcessExecutor {
     Collection<IssueAnalysingResult> results = new ArrayList<>();
     issues.parallelStream().forEach(issue -> results.add(parallelExecute(issue)));
     return results;
+  }
+
+  private IssueAnalysingResult parallelExecute(Issue issue) {
+    IssueAnalysingResult result = new IssueAnalysingResult();
+    processors.parallelStream().forEach(processor -> {
+      processor.run(issue, result);
+    });
+    return result;
   }
 }

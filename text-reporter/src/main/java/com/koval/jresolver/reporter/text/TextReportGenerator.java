@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.issue.Attachment;
 import com.koval.jresolver.common.api.bean.issue.Issue;
@@ -17,11 +19,11 @@ import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
 
 public class TextReportGenerator implements ReportGenerator {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(TextReportGenerator.class);
   private static final String DASH = " - ";
 
   @Override
   public void generate(List<IssueAnalysingResult> results) {
-
     StringBuilder content = new StringBuilder(100);
     for (IssueAnalysingResult result: results) {
       content.append(result.getOriginalIssue().getKey())
@@ -61,7 +63,7 @@ public class TextReportGenerator implements ReportGenerator {
     try {
       FileUtils.writeStringToFile(new File("../output/report.txt"), content.toString(), StandardCharsets.UTF_8);
     } catch (IOException e) {
-      // e.printStackTrace();
+      LOGGER.error("Could not save report.txt file", e);
     }
   }
 }

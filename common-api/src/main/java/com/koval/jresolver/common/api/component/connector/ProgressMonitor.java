@@ -35,7 +35,7 @@ public class ProgressMonitor {
     return dateTime.toString("HH:mm:ss");
   }
 
-  public DateTime getRemainingTime(int currentIndex) {
+  private DateTime getRemainingTime(int currentIndex) {
     if (batchSize == 0) {
       return new DateTime(0).withZone(DateTimeZone.UTC);
     }
@@ -52,7 +52,7 @@ public class ProgressMonitor {
     return dateTime.toString("HH:mm:ss");
   }
 
-  public DateTime getSpentTime() {
+  private DateTime getSpentTime() {
     return new DateTime(totalEnd - totalStart).withZone(DateTimeZone.UTC);
   }
 }
