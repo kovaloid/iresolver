@@ -78,10 +78,12 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private List<Component> transformComponents(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Component> transformedComponents = new ArrayList<>();
-    originalIssue.getComponents().forEach(originalComponent -> {
-      Component transformedComponent = new Component(originalComponent.getName(), originalComponent.getDescription());
-      transformedComponents.add(transformedComponent);
-    });
+    if (originalIssue.getComponents() != null) {
+      originalIssue.getComponents().forEach(originalComponent -> {
+        Component transformedComponent = new Component(originalComponent.getName(), originalComponent.getDescription());
+        transformedComponents.add(transformedComponent);
+      });
+    }
     return transformedComponents;
   }
 
@@ -107,12 +109,14 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private List<Comment> transformComments(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Comment> transformedComments = new ArrayList<>();
-    originalIssue.getComments().forEach(originalComment -> {
-      Comment transformedComment = new Comment(transformBasicUser(originalComment.getAuthor()),
-          transformBasicUser(originalComment.getUpdateAuthor()), originalComment.getCreationDate(),
-          originalComment.getUpdateDate(), originalComment.getBody());
-      transformedComments.add(transformedComment);
-    });
+    if (originalIssue.getComments() != null) {
+      originalIssue.getComments().forEach(originalComment -> {
+        Comment transformedComment = new Comment(transformBasicUser(originalComment.getAuthor()),
+            transformBasicUser(originalComment.getUpdateAuthor()), originalComment.getCreationDate(),
+            originalComment.getUpdateDate(), originalComment.getBody());
+        transformedComments.add(transformedComment);
+      });
+    }
     return transformedComments;
   }
 
@@ -130,12 +134,14 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private List<Attachment> transformAttachments(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Attachment> transformedAttachments = new ArrayList<>();
-    originalIssue.getAttachments().forEach(originalAttachment -> {
-      Attachment transformedAttachment = new Attachment(originalAttachment.getFilename(),
-          transformBasicUser(originalAttachment.getAuthor()), originalAttachment.getCreationDate(),
-          originalAttachment.getSize(), originalAttachment.getMimeType(), originalAttachment.getContentUri());
-      transformedAttachments.add(transformedAttachment);
-    });
+    if (originalIssue.getAttachments() != null) {
+      originalIssue.getAttachments().forEach(originalAttachment -> {
+        Attachment transformedAttachment = new Attachment(originalAttachment.getFilename(),
+            transformBasicUser(originalAttachment.getAuthor()), originalAttachment.getCreationDate(),
+            originalAttachment.getSize(), originalAttachment.getMimeType(), originalAttachment.getContentUri());
+        transformedAttachments.add(transformedAttachment);
+      });
+    }
     return transformedAttachments;
   }
 
@@ -155,11 +161,13 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private List<IssueField> transformIssueFields(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<IssueField> transformedIssueFields = new ArrayList<>();
-    originalIssue.getFields().forEach(originalIssueField -> {
-      IssueField transformedIssueField = new IssueField(originalIssueField.getId(), originalIssueField.getName(),
-          originalIssueField.getType(), originalIssueField.getValue());
-      transformedIssueFields.add(transformedIssueField);
-    });
+    if (originalIssue.getFields() != null) {
+      originalIssue.getFields().forEach(originalIssueField -> {
+        IssueField transformedIssueField = new IssueField(originalIssueField.getId(), originalIssueField.getName(),
+            originalIssueField.getType(), originalIssueField.getValue());
+        transformedIssueFields.add(transformedIssueField);
+      });
+    }
     return transformedIssueFields;
   }
 
