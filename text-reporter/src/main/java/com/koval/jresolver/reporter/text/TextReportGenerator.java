@@ -31,34 +31,7 @@ public class TextReportGenerator implements ReportGenerator {
           .append(result.getOriginalIssue().getSummary());
 
       if (result.getSimilarIssues() != null) {
-        content.append("\n\nsimilar issues: \n");
-        for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
-          content.append(similarIssue.getEntity().getKey())
-              .append(DASH)
-              .append(similarIssue.getMetric())
-              .append('\n');
-        }
-        content.append("\nusers: \n");
-        for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
-          content.append(qualifiedUser.getEntity().getDisplayName())
-              .append(DASH)
-              .append(qualifiedUser.getMetric())
-              .append('\n');
-        }
-        content.append("\nlabels: \n");
-        for (Pair<String, Integer> probableLabel: result.getProbableLabels()) {
-          content.append(probableLabel.getEntity())
-              .append(DASH)
-              .append(probableLabel.getMetric())
-              .append('\n');
-        }
-        content.append("\nattachments: \n");
-        for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
-          content.append(probableAttachment.getEntity().getFileName())
-              .append(DASH)
-              .append(probableAttachment.getMetric())
-              .append('\n');
-        }
+        fillSimilarityProcessorResults(content, result);
       }
       if (result.getProposals() != null) {
         content.append("\nproposals: \n");
@@ -74,6 +47,37 @@ public class TextReportGenerator implements ReportGenerator {
       FileUtils.writeStringToFile(new File("../output/report.txt"), content.toString(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       LOGGER.error("Could not save report.txt file", e);
+    }
+  }
+
+  private void fillSimilarityProcessorResults(StringBuilder content, IssueAnalysingResult result) {
+    content.append("\n\nsimilar issues: \n");
+    for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
+      content.append(similarIssue.getEntity().getKey())
+          .append(DASH)
+          .append(similarIssue.getMetric())
+          .append('\n');
+    }
+    content.append("\nusers: \n");
+    for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
+      content.append(qualifiedUser.getEntity().getDisplayName())
+          .append(DASH)
+          .append(qualifiedUser.getMetric())
+          .append('\n');
+    }
+    content.append("\nlabels: \n");
+    for (Pair<String, Integer> probableLabel: result.getProbableLabels()) {
+      content.append(probableLabel.getEntity())
+          .append(DASH)
+          .append(probableLabel.getMetric())
+          .append('\n');
+    }
+    content.append("\nattachments: \n");
+    for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
+      content.append(probableAttachment.getEntity().getFileName())
+          .append(DASH)
+          .append(probableAttachment.getMetric())
+          .append('\n');
     }
   }
 }
