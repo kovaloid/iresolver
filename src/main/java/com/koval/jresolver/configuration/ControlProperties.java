@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.exception.ConfigurationException;
+
 
 public class ControlProperties {
 
@@ -18,6 +20,7 @@ public class ControlProperties {
   private String connector;
   private List<String> processors;
   private List<String> reporters;
+  private boolean parallel;
 
   public ControlProperties() {
     loadProperties();
@@ -34,8 +37,9 @@ public class ControlProperties {
       processors = Arrays.asList(properties.getProperty("processors").split(","));
       reporters = Arrays.asList(properties.getProperty("reporters").split(","));
     } catch (IOException e) {
-      LOGGER.error("Could not load the connector properties. The default properties will be used.", e);
+      throw new ConfigurationException("Could not load the control properties.", e);
     }
+    LOGGER.debug("Control configuration was loaded successfully.");
   }
 
   public String getConnector() {
@@ -60,5 +64,23 @@ public class ControlProperties {
 
   public void setReporters(List<String> reporters) {
     this.reporters = reporters;
+  }
+
+  public boolean isParallel() {
+    return parallel;
+  }
+
+  public void setParallel(boolean parallel) {
+    this.parallel = parallel;
+  }
+
+  @Override
+  public String toString() {
+    return "ControlProperties{"
+        + "connector='" + connector + '\''
+        + ", processors=" + processors
+        + ", reporters=" + reporters
+        + ", parallel=" + parallel
+        + '}';
   }
 }

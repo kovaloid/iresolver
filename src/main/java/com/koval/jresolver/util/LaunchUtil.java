@@ -27,7 +27,9 @@ import com.koval.jresolver.configuration.ControlProperties;
 import com.koval.jresolver.configuration.ProcessorConstants;
 import com.koval.jresolver.configuration.ReporterConstants;
 import com.koval.jresolver.connector.bugzilla.BugZillaConnector;
-import com.koval.jresolver.connector.bugzilla.client.BugZillaIssueClient;
+import com.koval.jresolver.connector.bugzilla.client.BugZillaIssueClientFactory;
+import com.koval.jresolver.connector.bugzilla.configuration.BugZillaConnectorProperties;
+import com.koval.jresolver.connector.bugzilla.exception.BugZillaConnectorException;
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
@@ -101,15 +103,18 @@ public final class LaunchUtil {
          RuleEngine ruleEngine = new DroolsRuleEngine()) {
       Connector connector = getConnector(controlProperties, issueClient);
       IssueReceiver receiver = connector.getUnresolvedIssuesReceiver();
-      /*ProcessExecutor executor = new ProcessExecutor()
-          .add(new SimilarityProcessor(issueClient, similarityProcessorProperties))
-          .add(new RuleEngineProcessor(ruleEngine));*/
       ProcessExecutor executor = new ProcessExecutor();
       for (IssueProcessor issueProcessor: getIssueProcessors(controlProperties, issueClient, ruleEngine)) {
         executor.add(issueProcessor);
       }
-      while (receiver.hasNextIssues()) {
-        results.addAll(executor.execute(receiver.getNextIssues()));
+      if (controlProperties.isParallel()) {
+        while (receiver.hasNextIssues()) {
+          results.addAll(executor.parallelExecute(receiver.getNextIssues()));
+        }
+      } else {
+        while (receiver.hasNextIssues()) {
+          results.addAll(executor.execute(receiver.getNextIssues()));
+        }
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
@@ -128,7 +133,6 @@ public final class LaunchUtil {
                                                          RuleEngine ruleEngine) throws IOException {
     List<String> processorNames = controlProperties.getProcessors();
     List<IssueProcessor> issueProcessors = new ArrayList<>();
-
     if (processorNames.contains(ProcessorConstants.SIMILARITY)) {
       SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
       issueProcessors.add(new SimilarityProcessor(issueClient, similarityProcessorProperties));
@@ -145,7 +149,6 @@ public final class LaunchUtil {
   private static List<ReportGenerator> getReportGenerators(ControlProperties controlProperties) throws IOException {
     List<String> reporterNames = controlProperties.getReporters();
     List<ReportGenerator> reportGenerators = new ArrayList<>();
-
     if (reporterNames.contains(ReporterConstants.HTML)) {
       reportGenerators.add(new HtmlReportGenerator());
     }
@@ -188,40 +191,14 @@ public final class LaunchUtil {
     return URI.create(prefix + path);
   }
 
-  private static IssueClient getJiraClientInstance(JiraConnectorProperties connectorProperties) {
-    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
-    IssueClient jiraClient;
-    try {
-      if (connectorProperties.isAnonymous()) {
-        jiraClient = jiraIssueClientFactory.getAnonymousClient(connectorProperties.getUrl());
-      } else {
-        CredentialsProtector protector = new CredentialsProtector();
-        CredentialsKeeper keeper = new CredentialsKeeper(protector, connectorProperties.getCredentialsFolder());
-        Credentials credentials;
-        if (keeper.isStored()) {
-          credentials = keeper.load();
-        } else {
-          String username = CommandLineUtil.getUsername();
-          String password = CommandLineUtil.getPassword();
-          credentials = new Credentials(username, password);
-          keeper.store(credentials);
-        }
-        jiraClient = jiraIssueClientFactory.getBasicClient(connectorProperties.getUrl(), credentials);
-      }
-    } catch (JiraConnectorException e) {
-      throw new ResolverException("Could not initialize Jira client.", e);
-    }
-    return jiraClient;
-  }
-
   private static Connector getConnector(ControlProperties controlProperties, IssueClient issueClient) {
     String connectorName = controlProperties.getConnector();
     if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
       JiraConnectorProperties jiraConnectorProperties = new JiraConnectorProperties();
       return new JiraConnector(issueClient, jiraConnectorProperties);
     } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      // BugZillaConnectorProperties bugZillaConnectorProperties = new BugZillaConnectorProperties();
-      return  new BugZillaConnector();
+      BugZillaConnectorProperties bugZillaConnectorProperties = new BugZillaConnectorProperties();
+      return  new BugZillaConnector(issueClient, bugZillaConnectorProperties);
     } else {
       throw new ResolverException("Could not get connector with name: " + connectorName);
     }
@@ -233,10 +210,57 @@ public final class LaunchUtil {
       JiraConnectorProperties jiraConnectorProperties = new JiraConnectorProperties();
       return getJiraClientInstance(jiraConnectorProperties);
     } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      // BugZillaConnectorProperties bugZillaConnectorProperties = new BugZillaConnectorProperties();
-      return  new BugZillaIssueClient();
+      BugZillaConnectorProperties bugZillaConnectorProperties = new BugZillaConnectorProperties();
+      return getBugZillaClientInstance(bugZillaConnectorProperties);
     } else {
       throw new ResolverException("Could not get issue client for connector with name: " + connectorName);
     }
+  }
+
+  private static IssueClient getJiraClientInstance(JiraConnectorProperties connectorProperties) {
+    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
+    IssueClient jiraClient;
+    try {
+      if (connectorProperties.isAnonymous()) {
+        jiraClient = jiraIssueClientFactory.getAnonymousClient(connectorProperties.getUrl());
+      } else {
+        Credentials credentials = getCredentials(connectorProperties.getCredentialsFolder());
+        jiraClient = jiraIssueClientFactory.getBasicClient(connectorProperties.getUrl(), credentials);
+      }
+    } catch (JiraConnectorException e) {
+      throw new ResolverException("Could not initialize Jira client.", e);
+    }
+    return jiraClient;
+  }
+
+  private static IssueClient getBugZillaClientInstance(BugZillaConnectorProperties connectorProperties) {
+    BugZillaIssueClientFactory bugZillaIssueClientFactory = new BugZillaIssueClientFactory();
+    IssueClient bugZillaClient;
+    try {
+      if (connectorProperties.isAnonymous()) {
+        bugZillaClient = bugZillaIssueClientFactory.getAnonymousClient(connectorProperties.getUrl());
+      } else {
+        Credentials credentials = getCredentials(connectorProperties.getCredentialsFolder());
+        bugZillaClient = bugZillaIssueClientFactory.getBasicClient(connectorProperties.getUrl(), credentials);
+      }
+    } catch (BugZillaConnectorException e) {
+      throw new ResolverException("Could not initialize BugZilla client.", e);
+    }
+    return bugZillaClient;
+  }
+
+  private static Credentials getCredentials(String credentialsFolder) {
+    CredentialsProtector protector = new CredentialsProtector();
+    CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
+    Credentials credentials;
+    if (keeper.isStored()) {
+      credentials = keeper.load();
+    } else {
+      String username = CommandLineUtil.getUsername();
+      String password = CommandLineUtil.getPassword();
+      credentials = new Credentials(username, password);
+      keeper.store(credentials);
+    }
+    return credentials;
   }
 }

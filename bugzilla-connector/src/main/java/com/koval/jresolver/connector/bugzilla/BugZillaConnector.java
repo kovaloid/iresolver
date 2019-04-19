@@ -1,51 +1,29 @@
 package com.koval.jresolver.connector.bugzilla;
 
-/*
-import b4j.core.DefaultIssue;
-import b4j.core.DefaultSearchData;
-import b4j.core.Issue;
-import b4j.core.session.BugzillaHttpSession;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-    BugzillaHttpSession session = new BugzillaHttpSession();
-    session.setBaseUrl(new URL("https://bz.apache.org/ooo/"));
-    session.setBugzillaBugClass(DefaultIssue.class);
-
-    // Open the session
-    if (session.open()) {
-      // Search abug
-      DefaultSearchData searchData = new DefaultSearchData();
-      //searchData.add("classification", "Java Projects");
-      //searchData.add("product", "Bugzilla for Java");
-
-      searchData.add("offset", "2");
-      searchData.add("limit", "2");
-
-      // Perform the search
-      Iterable<Issue> i = session.searchBugs(searchData, null);
-      for (Issue issue : i) {
-        System.out.println("Bug found: "+issue.getId()+" - "+issue.getDescription());
-      }
-
-      // Close the session
-      session.close();*/
-
-
 import com.koval.jresolver.common.api.component.connector.Connector;
+import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.connector.bugzilla.configuration.BugZillaConnectorProperties;
+import com.koval.jresolver.connector.bugzilla.core.BugZillaIssueReceiver;
 
 
 public class BugZillaConnector implements Connector {
 
+  private final IssueClient issueClient;
+  private final BugZillaConnectorProperties connectorProperties;
+
+  public BugZillaConnector(IssueClient issueClient, BugZillaConnectorProperties connectorProperties) {
+    this.issueClient = issueClient;
+    this.connectorProperties = connectorProperties;
+  }
+
   @Override
   public IssueReceiver getResolvedIssuesReceiver() {
-    return null;
+    return new BugZillaIssueReceiver(issueClient, connectorProperties, true);
   }
 
   @Override
   public IssueReceiver getUnresolvedIssuesReceiver() {
-    return null;
+    return new BugZillaIssueReceiver(issueClient, connectorProperties, false);
   }
 }
