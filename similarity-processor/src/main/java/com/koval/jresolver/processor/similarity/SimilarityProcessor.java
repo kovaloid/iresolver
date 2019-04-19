@@ -89,7 +89,9 @@ public class SimilarityProcessor implements IssueProcessor {
         probableAttachmentsWithCounter.add(new Pair<>(attachment, 1));
       });
     });
-    result.setOriginalIssue(issue);
+    if (result.getOriginalIssue() == null) {
+      result.setOriginalIssue(issue);
+    }
     result.setSimilarIssues(similarIssuesWithSimilarity);
     result.setProbableAttachments(probableAttachmentsWithCounter);
     result.setQualifiedUsers(qualifiedUsersWithCounter);

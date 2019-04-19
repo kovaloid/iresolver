@@ -29,33 +29,43 @@ public class TextReportGenerator implements ReportGenerator {
       content.append(result.getOriginalIssue().getKey())
           .append(" : ")
           .append(result.getOriginalIssue().getSummary());
-      content.append("\n\nsimilar issues: \n");
-      for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
-        content.append(similarIssue.getEntity().getKey())
-            .append(DASH)
-            .append(similarIssue.getMetric())
-            .append('\n');
+
+      if (result.getSimilarIssues() != null) {
+        content.append("\n\nsimilar issues: \n");
+        for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
+          content.append(similarIssue.getEntity().getKey())
+              .append(DASH)
+              .append(similarIssue.getMetric())
+              .append('\n');
+        }
+        content.append("\nusers: \n");
+        for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
+          content.append(qualifiedUser.getEntity().getDisplayName())
+              .append(DASH)
+              .append(qualifiedUser.getMetric())
+              .append('\n');
+        }
+        content.append("\nlabels: \n");
+        for (Pair<String, Integer> probableLabel: result.getProbableLabels()) {
+          content.append(probableLabel.getEntity())
+              .append(DASH)
+              .append(probableLabel.getMetric())
+              .append('\n');
+        }
+        content.append("\nattachments: \n");
+        for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
+          content.append(probableAttachment.getEntity().getFileName())
+              .append(DASH)
+              .append(probableAttachment.getMetric())
+              .append('\n');
+        }
       }
-      content.append("\nusers: \n");
-      for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
-        content.append(qualifiedUser.getEntity().getDisplayName())
-            .append(DASH)
-            .append(qualifiedUser.getMetric())
-            .append('\n');
-      }
-      content.append("\nlabels: \n");
-      for (Pair<String, Integer> probableLabel: result.getProbableLabels()) {
-        content.append(probableLabel.getEntity())
-            .append(DASH)
-            .append(probableLabel.getMetric())
-            .append('\n');
-      }
-      content.append("\nattachments: \n");
-      for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
-        content.append(probableAttachment.getEntity().getFileName())
-            .append(DASH)
-            .append(probableAttachment.getMetric())
-            .append('\n');
+      if (result.getProposals() != null) {
+        content.append("\nproposals: \n");
+        for (String proposal: result.getProposals()) {
+          content.append(proposal)
+              .append('\n');
+        }
       }
       content.append("\n\n");
     }
