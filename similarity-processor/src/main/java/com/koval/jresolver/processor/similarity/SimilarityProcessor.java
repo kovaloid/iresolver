@@ -50,10 +50,10 @@ public class SimilarityProcessor implements IssueProcessor {
     similarIssueKeys.forEach((similarIssueKey) -> {
       Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
 
-
-      Double similarity = vectorModel.getSimilarity(similarIssueKey.trim(), similarIssue.getKey().trim());
+      /*Double similarity = vectorModel.getParagraphVectors()
+          .similarityToLabel(textDataExtractor.extract(similarIssue), issue.getKey().trim());*/
+      Double similarity = 0.0;
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, similarity));
-
 
       /*similarIssue.getLabels().forEach(newProbableLabel -> {
         probableLabelsWithCounter.forEach(existingProbableLabelWithCounter -> {
@@ -70,11 +70,10 @@ public class SimilarityProcessor implements IssueProcessor {
         probableLabelsWithCounter.add(new Pair<>(newProbableLabel, 1));
       });
 
-
-      if (similarIssue.getAssignee() != null) {
+      if (similarIssue.getAssignee() != null && !similarIssue.getAssignee().getName().equals("<unknown>")) {
         qualifiedUsersWithCounter.add(new Pair<>(similarIssue.getAssignee(), 1));
       }
-      if (similarIssue.getReporter() != null) {
+      if (similarIssue.getReporter() != null && !similarIssue.getReporter().getName().equals("<unknown>")) {
         qualifiedUsersWithCounter.add(new Pair<>(similarIssue.getReporter(), 1));
       }
       similarIssue.getComments().forEach((comment) -> {
@@ -84,7 +83,6 @@ public class SimilarityProcessor implements IssueProcessor {
               new ExpandableProperty<>(0), new HashMap<>(), "")); */
         // }
       });
-
 
       similarIssue.getAttachments().forEach(attachment -> {
         probableAttachmentsWithCounter.add(new Pair<>(attachment, 1));

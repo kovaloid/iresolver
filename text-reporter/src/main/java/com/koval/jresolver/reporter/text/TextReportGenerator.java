@@ -50,7 +50,7 @@ public class TextReportGenerator implements ReportGenerator {
       }
       content.append("\nattachments: \n");
       for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
-        content.append(probableAttachment.getEntity())
+        content.append(probableAttachment.getEntity().getFileName())
             .append(DASH)
             .append(probableAttachment.getMetric())
             .append('\n');
