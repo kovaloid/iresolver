@@ -1,5 +1,5 @@
 jar {
-  exclude('template.vm')
+  exclude('html-report-template.vm')
 }
 
 dependencies {

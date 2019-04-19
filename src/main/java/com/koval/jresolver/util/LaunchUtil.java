@@ -1,9 +1,7 @@
 package com.koval.jresolver.util;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +43,7 @@ import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
+import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
 
 
@@ -123,7 +122,6 @@ public final class LaunchUtil {
       for (ReportGenerator reportGenerator: getReportGenerators(controlProperties)) {
         reportGenerator.generate(results);
       }
-      openReport();
     } catch (IOException e) {
       LOGGER.error("Could not initialize report generator.", e);
     }
@@ -150,7 +148,7 @@ public final class LaunchUtil {
     List<String> reporterNames = controlProperties.getReporters();
     List<ReportGenerator> reportGenerators = new ArrayList<>();
     if (reporterNames.contains(ReporterConstants.HTML)) {
-      reportGenerators.add(new HtmlReportGenerator());
+      reportGenerators.add(new HtmlReportGenerator(new HtmlReporterConfiguration()));
     }
     if (reporterNames.contains(ReporterConstants.TEXT)) {
       reportGenerators.add(new TextReportGenerator());
@@ -159,15 +157,6 @@ public final class LaunchUtil {
       LOGGER.warn("Could not fins any appropriate report generator in the list: {}", reporterNames);
     }
     return reportGenerators;
-  }
-
-  private static void openReport() throws IOException {
-    File file = new File("../output/index.html");
-    try {
-      Desktop.getDesktop().browse(getUriFromFile(file));
-    } catch (UnsupportedOperationException e) {
-      LOGGER.warn("Could not open browser on the current platform", e);
-    }
   }
 
   public static void printFields() {
@@ -183,12 +172,6 @@ public final class LaunchUtil {
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
     }
-  }
-
-  private static URI getUriFromFile(File file) throws IOException {
-    String prefix = "file:///";
-    String path = file.getCanonicalPath().replace('\\', '/');
-    return URI.create(prefix + path);
   }
 
   private static Connector getConnector(ControlProperties controlProperties, IssueClient issueClient) {
