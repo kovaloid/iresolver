@@ -1,26 +1,29 @@
 package com.koval.jresolver.connector.jira;
 
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.core.IssuesReceiver;
-import com.koval.jresolver.connector.jira.core.impl.IssuesReceiverImpl;
+import com.koval.jresolver.common.api.component.connector.Connector;
+import com.koval.jresolver.common.api.component.connector.IssueClient;
+import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
+import com.koval.jresolver.connector.jira.core.JiraIssueReceiver;
 
 
-public class JiraConnector {
+public class JiraConnector implements Connector {
 
-  private final JiraClient jiraClient;
-  private final ConnectorProperties connectorProperties;
+  private final IssueClient issueClient;
+  private final JiraConnectorProperties connectorProperties;
 
-  public JiraConnector(JiraClient jiraClient, ConnectorProperties connectorProperties) {
-    this.jiraClient = jiraClient;
+  public JiraConnector(IssueClient issueClient, JiraConnectorProperties connectorProperties) {
+    this.issueClient = issueClient;
     this.connectorProperties = connectorProperties;
   }
 
-  public IssuesReceiver getResolvedIssuesReceiver() {
-    return new IssuesReceiverImpl(jiraClient, connectorProperties, true);
+  @Override
+  public IssueReceiver getResolvedIssuesReceiver() {
+    return new JiraIssueReceiver(issueClient, connectorProperties, true);
   }
 
-  public IssuesReceiver getUnresolvedIssuesReceiver() {
-    return new IssuesReceiverImpl(jiraClient, connectorProperties, false);
+  @Override
+  public IssueReceiver getUnresolvedIssuesReceiver() {
+    return new JiraIssueReceiver(issueClient, connectorProperties, false);
   }
 }

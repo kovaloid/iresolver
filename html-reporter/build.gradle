@@ -1,0 +1,11 @@
+jar {
+  exclude('html-report-template.vm')
+}
+
+dependencies {
+  compile project(':common-api'),
+      'org.apache.velocity:velocity:1.7',
+      'org.apache.velocity:velocity-tools:2.0'
+  testCompile 'junit:junit:4.12',
+      'org.mockito:mockito-core:2.19.0'
+}

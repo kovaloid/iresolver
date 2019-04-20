@@ -2,7 +2,7 @@ package com.koval.jresolver.util;
 
 import java.io.Console;
 
-import com.koval.jresolver.exception.JresolverException;
+import com.koval.jresolver.exception.ResolverException;
 
 
 public final class CommandLineUtil {
@@ -21,7 +21,7 @@ public final class CommandLineUtil {
   private static String getStringFromConsole(String question) {
     Console console = System.console();
     if (console == null) {
-      throw new JresolverException("Could not get console instance.");
+      throw new ResolverException("Could not get console instance.");
     }
     return new String(console.readPassword(question));
   }

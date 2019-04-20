@@ -7,6 +7,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.exception.ConfigurationException;
+
 
 public class SimilarityProcessorProperties {
 
@@ -51,8 +53,9 @@ public class SimilarityProcessorProperties {
       vectorModelFileName = properties.getProperty("vectorModelFileName");
       dataSetFileName = properties.getProperty("dataSetFileName");
     } catch (IOException e) {
-      LOGGER.error("Could not load the similarity processor properties. The default properties will be used.", e);
+      throw new ConfigurationException("Could not load the similarity processor properties.", e);
     }
+    LOGGER.debug("Similarity processor configuration was loaded successfully.");
   }
 
   public int getMinWordFrequency() {
@@ -149,5 +152,23 @@ public class SimilarityProcessorProperties {
 
   public void setDataSetFileName(String dataSetFileName) {
     this.dataSetFileName = dataSetFileName;
+  }
+
+  @Override
+  public String toString() {
+    return "SimilarityProcessorProperties{"
+        + "minWordFrequency=" + minWordFrequency
+        + ", iterations=" + iterations
+        + ", epochs=" + epochs
+        + ", layerSize=" + layerSize
+        + ", learningRate=" + learningRate
+        + ", windowSize=" + windowSize
+        + ", trainWordVectors=" + trainWordVectors
+        + ", sampling=" + sampling
+        + ", language='" + language + '\''
+        + ", workFolder='" + workFolder + '\''
+        + ", vectorModelFileName='" + vectorModelFileName + '\''
+        + ", dataSetFileName='" + dataSetFileName + '\''
+        + '}';
   }
 }

@@ -1,12 +1,12 @@
 package com.koval.jresolver.processor.rules;
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.processor.api.Processor;
-import com.koval.jresolver.processor.result.IssueProcessingResult;
+import com.koval.jresolver.common.api.bean.issue.Issue;
+import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
 
 
-public class RuleEngineProcessor implements Processor {
+public class RuleEngineProcessor implements IssueProcessor {
 
   private final RuleEngine ruleEngine;
 
@@ -15,8 +15,10 @@ public class RuleEngineProcessor implements Processor {
   }
 
   @Override
-  public void run(Issue issue, IssueProcessingResult result) {
-    result.setAdvices(ruleEngine.execute(issue).getAdvices());
+  public void run(Issue issue, IssueAnalysingResult result) {
+    if (result.getOriginalIssue() == null) {
+      result.setOriginalIssue(issue);
+    }
+    result.setProposals(ruleEngine.execute(issue));
   }
-
 }

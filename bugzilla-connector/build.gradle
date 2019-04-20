@@ -1,0 +1,7 @@
+dependencies {
+  compile project(':common-api')
+  compile('eu.ralph-schuster:b4j:2.0.3') {
+    exclude group: 'com.atlassian.jira', module: 'jira-rest-java-client'
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+  }
+}

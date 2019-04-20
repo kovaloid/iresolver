@@ -1,6 +1,6 @@
 package com.koval.jresolver.processor.similarity.core.dataset;
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.koval.jresolver.common.api.bean.issue.Issue;
 
 
 public class TextDataExtractor {

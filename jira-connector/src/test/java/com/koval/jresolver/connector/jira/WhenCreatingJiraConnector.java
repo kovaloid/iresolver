@@ -1,18 +1,18 @@
 package com.koval.jresolver.connector.jira;
 
 import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.koval.jresolver.connector.jira.client.JiraClient;
-import com.koval.jresolver.connector.jira.configuration.ConnectorProperties;
-import com.koval.jresolver.connector.jira.core.IssuesReceiver;
+import com.koval.jresolver.common.api.component.connector.IssueClient;
+import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 
 
 public class WhenCreatingJiraConnector {
@@ -21,25 +21,24 @@ public class WhenCreatingJiraConnector {
 
   @Before
   public void init() {
-    JiraClient client = mock(JiraClient.class);
-    ConnectorProperties properties = mock(ConnectorProperties.class);
-    SearchResult searchResult = mock(SearchResult.class);
+    IssueClient client = mock(IssueClient.class);
+    JiraConnectorProperties properties = mock(JiraConnectorProperties.class);
+    List searchResult = mock(List.class);
     when(properties.getResolvedQuery()).thenReturn("resolvedQuery");
     when(properties.getUnresolvedQuery()).thenReturn("unresolvedQuery");
-    when(searchResult.getTotal()).thenReturn(0);
-    when(client.searchByJql(anyString(), anyInt(), anyInt())).thenReturn(searchResult);
+    when(client.search(anyString(), anyInt(), anyInt(), anyList())).thenReturn(searchResult);
     jiraConnector = new JiraConnector(client, properties);
   }
 
   @Test
   public void shouldBeAbleToGetResolvedIssuesReceiver() {
-    IssuesReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
+    IssueReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
     assertFalse("Check next issues", receiver.hasNextIssues());
   }
 
   @Test
   public void shouldBeAbleToGetUnresolvedIssuesReceiver() {
-    IssuesReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
+    IssueReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
     assertFalse("Check next issues", receiver.hasNextIssues());
   }
 }
