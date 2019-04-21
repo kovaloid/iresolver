@@ -10,8 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.connector.jira.core.IssuesReceiver;
+import com.koval.jresolver.common.api.bean.issue.Issue;
+import com.koval.jresolver.common.api.component.connector.IssueReceiver;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
@@ -21,10 +21,10 @@ public class DataSetCreator {
   private static final String SEPARATOR = " | ";
 
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
-  private final IssuesReceiver receiver;
+  private final IssueReceiver receiver;
   private final SimilarityProcessorProperties properties;
 
-  public DataSetCreator(IssuesReceiver receiver, SimilarityProcessorProperties properties) {
+  public DataSetCreator(IssueReceiver receiver, SimilarityProcessorProperties properties) {
     this.receiver = receiver;
     this.properties = properties;
   }
@@ -32,7 +32,7 @@ public class DataSetCreator {
   public void create() throws IOException {
     File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
-    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getAbsolutePath());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
     try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name())) {
       while (receiver.hasNextIssues()) {
@@ -51,6 +51,6 @@ public class DataSetCreator {
         output.flush();
       }
     }
-    LOGGER.info("Data set file was created: {}", dataSetFile.getAbsolutePath());
+    LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
   }
 }

@@ -46,17 +46,23 @@ sourceSets {
       srcDir 'data'
       srcDir 'src/main/resources'
       srcDir 'jira-connector/src/main/resources'
+      srcDir 'bugzilla-connector/src/main/resources'
       srcDir 'similarity-processor/src/main/resources'
       srcDir 'rule-engine-processor/src/main/resources'
-      srcDir 'report-generator/src/main/resources'
+      srcDir 'documentation-processor/src/main/resources'
+      srcDir 'html-reporter/src/main/resources'
     }
   }
 }
 
 dependencies {
-  compile project(':similarity-processor'),
+  compile project(':jira-connector'),
+      project(':bugzilla-connector'),
+      project(':similarity-processor'),
       project(':rule-engine-processor'),
-      project(':report-generator')
+      project(':documentation-processor'),
+      project(':html-reporter'),
+      project(':text-reporter')
 }
 
 wrapper {
@@ -67,10 +73,12 @@ distributions {
   main {
     baseName = 'jresolver'
     contents {
-      from('jira-connector/src/main/resources/connector.properties') { into 'config' }
+      from('jira-connector/src/main/resources/jira-connector.properties') { into 'config' }
+      from('bugzilla-connector/src/main/resources/bugzilla-connector.properties') { into 'config' }
       from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
-      from('report-generator/src/main/resources') { into 'config' }
+      from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
+      from('src/main/resources/control.properties') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
       exclude('**/*-android-*.jar')
       exclude('**/*-macosx-*.jar')

@@ -86,9 +86,9 @@ public class VectorModelCreator {
         .stopWords(stopWords)
         .build();
 
-    LOGGER.info("Start creating vector model");
+    LOGGER.info("Start training Paragraph Vectors");
     paragraphVectors.fit();
-    LOGGER.info("Stop creating vector model");
+    LOGGER.info("Stop training Paragraph Vectors");
     return new VectorModel(paragraphVectors);
   }
 }

@@ -1,21 +1,20 @@
 package com.koval.jresolver.rules
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.connector.jira.util.CollectionsUtil;
+import com.koval.jresolver.common.api.bean.issue.Issue;
 
-global com.koval.jresolver.processor.rules.results.RulesResult results
+global java.util.List results
 
 rule "Comments size should contain at least one comment"
 	when
-		$issue : Issue( CollectionsUtil.convert(comments).isEmpty() )
+		$issue : Issue( comments.isEmpty() )
 	then
-		results.putAdvice("Comments size should contain at least one comment");
+		results.add("Comments size should contain at least one comment");
 end
 
 
 rule "Comments less than 5"
 	when
-		$issue : Issue( CollectionsUtil.convert(comments).size() < 5 )
+		$issue : Issue( comments.size() < 5 )
 	then
-		results.putAdvice("Comments less than 5");
+		results.add("Comments less than 5");
 end

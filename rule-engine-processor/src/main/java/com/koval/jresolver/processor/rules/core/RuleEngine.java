@@ -1,12 +1,12 @@
 package com.koval.jresolver.processor.rules.core;
 
 import java.io.Closeable;
+import java.util.List;
 
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.koval.jresolver.processor.rules.results.RulesResult;
+import com.koval.jresolver.common.api.bean.issue.Issue;
 
 
 public interface RuleEngine extends Closeable {
 
-  RulesResult execute(Issue actualIssue);
+  List<String> execute(Issue actualIssue);
 }
