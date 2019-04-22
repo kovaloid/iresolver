@@ -33,6 +33,8 @@ import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 import com.koval.jresolver.exception.ResolverException;
+import com.koval.jresolver.processor.link.LinkProcessor;
+import com.koval.jresolver.processor.link.configuration.LinkProcessorProperties;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
 import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
@@ -138,8 +140,11 @@ public final class LaunchUtil {
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
       issueProcessors.add(new RuleEngineProcessor(ruleEngine));
     }
+    if (processorNames.contains(ProcessorConstants.LINK)) {
+      issueProcessors.add(new LinkProcessor(new LinkProcessorProperties()));
+    }
     if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not fins any appropriate report generator in the list: {}", processorNames);
+      LOGGER.warn("Could not find any appropriate report generator in the list: {}", processorNames);
     }
     return issueProcessors;
   }
@@ -154,7 +159,7 @@ public final class LaunchUtil {
       reportGenerators.add(new TextReportGenerator());
     }
     if (reportGenerators.isEmpty()) {
-      LOGGER.warn("Could not fins any appropriate report generator in the list: {}", reporterNames);
+      LOGGER.warn("Could not find any appropriate report generator in the list: {}", reporterNames);
     }
     return reportGenerators;
   }
