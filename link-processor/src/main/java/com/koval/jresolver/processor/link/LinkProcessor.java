@@ -22,9 +22,22 @@ public class LinkProcessor implements IssueProcessor {
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
     issue.getIssueFields().forEach(field -> {
-      if (field.getId().equals(properties.getIssueField())) {
-        LOGGER.info("External link: {}/{}", properties.getTargetLink(), field.getValue());
+      if (field.getId().trim().equalsIgnoreCase(properties.getIssueField().trim()) && field.getValue() != null) {
+        String url = buildUrl(properties.getTargetLink().trim(), ((String)field.getValue()).trim());
+        LOGGER.debug("External link: {}", url);
+        result.setExternalLink(url);
       }
     });
+  }
+
+  private String buildUrl(String link, String id) {
+    if (link.endsWith("/")) {
+      return removeLastChar(link) + '/' + id;
+    }
+    return link + '/' + id;
+  }
+
+  private String removeLastChar(String str) {
+    return str.substring(0, str.length() - 1);
   }
 }
