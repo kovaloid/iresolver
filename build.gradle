@@ -50,6 +50,7 @@ sourceSets {
       srcDir 'similarity-processor/src/main/resources'
       srcDir 'rule-engine-processor/src/main/resources'
       srcDir 'documentation-processor/src/main/resources'
+      srcDir 'link-processor/src/main/resources'
       srcDir 'html-reporter/src/main/resources'
     }
   }
@@ -77,6 +78,7 @@ distributions {
       from('jira-connector/src/main/resources/jira-connector.properties') { into 'config' }
       from('bugzilla-connector/src/main/resources/bugzilla-connector.properties') { into 'config' }
       from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
+      from('link-processor/src/main/resources/link-processor.properties') { into 'config' }
       from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
       from('src/main/resources/control.properties') { into 'config' }
@@ -181,11 +183,34 @@ task cleanScript(type: CreateStartScripts) {
   }
 }
 
+task printFieldsScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'print-fields'
+
+  printFieldsScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=fields')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=fields')
+    }
+  }
+}
+
 applicationDistribution.into('bin') {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   from(createDataSetScript)
   from(createVectorModelScript)
   from(cleanScript)
+  from(printFieldsScript)
   fileMode = 0755
 }
 
