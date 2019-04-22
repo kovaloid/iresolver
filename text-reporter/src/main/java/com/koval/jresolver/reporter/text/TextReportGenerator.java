@@ -30,6 +30,11 @@ public class TextReportGenerator implements ReportGenerator {
           .append(" : ")
           .append(result.getOriginalIssue().getSummary());
 
+      if (result.getExternalLink() != null) {
+        content.append("\nexternal link: \n")
+            .append(result.getExternalLink())
+            .append('\n');
+      }
       if (result.getSimilarIssues() != null) {
         fillSimilarityProcessorResults(content, result);
       }

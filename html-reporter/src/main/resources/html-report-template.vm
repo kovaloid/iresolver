@@ -41,6 +41,9 @@
         <div class="item">
             <h3>$result.getOriginalIssue().getKey()</h3>
             <br/>
+            external url:<br/>
+                <a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a>
+            <br/>
             similar issues:<br/>
             #foreach ($issue in $result.getSimilarIssues())
                 <span><a href="https://issues.apache.org/jira/browse/$issue.getEntity().getKey()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
