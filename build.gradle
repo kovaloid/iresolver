@@ -14,22 +14,22 @@ apply plugin: 'application'
 
 mainClassName = 'com.koval.jresolver.Launcher'
 
-task sendRelease {
-    githubRelease {
-        token ""
-        owner "kovaloid"
-        repo "jresolver"
-        tagName "v0.1.0"
-        targetCommitish "master"
-        releaseName "v0.1.0"
-        body ""
-        draft false
-        prerelease false
-        releaseAssets "build/distributions/jresolver.zip"
-        overwrite true
-        apiEndpoint "https://api.github.com"
-    }
+
+githubRelease {
+  token ""
+  owner "Solomonov"
+  repo "jresolver"
+  tagName "v0.1.0"
+  targetCommitish "master"
+  releaseName "v0.1.0"
+  body ""
+  draft false
+  prerelease false
+  releaseAssets "build/distributions/jresolver.zip"
+  overwrite true
+  apiEndpoint "https://api.github.com"
 }
+
 
 def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME/config:\\$APP_HOME/rules:\\$APP_HOME/data'
 def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
