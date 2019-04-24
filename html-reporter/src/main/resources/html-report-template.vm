@@ -49,7 +49,7 @@
             #end
             similar issues:<br/>
             #foreach ($issue in $result.getSimilarIssues())
-                <span>$String.format("%.2f", $issue.getMetric()) : <a href="$issue.getEntity().getLink()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
+                <span>$String.format("%.2f", $issue.getMetric())% : <a href="$issue.getEntity().getLink()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
             #end
             <br/>
             labels:<br/>
