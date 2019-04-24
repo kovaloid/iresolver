@@ -22,7 +22,7 @@
             background-color: #FFFFFF;
             border: 1px solid #DDDDDD;
             border-radius: 4px;
-            width: 600px;
+            width: 70%;
             padding: 20px;
         }
         .item {
@@ -37,31 +37,34 @@
 </head>
 <body>
 <div class="container">
+    #set($String = "")
     #foreach ($result in $results)
         <div class="item">
-            <h3>$result.getOriginalIssue().getKey()</h3>
+            <h3><a href="$result.getOriginalIssue().getLink()" target="_blank">$result.getOriginalIssue().getKey()</a> - $result.getOriginalIssue().getSummary()</h3>
             <br/>
+            #if ($issue.getExternalUrl())
             external url:<br/>
-                <a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a>
-            <br/>
+                <span><a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a></span>
+            <br/><br/>
+            #end
             similar issues:<br/>
             #foreach ($issue in $result.getSimilarIssues())
-                <span><a href="https://issues.apache.org/jira/browse/$issue.getEntity().getKey()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
+                <span>$String.format("%.2f", $issue.getMetric()) : <a href="$issue.getEntity().getLink()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
             #end
             <br/>
             labels:<br/>
             #foreach ($probableLabel in $result.getProbableLabels())
-                <span>$probableLabel.getEntity()</span><br/>
+                <span>$probableLabel.getEntity() - $probableLabel.getMetric()</span><br/>
             #end
             <br/>
             users:<br/>
             #foreach ($qualifiedUser in $result.getQualifiedUsers())
-                <span>$qualifiedUser.getEntity().getDisplayName()</span><br/>
+                <span>$qualifiedUser.getEntity().getDisplayName() - $qualifiedUser.getMetric()</span><br/>
             #end
             <br/>
             attachments:<br/>
             #foreach ($probableAttachment in $result.getProbableAttachments())
-                <span>$probableAttachment.getEntity().getFileName()</span><br/>
+                <span>$probableAttachment.getEntity().getFileName() - $probableAttachment.getMetric()</span><br/>
             #end
             <br/>
             advices:<br/>

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,58 +45,46 @@ public class SimilarityProcessor implements IssueProcessor {
     Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
     List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
-    List<Pair<String, Integer>> probableLabelsWithCounter = new ArrayList<>();
-    List<Pair<User, Integer>> qualifiedUsersWithCounter = new ArrayList<>();
-    List<Pair<Attachment, Integer>> probableAttachmentsWithCounter = new ArrayList<>();
+    Map<String, Integer> probableLabelsMap = new HashMap<>();
+    Map<User, Integer> qualifiedUsersMap = new HashMap<>();
+    Map<Attachment, Integer> probableAttachmentsMap = new HashMap<>();
 
     LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), similarIssueKeys);
     similarIssueKeys.forEach((similarIssueKey) -> {
       Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
 
-      /*Double similarity = vectorModel.getParagraphVectors()
-          .similarityToLabel(textDataExtractor.extract(similarIssue), issue.getKey().trim());*/
-      Double similarity = 0.0;
+      Double similarity = vectorModel.getParagraphVectors()
+          .similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, similarity));
 
-      /*similarIssue.getLabels().forEach(newProbableLabel -> {
-        probableLabelsWithCounter.forEach(existingProbableLabelWithCounter -> {
-          if (existingProbableLabelWithCounter.getEntity().equals(newProbableLabel)) {
-            Integer numberOfLabels = existingProbableLabelWithCounter.getMetric();
-            existingProbableLabelWithCounter.setMetric(numberOfLabels + 1);
-          } else {
-            probableLabelsWithCounter.add(new Pair<>(newProbableLabel, 1));
-          }
-        });
-      });*/
-
-      similarIssue.getLabels().forEach(newProbableLabel -> {
-        probableLabelsWithCounter.add(new Pair<>(newProbableLabel, 1));
-      });
-
+      similarIssue.getLabels().forEach(label -> addEntityOrUpdateMetric(probableLabelsMap, label));
       if (similarIssue.getAssignee() != null && !similarIssue.getAssignee().getName().equals("<unknown>")) {
-        qualifiedUsersWithCounter.add(new Pair<>(similarIssue.getAssignee(), 1));
+        addEntityOrUpdateMetric(qualifiedUsersMap, similarIssue.getAssignee());
       }
-      if (similarIssue.getReporter() != null && !similarIssue.getReporter().getName().equals("<unknown>")) {
-        qualifiedUsersWithCounter.add(new Pair<>(similarIssue.getReporter(), 1));
-      }
-      similarIssue.getComments().forEach((comment) -> {
-        // if (comment.getAuthor() != null) {
-          /* BasicUser author = comment.getAuthor();
-          users.add(new User(author.getSelf(), author.getName(), author.getDisplayName(), "",
-              new ExpandableProperty<>(0), new HashMap<>(), "")); */
-        // }
-      });
-
-      similarIssue.getAttachments().forEach(attachment -> {
-        probableAttachmentsWithCounter.add(new Pair<>(attachment, 1));
-      });
+      similarIssue.getComments().forEach(comment -> addEntityOrUpdateMetric(qualifiedUsersMap, comment.getAuthor()));
+      similarIssue.getAttachments().forEach(attachment -> addEntityOrUpdateMetric(probableAttachmentsMap, attachment));
     });
     if (result.getOriginalIssue() == null) {
       result.setOriginalIssue(issue);
     }
     result.setSimilarIssues(similarIssuesWithSimilarity);
-    result.setProbableAttachments(probableAttachmentsWithCounter);
-    result.setQualifiedUsers(qualifiedUsersWithCounter);
-    result.setProbableLabels(probableLabelsWithCounter);
+    result.setProbableLabels(convertMapToPairList(probableLabelsMap));
+    result.setQualifiedUsers(convertMapToPairList(qualifiedUsersMap));
+    result.setProbableAttachments(convertMapToPairList(probableAttachmentsMap));
+  }
+
+  private <E> void addEntityOrUpdateMetric(Map<E, Integer> map, E entity) {
+    if (map.containsKey(entity)) {
+      Integer oldMetricNumber = map.get(entity);
+      map.replace(entity, oldMetricNumber + 1);
+    } else {
+      map.put(entity, 1);
+    }
+  }
+
+  private <E> List<Pair<E, Integer>> convertMapToPairList(Map<E, Integer> map) {
+    List<Pair<E, Integer>> pairList = new ArrayList<>();
+    map.forEach((key, value) -> pairList.add(new Pair<>(key, value)));
+    return pairList;
   }
 }

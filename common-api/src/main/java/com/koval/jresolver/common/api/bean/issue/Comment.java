@@ -1,5 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
+import java.util.Objects;
+
 import org.joda.time.DateTime;
 
 
@@ -60,5 +62,26 @@ public class Comment {
 
   public void setBody(String body) {
     this.body = body;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Comment comment = (Comment)o;
+    return Objects.equals(author, comment.author)
+        && Objects.equals(updateAuthor, comment.updateAuthor)
+        && Objects.equals(creationDate, comment.creationDate)
+        && Objects.equals(updateDate, comment.updateDate)
+        && Objects.equals(body, comment.body);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(author, updateAuthor, creationDate, updateDate, body);
   }
 }
