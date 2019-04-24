@@ -42,6 +42,7 @@ public class SimilarityProcessor implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
+    setOriginalIssueToResults(issue, result);
     Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
     List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
@@ -64,9 +65,6 @@ public class SimilarityProcessor implements IssueProcessor {
       similarIssue.getComments().forEach(comment -> addEntityOrUpdateMetric(qualifiedUsersMap, comment.getAuthor()));
       similarIssue.getAttachments().forEach(attachment -> addEntityOrUpdateMetric(probableAttachmentsMap, attachment));
     });
-    if (result.getOriginalIssue() == null) {
-      result.setOriginalIssue(issue);
-    }
     result.setSimilarIssues(similarIssuesWithSimilarity);
     result.setProbableLabels(convertMapToPairList(probableLabelsMap));
     result.setQualifiedUsers(convertMapToPairList(qualifiedUsersMap));

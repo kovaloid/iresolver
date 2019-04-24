@@ -21,6 +21,7 @@ public class LinkProcessor implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
+    setOriginalIssueToResults(issue, result);
     issue.getIssueFields().forEach(field -> {
       if (field.getId().trim().equalsIgnoreCase(properties.getIssueField().trim()) && field.getValue() != null) {
         String url = buildUrl(properties.getTargetLink().trim(), ((String)field.getValue()).trim());

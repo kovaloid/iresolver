@@ -16,9 +16,7 @@ public class RuleEngineProcessor implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
-    if (result.getOriginalIssue() == null) {
-      result.setOriginalIssue(issue);
-    }
+    setOriginalIssueToResults(issue, result);
     result.setProposals(ruleEngine.execute(issue));
   }
 }
