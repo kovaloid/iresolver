@@ -18,6 +18,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     Template template = velocityEngine.getTemplate("html-report-template.vm");
     VelocityContext context = new VelocityContext();
     context.put("results", results);
+    context.put("numberTool", new NumberTool());
     try (StringWriter writer = new StringWriter()) {
       template.merge(context, writer);
       LOGGER.debug(writer.toString());

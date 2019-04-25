@@ -4,75 +4,120 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     <title>Issue Report</title>
-    <style type="text/css">
-        body {
-            background-color: #F5F5F5;
-            margin: 0;
-            padding: 0;
-        }
-        h3 {
-            margin: 0;
-            padding: 0;
-        }
-        span {
-            padding-left: 40px;
-        }
-        .container {
-            margin: 40px auto;
-            background-color: #FFFFFF;
-            border: 1px solid #DDDDDD;
-            border-radius: 4px;
-            width: 70%;
-            padding: 20px;
-        }
-        .item {
-            background-color: #E5E5E5;
-            border: 1px solid #CCCCCC;
-            color: #404040;
-            font-family: Helvetica;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-    #set($String = "")
+<div class="container pt-4">
     #foreach ($result in $results)
-        <div class="item">
-            <h3><a href="$result.getOriginalIssue().getLink()" target="_blank">$result.getOriginalIssue().getKey()</a> - $result.getOriginalIssue().getSummary()</h3>
-            <br/>
-            #if ($issue.getExternalUrl())
-            external url:<br/>
-                <span><a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a></span>
-            <br/><br/>
-            #end
-            similar issues:<br/>
-            #foreach ($issue in $result.getSimilarIssues())
-                <span>$String.format("%.2f", $issue.getMetric())% : <a href="$issue.getEntity().getLink()" target="_blank">$issue.getEntity().getKey()</a> : $issue.getEntity().getSummary()</span><br/>
-            #end
-            <br/>
-            labels:<br/>
-            #foreach ($probableLabel in $result.getProbableLabels())
-                <span>$probableLabel.getEntity() - $probableLabel.getMetric()</span><br/>
-            #end
-            <br/>
-            users:<br/>
-            #foreach ($qualifiedUser in $result.getQualifiedUsers())
-                <span>$qualifiedUser.getEntity().getDisplayName() ($qualifiedUser.getEntity().getEmailAddress()) - $qualifiedUser.getMetric()</span><br/>
-            #end
-            <br/>
-            attachments:<br/>
-            #foreach ($probableAttachment in $result.getProbableAttachments())
-                <span>$probableAttachment.getEntity().getFileName() - $probableAttachment.getMetric()</span><br/>
-            #end
-            <br/>
-            advices:<br/>
-            #foreach ($proposal in $result.getProposals())
-                <span>$proposal</span><br/>
-            #end
+        <div class="card bg-light border-secondary mb-4">
+            <div class="card-header">
+                <h4>
+                    <a href="$result.getOriginalIssue().getLink()" target="_blank">
+                        $result.getOriginalIssue().getKey()
+                    </a> - $result.getOriginalIssue().getSummary()
+                </h4>
+            </div>
+            <div class="card-body">
+                #if ($issue.getExternalUrl())
+                    <h5 class="card-title">External Url</h5>
+                    <p class="card-text"><a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a></p>
+                    <br/>
+                #end
+
+                <h5 class="card-title">Similar Issues</h5>
+                <table class="table table-hover table-bordered table-sm">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Key</th>
+                        <th>Summary</th>
+                        <th>Similarity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($issue in $result.getSimilarIssues())
+                        <tr>
+                            <td>$issue.getEntity().getIssueType().getName()</td>
+                            <td><a href="$issue.getEntity().getLink()" target="_blank">$issue.getEntity().getKey()</a></td>
+                            <td>$issue.getEntity().getSummary()</td>
+                            <td>$numberTool.format("#0.00", $issue.getMetric())%</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+                <br/>
+
+                <h5 class="card-title">Qualified Users</h5>
+                <table class="table table-hover table-bordered table-sm">
+                    <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Full Name</th>
+                        <th>E-mail</th>
+                        <th>Rank</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($qualifiedUser in $result.getQualifiedUsers())
+                        <tr>
+                            <td>$qualifiedUser.getEntity().getName()</td>
+                            <td>$qualifiedUser.getEntity().getDisplayName()</td>
+                            <td>$qualifiedUser.getEntity().getEmailAddress()</td>
+                            <td>$qualifiedUser.getMetric()</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+                <br/>
+
+                <h5 class="card-title">Probable Labels</h5>
+                <table class="table table-hover table-bordered table-sm">
+                    <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Rank</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($probableLabel in $result.getProbableLabels())
+                        <tr>
+                            <td>$probableLabel.getEntity()</td>
+                            <td>$probableLabel.getMetric()</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+                <br/>
+
+                <h5 class="card-title">Probable Attachments</h5>
+                <table class="table table-hover table-bordered table-sm">
+                    <thead>
+                    <tr>
+                        <th>Attachment</th>
+                        <th>Rank</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($probableAttachment in $result.getProbableAttachments())
+                        <tr>
+                            <td>$probableAttachment.getEntity().getFileName()</td>
+                            <td>$probableAttachment.getMetric()</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+                <br/>
+
+                <h5 class="card-title">Proposals</h5>
+                #foreach ($proposal in $result.getProposals())
+                    <div>$proposal</div>
+                #end
+            </div>
         </div>
     #end
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
