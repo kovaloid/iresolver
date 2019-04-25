@@ -206,7 +206,7 @@ public final class LaunchUtil {
   }
 
   private static IssueClient getJiraClientInstance(JiraConnectorProperties connectorProperties) {
-    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
+    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory(connectorProperties);
     IssueClient jiraClient;
     try {
       if (connectorProperties.isAnonymous()) {

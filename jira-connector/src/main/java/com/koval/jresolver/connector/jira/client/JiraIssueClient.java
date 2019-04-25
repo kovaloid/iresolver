@@ -30,9 +30,9 @@ public class JiraIssueClient implements IssueClient {
   private final JiraRestClient restClient;
   private final IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> issueTransformer;
 
-  JiraIssueClient(JiraRestClient restClient) {
+  JiraIssueClient(JiraRestClient restClient, String browseUrl) {
     this.restClient = restClient;
-    this.issueTransformer = new JiraIssueTransformer();
+    this.issueTransformer = new JiraIssueTransformer(browseUrl);
   }
 
   @Override

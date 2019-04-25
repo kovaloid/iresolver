@@ -12,6 +12,7 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 import com.koval.jresolver.common.api.auth.Credentials;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueClientFactory;
+import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 
 
@@ -19,12 +20,18 @@ public class JiraIssueClientFactory implements IssueClientFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraIssueClientFactory.class);
 
+  private final JiraConnectorProperties connectorProperties;
+
+  public JiraIssueClientFactory(JiraConnectorProperties connectorProperties) {
+    this.connectorProperties = connectorProperties;
+  }
+
   @Override
   public IssueClient getAnonymousClient(String host) throws JiraConnectorException {
     LOGGER.info("Creating Jira client with Anonymous authentication...");
     JiraRestClient restClient = new AsynchronousJiraRestClientFactory().create(getURI(host),
         new AnonymousAuthenticationHandler());
-    return new JiraIssueClient(restClient);
+    return new JiraIssueClient(restClient, connectorProperties.getBrowseUrl());
   }
 
   @Override
@@ -32,7 +39,7 @@ public class JiraIssueClientFactory implements IssueClientFactory {
     LOGGER.info("Creating Jira client with Basic authentication...");
     JiraRestClient restClient = new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(getURI(host),
         credentials.getUsername(), credentials.getPassword());
-    return new JiraIssueClient(restClient);
+    return new JiraIssueClient(restClient, connectorProperties.getBrowseUrl());
   }
 
   private static URI getURI(String host) throws JiraConnectorException {

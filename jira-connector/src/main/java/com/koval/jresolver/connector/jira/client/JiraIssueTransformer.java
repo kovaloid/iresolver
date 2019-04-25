@@ -25,10 +25,17 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private static final String UNKNOWN = "<unknown>";
 
+  private final String browseUrl;
+
+  public JiraIssueTransformer(String browseUrl) {
+    this.browseUrl = browseUrl;
+  }
+
   @Override
   public Issue transform(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     Issue transformedIssue = new Issue();
 
+    transformedIssue.setLink(URI.create(browseUrl + originalIssue.getKey()));
     transformedIssue.setKey(originalIssue.getKey());
     transformedIssue.setSummary(originalIssue.getSummary());
     transformedIssue.setDescription(originalIssue.getDescription());

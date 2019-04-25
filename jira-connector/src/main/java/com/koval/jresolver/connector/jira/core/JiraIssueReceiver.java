@@ -1,6 +1,5 @@
 package com.koval.jresolver.connector.jira.core;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,10 +23,9 @@ public class JiraIssueReceiver implements IssueReceiver {
   private final String query;
   private final Set<String> fields;
   private final int batchSize;
-  private int currentIndex;
-  private final int finishIndex;
   private final int batchDelay;
-  private final String browseUrl;
+  private final int finishIndex;
+  private int currentIndex;
 
   public JiraIssueReceiver(IssueClient client, JiraConnectorProperties properties, boolean isResolvedMode) {
     this.client = client;
@@ -39,7 +37,6 @@ public class JiraIssueReceiver implements IssueReceiver {
     this.finishIndex = getTotalIssues();
     this.progressMonitor = new ProgressMonitor(batchSize, finishIndex);
     this.progressMonitor.startMeasuringTotalTime();
-    this.browseUrl = properties.getBrowseUrl();
   }
 
   private int getTotalIssues() {
@@ -61,12 +58,11 @@ public class JiraIssueReceiver implements IssueReceiver {
   @Override
   public List<Issue> getNextIssues() {
     List<Issue> searchResult = client.search(query, batchSize, currentIndex, new ArrayList<>(fields));
-    searchResult.forEach(issue -> {
-      issue.setLink(URI.create(browseUrl + issue.getKey()));
-      LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
-          countWords(issue.getSummary()), countWords(issue.getDescription()), issue.getComments().size(),
-          issue.getAttachments().size());
-    });
+    searchResult.forEach(issue ->
+        LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
+            countWords(issue.getSummary()), countWords(issue.getDescription()), issue.getComments().size(),
+            issue.getAttachments().size())
+    );
     currentIndex += batchSize;
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
     if (batchDelay != 0) {
@@ -82,11 +78,11 @@ public class JiraIssueReceiver implements IssueReceiver {
     if (text == null) {
       return 0;
     }
-    String blankText = text.trim();
-    if (blankText.isEmpty()) {
+    String trimmedText = text.trim();
+    if (trimmedText.isEmpty()) {
       return 0;
     }
-    return blankText.split("\\s+").length;
+    return trimmedText.split("\\s+").length;
   }
 
   private void delay() {
