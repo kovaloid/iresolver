@@ -12,9 +12,7 @@
         <div class="card bg-light border-secondary mb-4">
             <div class="card-header">
                 <h4>
-                    <a href="$result.getOriginalIssue().getLink()" target="_blank">
-                        $result.getOriginalIssue().getKey()
-                    </a> - $result.getOriginalIssue().getSummary()
+                    <a href="$result.getOriginalIssue().getLink()" target="_blank">$result.getOriginalIssue().getKey()</a> - $result.getOriginalIssue().getSummary()
                 </h4>
             </div>
             <div class="card-body">
@@ -62,7 +60,7 @@
                         <tr>
                             <td>$qualifiedUser.getEntity().getName()</td>
                             <td>$qualifiedUser.getEntity().getDisplayName()</td>
-                            <td>$qualifiedUser.getEntity().getEmailAddress()</td>
+                            <td><a href="mailto:$qualifiedUser.getEntity().getEmailAddress()">$qualifiedUser.getEntity().getEmailAddress()</a></td>
                             <td>$qualifiedUser.getMetric()</td>
                         </tr>
                         #end
