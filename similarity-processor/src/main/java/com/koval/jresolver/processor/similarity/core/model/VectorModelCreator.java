@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.deeplearning4j.models.embeddings.learning.impl.sequence.DBOW;
@@ -69,9 +69,9 @@ public class VectorModelCreator {
 
     ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
         .sequenceLearningAlgorithm(new DBOW<>())
-        .setVectorsListeners(Arrays.asList(
-            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "incomplet", "alloc"),
-            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "fear", "truststorepassword")))
+        .setVectorsListeners(Collections.singletonList(
+            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "AMQ-6134 ", "AMQ-5100 "))
+        )
         .minWordFrequency(similarityProcessorProperties.getMinWordFrequency())
         .iterations(similarityProcessorProperties.getIterations())
         .epochs(similarityProcessorProperties.getEpochs())
