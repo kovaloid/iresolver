@@ -217,8 +217,9 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
       return user;
     } catch (RestClientException e) {
       LOGGER.error("Could not get full data about user {}", e.getErrorCollections());
-      return new User(originalBasicUser.getName(), originalBasicUser.getDisplayName(), UNKNOWN, new ArrayList<>(),
-          URI.create(""), URI.create(""));
+      User user = getIncompleteUserByBasicUser(originalBasicUser);
+      USER_CACHE.put(originalBasicUser.getName(), user);
+      return user;
     }
   }
 
@@ -234,6 +235,11 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
         : CollectionsUtil.convert(fullUser.getGroups().getItems());
     return new User(basicUser.getName(), basicUser.getDisplayName(), fullUser.getEmailAddress(),
         userGroups, fullUser.getAvatarUri(), fullUser.getSmallAvatarUri());
+  }
+
+  private User getIncompleteUserByBasicUser(BasicUser basicUser) {
+    return new User(basicUser.getName(), basicUser.getDisplayName(), UNKNOWN, new ArrayList<>(), URI.create(""),
+        URI.create(""));
   }
 
   private Version transformVersion(com.atlassian.jira.rest.client.api.domain.Version originalVersion) {
