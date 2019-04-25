@@ -59,7 +59,7 @@
             <br/>
             users:<br/>
             #foreach ($qualifiedUser in $result.getQualifiedUsers())
-                <span>$qualifiedUser.getEntity().getDisplayName() - $qualifiedUser.getMetric()</span><br/>
+                <span>$qualifiedUser.getEntity().getDisplayName() ($qualifiedUser.getEntity().getEmailAddress()) - $qualifiedUser.getMetric()</span><br/>
             #end
             <br/>
             attachments:<br/>

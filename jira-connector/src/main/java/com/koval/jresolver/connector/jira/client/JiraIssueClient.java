@@ -32,7 +32,7 @@ public class JiraIssueClient implements IssueClient {
 
   JiraIssueClient(JiraRestClient restClient, String browseUrl) {
     this.restClient = restClient;
-    this.issueTransformer = new JiraIssueTransformer(browseUrl);
+    this.issueTransformer = new JiraIssueTransformer(restClient, browseUrl);
   }
 
   @Override

@@ -67,6 +67,8 @@ public class TextReportGenerator implements ReportGenerator {
     for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
       content.append(qualifiedUser.getEntity().getDisplayName())
           .append(DASH)
+          .append(qualifiedUser.getEntity().getEmailAddress())
+          .append(DASH)
           .append(qualifiedUser.getMetric())
           .append('\n');
     }
