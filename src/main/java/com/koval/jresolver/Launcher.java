@@ -16,8 +16,9 @@ public final class Launcher {
   private static final String CREATE_VECTOR_MODEL = "create-vector-model";
   private static final String CLEAN = "clean";
   private static final String FIELDS = "fields";
+  private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
   private static final String HELP_TIP = "Please use " + CREATE_DATA_SET + ", " + CREATE_VECTOR_MODEL + ", " + CLEAN
-          + " or " + FIELDS + ".";
+          + ", " + FIELDS + " or " + TEST_SIMILARITY_PROCESSOR + ".";
 
   private Launcher() {
   }
@@ -43,6 +44,10 @@ public final class Launcher {
         case FIELDS:
           LOGGER.info("Start printing fields.");
           LaunchUtil.printFields();
+          break;
+        case TEST_SIMILARITY_PROCESSOR:
+          LOGGER.info("Start testing similarity processor.");
+          LaunchUtil.testSimilarityProcessor();
           break;
         default:
           LOGGER.warn("Wrong arguments.");

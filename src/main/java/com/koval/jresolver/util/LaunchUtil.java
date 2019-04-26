@@ -44,6 +44,7 @@ import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
+import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
@@ -176,6 +177,14 @@ public final class LaunchUtil {
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
+    }
+  }
+
+  public static void testSimilarityProcessor() {
+    try {
+      new TestSimilarityProcessor().test();
+    } catch (IOException e) {
+      LOGGER.error("Could not perform similarity processor testing...", e);
     }
   }
 
