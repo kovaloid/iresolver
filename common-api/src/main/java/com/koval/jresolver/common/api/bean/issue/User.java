@@ -2,6 +2,7 @@ package com.koval.jresolver.common.api.bean.issue;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 
 public class User {
@@ -71,5 +72,27 @@ public class User {
 
   public void setSmallAvatarUri(URI smallAvatarUri) {
     this.smallAvatarUri = smallAvatarUri;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User)o;
+    return Objects.equals(name, user.name)
+        && Objects.equals(displayName, user.displayName)
+        && Objects.equals(emailAddress, user.emailAddress)
+        && Objects.equals(groups, user.groups)
+        && Objects.equals(avatarUri, user.avatarUri)
+        && Objects.equals(smallAvatarUri, user.smallAvatarUri);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, displayName, emailAddress, groups, avatarUri, smallAvatarUri);
   }
 }

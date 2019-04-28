@@ -1,6 +1,8 @@
 package com.koval.jresolver.common.api.bean.issue;
 
 
+import java.util.Objects;
+
 public class Project {
 
   private String key;
@@ -28,5 +30,23 @@ public class Project {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Project project = (Project)o;
+    return Objects.equals(key, project.key)
+        && Objects.equals(name, project.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(key, name);
   }
 }

@@ -30,6 +30,11 @@ public class TextReportGenerator implements ReportGenerator {
           .append(" : ")
           .append(result.getOriginalIssue().getSummary());
 
+      if (result.getExternalLink() != null) {
+        content.append("\nexternal link: \n")
+            .append(result.getExternalLink())
+            .append('\n');
+      }
       if (result.getSimilarIssues() != null) {
         fillSimilarityProcessorResults(content, result);
       }
@@ -61,6 +66,8 @@ public class TextReportGenerator implements ReportGenerator {
     content.append("\nusers: \n");
     for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
       content.append(qualifiedUser.getEntity().getDisplayName())
+          .append(DASH)
+          .append(qualifiedUser.getEntity().getEmailAddress())
           .append(DASH)
           .append(qualifiedUser.getMetric())
           .append('\n');

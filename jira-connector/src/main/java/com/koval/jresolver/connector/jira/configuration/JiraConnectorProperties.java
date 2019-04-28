@@ -19,6 +19,7 @@ public class JiraConnectorProperties {
   private static final String CONNECTOR_PROPERTIES_FILE = "jira-connector.properties";
 
   private String url;
+  private String browseUrl;
   private boolean anonymous = true;
   private String resolvedQuery;
   private String unresolvedQuery;
@@ -40,6 +41,7 @@ public class JiraConnectorProperties {
       }
       properties.load(input);
       url = properties.getProperty("url");
+      browseUrl = properties.getProperty("browseUrl");
       anonymous = Boolean.parseBoolean(properties.getProperty("anonymous"));
       resolvedQuery = properties.getProperty("resolvedQuery");
       unresolvedQuery = properties.getProperty("unresolvedQuery");
@@ -60,6 +62,14 @@ public class JiraConnectorProperties {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getBrowseUrl() {
+    return browseUrl;
+  }
+
+  public void setBrowseUrl(String browseUrl) {
+    this.browseUrl = browseUrl;
   }
 
   public boolean isAnonymous() {
@@ -130,6 +140,7 @@ public class JiraConnectorProperties {
   public String toString() {
     return "JiraConnectorProperties{"
         + "url='" + url + '\''
+        + ", browseUrl='" + browseUrl + '\''
         + ", anonymous=" + anonymous
         + ", resolvedQuery='" + resolvedQuery + '\''
         + ", unresolvedQuery='" + unresolvedQuery + '\''

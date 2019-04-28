@@ -33,6 +33,8 @@ import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 import com.koval.jresolver.exception.ResolverException;
+import com.koval.jresolver.processor.link.LinkProcessor;
+import com.koval.jresolver.processor.link.configuration.LinkProcessorProperties;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
 import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
@@ -42,6 +44,7 @@ import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
+import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
@@ -138,8 +141,11 @@ public final class LaunchUtil {
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
       issueProcessors.add(new RuleEngineProcessor(ruleEngine));
     }
+    if (processorNames.contains(ProcessorConstants.LINK)) {
+      issueProcessors.add(new LinkProcessor(new LinkProcessorProperties()));
+    }
     if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not fins any appropriate report generator in the list: {}", processorNames);
+      LOGGER.warn("Could not find any appropriate report generator in the list: {}", processorNames);
     }
     return issueProcessors;
   }
@@ -154,7 +160,7 @@ public final class LaunchUtil {
       reportGenerators.add(new TextReportGenerator());
     }
     if (reportGenerators.isEmpty()) {
-      LOGGER.warn("Could not fins any appropriate report generator in the list: {}", reporterNames);
+      LOGGER.warn("Could not find any appropriate report generator in the list: {}", reporterNames);
     }
     return reportGenerators;
   }
@@ -171,6 +177,14 @@ public final class LaunchUtil {
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
+    }
+  }
+
+  public static void testSimilarityProcessor() {
+    try {
+      new TestSimilarityProcessor().test();
+    } catch (IOException e) {
+      LOGGER.error("Could not perform similarity processor testing...", e);
     }
   }
 
@@ -201,7 +215,7 @@ public final class LaunchUtil {
   }
 
   private static IssueClient getJiraClientInstance(JiraConnectorProperties connectorProperties) {
-    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
+    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory(connectorProperties);
     IssueClient jiraClient;
     try {
       if (connectorProperties.isAnonymous()) {

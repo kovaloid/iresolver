@@ -6,6 +6,12 @@
 <module name="Checker">
     <property name="severity" value="warning"/>
 
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+    <module name="NewlineAtEndOfFile">
+        <property name="fileExtensions" value="java,txt,xml,xsl,gradle,groovy" />
+    </module>
+
     <!-- Checks that property files contain the same keys.         -->
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
     <module name="Translation"/>
@@ -63,7 +69,7 @@
         </module>
         <module name="ImportOrder">
             <property name="option" value="top"/>
-            <property name="groups" value="java,javax,org,net,com,radl"/>
+            <property name="groups" value="java,javax,org,net,com"/>
             <property name="separated" value="true"/>
         </module>
         <module name="RedundantImport"/>

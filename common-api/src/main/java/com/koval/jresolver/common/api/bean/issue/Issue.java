@@ -2,6 +2,7 @@ package com.koval.jresolver.common.api.bean.issue;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 import org.joda.time.DateTime;
 
@@ -215,5 +216,44 @@ public class Issue {
 
   public void setIssueFields(List<IssueField> issueFields) {
     this.issueFields = issueFields;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Issue issue = (Issue)o;
+    return Objects.equals(link, issue.link)
+        && Objects.equals(key, issue.key)
+        && Objects.equals(summary, issue.summary)
+        && Objects.equals(description, issue.description)
+        && Objects.equals(resolution, issue.resolution)
+        && Objects.equals(status, issue.status)
+        && Objects.equals(priority, issue.priority)
+        && Objects.equals(reporter, issue.reporter)
+        && Objects.equals(assignee, issue.assignee)
+        && Objects.equals(issueType, issue.issueType)
+        && Objects.equals(project, issue.project)
+        && Objects.equals(creationDate, issue.creationDate)
+        && Objects.equals(updateDate, issue.updateDate)
+        && Objects.equals(dueDate, issue.dueDate)
+        && Objects.equals(labels, issue.labels)
+        && Objects.equals(components, issue.components)
+        && Objects.equals(fixVersions, issue.fixVersions)
+        && Objects.equals(affectedVersions, issue.affectedVersions)
+        && Objects.equals(comments, issue.comments)
+        && Objects.equals(issueLinks, issue.issueLinks)
+        && Objects.equals(attachments, issue.attachments)
+        && Objects.equals(subTasks, issue.subTasks)
+        && Objects.equals(issueFields, issue.issueFields);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(link, key, summary, description, resolution, status, priority, reporter, assignee, issueType, project, creationDate, updateDate, dueDate, labels, components, fixVersions, affectedVersions, comments, issueLinks, attachments, subTasks, issueFields);
   }
 }

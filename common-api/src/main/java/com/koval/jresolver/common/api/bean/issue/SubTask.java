@@ -1,6 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
 import java.net.URI;
+import java.util.Objects;
 
 
 public class SubTask {
@@ -60,5 +61,26 @@ public class SubTask {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    SubTask subTask = (SubTask)o;
+    return Objects.equals(issueKey, subTask.issueKey)
+        && Objects.equals(issueUri, subTask.issueUri)
+        && Objects.equals(summary, subTask.summary)
+        && Objects.equals(issueType, subTask.issueType)
+        && Objects.equals(status, subTask.status);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(issueKey, issueUri, summary, issueType, status);
   }
 }
