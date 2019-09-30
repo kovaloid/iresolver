@@ -3,8 +3,15 @@ package com.koval.jresolver.connector.jira.client;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.atlassian.jira.rest.client.api.JiraRestClient;
+import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicUser;
 import com.koval.jresolver.common.api.bean.issue.Attachment;
 import com.koval.jresolver.common.api.bean.issue.Comment;
@@ -23,12 +30,23 @@ import com.koval.jresolver.common.api.util.CollectionsUtil;
 
 public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(JiraIssueTransformer.class);
+  private static final Map<String, User> USER_CACHE = new HashMap<>();
   private static final String UNKNOWN = "<unknown>";
+
+  private final JiraRestClient restClient;
+  private final String browseUrl;
+
+  public JiraIssueTransformer(JiraRestClient restClient, String browseUrl) {
+    this.restClient = restClient;
+    this.browseUrl = browseUrl;
+  }
 
   @Override
   public Issue transform(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     Issue transformedIssue = new Issue();
 
+    transformedIssue.setLink(URI.create(browseUrl + originalIssue.getKey()));
     transformedIssue.setKey(originalIssue.getKey());
     transformedIssue.setSummary(originalIssue.getSummary());
     transformedIssue.setDescription(originalIssue.getDescription());
@@ -190,13 +208,38 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
     if (originalBasicUser == null) {
       return getUnknownUser();
     }
-    return new User(originalBasicUser.getName(), originalBasicUser.getDisplayName(), UNKNOWN,
-        new ArrayList<>(), URI.create(""), URI.create(""));
+    if (USER_CACHE.containsKey(originalBasicUser.getName())) {
+      return USER_CACHE.get(originalBasicUser.getName());
+    }
+    try {
+      User user = getFullUserByBasicUser(originalBasicUser);
+      USER_CACHE.put(originalBasicUser.getName(), user);
+      return user;
+    } catch (RestClientException e) {
+      LOGGER.error("Could not get full data about user {}", e.getErrorCollections());
+      User user = getIncompleteUserByBasicUser(originalBasicUser);
+      USER_CACHE.put(originalBasicUser.getName(), user);
+      return user;
+    }
   }
 
   private User getUnknownUser() {
     return new User(UNKNOWN, UNKNOWN, UNKNOWN, new ArrayList<>(),
         URI.create(""), URI.create(""));
+  }
+
+  private User getFullUserByBasicUser(BasicUser basicUser) {
+    com.atlassian.jira.rest.client.api.domain.User fullUser = restClient.getUserClient()
+        .getUser(basicUser.getSelf()).claim();
+    List<String> userGroups = fullUser.getGroups() == null ? new ArrayList<>()
+        : CollectionsUtil.convert(fullUser.getGroups().getItems());
+    return new User(basicUser.getName(), basicUser.getDisplayName(), fullUser.getEmailAddress(),
+        userGroups, fullUser.getAvatarUri(), fullUser.getSmallAvatarUri());
+  }
+
+  private User getIncompleteUserByBasicUser(BasicUser basicUser) {
+    return new User(basicUser.getName(), basicUser.getDisplayName(), UNKNOWN, new ArrayList<>(), URI.create(""),
+        URI.create(""));
   }
 
   private Version transformVersion(com.atlassian.jira.rest.client.api.domain.Version originalVersion) {

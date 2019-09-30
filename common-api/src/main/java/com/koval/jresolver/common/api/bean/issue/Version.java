@@ -1,5 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
+import java.util.Objects;
+
 import org.joda.time.DateTime;
 
 
@@ -60,5 +62,26 @@ public class Version {
 
   public void setReleaseDate(DateTime releaseDate) {
     this.releaseDate = releaseDate;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Version version = (Version)o;
+    return isArchived == version.isArchived
+        && isReleased == version.isReleased
+        && Objects.equals(name, version.name)
+        && Objects.equals(description, version.description)
+        && Objects.equals(releaseDate, version.releaseDate);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, description, isArchived, isReleased, releaseDate);
   }
 }

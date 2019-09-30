@@ -1,6 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
 import java.net.URI;
+import java.util.Objects;
 
 
 public class IssueLink {
@@ -40,5 +41,24 @@ public class IssueLink {
 
   public void setTargetIssueUri(URI targetIssueUri) {
     this.targetIssueUri = targetIssueUri;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    IssueLink issueLink = (IssueLink)o;
+    return Objects.equals(targetIssueKey, issueLink.targetIssueKey)
+        && Objects.equals(issueLinkType, issueLink.issueLinkType)
+        && Objects.equals(targetIssueUri, issueLink.targetIssueUri);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(targetIssueKey, issueLinkType, targetIssueUri);
   }
 }

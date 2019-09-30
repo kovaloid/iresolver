@@ -70,6 +70,14 @@ task printFields(type: JavaExec) {
   args = ['fields']
 }
 
+task testSimilarityProcessor(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['test-similarity-processor']
+}
+
 sourceSets {
   main {
     resources {
@@ -94,7 +102,8 @@ dependencies {
       project(':documentation-processor'),
       project(':link-processor'),
       project(':html-reporter'),
-      project(':text-reporter')
+      project(':text-reporter'),
+      project(':test-similarity-processor')
 }
 
 wrapper {
@@ -231,6 +240,28 @@ task printFieldsScript(type: CreateStartScripts) {
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=fields')
       unixScriptFile.text = unixScriptFile.text
           .replaceFirst('APP_ARGS=', 'APP_ARGS=fields')
+    }
+  }
+}
+
+task testSimilarityProcessorScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'test-similarity-processor'
+
+  testSimilarityProcessorScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=test-similarity-processor')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=test-similarity-processor')
     }
   }
 }

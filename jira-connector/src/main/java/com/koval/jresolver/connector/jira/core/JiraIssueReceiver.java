@@ -23,9 +23,9 @@ public class JiraIssueReceiver implements IssueReceiver {
   private final String query;
   private final Set<String> fields;
   private final int batchSize;
-  private int currentIndex;
-  private final int finishIndex;
   private final int batchDelay;
+  private final int finishIndex;
+  private int currentIndex;
 
   public JiraIssueReceiver(IssueClient client, JiraConnectorProperties properties, boolean isResolvedMode) {
     this.client = client;
@@ -61,7 +61,8 @@ public class JiraIssueReceiver implements IssueReceiver {
     searchResult.forEach(issue ->
         LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
             countWords(issue.getSummary()), countWords(issue.getDescription()), issue.getComments().size(),
-            issue.getAttachments().size()));
+            issue.getAttachments().size())
+    );
     currentIndex += batchSize;
     LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
     if (batchDelay != 0) {
@@ -77,11 +78,11 @@ public class JiraIssueReceiver implements IssueReceiver {
     if (text == null) {
       return 0;
     }
-    String blankText = text.trim();
-    if (blankText.isEmpty()) {
+    String trimmedText = text.trim();
+    if (trimmedText.isEmpty()) {
       return 0;
     }
-    return blankText.split("\\s+").length;
+    return trimmedText.split("\\s+").length;
   }
 
   private void delay() {

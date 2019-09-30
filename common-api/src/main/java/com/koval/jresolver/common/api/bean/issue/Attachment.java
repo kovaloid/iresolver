@@ -1,6 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
 import java.net.URI;
+import java.util.Objects;
 
 import org.joda.time.DateTime;
 
@@ -72,5 +73,27 @@ public class Attachment {
 
   public void setContentUri(URI contentUri) {
     this.contentUri = contentUri;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Attachment that = (Attachment)o;
+    return size == that.size
+        && Objects.equals(fileName, that.fileName)
+        && Objects.equals(author, that.author)
+        && Objects.equals(creationDate, that.creationDate)
+        && Objects.equals(mimeType, that.mimeType)
+        && Objects.equals(contentUri, that.contentUri);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(fileName, author, creationDate, size, mimeType, contentUri);
   }
 }
