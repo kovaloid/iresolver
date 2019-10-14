@@ -1,26 +1,24 @@
 package com.koval.jresolver.docprocessor;
 
-import com.koval.jresolver.common.api.component.connector.Connector;
-import com.koval.jresolver.common.api.component.connector.IssueReceiver;
-import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
-import com.koval.jresolver.docprocessor.core.DocumentationParagraphReceiver;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
-public class DocumentationProcessor implements Connector {
+public class DocumentationProcessor {
+  public static void main(String[] args) {
+    PdfFileParser parser = new PdfFileParser();
+    DataSetGenerator generator = new DataSetGenerator();
+    try (InputStream input = DocumentationProcessor.class.getResourceAsStream("/test.pdf")) {
+      if (input == null) {
+        System.out.println("No such file");
+      }
 
-    private DocumentationProcessorProperties properties;
+      Map<Integer, String> result = parser.getMapping(input);
+      System.out.println(result);
 
-    public DocumentationProcessor(DocumentationProcessorProperties properties) {
-        this.properties = properties;
+      generator.createDataSet(result);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-
-    @Override
-    public IssueReceiver getResolvedIssuesReceiver() {
-        return null;
-    }
-
-    @Override
-    public IssueReceiver getUnresolvedIssuesReceiver() {
-        return null;
-    }
-
+  }
 }
