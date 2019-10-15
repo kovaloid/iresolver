@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-public class PdfFileParser {
+public class PdfFileParser implements FileParser {
 
   public Map<Integer, String> getMapping(InputStream input) throws IOException {
     Map<Integer, String> result = new HashMap<>();
