@@ -28,6 +28,8 @@ public class SimilarityProcessorProperties {
   private String workFolder = "../data/";
   private String vectorModelFileName = "VectorModel.zip";
   private String dataSetFileName = "DataSet.txt";
+  private String trainSetFileName = "TrainDataSet.txt";
+  private String testSetFileName = "TestDataSet.txt";
 
   public SimilarityProcessorProperties() {
     loadProperties();
@@ -52,6 +54,8 @@ public class SimilarityProcessorProperties {
       workFolder = properties.getProperty("workFolder");
       vectorModelFileName = properties.getProperty("vectorModelFileName");
       dataSetFileName = properties.getProperty("dataSetFileName");
+      trainSetFileName = properties.getProperty("trainSetFileName");
+      testSetFileName = properties.getProperty("testSetFileName");
     } catch (IOException e) {
       throw new ConfigurationException("Could not load the similarity processor properties.", e);
     }
@@ -154,6 +158,22 @@ public class SimilarityProcessorProperties {
     this.dataSetFileName = dataSetFileName;
   }
 
+  public String getTrainSetFileName() {
+    return trainSetFileName;
+  }
+
+  public void setTrainSetFileName(String trainSetFileName) {
+    this.trainSetFileName = trainSetFileName;
+  }
+
+  public String getTestSetFileName() {
+    return testSetFileName;
+  }
+
+  public void setTestSetFileName(String testSetFileName) {
+    this.testSetFileName = testSetFileName;
+  }
+
   @Override
   public String toString() {
     return "SimilarityProcessorProperties{"
@@ -169,6 +189,8 @@ public class SimilarityProcessorProperties {
         + ", workFolder='" + workFolder + '\''
         + ", vectorModelFileName='" + vectorModelFileName + '\''
         + ", dataSetFileName='" + dataSetFileName + '\''
+        + ", trainSetFileName ='" + trainSetFileName + '\''
+        + ", testSetFileName ='" + testSetFileName + '\''
         + '}';
   }
 }
