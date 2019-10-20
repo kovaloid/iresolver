@@ -44,6 +44,12 @@ import com.koval.jresolver.processor.similarity.core.dataset.DataSetCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModel;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelCreator;
 import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
+import com.koval.jresolver.docprocessor.similarity.SimilarityProcessor;
+import com.koval.jresolver.docprocessor.similarity.configuration.SimilarityProcessorProperties;
+import com.koval.jresolver.docprocessor.similarity.core.dataset.DataSetCreator;
+import com.koval.jresolver.docprocessor.similarity.core.model.VectorModel;
+import com.koval.jresolver.docprocessor.similarity.core.model.VectorModelCreator;
+import com.koval.jresolver.docprocessor.similarity.core.model.VectorModelSerializer;
 import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
@@ -70,8 +76,25 @@ public final class LaunchUtil {
     }
   }
 
+  public static void createDocumentationDataSet() {
+    /*TODO refer to createDataSet from documentation-processor*/
+  }
+
   public static void createVectorModel() {
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
+    VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
+    File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
+    try {
+      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
+      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
+      vectorModelSerializer.serialize(vectorModel);
+    } catch (IOException e) {
+      LOGGER.error("Could not create vector model file.", e);
+    }
+  }
+
+  public static void createDocumentationVectorModel() {
+    DocumentationSimilarityProcessorProperties similarityProcessorProperties = new DocumentationSimilarityProcessorProperties();
     VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
     File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
     try {
@@ -97,6 +120,8 @@ public final class LaunchUtil {
       LOGGER.error("Could not clean folder: " + similarityProcessorProperties.getWorkFolder(), e);
     }
   }
+
+  /*TODO do we need clean method for documentation?*/
 
   public static void run() {
     ControlProperties controlProperties = new ControlProperties();
