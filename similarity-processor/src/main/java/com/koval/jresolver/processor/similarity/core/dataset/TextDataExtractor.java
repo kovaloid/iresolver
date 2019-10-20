@@ -20,7 +20,7 @@ public class TextDataExtractor {
     return textData.toString().trim();
   }
 
-  private String simplify(String text) {
+  public String simplify(String text) {
     return text
         .trim()
         .replaceAll("[^A-Za-z0-9]", " ")

@@ -1,0 +1,12 @@
+dependencies {
+  compile project(':common-api'),
+      project(':similarity-processor')
+  compile 'org.apache.tika:tika-parsers:1.17'
+}
+
+task runDocProcessor(type: JavaExec) {
+  group 'application'
+  main = 'com.koval.jresolver.docprocessor.DocumentationProcessor'
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('.')
+}
