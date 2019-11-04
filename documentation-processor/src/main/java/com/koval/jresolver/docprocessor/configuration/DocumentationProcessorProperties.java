@@ -1,14 +1,10 @@
 package com.koval.jresolver.docprocessor.configuration;
 
-public class DocumentationProcessorProperties {
+import com.koval.jresolver.common.api.doc2vec.Doc2VecProperties;
 
-    private String filename;
+public class DocumentationProcessorProperties extends Doc2VecProperties {
 
-    public DocumentationProcessorProperties() {
-        this.filename = "test.pdf";
-    }
-
-    public String getFilename() {
-        return this.filename;
-    }
+  public DocumentationProcessorProperties() {
+    super("documentation-processor.properties");
+  }
 }

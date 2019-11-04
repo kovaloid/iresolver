@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.core.model;
+package com.koval.jresolver.common.api.doc2vec;
 
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.slf4j.Logger;

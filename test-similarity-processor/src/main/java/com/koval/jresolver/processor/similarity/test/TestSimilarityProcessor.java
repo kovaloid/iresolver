@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.koval.jresolver.common.api.doc2vec.VectorModel;
+import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
 import org.apache.commons.io.FileUtils;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareListSentenceIterator;
 import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIterator;
@@ -11,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-import com.koval.jresolver.processor.similarity.core.model.VectorModel;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
 
 
 public class TestSimilarityProcessor {

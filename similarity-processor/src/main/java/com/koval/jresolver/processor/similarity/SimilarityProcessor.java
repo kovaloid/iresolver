@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.koval.jresolver.common.api.doc2vec.VectorModel;
+import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +21,7 @@ import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-import com.koval.jresolver.processor.similarity.core.dataset.TextDataExtractor;
-import com.koval.jresolver.processor.similarity.core.model.VectorModel;
-import com.koval.jresolver.processor.similarity.core.model.VectorModelSerializer;
+import com.koval.jresolver.processor.similarity.core.TextDataExtractor;
 
 
 public class SimilarityProcessor implements IssueProcessor {

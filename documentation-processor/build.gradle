@@ -1,6 +1,5 @@
 dependencies {
-  compile project(':common-api'),
-      project(':similarity-processor')
+  compile project(':common-api')
   compile 'org.apache.tika:tika-parsers:1.17'
 }
 

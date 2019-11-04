@@ -5,6 +5,14 @@ dependencies {
       'joda-time:joda-time:2.10.1',
       'commons-io:commons-io:2.6',
       'commons-codec:commons-codec:1.12'
+  compile('org.deeplearning4j:deeplearning4j-nlp:0.9.1') {
+    exclude group: 'org.datavec', module: 'datavec-data-image'
+    exclude group: 'org.deeplearning4j', module: 'deeplearning4j-ui-components'
+    exclude group: 'org.bytedeco.javacpp-presets', module: 'hdf5-platform'
+    exclude group: 'com.github.stephenc.findbugs', module: 'findbugs-annotations'
+  }
+  compile 'org.nd4j:nd4j-native-platform:0.9.1',
+          'org.apache.lucene:lucene-snowball:3.0.3'
   testCompile 'junit:junit:4.12',
       'org.mockito:mockito-core:2.19.0'
 }

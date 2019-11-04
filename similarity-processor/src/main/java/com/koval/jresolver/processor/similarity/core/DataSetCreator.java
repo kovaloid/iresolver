@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.core.dataset;
+package com.koval.jresolver.processor.similarity.core;
 
 import java.io.File;
 import java.io.IOException;

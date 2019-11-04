@@ -1,11 +1,4 @@
-package com.koval.jresolver.processor.similarity.core.model;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
+package com.koval.jresolver.common.api.doc2vec;
 
 import org.deeplearning4j.models.embeddings.learning.impl.sequence.DBOW;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
@@ -22,7 +15,12 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 
 public class VectorModelCreator {
@@ -31,17 +29,17 @@ public class VectorModelCreator {
 
   private TokenPreProcess tokenPreprocessor;
   private List<String> stopWords;
-  private SimilarityProcessorProperties similarityProcessorProperties;
+  private Doc2VecProperties properties;
 
-  public VectorModelCreator(SimilarityProcessorProperties similarityProcessorProperties) {
-    this(new StemmingPreprocessor().setLanguage(similarityProcessorProperties.getLanguage()), StopWords.getStopWords(),
-        similarityProcessorProperties);
+  public VectorModelCreator(Doc2VecProperties properties) {
+    this(new StemmingPreprocessor().setLanguage(properties.getLanguage()), StopWords.getStopWords(),
+        properties);
   }
 
-  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, SimilarityProcessorProperties similarityProcessorProperties) {
+  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, Doc2VecProperties properties) {
     this.tokenPreprocessor = tokenPreprocessor;
     this.stopWords = stopWords;
-    this.similarityProcessorProperties = similarityProcessorProperties;
+    this.properties = properties;
   }
 
   public VectorModel createFromFile(File inputFile) throws IOException {
@@ -72,14 +70,14 @@ public class VectorModelCreator {
         .setVectorsListeners(Collections.singletonList(
             new SimilarityListener<>(ListenerEvent.EPOCH, 1, "AMQ-6134 ", "AMQ-5100 "))
         )
-        .minWordFrequency(similarityProcessorProperties.getMinWordFrequency())
-        .iterations(similarityProcessorProperties.getIterations())
-        .epochs(similarityProcessorProperties.getEpochs())
-        .layerSize(similarityProcessorProperties.getLayerSize())
-        .learningRate(similarityProcessorProperties.getLearningRate())
-        .windowSize(similarityProcessorProperties.getWindowSize())
-        .trainWordVectors(similarityProcessorProperties.isTrainWordVectors())
-        .sampling(similarityProcessorProperties.getSampling())
+        .minWordFrequency(properties.getMinWordFrequency())
+        .iterations(properties.getIterations())
+        .epochs(properties.getEpochs())
+        .layerSize(properties.getLayerSize())
+        .learningRate(properties.getLearningRate())
+        .windowSize(properties.getWindowSize())
+        .trainWordVectors(properties.isTrainWordVectors())
+        .sampling(properties.getSampling())
         .iterate(iterator)
         .vocabCache(cache)
         .tokenizerFactory(tokenizerFactory)

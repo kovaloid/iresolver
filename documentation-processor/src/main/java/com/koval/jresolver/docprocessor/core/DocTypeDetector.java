@@ -1,10 +1,11 @@
-package com.koval.jresolver.docprocessor;
+package com.koval.jresolver.docprocessor.core;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.koval.jresolver.docprocessor.core.parser.PdfFileParser;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;

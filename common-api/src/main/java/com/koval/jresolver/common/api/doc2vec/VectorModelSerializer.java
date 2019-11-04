@@ -1,7 +1,4 @@
-package com.koval.jresolver.processor.similarity.core.model;
-
-import java.io.File;
-import java.io.IOException;
+package com.koval.jresolver.common.api.doc2vec;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
@@ -9,7 +6,8 @@ import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
+import java.io.File;
+import java.io.IOException;
 
 
 public class VectorModelSerializer {
@@ -18,10 +16,10 @@ public class VectorModelSerializer {
   private final String vectorModelPath;
   private final String vectorModelFileName;
 
-  public VectorModelSerializer(SimilarityProcessorProperties similarityProcessorProperties) {
-    this.preProcessor = new StemmingPreprocessor().setLanguage(similarityProcessorProperties.getLanguage());
-    this.vectorModelPath = similarityProcessorProperties.getWorkFolder();
-    this.vectorModelFileName = similarityProcessorProperties.getVectorModelFileName();
+  public VectorModelSerializer(Doc2VecProperties properties) {
+    this.preProcessor = new StemmingPreprocessor().setLanguage(properties.getLanguage());
+    this.vectorModelPath = properties.getWorkFolder();
+    this.vectorModelFileName = properties.getVectorModelFileName();
   }
 
   public File serialize(VectorModel vectorModel) {

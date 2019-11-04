@@ -1,10 +1,11 @@
-package com.koval.jresolver.docprocessor;
+package com.koval.jresolver.docprocessor.core.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.koval.jresolver.docprocessor.core.FileParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 

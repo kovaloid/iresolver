@@ -1,6 +1,7 @@
-package com.koval.jresolver.processor.similarity.core.dataset;
+package com.koval.jresolver.processor.similarity.core;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
+import com.koval.jresolver.common.api.util.TextUtil;
 
 
 public class TextDataExtractor {
@@ -9,21 +10,14 @@ public class TextDataExtractor {
     StringBuilder textData = new StringBuilder(100);
     if (issue.getSummary() != null && !issue.getSummary().isEmpty()) {
       textData
-          .append(simplify(issue.getSummary()))
+          .append(TextUtil.simplify(issue.getSummary()))
           .append(' ');
     }
     if (issue.getDescription() != null && !issue.getDescription().isEmpty()) {
       textData
-          .append(simplify(issue.getDescription()))
+          .append(TextUtil.simplify(issue.getDescription()))
           .append(' ');
     }
     return textData.toString().trim();
-  }
-
-  public String simplify(String text) {
-    return text
-        .trim()
-        .replaceAll("[^A-Za-z0-9]", " ")
-        .replaceAll(" +", " ");
   }
 }

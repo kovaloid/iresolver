@@ -9,6 +9,14 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Objects;
 
+import com.koval.jresolver.common.api.doc2vec.Doc2VecProperties;
+import com.koval.jresolver.common.api.doc2vec.VectorModel;
+import com.koval.jresolver.common.api.doc2vec.VectorModelCreator;
+import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.docprocessor.core.DataSetGenerator;
+import com.koval.jresolver.docprocessor.core.DocTypeDetector;
+import com.koval.jresolver.docprocessor.core.FileParser;
 import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +29,12 @@ public class DocumentationProcessor {
   private static final String outputFileName = "../output/pdf-data-set.txt";
 
   public static void main(String[] args) {
+    DocumentationProcessor doc = new DocumentationProcessor();
+    doc.createDataSet();
+    doc.createVectorModel();
+  }
+
+  private void createDataSet() {
     DataSetGenerator dataSetGenerator = new DataSetGenerator();
     DocTypeDetector docTypeDetector = new DocTypeDetector();
 
@@ -39,6 +53,19 @@ public class DocumentationProcessor {
           LOGGER.error("Could not read files from work folder", e);
         }
       }
+    }
+  }
+
+  private void createVectorModel() {
+    DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
+    VectorModelCreator vectorModelCreator = new VectorModelCreator(properties);
+    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    try {
+      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
+      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
+      vectorModelSerializer.serialize(vectorModel);
+    } catch (IOException e) {
+      LOGGER.error("Could not create vector model file.", e);
     }
   }
 

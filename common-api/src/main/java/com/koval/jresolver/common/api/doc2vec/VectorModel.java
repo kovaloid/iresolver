@@ -1,8 +1,8 @@
-package com.koval.jresolver.processor.similarity.core.model;
-
-import java.util.Collection;
+package com.koval.jresolver.common.api.doc2vec;
 
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
+
+import java.util.Collection;
 
 
 public class VectorModel {

@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor;
+package com.koval.jresolver.docprocessor.core;
 
 import java.io.IOException;
 import java.io.InputStream;
