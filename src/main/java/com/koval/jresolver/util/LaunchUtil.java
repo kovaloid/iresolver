@@ -73,6 +73,10 @@ public final class LaunchUtil {
     }
   }
 
+  public static void createDocumentationDataSet() {
+    /*TODO refer to createDataSet from documentation-processor*/
+  }
+
   public static void createVectorModel() {
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
     VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
@@ -119,6 +123,8 @@ public final class LaunchUtil {
       LOGGER.error("Could not clean folder: " + similarityProcessorProperties.getWorkFolder(), e);
     }
   }
+
+  /*TODO do we need clean method for documentation?*/
 
   public static void run() {
     ControlProperties controlProperties = new ControlProperties();
