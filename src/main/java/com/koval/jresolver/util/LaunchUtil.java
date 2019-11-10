@@ -1,14 +1,26 @@
 package com.koval.jresolver.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.jresolver.docprocessor.DocumentationProcessor;
+import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.docprocessor.core.DocDataSetCreator;
+import com.koval.jresolver.docprocessor.core.DocTypeDetector;
+import com.koval.jresolver.docprocessor.core.FileParser;
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +95,43 @@ public final class LaunchUtil {
     }
   }
 
+  public static void createDocumentationDataSet() {
+    // TODO: data sets creation
+    DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
+    DocDataSetCreator docDataSetCreator = new DocDataSetCreator();
+    DocTypeDetector docTypeDetector = new DocTypeDetector();
+    File docsFolder = new File(properties.getDocsFolder());
+    for (final File fileEntry: Objects.requireNonNull(docsFolder.listFiles())) {
+      if (fileEntry.isFile()) {
+        try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(fileEntry))) {
+          MediaType mediaType = docTypeDetector.detectType(inputFileStream, fileEntry.getName());
+          if (docTypeDetector.isTypeSupported(mediaType)) {
+            FileParser fileParser = docTypeDetector.getFileParser(mediaType);
+            Map<Integer, String> result = fileParser.getMapping(inputFileStream);
+            docDataSetCreator.create(result, new File(properties.getWorkFolder(), properties.getDataSetFileName()));
+          }
+        } catch (FileNotFoundException e) {
+          LOGGER.error("Could not find work folder", e);
+        } catch (IOException e) {
+          LOGGER.error("Could not read files from work folder", e);
+        }
+      }
+    }
+  }
+
+  public static void createDocumentationVectorModel() {
+    DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
+    VectorModelCreator vectorModelCreator = new VectorModelCreator(properties);
+    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    try {
+      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
+      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
+      vectorModelSerializer.serialize(vectorModel);
+    } catch (IOException e) {
+      LOGGER.error("Could not create documentation vector model file.", e);
+    }
+  }
+
   public static void clean() {
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
     try {
@@ -137,6 +186,10 @@ public final class LaunchUtil {
     if (processorNames.contains(ProcessorConstants.SIMILARITY)) {
       SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
       issueProcessors.add(new SimilarityProcessor(issueClient, similarityProcessorProperties));
+    }
+    if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
+      DocumentationProcessorProperties documentationProcessorProperties = new DocumentationProcessorProperties();
+      issueProcessors.add(new DocumentationProcessor(documentationProcessorProperties));
     }
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
       issueProcessors.add(new RuleEngineProcessor(ruleEngine));

@@ -21,7 +21,7 @@ import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
-import com.koval.jresolver.processor.similarity.core.TextDataExtractor;
+import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 
 
 public class SimilarityProcessor implements IssueProcessor {

@@ -2,6 +2,7 @@ package com.koval.jresolver.common.api.bean.result;
 
 import java.util.List;
 
+import com.koval.jresolver.common.api.bean.doc.Documentation;
 import com.koval.jresolver.common.api.bean.issue.Attachment;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
@@ -14,6 +15,7 @@ public class IssueAnalysingResult {
   private List<Pair<User, Integer>> qualifiedUsers;
   private List<Pair<String, Integer>> probableLabels;
   private List<Pair<Attachment, Integer>> probableAttachments;
+  private List<Documentation> documentations;
   private List<String> proposals;
   private String externalLink;
 
@@ -55,6 +57,14 @@ public class IssueAnalysingResult {
 
   public void setProbableAttachments(List<Pair<Attachment, Integer>> probableAttachments) {
     this.probableAttachments = probableAttachments;
+  }
+
+  public List<Documentation> getDocumentations() {
+    return documentations;
+  }
+
+  public void setDocumentations(List<Documentation> documentations) {
+    this.documentations = documentations;
   }
 
   public List<String> getProposals() {

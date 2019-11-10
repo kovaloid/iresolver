@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.core;
+package com.koval.jresolver.common.api.doc2vec;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.util.TextUtil;

@@ -14,11 +14,18 @@ public final class Launcher {
 
   private static final String CREATE_DATA_SET = "create-data-set";
   private static final String CREATE_VECTOR_MODEL = "create-vector-model";
+  private static final String CREATE_DOCUMENTATION_DATA_SET = "create-documentation-data-set";
+  private static final String CREATE_DOCUMENTATION_VECTOR_MODEL = "create-documentation-vector-model";
   private static final String CLEAN = "clean";
   private static final String FIELDS = "fields";
   private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
-  private static final String HELP_TIP = "Please use " + CREATE_DATA_SET + ", " + CREATE_VECTOR_MODEL + ", " + CLEAN
-          + ", " + FIELDS + " or " + TEST_SIMILARITY_PROCESSOR + ".";
+  private static final String HELP_TIP = "Please use the following commands: \n"
+      + CREATE_DATA_SET + ", "
+      + CREATE_VECTOR_MODEL + ", "
+      + CREATE_DOCUMENTATION_VECTOR_MODEL + ", "
+      + CLEAN + ", "
+      + FIELDS + ", "
+      + TEST_SIMILARITY_PROCESSOR + ".";
 
   private Launcher() {
   }
@@ -36,6 +43,14 @@ public final class Launcher {
         case CREATE_VECTOR_MODEL:
           LOGGER.info("Start creating vector model.");
           LaunchUtil.createVectorModel();
+          break;
+        case CREATE_DOCUMENTATION_DATA_SET:
+          LOGGER.info("Start creating documentation data set.");
+          LaunchUtil.createDocumentationDataSet();
+          break;
+        case CREATE_DOCUMENTATION_VECTOR_MODEL:
+          LOGGER.info("Start creating documentation vector model.");
+          LaunchUtil.createDocumentationVectorModel();
           break;
         case CLEAN:
           LOGGER.info("Start cleaning work folder.");

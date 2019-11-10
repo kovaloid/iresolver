@@ -26,11 +26,13 @@ public class Doc2VecProperties {
   private String vectorModelFileName = "VectorModel.zip";
   private String dataSetFileName = "DataSet.txt";
 
+  protected Properties properties;
+
   public Doc2VecProperties(String propertiesFileName) {
-    loadProperties(propertiesFileName);
+    properties = loadProperties(propertiesFileName);
   }
 
-  private void loadProperties(String propertiesFileName) {
+  private Properties loadProperties(String propertiesFileName) {
     Properties properties = new Properties();
     try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesFileName)) {
       if (input == null) {
@@ -53,6 +55,7 @@ public class Doc2VecProperties {
       throw new ConfigurationException("Could not load the doc2vec processor properties.", e);
     }
     LOGGER.debug("Doc2Vec configuration was loaded successfully.");
+    return properties;
   }
 
   public int getMinWordFrequency() {

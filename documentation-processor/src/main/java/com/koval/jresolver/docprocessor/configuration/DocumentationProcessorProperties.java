@@ -7,4 +7,8 @@ public class DocumentationProcessorProperties extends Doc2VecProperties {
   public DocumentationProcessorProperties() {
     super("documentation-processor.properties");
   }
+
+  public String getDocsFolder() {
+    return properties.getProperty("docsFolder");
+  }
 }

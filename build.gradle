@@ -24,6 +24,22 @@ task createVectorModel(type: JavaExec) {
   args = ['create-vector-model']
 }
 
+task createDocumentationDataSet(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['create-documentation-data-set']
+}
+
+task createDocumentationVectorModel(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['create-documentation-vector-model']
+}
+
 task cleanWorkFolders(type: JavaExec) {
   group 'application'
   main = "$mainClassName"
@@ -52,6 +68,7 @@ sourceSets {
   main {
     resources {
       srcDir 'data'
+      srcDir 'docs'
       srcDir 'src/main/resources'
       srcDir 'jira-connector/src/main/resources'
       srcDir 'bugzilla-connector/src/main/resources'
@@ -166,6 +183,50 @@ task createVectorModelScript(type: CreateStartScripts) {
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-vector-model')
       unixScriptFile.text = unixScriptFile.text
           .replaceFirst('APP_ARGS=', 'APP_ARGS=create-vector-model')
+    }
+  }
+}
+
+task createDocumentationDataSetScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'create-documentation-data-set'
+
+  createDataSetScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-documentation-data-set')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-documentation-data-set')
+    }
+  }
+}
+
+task createDocumentationVectorModelScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'create-documentation-vector-model'
+
+  createVectorModelScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-documentation-vector-model')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-documentation-vector-model')
     }
   }
 }
