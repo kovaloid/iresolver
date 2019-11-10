@@ -2,8 +2,11 @@ package com.koval.jresolver.docprocessor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import com.koval.jresolver.common.api.bean.doc.Documentation;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
@@ -35,10 +38,11 @@ public class DocumentationProcessor implements IssueProcessor {
     Collection<String> similarDocKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
+    List<Documentation> docs = new ArrayList<>();
     similarDocKeys.forEach((similarDocKey) -> {
       // TODO: results generation
     });
-    result.setDocumentations(null);
+    result.setDocumentations(docs);
   }
 
 }

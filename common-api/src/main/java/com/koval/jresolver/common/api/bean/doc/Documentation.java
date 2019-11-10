@@ -5,6 +5,11 @@ public class Documentation {
   private String fileName;
   private int pageNumber;
 
+  public Documentation(String fileName, int pageNumber) {
+    this.fileName = fileName;
+    this.pageNumber = pageNumber;
+  }
+
   public String getFileName() {
     return fileName;
   }

@@ -1,26 +1,82 @@
 package com.koval.jresolver.docprocessor.core;
 
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
 import com.koval.jresolver.common.api.util.TextUtil;
+import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
+import org.apache.tika.mime.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DocDataSetCreator {
 
-  public void create(Map<Integer, String> mapping, File outputFile) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-      for(Map.Entry<Integer, String> entry: mapping.entrySet()) {
-        writer.write(entry.getKey().toString());
-        writer.write(" | ");
-        writer.write(TextUtil.simplify(entry.getValue()));
-        writer.newLine();
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
+
+  private DocTypeDetector docTypeDetector = new DocTypeDetector();
+  private DocumentationProcessorProperties properties;
+
+  public DocDataSetCreator(DocumentationProcessorProperties properties) {
+    this.properties = properties;
+  }
+
+  public void create() {
+    File docsFolder = new File(properties.getDocsFolder());
+    int pageIndex = 0;
+    int documentIndex = 0;
+
+    for (final File docFile : Objects.requireNonNull(docsFolder.listFiles())) {
+      if (docFile.isFile()) {
+        try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
+          MediaType mediaType = docTypeDetector.detectType(inputFileStream, docFile.getName());
+          if (docTypeDetector.isTypeSupported(mediaType)) {
+
+            try (PrintWriter dataSetOutput = new PrintWriter(new File(properties.getWorkFolder(), properties.getDataSetFileName()), StandardCharsets.UTF_8.name());
+                 PrintWriter metadataOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-metadata.txt"), StandardCharsets.UTF_8.name());
+                 PrintWriter docListOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-list.txt"), StandardCharsets.UTF_8.name())) {
+
+              FileParser fileParser = docTypeDetector.getFileParser(mediaType);
+              Map<Integer, String> result = fileParser.getMapping(inputFileStream);
+
+              for (Map.Entry<Integer, String> docPage : result.entrySet()) {
+                String docPageKey = "doc_" + pageIndex;
+                pageIndex++;
+
+                dataSetOutput.print(docPageKey);
+                dataSetOutput.print("|");
+                dataSetOutput.println(TextUtil.simplify(docPage.getValue()));
+
+                metadataOutput.print(docPageKey);
+                metadataOutput.print("|");
+                metadataOutput.print(documentIndex);
+                metadataOutput.print("|");
+                metadataOutput.println(docPage.getKey());
+              }
+
+              docListOutput.print(documentIndex);
+              docListOutput.print(" ");
+              docListOutput.println(docFile.getName());
+              documentIndex++;
+            } catch (FileNotFoundException | UnsupportedEncodingException e) {
+              LOGGER.error("Could not write to output file", e);
+            }
+          }
+        } catch (FileNotFoundException e) {
+          LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
+        } catch (IOException e) {
+          LOGGER.error("Could not read documentation file" + docFile.getAbsolutePath(), e);
+        }
       }
-    } catch (IOException e) {
-      e.printStackTrace();
     }
   }
 }
