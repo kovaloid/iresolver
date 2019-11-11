@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.util.LaunchUtil;
 
 
+@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);

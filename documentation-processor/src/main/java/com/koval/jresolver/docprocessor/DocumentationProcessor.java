@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.jresolver.common.api.bean.doc.Documentation;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
@@ -17,8 +20,6 @@ import com.koval.jresolver.docprocessor.bean.DocFile;
 import com.koval.jresolver.docprocessor.bean.DocMetadata;
 import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
 import com.koval.jresolver.docprocessor.core.DocOutputFilesParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class DocumentationProcessor implements IssueProcessor {

@@ -1,13 +1,13 @@
 package com.koval.jresolver.common.api.doc2vec;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class VectorModelSerializer {

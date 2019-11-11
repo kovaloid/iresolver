@@ -6,13 +6,13 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
-import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 

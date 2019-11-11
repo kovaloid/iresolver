@@ -1,8 +1,8 @@
 package com.koval.jresolver.common.api.doc2vec;
 
-import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
-
 import java.util.Collection;
+
+import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 
 
 public class VectorModel {

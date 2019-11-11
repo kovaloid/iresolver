@@ -1,12 +1,13 @@
 package com.koval.jresolver.common.api.doc2vec;
 
-import com.koval.jresolver.common.api.exception.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.koval.jresolver.common.api.exception.ConfigurationException;
 
 
 public class Doc2VecProperties {
@@ -26,10 +27,10 @@ public class Doc2VecProperties {
   private String vectorModelFileName = "VectorModel.zip";
   private String dataSetFileName = "DataSet.txt";
 
-  protected Properties properties;
+  private final Properties allProperties;
 
   public Doc2VecProperties(String propertiesFileName) {
-    properties = loadProperties(propertiesFileName);
+    allProperties = loadProperties(propertiesFileName);
   }
 
   private Properties loadProperties(String propertiesFileName) {
@@ -56,6 +57,10 @@ public class Doc2VecProperties {
     }
     LOGGER.debug("Doc2Vec configuration was loaded successfully.");
     return properties;
+  }
+
+  public Properties getProperties() {
+    return allProperties;
   }
 
   public int getMinWordFrequency() {

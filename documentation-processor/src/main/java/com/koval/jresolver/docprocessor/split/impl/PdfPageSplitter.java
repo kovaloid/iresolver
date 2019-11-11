@@ -5,9 +5,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.koval.jresolver.docprocessor.split.PageSplitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+
+import com.koval.jresolver.docprocessor.split.PageSplitter;
 
 
 public class PdfPageSplitter implements PageSplitter {

@@ -10,14 +10,14 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Objects;
+
+import org.apache.tika.mime.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.util.TextUtil;
 import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
 import com.koval.jresolver.docprocessor.split.PageSplitter;
-import org.apache.tika.mime.MediaType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class DocDataSetCreator {
@@ -27,8 +27,8 @@ public class DocDataSetCreator {
   private static final String SPACE = " ";
   private static final String SEPARATOR = "|";
 
-  private DocTypeDetector docTypeDetector = new DocTypeDetector();
-  private DocumentationProcessorProperties properties;
+  private final DocTypeDetector docTypeDetector = new DocTypeDetector();
+  private final DocumentationProcessorProperties properties;
 
   public DocDataSetCreator(DocumentationProcessorProperties properties) {
     this.properties = properties;
@@ -36,10 +36,16 @@ public class DocDataSetCreator {
 
   public void create() {
     File docsFolder = new File(properties.getDocsFolder());
+    File[] docFiles = docsFolder.listFiles();
+    if (docFiles == null) {
+      LOGGER.warn("There are no documentation files");
+      return;
+    }
+
     int pageIndex = 0;
     int documentIndex = 0;
 
-    for (final File docFile : Objects.requireNonNull(docsFolder.listFiles())) {
+    for (final File docFile : docFiles) {
       if (docFile.isFile()) {
         try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
           MediaType mediaType = docTypeDetector.detectType(inputFileStream, docFile.getName());
