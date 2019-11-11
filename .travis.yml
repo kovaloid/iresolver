@@ -5,10 +5,6 @@ cache:
   directories:
     - "$HOME/.gradle/caches/"
     - "$HOME/.gradle/wrapper/"
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 install: true
 before_install:
   - export JAVA_OPTS="-Xms1024m -Xmx1024m"
