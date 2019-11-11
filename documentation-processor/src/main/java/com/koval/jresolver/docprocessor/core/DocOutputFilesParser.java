@@ -12,6 +12,7 @@ import com.koval.jresolver.docprocessor.bean.DocMetadata;
 
 public class DocOutputFilesParser {
 
+  private final static String SPACE = " ";
   /*
   private DocumentationProcessorProperties properties;
 
@@ -25,7 +26,7 @@ public class DocOutputFilesParser {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(DocOutputFilesParser.class.getResourceAsStream("doc-list.txt")))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String[] split = line.split(" ");
+        String[] split = line.split(SPACE);
         int fileIndex = Integer.valueOf(split[0]);
         String fileName = split[1];
         docFiles.add(new DocFile(fileIndex, fileName));
@@ -41,7 +42,7 @@ public class DocOutputFilesParser {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(DocOutputFilesParser.class.getResourceAsStream("doc-metadata.txt")))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String[] split = line.split(" ");
+        String[] split = line.split(SPACE);
         docMetadata.add(new DocMetadata(split[0], Integer.valueOf(split[1]), Integer.valueOf(split[2])));
       }
     } catch (IOException e) {
