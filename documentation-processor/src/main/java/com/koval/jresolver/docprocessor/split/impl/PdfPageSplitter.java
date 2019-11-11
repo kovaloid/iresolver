@@ -1,16 +1,18 @@
-package com.koval.jresolver.docprocessor.core.parser;
+package com.koval.jresolver.docprocessor.split.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.koval.jresolver.docprocessor.core.FileParser;
+import com.koval.jresolver.docprocessor.split.PageSplitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-public class PdfFileParser implements FileParser {
 
+public class PdfPageSplitter implements PageSplitter {
+
+  @Override
   public Map<Integer, String> getMapping(InputStream input) throws IOException {
     Map<Integer, String> result = new HashMap<>();
     PDDocument doc = PDDocument.load(input);
@@ -23,5 +25,4 @@ public class PdfFileParser implements FileParser {
     }
     return result;
   }
-
 }

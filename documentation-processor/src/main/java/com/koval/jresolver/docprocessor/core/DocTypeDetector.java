@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.koval.jresolver.docprocessor.core.parser.PdfFileParser;
+import com.koval.jresolver.docprocessor.split.PageSplitter;
+import com.koval.jresolver.docprocessor.split.impl.PdfPageSplitter;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
@@ -27,9 +28,9 @@ public class DocTypeDetector {
     return supportedTypes.contains(mediaType.toString());
   }
 
-  public FileParser getFileParser(MediaType mediaType) {
+  public PageSplitter getFileParser(MediaType mediaType) {
     if (mediaType.toString().equals("application/pdf")) {
-      return new PdfFileParser();
+      return new PdfPageSplitter();
     } else {
       throw new IllegalArgumentException("Unsupported format: " + mediaType.toString());
     }

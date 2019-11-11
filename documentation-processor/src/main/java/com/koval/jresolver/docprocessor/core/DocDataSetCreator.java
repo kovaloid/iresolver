@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import com.koval.jresolver.common.api.util.TextUtil;
 import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.docprocessor.split.PageSplitter;
 import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,9 @@ import org.slf4j.LoggerFactory;
 public class DocDataSetCreator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
+  private static final String KEY_PREFIX = "doc_";
+  private static final String SPACE = " ";
+  private static final String SEPARATOR = "|";
 
   private DocTypeDetector docTypeDetector = new DocTypeDetector();
   private DocumentationProcessorProperties properties;
@@ -45,26 +49,26 @@ public class DocDataSetCreator {
                  PrintWriter metadataOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-metadata.txt"), StandardCharsets.UTF_8.name());
                  PrintWriter docListOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-list.txt"), StandardCharsets.UTF_8.name())) {
 
-              FileParser fileParser = docTypeDetector.getFileParser(mediaType);
-              Map<Integer, String> result = fileParser.getMapping(inputFileStream);
+              PageSplitter pageSplitter = docTypeDetector.getFileParser(mediaType);
+              Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
-              for (Map.Entry<Integer, String> docPage : result.entrySet()) {
-                String docPageKey = "doc_" + pageIndex;
+              for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
+                String docPageKey = KEY_PREFIX + pageIndex;
                 pageIndex++;
 
                 dataSetOutput.print(docPageKey);
-                dataSetOutput.print("|");
+                dataSetOutput.print(SEPARATOR);
                 dataSetOutput.println(TextUtil.simplify(docPage.getValue()));
 
                 metadataOutput.print(docPageKey);
-                metadataOutput.print("|");
+                metadataOutput.print(SPACE);
                 metadataOutput.print(documentIndex);
-                metadataOutput.print("|");
+                metadataOutput.print(SPACE);
                 metadataOutput.println(docPage.getKey());
               }
 
               docListOutput.print(documentIndex);
-              docListOutput.print(" ");
+              docListOutput.print(SPACE);
               docListOutput.println(docFile.getName());
               documentIndex++;
             } catch (FileNotFoundException | UnsupportedEncodingException e) {

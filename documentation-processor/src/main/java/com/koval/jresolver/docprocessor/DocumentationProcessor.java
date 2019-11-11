@@ -16,9 +16,7 @@ import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.jresolver.docprocessor.bean.DocFile;
 import com.koval.jresolver.docprocessor.bean.DocMetadata;
 import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
-
-import com.koval.jresolver.docprocessor.core.DocListParser;
-import com.koval.jresolver.docprocessor.core.DocMetadataParser;
+import com.koval.jresolver.docprocessor.core.DocOutputFilesParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,22 +41,23 @@ public class DocumentationProcessor implements IssueProcessor {
     Collection<String> similarDocKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
-    List<Documentation> docs = new ArrayList<>();
-    List<DocMetadata> docMetadata = new DocMetadataParser().parse();
-    List<DocFile> docFiles = new DocListParser().parse();
+    List<Documentation> similarDocs = new ArrayList<>();
+    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser();
+    List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
+    List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 
     similarDocKeys.forEach((String similarDocKey) -> docMetadata.stream()
-        .filter((DocMetadata m) -> m.getKey().equals(similarDocKey))
+        .filter((DocMetadata metadata) -> metadata.getKey().equals(similarDocKey))
         .findFirst()
-        .map((DocMetadata m) -> {
+        .map((DocMetadata metadata) -> {
           DocFile docFile = docFiles.stream()
-              .filter((DocFile d) -> d.getFileIndex() == m.getFileIndex())
+              .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
               .findFirst()
               .orElse(new DocFile(0, "no_such_file"));
-          return new Documentation(docFile.getFileName(), m.getPageNumber());
+          return new Documentation(docFile.getFileName(), metadata.getPageNumber());
         })
-        .ifPresent(docs::add));
-    result.setDocumentations(docs);
+        .ifPresent(similarDocs::add));
+    result.setDocumentations(similarDocs);
   }
 
 }

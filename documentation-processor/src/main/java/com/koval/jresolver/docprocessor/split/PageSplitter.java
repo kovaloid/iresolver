@@ -1,9 +1,11 @@
-package com.koval.jresolver.docprocessor.core;
+package com.koval.jresolver.docprocessor.split;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-public interface FileParser {
+
+public interface PageSplitter {
+
   Map<Integer, String> getMapping(InputStream input) throws IOException;
 }
