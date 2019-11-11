@@ -1,5 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/kovaloid/jresolver.svg?branch=master)](https://travis-ci.com/kovaloid/jresolver)
+[![Build Status](https://travis-ci.com/kovaloid/jresolver.svg?token=sKq6sPnpTqN6z9n8qXhL&branch=master)](https://travis-ci.com/kovaloid/jresolver)
 
 # Jira Resolver
 
