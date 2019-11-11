@@ -23,7 +23,7 @@ public class DocOutputFilesParser {
 
   public List<DocFile> parseDocumentationFilesList() {
     List<DocFile> docFiles = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(DocOutputFilesParser.class.getResourceAsStream("doc-list.txt")))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("doc-list.txt")))) {
       String line;
       while ((line = reader.readLine()) != null) {
         String[] split = line.split(SPACE);
@@ -39,7 +39,7 @@ public class DocOutputFilesParser {
 
   public List<DocMetadata> parseDocumentationMetadata() {
     List<DocMetadata> docMetadata = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(DocOutputFilesParser.class.getResourceAsStream("doc-metadata.txt")))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("doc-metadata.txt")))) {
       String line;
       while ((line = reader.readLine()) != null) {
         String[] split = line.split(SPACE);

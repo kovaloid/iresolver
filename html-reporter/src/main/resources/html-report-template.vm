@@ -106,6 +106,27 @@
                 </table>
                 <br/>
 
+                                <h5 class="card-title">Useful Documentation</h5>
+                                <table class="table table-hover table-bordered table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Page</th>
+                                        <th>Rank</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        #foreach ($doc in $result.getDocumentations())
+                                        <tr>
+                                            <td>$doc.getFileName()</td>
+                                            <td>$doc.getPageNumber()</td>
+                                            <td></td>
+                                        </tr>
+                                        #end
+                                    </tbody>
+                                </table>
+                                <br/>
+
                 <h5 class="card-title">Proposals</h5>
                 #foreach ($proposal in $result.getProposals())
                     <div>$proposal</div>
