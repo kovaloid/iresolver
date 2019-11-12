@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +35,18 @@ public class DocDataSetCreator {
     this.properties = properties;
   }
 
-  public void create() {
+  public void create() throws IOException {
     File docsFolder = new File(properties.getDocsFolder());
     File[] docFiles = docsFolder.listFiles();
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
     }
+
+    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    FileUtils.forceMkdir(dataSetFile.getParentFile());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
+    LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
 
     int pageIndex = 0;
     int documentIndex = 0;
@@ -51,7 +57,7 @@ public class DocDataSetCreator {
           MediaType mediaType = docTypeDetector.detectType(inputFileStream, docFile.getName());
           if (docTypeDetector.isTypeSupported(mediaType)) {
 
-            try (PrintWriter dataSetOutput = new PrintWriter(new File(properties.getWorkFolder(), properties.getDataSetFileName()), StandardCharsets.UTF_8.name());
+            try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
                  PrintWriter metadataOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-metadata.txt"), StandardCharsets.UTF_8.name());
                  PrintWriter docListOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-list.txt"), StandardCharsets.UTF_8.name())) {
 
@@ -88,5 +94,6 @@ public class DocDataSetCreator {
         }
       }
     }
+    LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
   }
 }

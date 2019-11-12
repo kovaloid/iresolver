@@ -89,7 +89,11 @@ public final class LaunchUtil {
   public static void createDocumentationDataSet() {
     DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(properties);
-    docDataSetCreator.create();
+    try {
+      docDataSetCreator.create();
+    } catch (IOException e) {
+      LOGGER.error("Could not create documentation data set file.", e);
+    }
   }
 
   public static void createDocumentationVectorModel() {
