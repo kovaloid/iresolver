@@ -1,7 +1,0 @@
-jar {
-  exclude('link-processor.properties')
-}
-
-dependencies {
-  compile project(':common-api')
-}

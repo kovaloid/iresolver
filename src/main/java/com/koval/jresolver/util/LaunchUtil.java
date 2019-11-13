@@ -39,8 +39,6 @@ import com.koval.jresolver.docprocessor.DocumentationProcessor;
 import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
 import com.koval.jresolver.docprocessor.core.DocDataSetCreator;
 import com.koval.jresolver.exception.ResolverException;
-import com.koval.jresolver.processor.link.LinkProcessor;
-import com.koval.jresolver.processor.link.configuration.LinkProcessorProperties;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
 import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
@@ -170,9 +168,6 @@ public final class LaunchUtil {
     }
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
       issueProcessors.add(new RuleEngineProcessor(ruleEngine));
-    }
-    if (processorNames.contains(ProcessorConstants.LINK)) {
-      issueProcessors.add(new LinkProcessor(new LinkProcessorProperties()));
     }
     if (issueProcessors.isEmpty()) {
       LOGGER.warn("Could not find any appropriate report generator in the list: {}", processorNames);

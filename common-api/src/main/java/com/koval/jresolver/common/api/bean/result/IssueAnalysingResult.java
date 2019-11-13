@@ -17,7 +17,6 @@ public class IssueAnalysingResult {
   private List<Pair<Attachment, Integer>> probableAttachments;
   private List<Documentation> documentations;
   private List<String> proposals;
-  private String externalLink;
 
   public Issue getOriginalIssue() {
     return originalIssue;
@@ -73,13 +72,5 @@ public class IssueAnalysingResult {
 
   public void setProposals(List<String> proposals) {
     this.proposals = proposals;
-  }
-
-  public String getExternalLink() {
-    return externalLink;
-  }
-
-  public void setExternalLink(String externalLink) {
-    this.externalLink = externalLink;
   }
 }

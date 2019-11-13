@@ -16,11 +16,6 @@
                 </h4>
             </div>
             <div class="card-body">
-                #if ($issue.getExternalUrl())
-                    <h5 class="card-title">External Url</h5>
-                    <p class="card-text"><a href="$issue.getExternalUrl()" target="_blank">$issue.getExternalUrl()</a></p>
-                    <br/>
-                #end
 
                 <h5 class="card-title">Similar Issues</h5>
                 <table class="table table-hover table-bordered table-sm">
