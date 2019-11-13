@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +53,7 @@ public class DocDataSetCreator {
     for (final File docFile : docFiles) {
       if (docFile.isFile()) {
         try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-          MediaType mediaType = docTypeDetector.detectType(inputFileStream, docFile.getName());
+          MediaType mediaType = docTypeDetector.detectType(docFile.getName());
           if (docTypeDetector.isTypeSupported(mediaType)) {
 
             try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
@@ -89,8 +88,6 @@ public class DocDataSetCreator {
           }
         } catch (FileNotFoundException e) {
           LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
-        } catch (IOException e) {
-          LOGGER.error("Could not read documentation file" + docFile.getAbsolutePath(), e);
         }
       }
     }

@@ -4,5 +4,7 @@ jar {
 
 dependencies {
   compile project(':common-api')
-  compile 'org.apache.tika:tika-parsers:1.17'
+  compile('org.apache.pdfbox:pdfbox:2.0.8') {
+    exclude group: 'commons-logging', module: 'commons-logging'
+  }
 }
