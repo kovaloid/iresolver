@@ -1,20 +1,48 @@
 package com.koval.jresolver.rules
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
-
+import com.koval.jresolver.common.api.util.CollectionsUtil
+import com.koval.jresolver.common.api.util.TextUtil
 global java.util.List results
 
-rule "Comments size should contain at least one comment"
+
+rule "Comments are empty"
 	when
 		$issue : Issue( comments.isEmpty() )
 	then
-		results.add("Comments size should contain at least one comment");
+		results.add("Should assign on the qualified engineer");
 end
 
-
-rule "Comments less than 5"
+/*
+rule "Last comment is from reporter and contains question"
 	when
-		$issue : Issue( comments.size() < 5 )
+		$issue : Issue( TextUtil.hasQuestion() )
 	then
-		results.add("Comments less than 5");
+		results.add("Should answer the question");
 end
+
+
+rule "Last comment is not from reporter"
+	when
+		$issue : Issue( true )
+	then
+		results.add("Probably should assign issue on reporter");
+end
+*/
+
+
+rule "Issue status is open and comments are not empty"
+	when
+		$issue : Issue( status == "OPEN" && !comments.isEmpty() )
+	then
+		results.add("Should change status to IN PROGRESS");
+end
+
+/*
+rule "Last comment was 3 days ago"
+	when
+		$issue : Issue( !comments.isEmpty() && CollectionsUtil.getLastItem(comments).updateDate )
+	then
+		results.add("Should ping TSE and check status");
+end
+*/

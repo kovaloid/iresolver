@@ -1,0 +1,22 @@
+package com.koval.jresolver.rules
+
+import com.koval.jresolver.common.api.bean.issue.Issue;
+global java.util.List results
+
+
+rule "Assignee and reporter are the same person"
+	dialect "mvel"
+	when
+		Issue( assignee.getName().equals(reporter.getName()) )
+	then
+		results.add("TSE is probably working on the problem");
+end
+
+
+rule "Assignee and reporter are not the same person"
+	dialect "mvel"
+	when
+		Issue( !assignee.getName().equals(reporter.getName()) )
+	then
+		results.add("Developer is probably working on the problem");
+end

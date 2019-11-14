@@ -1,0 +1,54 @@
+
+/*
+TODO: Request customer name, ITSM hyperlink from TSE
+*/
+
+package com.koval.jresolver.rules
+
+import com.koval.jresolver.common.api.bean.issue.Issue;
+global java.util.List results
+
+
+rule "Attachments are empty"
+	dialect "mvel"
+	when
+		Issue( !attachments.isEmpty() )
+	then
+		results.add("Request attachments from TSE");
+end
+
+
+rule "Components are empty"
+	dialect "mvel"
+	when
+		Issue( !components.isEmpty() )
+	then
+		results.add("Request components field from TSE");
+end
+
+
+rule "Affected versions are empty"
+	dialect "mvel"
+	when
+		Issue( !affectedVersions.isEmpty() )
+	then
+		results.add("Request affectedVersions field from TSE");
+end
+
+
+rule "Labels are empty"
+	dialect "mvel"
+	when
+		Issue( !labels.isEmpty() )
+	then
+		results.add("Developer should set labels field");
+end
+
+
+rule "Fix versions are empty"
+	dialect "mvel"
+	when
+		Issue( !fixVersions.isEmpty() )
+	then
+		results.add("Developer should set fixVersions field");
+end

@@ -15,6 +15,7 @@ public class IssueAnalysingResult {
   private List<Pair<User, Integer>> qualifiedUsers;
   private List<Pair<String, Integer>> probableLabels;
   private List<Pair<Attachment, Integer>> probableAttachments;
+  private List<AttachmentMetric> probableAttachmentTypes;
   private List<Documentation> documentations;
   private List<String> proposals;
 
@@ -56,6 +57,14 @@ public class IssueAnalysingResult {
 
   public void setProbableAttachments(List<Pair<Attachment, Integer>> probableAttachments) {
     this.probableAttachments = probableAttachments;
+  }
+
+  public List<AttachmentMetric> getProbableAttachmentTypes() {
+    return probableAttachmentTypes;
+  }
+
+  public void setProbableAttachmentTypes(List<AttachmentMetric> probableAttachmentTypes) {
+    this.probableAttachmentTypes = probableAttachmentTypes;
   }
 
   public List<Documentation> getDocumentations() {

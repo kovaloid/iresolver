@@ -1,20 +1,20 @@
 package com.koval.jresolver.rules
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
-
 global java.util.List results
 
-rule "Description size should be more than 100 characters"
+
+rule "Description is empty"
 	when
-		$issue : Issue( description.length < 100 )
+		$issue : Issue( description.isEmpty() )
 	then
-		results.add("Description size should be more than 100 characters");
+		results.add("Description should contain information. Developer should request information from TSE");
 end
 
 
-rule "Description contains word 'file'"
+rule "Description contains less than 100 characters"
 	when
-		$issue : Issue( description contains "file" )
+		$issue : Issue( !description.isEmpty() && description.length() < 100 )
 	then
-		results.add("Description contains word 'file', hence the issue should contain attachments");
+		results.add("Description is too short. Developer should request more information from TSE");
 end

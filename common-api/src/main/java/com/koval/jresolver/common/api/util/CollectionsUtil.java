@@ -17,4 +17,8 @@ public final class CollectionsUtil {
     iterable.forEach(result::add);
     return result;
   }
+
+  public static <T> T getLastItem(final List<T> list) throws IndexOutOfBoundsException {
+    return list.subList(list.size() - 1, list.size()).get(0);
+  }
 }
