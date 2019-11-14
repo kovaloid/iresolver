@@ -69,7 +69,7 @@ public class JiraIssueClient implements IssueClient {
     LOGGER.debug("Send issue request: IssueKey = '{}'.", issueKey);
     com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
         () -> restClient.getIssueClient().getIssue(issueKey).claim(),
-        "Could not get issue by key.");
+        "Could not get issue by key: " + issueKey);
     return issueTransformer.transform(issue);
   }
 

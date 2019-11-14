@@ -86,15 +86,19 @@
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                     <tr>
-                        <th>Attachment</th>
+                        <th>Attachment type</th>
                         <th>Rank</th>
+                        <th>Type</th>
+                        <th>Is presented</th>
                     </tr>
                     </thead>
                     <tbody>
-                        #foreach ($probableAttachment in $result.getProbableAttachments())
+                        #foreach ($probableAttachment in $result.getProbableAttachmentTypes())
                         <tr>
-                            <td>$probableAttachment.getEntity().getFileName()</td>
-                            <td>$probableAttachment.getMetric()</td>
+                            <td>$probableAttachment.getExtension()</td>
+                            <td>$probableAttachment.getRank()</td>
+                            <td>$probableAttachment.getType()</td>
+                            <td>$probableAttachment.isPresentInCurrentIssue()</td>
                         </tr>
                         #end
                     </tbody>

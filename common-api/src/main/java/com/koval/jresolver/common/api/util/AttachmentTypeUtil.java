@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.koval.jresolver.common.api.bean.issue.Attachment;
-import com.koval.jresolver.common.api.bean.result.AttachmentType;
 
 
 public final class AttachmentTypeUtil {
@@ -15,30 +14,36 @@ public final class AttachmentTypeUtil {
   }
 
   @SuppressWarnings({"PMD.CyclomaticComplexity"})
-  public static AttachmentType getType(Attachment attachment) {
-    // TODO: implement using mime type
-    String fileName = attachment.getFileName();
-    if (fileName.endsWith(".txt") || fileName.endsWith(".log")) {
-      return AttachmentType.LOG;
-    } else if (fileName.endsWith(".pdf") || fileName.endsWith(".doc") || fileName.endsWith(".docx")) {
-      return AttachmentType.DOCUMENT;
-    } else if (fileName.endsWith(".csv")) {
-      return AttachmentType.TABLE;
-    } else if (fileName.endsWith(".zip")) {
-      return AttachmentType.ARCHIVE;
-    } else if (fileName.endsWith(".png")) {
-      return AttachmentType.PICTURE;
-    } else if (fileName.endsWith(".arf")) {
-      return AttachmentType.VIDEO;
+  public static String getType(String extension) {
+    if (extension.endsWith(".txt") || extension.endsWith(".log")) {
+      return "Log";
+    } else if (extension.endsWith(".pdf") || extension.endsWith(".doc") || extension.endsWith(".docx") || extension.endsWith(".rtf")) {
+      return "Document";
+    } else if (extension.endsWith(".xml") || extension.endsWith(".json") || extension.endsWith(".yaml")) {
+      return "Configuration";
+    } else if (extension.endsWith(".csv") || extension.endsWith(".xls")) {
+      return "Table";
+    } else if (extension.endsWith(".zip") || extension.endsWith(".tar")) {
+      return "Archive";
+    } else if (extension.endsWith(".png") || extension.endsWith(".jpg") || extension.endsWith(".jpeg")
+        || extension.endsWith(".gif") || extension.endsWith(".bmp")) {
+      return "Picture";
+    } else if (extension.endsWith(".arf")) {
+      return "Video";
     } else {
-      return AttachmentType.UNKNOWN;
+      return "Unknown";
     }
   }
 
-  public static List<AttachmentType> getTypes(List<Attachment> attachments) {
-    Set<AttachmentType> types = new HashSet<>();
+  public static String getExtension(Attachment attachment) {
+    String fileName = attachment.getFileName();
+    return fileName.substring(fileName.lastIndexOf('.'));
+  }
+
+  public static List<String> getExtensions(List<Attachment> attachments) {
+    Set<String> types = new HashSet<>();
     for (Attachment attachment: attachments) {
-      types.add(getType(attachment));
+      types.add(getExtension(attachment));
     }
     return new ArrayList<>(types);
   }

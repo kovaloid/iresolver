@@ -9,9 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.common.api.bean.issue.Attachment;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
+import com.koval.jresolver.common.api.bean.result.AttachmentMetric;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
@@ -75,10 +75,14 @@ public class TextReportGenerator implements ReportGenerator {
           .append('\n');
     }
     content.append("\nattachments: \n");
-    for (Pair<Attachment, Integer> probableAttachment: result.getProbableAttachments()) {
-      content.append(probableAttachment.getEntity().getFileName())
+    for (AttachmentMetric probableAttachment: result.getProbableAttachmentTypes()) {
+      content.append(probableAttachment.getExtension())
           .append(DASH)
-          .append(probableAttachment.getMetric())
+          .append(probableAttachment.getRank())
+          .append(DASH)
+          .append(probableAttachment.getType())
+          .append(DASH)
+          .append(probableAttachment.isPresentInCurrentIssue())
           .append('\n');
     }
   }

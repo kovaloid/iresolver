@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
 import com.koval.jresolver.common.api.bean.result.AttachmentMetric;
-import com.koval.jresolver.common.api.bean.result.AttachmentType;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
@@ -50,7 +49,7 @@ public class SimilarityProcessor implements IssueProcessor {
     List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
     Map<String, Integer> probableLabelsMap = new HashMap<>();
     Map<User, Integer> qualifiedUsersMap = new HashMap<>();
-    Map<AttachmentType, Integer> probableAttachmentTypesMap = new HashMap<>();
+    Map<String, Integer> probableAttachmentExtensionsMap = new HashMap<>();
 
     LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), similarIssueKeys);
     similarIssueKeys.forEach((similarIssueKey) -> {
@@ -66,12 +65,12 @@ public class SimilarityProcessor implements IssueProcessor {
       }
       similarIssue.getComments().forEach(comment -> addEntityOrUpdateMetric(qualifiedUsersMap, comment.getAuthor()));
       similarIssue.getAttachments().forEach(attachment ->
-          addEntityOrUpdateMetric(probableAttachmentTypesMap, AttachmentTypeUtil.getType(attachment)));
+          addEntityOrUpdateMetric(probableAttachmentExtensionsMap, AttachmentTypeUtil.getExtension(attachment)));
     });
     result.setSimilarIssues(similarIssuesWithSimilarity);
     result.setProbableLabels(convertMapToPairList(probableLabelsMap));
     result.setQualifiedUsers(convertMapToPairList(qualifiedUsersMap));
-    result.setProbableAttachmentTypes(getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentTypesMap)));
+    result.setProbableAttachmentTypes(getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentExtensionsMap)));
   }
 
   private <E> void addEntityOrUpdateMetric(Map<E, Integer> map, E entity) {
@@ -89,15 +88,16 @@ public class SimilarityProcessor implements IssueProcessor {
     return pairList;
   }
 
-  private List<AttachmentMetric> getAttachmentMetrics(Issue issue, List<Pair<AttachmentType, Integer>> probableAttachmentTypes) {
-    List<AttachmentType> currentIssueAttachmentTypes = AttachmentTypeUtil.getTypes(issue.getAttachments());
+  private List<AttachmentMetric> getAttachmentMetrics(Issue issue, List<Pair<String, Integer>> probableAttachmentExtensions) {
+    List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
     List<AttachmentMetric> attachmentMetrics = new ArrayList<>();
-    for (Pair<AttachmentType, Integer> probableAttachmentType: probableAttachmentTypes) {
+    for (Pair<String, Integer> probableAttachmentExtension: probableAttachmentExtensions) {
       attachmentMetrics.add(
           new AttachmentMetric(
-              probableAttachmentType.getEntity(),
-              probableAttachmentType.getMetric(),
-              currentIssueAttachmentTypes.contains(probableAttachmentType.getEntity())
+              probableAttachmentExtension.getEntity(),
+              probableAttachmentExtension.getMetric(),
+              AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
+              currentIssueAttachmentTypes.contains(probableAttachmentExtension.getEntity())
           )
       );
     }
