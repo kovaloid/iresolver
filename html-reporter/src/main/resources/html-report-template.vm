@@ -17,6 +17,7 @@
             </div>
             <div class="card-body">
 
+            #if($isSimilarityProcessorEnabled)
                 <h5 class="card-title">Similar Issues</h5>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
@@ -104,7 +105,9 @@
                     </tbody>
                 </table>
                 <br/>
+            #end
 
+            #if($isDocumentationProcessorEnabled)
                 <h5 class="card-title">Useful Documentation</h5>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
@@ -125,11 +128,14 @@
                     </tbody>
                 </table>
                 <br/>
+            #end
 
+            #if($isRuleEngineProcessorEnabled)
                 <h5 class="card-title">Proposals</h5>
                 #foreach ($proposal in $result.getProposals())
                     <div>$proposal</div>
                 #end
+            #end
             </div>
         </div>
     #end

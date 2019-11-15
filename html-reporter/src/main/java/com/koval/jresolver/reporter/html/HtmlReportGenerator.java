@@ -12,6 +12,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.koval.jresolver.common.api.constant.ProcessorConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -33,9 +34,11 @@ public class HtmlReportGenerator implements ReportGenerator {
   private static final String REPORT_FILE_NAME = "index.html";
 
   private final HtmlReporterConfiguration configuration;
+  private final List<String> enabledProcessors;
 
-  public HtmlReportGenerator(HtmlReporterConfiguration configuration) throws IOException {
+  public HtmlReportGenerator(HtmlReporterConfiguration configuration, List<String> enabledProcessors) throws IOException {
     this.configuration = configuration;
+    this.enabledProcessors = enabledProcessors;
     FileUtils.forceMkdir(new File(configuration.getOutputFolder()));
   }
 
@@ -60,6 +63,9 @@ public class HtmlReportGenerator implements ReportGenerator {
     VelocityContext context = new VelocityContext();
     context.put("results", results);
     context.put("numberTool", new NumberTool());
+    context.put("isSimilarityProcessorEnabled", enabledProcessors.contains(ProcessorConstants.SIMILARITY));
+    context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(ProcessorConstants.DOCUMENTATION));
+    context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE));
     try (StringWriter writer = new StringWriter()) {
       template.merge(context, writer);
       LOGGER.debug(writer.toString());

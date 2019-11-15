@@ -1,3 +1,10 @@
+
+repositories {
+  maven {
+    url 'https://repository.aspose.com/repo/'
+  }
+}
+
 jar {
   exclude('documentation-processor.properties')
 }
@@ -7,4 +14,6 @@ dependencies {
   compile('org.apache.pdfbox:pdfbox:2.0.8') {
     exclude group: 'commons-logging', module: 'commons-logging'
   }
+  compile 'com.aspose:aspose-words:19.9:jdk17',
+          'com.aspose:aspose-words:19.9:javadoc'
 }

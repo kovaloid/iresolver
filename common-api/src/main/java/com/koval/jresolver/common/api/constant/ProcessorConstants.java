@@ -1,4 +1,4 @@
-package com.koval.jresolver.configuration;
+package com.koval.jresolver.common.api.constant;
 
 
 public interface ProcessorConstants {

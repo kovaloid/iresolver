@@ -23,10 +23,10 @@ import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
-import com.koval.jresolver.configuration.ConnectorConstants;
+import com.koval.jresolver.common.api.constant.ConnectorConstants;
 import com.koval.jresolver.configuration.ControlProperties;
-import com.koval.jresolver.configuration.ProcessorConstants;
-import com.koval.jresolver.configuration.ReporterConstants;
+import com.koval.jresolver.common.api.constant.ProcessorConstants;
+import com.koval.jresolver.common.api.constant.ReporterConstants;
 import com.koval.jresolver.connector.bugzilla.BugZillaConnector;
 import com.koval.jresolver.connector.bugzilla.client.BugZillaIssueClientFactory;
 import com.koval.jresolver.connector.bugzilla.configuration.BugZillaConnectorProperties;
@@ -179,7 +179,7 @@ public final class LaunchUtil {
     List<String> reporterNames = controlProperties.getReporters();
     List<ReportGenerator> reportGenerators = new ArrayList<>();
     if (reporterNames.contains(ReporterConstants.HTML)) {
-      reportGenerators.add(new HtmlReportGenerator(new HtmlReporterConfiguration()));
+      reportGenerators.add(new HtmlReportGenerator(new HtmlReporterConfiguration(), controlProperties.getProcessors()));
     }
     if (reporterNames.contains(ReporterConstants.TEXT)) {
       reportGenerators.add(new TextReportGenerator());
