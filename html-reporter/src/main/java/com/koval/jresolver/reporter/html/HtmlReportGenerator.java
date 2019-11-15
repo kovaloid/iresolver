@@ -12,7 +12,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import com.koval.jresolver.common.api.constant.ProcessorConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
+import com.koval.jresolver.common.api.constant.ProcessorConstants;
 import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 
 

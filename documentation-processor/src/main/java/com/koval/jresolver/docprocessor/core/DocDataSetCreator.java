@@ -50,15 +50,18 @@ public class DocDataSetCreator {
     int pageIndex = 0;
     int documentIndex = 0;
 
-    for (final File docFile : docFiles) {
-      if (docFile.isFile()) {
-        try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-          MediaType mediaType = docTypeDetector.detectType(docFile.getName());
-          if (docTypeDetector.isTypeSupported(mediaType)) {
+    File docMetadataFile = new File(properties.getWorkFolder(), "doc-metadata.txt");
+    File docListFile = new File(properties.getWorkFolder(), "doc-list.txt");
 
-            try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
-                 PrintWriter metadataOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-metadata.txt"), StandardCharsets.UTF_8.name());
-                 PrintWriter docListOutput = new PrintWriter(new File(properties.getWorkFolder(), "doc-list.txt"), StandardCharsets.UTF_8.name())) {
+    try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
+         PrintWriter metadataOutput = new PrintWriter(docMetadataFile, StandardCharsets.UTF_8.name());
+         PrintWriter docListOutput = new PrintWriter(docListFile, StandardCharsets.UTF_8.name())) {
+
+      for (final File docFile : docFiles) {
+        if (docFile.isFile()) {
+          try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
+            MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+            if (docTypeDetector.isTypeSupported(mediaType)) {
 
               PageSplitter pageSplitter = docTypeDetector.getFileParser(mediaType);
               Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
@@ -82,15 +85,17 @@ public class DocDataSetCreator {
               docListOutput.print(SPACE);
               docListOutput.println(docFile.getName());
               documentIndex++;
-            } catch (FileNotFoundException | UnsupportedEncodingException e) {
-              LOGGER.error("Could not write to output file", e);
             }
+          } catch (FileNotFoundException e) {
+            LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
           }
-        } catch (FileNotFoundException e) {
-          LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
         }
       }
+      LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
+      LOGGER.info("Doc metadata file was created: {}", docMetadataFile.getCanonicalPath());
+      LOGGER.info("Doc list file was created: {}", docListFile.getCanonicalPath());
+    } catch (FileNotFoundException | UnsupportedEncodingException e) {
+      LOGGER.error("Could not write to output file", e);
     }
-    LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
   }
 }
