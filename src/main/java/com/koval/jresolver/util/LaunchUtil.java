@@ -87,6 +87,7 @@ public final class LaunchUtil {
   public static void createDocumentationDataSet() {
     DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(properties);
+    docDataSetCreator.convertWordFilesToPdf();
     try {
       docDataSetCreator.create();
     } catch (IOException e) {

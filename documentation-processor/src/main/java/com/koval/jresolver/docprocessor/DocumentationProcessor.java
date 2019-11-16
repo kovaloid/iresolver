@@ -9,8 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.common.api.bean.result.DocumentationResult;
 import com.koval.jresolver.common.api.bean.issue.Issue;
+import com.koval.jresolver.common.api.bean.result.DocumentationResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
