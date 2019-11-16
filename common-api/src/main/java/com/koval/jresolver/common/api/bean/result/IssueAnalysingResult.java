@@ -2,7 +2,6 @@ package com.koval.jresolver.common.api.bean.result;
 
 import java.util.List;
 
-import com.koval.jresolver.common.api.bean.doc.Documentation;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
 
@@ -13,8 +12,8 @@ public class IssueAnalysingResult {
   private List<Pair<Issue, Double>> similarIssues;
   private List<Pair<User, Integer>> qualifiedUsers;
   private List<Pair<String, Integer>> probableLabels;
-  private List<AttachmentMetric> probableAttachmentTypes;
-  private List<Documentation> documentations;
+  private List<AttachmentResult> probableAttachmentTypes;
+  private List<DocumentationResult> documentationResults;
   private List<String> proposals;
 
   public Issue getOriginalIssue() {
@@ -49,20 +48,20 @@ public class IssueAnalysingResult {
     this.probableLabels = probableLabels;
   }
 
-  public List<AttachmentMetric> getProbableAttachmentTypes() {
+  public List<AttachmentResult> getProbableAttachmentTypes() {
     return probableAttachmentTypes;
   }
 
-  public void setProbableAttachmentTypes(List<AttachmentMetric> probableAttachmentTypes) {
+  public void setProbableAttachmentTypes(List<AttachmentResult> probableAttachmentTypes) {
     this.probableAttachmentTypes = probableAttachmentTypes;
   }
 
-  public List<Documentation> getDocumentations() {
-    return documentations;
+  public List<DocumentationResult> getDocumentationResults() {
+    return documentationResults;
   }
 
-  public void setDocumentations(List<Documentation> documentations) {
-    this.documentations = documentations;
+  public void setDocumentationResults(List<DocumentationResult> documentationResults) {
+    this.documentationResults = documentationResults;
   }
 
   public List<String> getProposals() {

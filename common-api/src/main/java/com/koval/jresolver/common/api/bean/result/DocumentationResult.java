@@ -1,11 +1,11 @@
-package com.koval.jresolver.common.api.bean.doc;
+package com.koval.jresolver.common.api.bean.result;
 
-public class Documentation {
+public class DocumentationResult {
 
   private String fileName;
   private int pageNumber;
 
-  public Documentation(String fileName, int pageNumber) {
+  public DocumentationResult(String fileName, int pageNumber) {
     this.fileName = fileName;
     this.pageNumber = pageNumber;
   }

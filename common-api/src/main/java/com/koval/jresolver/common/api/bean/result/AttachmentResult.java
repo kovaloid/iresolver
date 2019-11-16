@@ -1,14 +1,14 @@
 package com.koval.jresolver.common.api.bean.result;
 
 
-public class AttachmentMetric {
+public class AttachmentResult {
 
   private String extension;
   private int rank;
   private String type;
   private boolean presentInCurrentIssue;
 
-  public AttachmentMetric(String extension, int rank, String type, boolean presentInCurrentIssue) {
+  public AttachmentResult(String extension, int rank, String type, boolean presentInCurrentIssue) {
     this.extension = extension;
     this.rank = rank;
     this.type = type;

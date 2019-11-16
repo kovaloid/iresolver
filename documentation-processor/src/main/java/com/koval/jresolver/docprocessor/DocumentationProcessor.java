@@ -9,7 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.common.api.bean.doc.Documentation;
+import com.koval.jresolver.common.api.bean.result.DocumentationResult;
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
@@ -42,7 +42,7 @@ public class DocumentationProcessor implements IssueProcessor {
     Collection<String> similarDocKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
-    List<Documentation> similarDocs = new ArrayList<>();
+    List<DocumentationResult> similarDocs = new ArrayList<>();
     DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser();
     List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
     List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
@@ -55,10 +55,10 @@ public class DocumentationProcessor implements IssueProcessor {
               .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
               .findFirst()
               .orElse(new DocFile(0, "no_such_file"));
-          return new Documentation(docFile.getFileName(), metadata.getPageNumber());
+          return new DocumentationResult(docFile.getFileName(), metadata.getPageNumber());
         })
         .ifPresent(similarDocs::add));
-    result.setDocumentations(similarDocs);
+    result.setDocumentationResults(similarDocs);
   }
 
 }

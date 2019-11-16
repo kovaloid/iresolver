@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
-import com.koval.jresolver.common.api.bean.result.AttachmentMetric;
+import com.koval.jresolver.common.api.bean.result.AttachmentResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
@@ -75,7 +75,7 @@ public class TextReportGenerator implements ReportGenerator {
           .append('\n');
     }
     content.append("\nattachments: \n");
-    for (AttachmentMetric probableAttachment: result.getProbableAttachmentTypes()) {
+    for (AttachmentResult probableAttachment: result.getProbableAttachmentTypes()) {
       content.append(probableAttachment.getExtension())
           .append(DASH)
           .append(probableAttachment.getRank())

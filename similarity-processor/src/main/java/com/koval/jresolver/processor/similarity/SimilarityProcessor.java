@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.User;
-import com.koval.jresolver.common.api.bean.result.AttachmentMetric;
+import com.koval.jresolver.common.api.bean.result.AttachmentResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
@@ -88,12 +88,12 @@ public class SimilarityProcessor implements IssueProcessor {
     return pairList;
   }
 
-  private List<AttachmentMetric> getAttachmentMetrics(Issue issue, List<Pair<String, Integer>> probableAttachmentExtensions) {
+  private List<AttachmentResult> getAttachmentMetrics(Issue issue, List<Pair<String, Integer>> probableAttachmentExtensions) {
     List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
-    List<AttachmentMetric> attachmentMetrics = new ArrayList<>();
+    List<AttachmentResult> attachmentResults = new ArrayList<>();
     for (Pair<String, Integer> probableAttachmentExtension: probableAttachmentExtensions) {
-      attachmentMetrics.add(
-          new AttachmentMetric(
+      attachmentResults.add(
+          new AttachmentResult(
               probableAttachmentExtension.getEntity(),
               probableAttachmentExtension.getMetric(),
               AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
@@ -101,6 +101,6 @@ public class SimilarityProcessor implements IssueProcessor {
           )
       );
     }
-    return attachmentMetrics;
+    return attachmentResults;
   }
 }
