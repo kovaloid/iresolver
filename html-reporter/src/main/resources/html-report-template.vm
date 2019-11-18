@@ -118,11 +118,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        #foreach ($doc in $result.getDocumentations())
+                        #foreach ($doc in $result.getDocumentationResults())
                         <tr>
                             <td>$doc.getFileName()</td>
                             <td>$doc.getPageNumber()</td>
-                            <td></td>
+                            <td>$doc.getRank()</td>
                         </tr>
                         #end
                     </tbody>

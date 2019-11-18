@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.ops.transforms.Transforms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,17 +49,22 @@ public class DocumentationProcessor implements IssueProcessor {
     List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
     List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 
-    similarDocKeys.forEach((String similarDocKey) -> docMetadata.stream()
-        .filter((DocMetadata metadata) -> metadata.getKey().equals(similarDocKey))
-        .findFirst()
-        .map((DocMetadata metadata) -> {
-          DocFile docFile = docFiles.stream()
-              .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
+    similarDocKeys.forEach((String similarDocKey) -> {
+      docMetadata.stream()
+              .filter((DocMetadata metadata) -> metadata.getKey().equals(similarDocKey))
               .findFirst()
-              .orElse(new DocFile(0, "no_such_file"));
-          return new DocumentationResult(docFile.getFileName(), metadata.getPageNumber());
-        })
-        .ifPresent(similarDocs::add));
+              .map((DocMetadata metadata) -> {
+                DocFile docFile = docFiles.stream()
+                        .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
+                        .findFirst()
+                        .orElse(new DocFile(0, "no_such_file"));
+                INDArray Issue = vectorModel.getParagraphVectors().inferVector(textDataExtractor.extract(issue));
+                INDArray Label = vectorModel.getParagraphVectors().getWordVectorMatrix(similarDocKey);
+                double similarity = Transforms.cosineSim(Issue, Label);
+                return new DocumentationResult(docFile.getFileName(), metadata.getPageNumber(), Math.abs(similarity * 100));
+              })
+              .ifPresent(similarDocs::add);
+    });
     result.setDocumentationResults(similarDocs);
   }
 

@@ -4,10 +4,12 @@ public class DocumentationResult {
 
   private String fileName;
   private int pageNumber;
+  private double rank;
 
-  public DocumentationResult(String fileName, int pageNumber) {
+  public DocumentationResult(String fileName, int pageNumber, double rank) {
     this.fileName = fileName;
     this.pageNumber = pageNumber;
+    this.rank = rank;
   }
 
   public String getFileName() {
@@ -24,5 +26,13 @@ public class DocumentationResult {
 
   public void setPageNumber(int pageNumber) {
     this.pageNumber = pageNumber;
+  }
+
+  public double getRank() {
+    return rank;
+  }
+
+  public void setRank(double rank) {
+    this.rank = rank;
   }
 }
