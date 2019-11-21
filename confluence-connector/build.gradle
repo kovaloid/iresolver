@@ -1,0 +1,15 @@
+repositories {
+  maven {
+    url 'https://maven.atlassian.com/content/repositories/atlassian-public/'
+  }
+}
+
+jar {
+  exclude('confluence-connector.properties')
+}
+
+dependencies {
+  compile project(':common-api'),
+      'com.atlassian.confluence:confluence-rest-client:5.9.1-issue-CONF-38693-m2',
+      'javax.xml.bind:jaxb-api:2.3.0'
+}
