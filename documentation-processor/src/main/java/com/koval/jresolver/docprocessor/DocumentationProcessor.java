@@ -58,9 +58,9 @@ public class DocumentationProcessor implements IssueProcessor {
                         .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
                         .findFirst()
                         .orElse(new DocFile(0, "no_such_file"));
-                INDArray Issue = vectorModel.getParagraphVectors().inferVector(textDataExtractor.extract(issue));
-                INDArray Label = vectorModel.getParagraphVectors().getWordVectorMatrix(similarDocKey);
-                double similarity = Transforms.cosineSim(Issue, Label);
+                INDArray issueContent = vectorModel.getParagraphVectors().inferVector(textDataExtractor.extract(issue));
+                INDArray label = vectorModel.getParagraphVectors().getWordVectorMatrix(similarDocKey);
+                double similarity = Transforms.cosineSim(issueContent, label);
                 return new DocumentationResult(docFile.getFileName(), metadata.getPageNumber(), Math.abs(similarity * 100));
               })
               .ifPresent(similarDocs::add);
