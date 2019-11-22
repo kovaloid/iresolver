@@ -19,6 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.sun.jersey.api.client.Client;
 
 
+@SuppressWarnings("PMD")
 public final class ConfluenceConnector {
 
   private static final String CONFLUENCE_BASE_URL = "https://cwiki.apache.org/confluence";
