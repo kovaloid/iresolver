@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.sun.jersey.api.client.Client;
 
 
-public class ConfluenceConnector {
+public final class ConfluenceConnector {
 
   private static final String CONFLUENCE_BASE_URL = "https://cwiki.apache.org/confluence";
   private static final boolean ANONYMOUS = true;
@@ -27,6 +27,9 @@ public class ConfluenceConnector {
   private static final String PASSWORD = "";
   private static final String SPACE_KEY = "KAFKA";
   private static final int BATCH_SIZE = 500;
+
+  private ConfluenceConnector() {
+  }
 
   public static void main(String[] args) {
     Client client = RestClientFactory.newClient();
