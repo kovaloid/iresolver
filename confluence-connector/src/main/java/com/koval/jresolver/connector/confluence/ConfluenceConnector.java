@@ -16,35 +16,32 @@ import com.atlassian.confluence.rest.client.RestClientFactory;
 import com.atlassian.confluence.rest.client.authentication.AuthenticatedWebResourceProvider;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
 import com.sun.jersey.api.client.Client;
 
 
 @SuppressWarnings("PMD")
 public final class ConfluenceConnector {
 
-  private static final String CONFLUENCE_BASE_URL = "https://cwiki.apache.org/confluence";
-  private static final boolean ANONYMOUS = true;
-  private static final String USERNAME = "";
-  private static final String PASSWORD = "";
-  private static final String SPACE_KEY = "KAFKA";
-  private static final int BATCH_SIZE = 500;
+  private final ConfluenceConnectorProperties connectorProperties;
 
-  private ConfluenceConnector() {
+  private ConfluenceConnector(ConfluenceConnectorProperties connectorProperties) {
+    this.connectorProperties = connectorProperties;
   }
 
-  public static void main(String[] args) {
+  public void main(String[] args) {
     Client client = RestClientFactory.newClient();
     ListeningExecutorService executor = MoreExecutors.newDirectExecutorService();
 
     try (AuthenticatedWebResourceProvider provider =
-             new AuthenticatedWebResourceProvider(client, CONFLUENCE_BASE_URL, "")) {
+             new AuthenticatedWebResourceProvider(client, connectorProperties.getConfluenceBaseUrl(), "")) {
 
-      if (!ANONYMOUS) {
-        provider.setAuthContext(USERNAME, PASSWORD.toCharArray());
+      if (!connectorProperties.isAnonymous()) {
+        provider.setAuthContext(connectorProperties.getUsername(), connectorProperties.getPassword().toCharArray());
       }
 
       RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
-      Space space = spaceService.find().withKeys(SPACE_KEY).fetchOne().claim().get();
+      Space space = spaceService.find().withKeys(connectorProperties.getSpaceKey()).fetchOne().claim().get();
       printSpaceInfo(space);
 
       RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
@@ -59,9 +56,9 @@ public final class ConfluenceConnector {
     System.out.println(space.getHomepageRef());
   }
 
-  public static void printPagesBySpace(RemoteContentService contentService, Space space) {
+  public void printPagesBySpace(RemoteContentService contentService, Space space) {
     int startIndex = 0;
-    int endIndex = BATCH_SIZE;
+    int endIndex = connectorProperties.getBatchSize();
     while (true) {
       PageRequest pageRequest = new SimplePageRequest(startIndex, endIndex);
       System.out.println("Create page request: " + pageRequest);
