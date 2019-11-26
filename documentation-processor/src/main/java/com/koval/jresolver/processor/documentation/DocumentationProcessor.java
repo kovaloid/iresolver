@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor;
+package com.koval.jresolver.processor.documentation;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
-import com.koval.jresolver.docprocessor.bean.DocFile;
-import com.koval.jresolver.docprocessor.bean.DocMetadata;
-import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
-import com.koval.jresolver.docprocessor.core.DocOutputFilesParser;
+import com.koval.jresolver.processor.documentation.bean.DocFile;
+import com.koval.jresolver.processor.documentation.bean.DocMetadata;
+import com.koval.jresolver.processor.documentation.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.processor.documentation.core.DocOutputFilesParser;
 
 
 public class DocumentationProcessor implements IssueProcessor {

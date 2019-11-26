@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.convert.impl;
+package com.koval.jresolver.processor.documentation.convert.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +13,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.docprocessor.convert.FileConverter;
+import com.koval.jresolver.processor.documentation.convert.FileConverter;
 
 
 public class WordToPdfFileConverter implements FileConverter {

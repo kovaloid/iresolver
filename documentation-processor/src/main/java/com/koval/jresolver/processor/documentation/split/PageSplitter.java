@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.split;
+package com.koval.jresolver.processor.documentation.split;
 
 import java.io.IOException;
 import java.io.InputStream;

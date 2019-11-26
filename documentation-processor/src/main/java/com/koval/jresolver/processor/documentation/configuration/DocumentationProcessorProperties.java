@@ -1,6 +1,7 @@
-package com.koval.jresolver.docprocessor.configuration;
+package com.koval.jresolver.processor.documentation.configuration;
 
 import com.koval.jresolver.common.api.doc2vec.Doc2VecProperties;
+
 
 public class DocumentationProcessorProperties extends Doc2VecProperties {
 

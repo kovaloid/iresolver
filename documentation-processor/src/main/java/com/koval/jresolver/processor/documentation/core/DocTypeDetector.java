@@ -1,6 +1,6 @@
-package com.koval.jresolver.docprocessor.core;
+package com.koval.jresolver.processor.documentation.core;
 
-import com.koval.jresolver.docprocessor.bean.MediaType;
+import com.koval.jresolver.processor.documentation.bean.MediaType;
 
 
 public class DocTypeDetector {

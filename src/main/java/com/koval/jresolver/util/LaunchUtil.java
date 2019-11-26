@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.koval.jresolver.common.api.doc2vec.Doc2VecProperties;
+import com.koval.jresolver.processor.confluence.ConfluenceProcessor;
+import com.koval.jresolver.processor.confluence.configuration.ConfluenceProcessorProperties;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +38,9 @@ import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
-import com.koval.jresolver.docprocessor.DocumentationProcessor;
-import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
-import com.koval.jresolver.docprocessor.core.DocDataSetCreator;
+import com.koval.jresolver.processor.documentation.DocumentationProcessor;
+import com.koval.jresolver.processor.documentation.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.jresolver.exception.ResolverException;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
 import com.koval.jresolver.processor.rules.core.RuleEngine;
@@ -58,7 +61,7 @@ public final class LaunchUtil {
   private LaunchUtil() {
   }
 
-  public static void createDataSet() {
+  public static void createSimilarityDataSet() {
     ControlProperties controlProperties = new ControlProperties();
     SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
     try (IssueClient issueClient = getIssueClient(controlProperties)) {
@@ -71,17 +74,9 @@ public final class LaunchUtil {
     }
   }
 
-  public static void createVectorModel() {
-    SimilarityProcessorProperties similarityProcessorProperties = new SimilarityProcessorProperties();
-    VectorModelCreator vectorModelCreator = new VectorModelCreator(similarityProcessorProperties);
-    File dataSetFile = new File(similarityProcessorProperties.getWorkFolder(), similarityProcessorProperties.getDataSetFileName());
-    try {
-      VectorModel vectorModel = vectorModelCreator.createFromFile(dataSetFile);
-      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(similarityProcessorProperties);
-      vectorModelSerializer.serialize(vectorModel);
-    } catch (IOException e) {
-      LOGGER.error("Could not create vector model file.", e);
-    }
+  public static void createSimilarityVectorModel() {
+    SimilarityProcessorProperties properties = new SimilarityProcessorProperties();
+    createVectorModel(properties, "Could not create similarity vector model file.");
   }
 
   public static void createDocumentationDataSet() {
@@ -97,6 +92,19 @@ public final class LaunchUtil {
 
   public static void createDocumentationVectorModel() {
     DocumentationProcessorProperties properties = new DocumentationProcessorProperties();
+    createVectorModel(properties, "Could not create documentation vector model file.");
+  }
+
+  public static void createConfluenceDataSet() {
+    // TODO: implement
+  }
+
+  public static void createConfluenceVectorModel() {
+    ConfluenceProcessorProperties properties = new ConfluenceProcessorProperties();
+    createVectorModel(properties, "Could not create confluence vector model file.");
+  }
+
+  private static void createVectorModel(Doc2VecProperties properties, String errorMessage) {
     VectorModelCreator vectorModelCreator = new VectorModelCreator(properties);
     File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
     try {
@@ -104,7 +112,7 @@ public final class LaunchUtil {
       VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
       vectorModelSerializer.serialize(vectorModel);
     } catch (IOException e) {
-      LOGGER.error("Could not create documentation vector model file.", e);
+      LOGGER.error(errorMessage, e);
     }
   }
 
@@ -167,11 +175,15 @@ public final class LaunchUtil {
       DocumentationProcessorProperties documentationProcessorProperties = new DocumentationProcessorProperties();
       issueProcessors.add(new DocumentationProcessor(documentationProcessorProperties));
     }
+    if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
+      ConfluenceProcessorProperties confluenceProcessorProperties = new ConfluenceProcessorProperties();
+      issueProcessors.add(new ConfluenceProcessor(confluenceProcessorProperties));
+    }
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
       issueProcessors.add(new RuleEngineProcessor(ruleEngine));
     }
     if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not find any appropriate report generator in the list: {}", processorNames);
+      LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
     }
     return issueProcessors;
   }

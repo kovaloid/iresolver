@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.core;
+package com.koval.jresolver.processor.documentation.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.jresolver.docprocessor.bean.DocFile;
-import com.koval.jresolver.docprocessor.bean.DocMetadata;
+import com.koval.jresolver.processor.documentation.bean.DocFile;
+import com.koval.jresolver.processor.documentation.bean.DocMetadata;
 
 
 public class DocOutputFilesParser {

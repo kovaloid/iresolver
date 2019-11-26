@@ -42,6 +42,22 @@ task createDocumentationVectorModel(type: JavaExec) {
   args = ['create-documentation-vector-model']
 }
 
+task createConfluenceDataSet(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['create-confluence-data-set']
+}
+
+task createConfluenceVectorModel(type: JavaExec) {
+  group 'application'
+  main = "$mainClassName"
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = file('src')
+  args = ['create-confluence-vector-model']
+}
+
 task cleanWorkFolders(type: JavaExec) {
   group 'application'
   main = "$mainClassName"
@@ -74,9 +90,11 @@ sourceSets {
       srcDir 'src/main/resources'
       srcDir 'jira-connector/src/main/resources'
       srcDir 'bugzilla-connector/src/main/resources'
+      srcDir 'confluence-connector/src/main/resources'
       srcDir 'similarity-processor/src/main/resources'
       srcDir 'rule-engine-processor/src/main/resources'
       srcDir 'documentation-processor/src/main/resources'
+      srcDir 'confluence-processor/src/main/resources'
       srcDir 'html-reporter/src/main/resources'
     }
   }
@@ -85,9 +103,11 @@ sourceSets {
 dependencies {
   compile project(':jira-connector'),
       project(':bugzilla-connector'),
+      project(':confluence-connector'),
       project(':similarity-processor'),
       project(':rule-engine-processor'),
       project(':documentation-processor'),
+      project(':confluence-processor'),
       project(':html-reporter'),
       project(':text-reporter'),
       project(':test-similarity-processor')
@@ -103,7 +123,10 @@ distributions {
     contents {
       from('jira-connector/src/main/resources/jira-connector.properties') { into 'config' }
       from('bugzilla-connector/src/main/resources/bugzilla-connector.properties') { into 'config' }
+      from('confluence-connector/src/main/resources/confluence-connector.properties') { into 'config' }
       from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
+      from('documentation-processor/src/main/resources/documentation-processor.properties') { into 'config' }
+      from('confluence-processor/src/main/resources/confluence-processor.properties') { into 'config' }
       from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
       from('src/main/resources/control.properties') { into 'config' }
@@ -192,7 +215,7 @@ task createDocumentationDataSetScript(type: CreateStartScripts) {
   outputDir = startScripts.outputDir
   applicationName = 'create-documentation-data-set'
 
-  createDataSetScript {
+  createDocumentationDataSetScript {
     doLast {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
@@ -214,7 +237,7 @@ task createDocumentationVectorModelScript(type: CreateStartScripts) {
   outputDir = startScripts.outputDir
   applicationName = 'create-documentation-vector-model'
 
-  createVectorModelScript {
+  createDocumentationVectorModelScript {
     doLast {
       def windowsScriptFile = file getWindowsScript()
       def unixScriptFile = file getUnixScript()
@@ -226,6 +249,50 @@ task createDocumentationVectorModelScript(type: CreateStartScripts) {
           .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-documentation-vector-model')
       unixScriptFile.text = unixScriptFile.text
           .replaceFirst('APP_ARGS=', 'APP_ARGS=create-documentation-vector-model')
+    }
+  }
+}
+
+task createConfluenceDataSetScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'create-confluence-data-set'
+
+  createConfluenceDataSetScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-confluence-data-set')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-confluence-data-set')
+    }
+  }
+}
+
+task createConfluenceVectorModelScript(type: CreateStartScripts) {
+  mainClassName = startScripts.mainClassName
+  classpath = startScripts.classpath
+  outputDir = startScripts.outputDir
+  applicationName = 'create-confluence-vector-model'
+
+  createConfluenceVectorModelScript {
+    doLast {
+      def windowsScriptFile = file getWindowsScript()
+      def unixScriptFile = file getUnixScript()
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+      windowsScriptFile.text = windowsScriptFile.text
+          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-confluence-vector-model')
+      unixScriptFile.text = unixScriptFile.text
+          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-confluence-vector-model')
     }
   }
 }
@@ -302,6 +369,8 @@ applicationDistribution.into('bin') {
   from(createVectorModelScript)
   from(createDocumentationDataSetScript)
   from(createDocumentationVectorModelScript)
+  from(createConfluenceDataSetScript)
+  from(createConfluenceVectorModelScript)
   from(cleanScript)
   from(printFieldsScript)
   fileMode = 0755

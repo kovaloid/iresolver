@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.convert;
+package com.koval.jresolver.processor.documentation.convert;
 
 import java.io.File;
 

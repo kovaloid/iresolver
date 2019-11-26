@@ -1,0 +1,7 @@
+jar {
+  exclude('confluence-processor.properties')
+}
+
+dependencies {
+  compile project(':common-api')
+}

@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.core;
+package com.koval.jresolver.processor.documentation.core;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -16,12 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.util.TextUtil;
-import com.koval.jresolver.docprocessor.bean.MediaType;
-import com.koval.jresolver.docprocessor.configuration.DocumentationProcessorProperties;
-import com.koval.jresolver.docprocessor.convert.FileConverter;
-import com.koval.jresolver.docprocessor.convert.impl.WordToPdfFileConverter;
-import com.koval.jresolver.docprocessor.split.PageSplitter;
-import com.koval.jresolver.docprocessor.split.impl.PdfPageSplitter;
+import com.koval.jresolver.processor.documentation.bean.MediaType;
+import com.koval.jresolver.processor.documentation.configuration.DocumentationProcessorProperties;
+import com.koval.jresolver.processor.documentation.convert.FileConverter;
+import com.koval.jresolver.processor.documentation.convert.impl.WordToPdfFileConverter;
+import com.koval.jresolver.processor.documentation.split.PageSplitter;
+import com.koval.jresolver.processor.documentation.split.impl.PdfPageSplitter;
 
 
 public class DocDataSetCreator {

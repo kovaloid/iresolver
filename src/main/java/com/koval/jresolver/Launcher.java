@@ -17,13 +17,18 @@ public final class Launcher {
   private static final String CREATE_VECTOR_MODEL = "create-vector-model";
   private static final String CREATE_DOCUMENTATION_DATA_SET = "create-documentation-data-set";
   private static final String CREATE_DOCUMENTATION_VECTOR_MODEL = "create-documentation-vector-model";
+  private static final String CREATE_CONFLUENCE_DATA_SET = "create-confluence-data-set";
+  private static final String CREATE_CONFLUENCE_VECTOR_MODEL = "create-confluence-vector-model";
   private static final String CLEAN = "clean";
   private static final String FIELDS = "fields";
   private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
   private static final String HELP_TIP = "Please use the following commands: \n"
       + CREATE_DATA_SET + ", "
       + CREATE_VECTOR_MODEL + ", "
+      + CREATE_DOCUMENTATION_DATA_SET + ", "
       + CREATE_DOCUMENTATION_VECTOR_MODEL + ", "
+      + CREATE_CONFLUENCE_DATA_SET + ", "
+      + CREATE_CONFLUENCE_VECTOR_MODEL + ", "
       + CLEAN + ", "
       + FIELDS + ", "
       + TEST_SIMILARITY_PROCESSOR + ".";
@@ -39,11 +44,11 @@ public final class Launcher {
       switch (args[0]) {
         case CREATE_DATA_SET:
           LOGGER.info("Start creating data set.");
-          LaunchUtil.createDataSet();
+          LaunchUtil.createSimilarityDataSet();
           break;
         case CREATE_VECTOR_MODEL:
           LOGGER.info("Start creating vector model.");
-          LaunchUtil.createVectorModel();
+          LaunchUtil.createSimilarityVectorModel();
           break;
         case CREATE_DOCUMENTATION_DATA_SET:
           LOGGER.info("Start creating documentation data set.");
@@ -52,6 +57,14 @@ public final class Launcher {
         case CREATE_DOCUMENTATION_VECTOR_MODEL:
           LOGGER.info("Start creating documentation vector model.");
           LaunchUtil.createDocumentationVectorModel();
+          break;
+        case CREATE_CONFLUENCE_DATA_SET:
+          LOGGER.info("Start creating documentation data set.");
+          LaunchUtil.createConfluenceDataSet();
+          break;
+        case CREATE_CONFLUENCE_VECTOR_MODEL:
+          LOGGER.info("Start creating documentation vector model.");
+          LaunchUtil.createConfluenceVectorModel();
           break;
         case CLEAN:
           LOGGER.info("Start cleaning work folder.");

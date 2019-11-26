@@ -1,4 +1,4 @@
-package com.koval.jresolver.docprocessor.split.impl;
+package com.koval.jresolver.processor.documentation.split.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import com.koval.jresolver.docprocessor.split.PageSplitter;
+import com.koval.jresolver.processor.documentation.split.PageSplitter;
 
 
 public class PdfPageSplitter implements PageSplitter {

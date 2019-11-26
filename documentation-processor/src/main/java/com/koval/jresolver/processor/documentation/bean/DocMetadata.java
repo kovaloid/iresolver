@@ -1,4 +1,5 @@
-package com.koval.jresolver.docprocessor.bean;
+package com.koval.jresolver.processor.documentation.bean;
+
 
 public class DocMetadata {
 
