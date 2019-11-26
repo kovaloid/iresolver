@@ -67,9 +67,9 @@ public class VectorModelCreator {
 
     ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
         .sequenceLearningAlgorithm(new DBOW<>())
-        .setVectorsListeners(Collections.singletonList(
-            new SimilarityListener<>(ListenerEvent.EPOCH, 1, "AMQ-6134 ", "AMQ-5100 "))
-        )
+        // .setVectorsListeners(Collections.singletonList(
+        //     new SimilarityListener<>(ListenerEvent.EPOCH, 1, "AMQ-6134 ", "AMQ-5100 "))
+        // )
         .minWordFrequency(properties.getMinWordFrequency())
         .iterations(properties.getIterations())
         .epochs(properties.getEpochs())
