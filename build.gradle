@@ -114,7 +114,7 @@ dependencies {
 }
 
 wrapper {
-  gradleVersion = '5.3.1'
+  gradleVersion = '5.6.4'
 }
 
 distributions {
