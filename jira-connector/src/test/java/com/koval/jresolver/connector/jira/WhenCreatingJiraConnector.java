@@ -1,5 +1,6 @@
 package com.koval.jresolver.connector.jira;
 
+/*
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -42,3 +43,4 @@ public class WhenCreatingJiraConnector {
     assertFalse("Check next issues", receiver.hasNextIssues());
   }
 }
+*/

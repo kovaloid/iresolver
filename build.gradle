@@ -400,6 +400,10 @@ allprojects {
     }
   }
 
+  compileJava {
+    options.compilerArgs << '-Xlint:deprecation'
+  }
+
   apply plugin: 'checkstyle'
   checkstyle {
     configFile = rootProject.file('config/checkstyle.xml')
@@ -425,6 +429,7 @@ allprojects {
     ignoreFailures = false
   }
 
+  /*
   apply plugin: 'findbugs'
   findbugs {
     toolVersion = '3.0.1'
@@ -438,6 +443,7 @@ allprojects {
       html.enabled = true
     }
   }
+  */
 
   apply from: rootProject.file('jdepend.gradle')
   apply from: rootProject.file('coverage.gradle')
