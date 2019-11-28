@@ -1,3 +1,4 @@
+/*
 apply plugin: 'jacoco'
 
 jacoco {
@@ -51,5 +52,6 @@ jacocoTestReport {
     }
   }
 }
+*/
 
 // check.dependsOn jacocoTestReport
