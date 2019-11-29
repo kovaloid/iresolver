@@ -55,8 +55,7 @@ public class SimilarityProcessor implements IssueProcessor {
     similarIssueKeys.forEach((similarIssueKey) -> {
       Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
 
-      double similarity = vectorModel.getParagraphVectors()
-          .similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
+      double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, Math.abs(similarity * 100)));
 
       similarIssue.getLabels().forEach(label -> addEntityOrUpdateMetric(probableLabelsMap, label));
