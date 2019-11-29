@@ -71,7 +71,7 @@ task printFields(type: JavaExec) {
   main = "$mainClassName"
   classpath = sourceSets.main.runtimeClasspath
   workingDir = file('src')
-  args = ['fields']
+  args = ['print-fields']
 }
 
 task testSimilarityProcessor(type: JavaExec) {
@@ -153,6 +153,7 @@ distributions {
 }
 
 startScripts {
+  group 'distribution'
   classpath += files('config')
   applicationName = 'run'
   doLast {
@@ -165,214 +166,48 @@ startScripts {
   }
 }
 
-task createDataSetScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-data-set'
+def actions = [
+  [taskName: 'createDataSetScript', scriptName: 'create-data-set'],
+  [taskName: 'createVectorModelScript', scriptName: 'create-vector-model'],
+  [taskName: 'createDocumentationDataSetScript', scriptName: 'create-documentation-data-set'],
+  [taskName: 'createDocumentationVectorModelScript', scriptName: 'create-documentation-vector-model'],
+  [taskName: 'createConfluenceDataSetScript', scriptName: 'create-confluence-data-set'],
+  [taskName: 'createConfluenceVectorModelScript', scriptName: 'create-confluence-vector-model'],
+  [taskName: 'cleanScript', scriptName: 'clean'],
+  [taskName: 'printFieldsScript', scriptName: 'print-fields']
+  // [taskName: 'testSimilarityProcessorScript', scriptName: 'test-similarity-processor']
+]
 
-  createDataSetScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-data-set')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-data-set')
-    }
-  }
-}
+actions.each { action ->
+  task "${action.taskName}"(type: CreateStartScripts) {
+    group 'distribution'
+    mainClassName = startScripts.mainClassName
+    classpath = startScripts.classpath
+    outputDir = startScripts.outputDir
+    applicationName = "${action.scriptName}"
 
-task createVectorModelScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-vector-model'
-
-  createVectorModelScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-vector-model')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-vector-model')
-    }
-  }
-}
-
-task createDocumentationDataSetScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-documentation-data-set'
-
-  createDocumentationDataSetScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-documentation-data-set')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-documentation-data-set')
-    }
-  }
-}
-
-task createDocumentationVectorModelScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-documentation-vector-model'
-
-  createDocumentationVectorModelScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-documentation-vector-model')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-documentation-vector-model')
-    }
-  }
-}
-
-task createConfluenceDataSetScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-confluence-data-set'
-
-  createConfluenceDataSetScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-confluence-data-set')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-confluence-data-set')
-    }
-  }
-}
-
-task createConfluenceVectorModelScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'create-confluence-vector-model'
-
-  createConfluenceVectorModelScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=create-confluence-vector-model')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=create-confluence-vector-model')
-    }
-  }
-}
-
-task cleanScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'clean'
-
-  cleanScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=clean')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=clean')
-    }
-  }
-}
-
-task printFieldsScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'print-fields'
-
-  printFieldsScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=fields')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=fields')
-    }
-  }
-}
-
-task testSimilarityProcessorScript(type: CreateStartScripts) {
-  mainClassName = startScripts.mainClassName
-  classpath = startScripts.classpath
-  outputDir = startScripts.outputDir
-  applicationName = 'test-similarity-processor'
-
-  testSimilarityProcessorScript {
-    doLast {
-      def windowsScriptFile = file getWindowsScript()
-      def unixScriptFile = file getUnixScript()
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
-      windowsScriptFile.text = windowsScriptFile.text
-          .replaceFirst('CMD_LINE_ARGS=', 'CMD_LINE_ARGS=test-similarity-processor')
-      unixScriptFile.text = unixScriptFile.text
-          .replaceFirst('APP_ARGS=', 'APP_ARGS=test-similarity-processor')
+    "${action.taskName}" {
+      doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text
+            .replaceFirst(/CLASSPATH=\S+/, windowsClassPath)
+        unixScriptFile.text = unixScriptFile.text
+            .replaceFirst(/CLASSPATH=\S+/, unixClassPath)
+        windowsScriptFile.text = windowsScriptFile.text
+            .replaceFirst('CMD_LINE_ARGS=', "CMD_LINE_ARGS=${action.scriptName}")
+        unixScriptFile.text = unixScriptFile.text
+            .replaceFirst('APP_ARGS=', "APP_ARGS=${action.scriptName}")
+      }
     }
   }
 }
 
 applicationDistribution.into('bin') {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-  from(createDataSetScript)
-  from(createVectorModelScript)
-  from(createDocumentationDataSetScript)
-  from(createDocumentationVectorModelScript)
-  from(createConfluenceDataSetScript)
-  from(createConfluenceVectorModelScript)
-  from(cleanScript)
-  from(printFieldsScript)
+  actions.each { action ->
+    from(tasks.getByName(action.taskName))
+  }
   fileMode = 0755
 }
 
