@@ -78,10 +78,12 @@ public class HtmlReportGenerator implements ReportGenerator {
 
   private void openReport() throws IOException {
     File file = new File(configuration.getOutputFolder(), REPORT_FILE_NAME);
-    try {
+    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
       Desktop.getDesktop().browse(getUriFromFile(file));
-    } catch (UnsupportedOperationException e) {
-      LOGGER.warn("Could not open browser on the current platform", e);
+      LOGGER.warn("Opening the default browser with report...");
+    } else {
+      LOGGER.warn("Could not open default browser on the current platform");
+      LOGGER.warn("Please open the {} file manually", REPORT_FILE_NAME);
     }
   }
 

@@ -2,6 +2,7 @@ package com.koval.jresolver.processor.documentation;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,12 +29,14 @@ public class DocumentationProcessor implements IssueProcessor {
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
+  private final String docsPath;
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
 
   public DocumentationProcessor(DocumentationProcessorProperties properties) throws IOException {
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
     File vectorModelFile = new File(properties.getWorkFolder(), properties.getVectorModelFileName());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile);
+    this.docsPath = properties.getDocsFolder();
   }
 
   @Override
@@ -57,11 +60,25 @@ public class DocumentationProcessor implements IssueProcessor {
                         .findFirst()
                         .orElse(new DocFile(0, "no_such_file"));
                 double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarDocKey);
-                return new DocumentationResult(docFile.getFileName(), metadata.getPageNumber(), Math.abs(similarity * 100));
+                return new DocumentationResult(
+                    docFile.getFileName(),
+                    getFileUri(docsPath, docFile.getFileName()),
+                    metadata.getPageNumber(),
+                    Math.abs(similarity * 100)
+                );
               })
               .ifPresent(similarDocs::add);
     });
     result.setDocumentationResults(similarDocs);
+  }
+
+  private String getFileUri(String path, String fileName) {
+    return FileSystems.getDefault()
+        .getPath(path, fileName)
+        .toAbsolutePath()
+        .normalize()
+        .toUri()
+        .toString();
   }
 
 }

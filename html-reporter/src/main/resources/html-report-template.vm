@@ -120,8 +120,8 @@
                     <tbody>
                         #foreach ($doc in $result.getDocumentationResults())
                         <tr>
-                            <td>$doc.getFileName()</td>
-                            <td>$doc.getPageNumber()</td>
+                            <td><a href="$doc.getFileUri()" target="_blank">$doc.getFileName()</a></td>
+                            <td><a href="$doc.getFileUri()#page=$doc.getPageNumber()" target="_blank">$doc.getPageNumber()</a></td>
                             <td>$numberTool.format("#0.00", $doc.getRank())%</td>
                         </tr>
                         #end
