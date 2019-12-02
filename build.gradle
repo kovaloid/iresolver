@@ -1,4 +1,8 @@
 
+plugins {
+  id 'com.github.spotbugs' version '2.0.1'
+}
+
 apply plugin: 'application'
 
 mainClassName = 'com.koval.jresolver.Launcher'
@@ -264,21 +268,20 @@ allprojects {
     ignoreFailures = false
   }
 
-  /*
-  apply plugin: 'findbugs'
-  findbugs {
-    toolVersion = '3.0.1'
+  spotbugs {
+    toolVersion = '3.1.12'
+    reportLevel = 'low'
+    effort = 'max'
     excludeFilter = rootProject.file('config/findbugs_filter.xml')
-    ignoreFailures = false
+    ignoreFailures = true
   }
 
-  tasks.withType(FindBugs) {
+  tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
       xml.enabled = false
       html.enabled = true
     }
   }
-  */
 
   apply from: rootProject.file('jdepend.gradle')
   apply from: rootProject.file('coverage.gradle')
