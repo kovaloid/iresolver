@@ -5,20 +5,33 @@
     <meta name="viewport" content="width=device-width"/>
     <title>Issue Report</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        .card {
+            margin-left:20px;
+        }
+    </style>
 </head>
 <body>
 <div class="container pt-4">
+    <nav class="toc">
+        <h2>Content:</h2>
+        <ul>
+        #foreach ($result in $results)
+            <li><a href="#$result.getOriginalIssue().getKey()">$result.getOriginalIssue().getKey()</a>
+        #end
+        </ul>
+    </nav>
     #foreach ($result in $results)
         <div class="card bg-light border-secondary mb-4">
             <div class="card-header">
                 <h4>
-                    <a href="$result.getOriginalIssue().getLink()" target="_blank">$result.getOriginalIssue().getKey()</a> - $result.getOriginalIssue().getSummary()
+                    <h2 id="$result.getOriginalIssue().getKey()"><a href="$result.getOriginalIssue().getLink()" target="_blank">$result.getOriginalIssue().getKey()</a></h2>$result.getOriginalIssue().getSummary()
                 </h4>
             </div>
             <div class="card-body">
 
             #if($isSimilarityProcessorEnabled)
-                <h5 class="card-title">Similar Issues</h5>
+                <details> <summary>Similar Issues</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                     <tr>
@@ -38,10 +51,10 @@
                         </tr>
                         #end
                     </tbody>
-                </table>
+                </table></details>
                 <br/>
 
-                <h5 class="card-title">Qualified Users</h5>
+                <details> <summary>Qualified Users</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                     <tr>
@@ -61,10 +74,10 @@
                         </tr>
                         #end
                     </tbody>
-                </table>
+                </table></details>
                 <br/>
 
-                <h5 class="card-title">Probable Labels</h5>
+                <details> <summary>Probable Labels</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                     <tr>
@@ -80,10 +93,10 @@
                         </tr>
                         #end
                     </tbody>
-                </table>
+                </table></details>
                 <br/>
 
-                <h5 class="card-title">Probable Attachments</h5>
+                <details> <summary>Probable Attachments</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                     <tr>
@@ -103,12 +116,12 @@
                         </tr>
                         #end
                     </tbody>
-                </table>
+                </table></details>
                 <br/>
             #end
 
             #if($isDocumentationProcessorEnabled)
-                <h5 class="card-title">Useful Documentation</h5>
+                <details> <summary>Useful Documentation</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
                         <tr>
@@ -121,12 +134,12 @@
                         #foreach ($doc in $result.getDocumentationResults())
                         <tr>
                             <td><a href="$doc.getFileUri()" target="_blank">$doc.getFileName()</a></td>
-                            <td><a href="$doc.getFileUri()#page=$doc.getPageNumber()" target="_blank">$doc.getPageNumber()</a></td>
+                            <td><a title="hover text" href="$doc.getFileUri()#page=$doc.getPageNumber()" target="_blank">$doc.getPageNumber()</a></td>
                             <td>$numberTool.format("#0.00", $doc.getRank())%</td>
                         </tr>
                         #end
                     </tbody>
-                </table>
+                </table></details>
                 <br/>
             #end
 
