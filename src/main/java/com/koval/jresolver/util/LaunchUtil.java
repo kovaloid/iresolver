@@ -32,6 +32,8 @@ import com.koval.jresolver.connector.bugzilla.BugZillaConnector;
 import com.koval.jresolver.connector.bugzilla.client.BugZillaIssueClientFactory;
 import com.koval.jresolver.connector.bugzilla.configuration.BugZillaConnectorProperties;
 import com.koval.jresolver.connector.bugzilla.exception.BugZillaConnectorException;
+import com.koval.jresolver.connector.confluence.ConfluenceConnector;
+import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
 import com.koval.jresolver.connector.jira.JiraConnector;
 import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
@@ -96,7 +98,9 @@ public final class LaunchUtil {
   }
 
   public static void createConfluenceDataSet() {
-    // TODO: implement
+    ConfluenceConnectorProperties properties = new ConfluenceConnectorProperties();
+    ConfluenceConnector confluenceConnector = new ConfluenceConnector(properties);
+    confluenceConnector.create();
   }
 
   public static void createConfluenceVectorModel() {

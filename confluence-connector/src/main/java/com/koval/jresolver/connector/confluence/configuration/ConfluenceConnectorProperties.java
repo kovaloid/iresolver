@@ -20,6 +20,7 @@ public class ConfluenceConnectorProperties {
     private String password = "";
     private String spaceKey;
     private int batchSize = 500;
+    private String docsFolder = "";
 
     public ConfluenceConnectorProperties() {
         loadProperties();
@@ -38,6 +39,7 @@ public class ConfluenceConnectorProperties {
             password = properties.getProperty("password");
             spaceKey = properties.getProperty("spaceKey");
             batchSize = Integer.parseInt(properties.getProperty("batchSize"));
+            docsFolder = properties.getProperty("docsFolder");
         } catch (IOException e) {
             throw new ConfigurationException("Could not load the confluence connector properties.", e);
         }
@@ -92,6 +94,14 @@ public class ConfluenceConnectorProperties {
         this.spaceKey = spaceKey;
     }
 
+    public String getDocsFolder() {
+        return docsFolder;
+    }
+
+    public void setDocsFolder(String docsFolder) {
+        this.docsFolder = docsFolder;
+    }
+
     @Override
     public String toString() {
         return "ConfluenceConnectorProperties{"
@@ -101,6 +111,7 @@ public class ConfluenceConnectorProperties {
                 + ", password='" + password + '\''
                 + ", batchSize=" + batchSize
                 + ", spaceKey='" + spaceKey + '\''
+                + ", docsFolder='" + docsFolder + '\''
                 + '}';
     }
 }
