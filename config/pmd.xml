@@ -60,7 +60,7 @@
         <exclude name="UncommentedEmptyMethodBody" />
         <exclude name="UncommentedEmptyConstructor" />
         <exclude name="UseVarargs" />
-        <exclude name="AvoidConstantsInterface" />
+        <exclude name="ConstantsInInterface" />
         <exclude name="GodClass" />
         <!-- Does not allow inner classes to be at the start of a class -->
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />

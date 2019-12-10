@@ -12,6 +12,7 @@ import java.util.Properties;
 import javax.swing.*;
 
 
+@SuppressWarnings("PMD")
 public final class ConfigWizard {
 
   private ConfigWizard() {
