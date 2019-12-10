@@ -1,19 +1,23 @@
 plugins {
   id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.8'
-}
-
-javafx {
-  version = '11.0.2'
-  modules = [ 'javafx.controls' ]
 }
 
 mainClassName = 'com.koval.jresolver.wizard.config.ConfigWizard'
+
+sourceCompatibility = 8
+targetCompatibility = 8
 
 run {
   workingDir = file('src')
 }
 
-application {
-  applicationDefaultJvmArgs = ['--module-path %APP_HOME%\\lib\\ --add-modules=javafx.controls']
+/*
+startScripts {
+  doLast {
+    unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=',
+        'DEFAULT_JVM_OPTS=--module-path $APP_HOME/lib/ --add-modules=javafx.controls')
+    windowsScript.text = windowsScript.text.replace('set DEFAULT_JVM_OPTS=',
+        'set DEFAULT_JVM_OPTS=--module-path %APP_HOME%\\lib\\ --add-modules=javafx.controls')
+  }
 }
+*/
