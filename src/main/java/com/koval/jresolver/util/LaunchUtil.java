@@ -222,6 +222,10 @@ public final class LaunchUtil {
     }
   }
 
+  public static void configurationWizard() {
+    // TODO: add ConfigWizard instance
+  }
+
   public static void testSimilarityProcessor() {
     try {
       new TestSimilarityProcessor().test();

@@ -4,9 +4,6 @@ plugins {
 
 mainClassName = 'com.koval.jresolver.wizard.config.ConfigWizard'
 
-sourceCompatibility = 8
-targetCompatibility = 8
-
 run {
   workingDir = file('src')
 }

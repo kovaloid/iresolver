@@ -22,6 +22,7 @@ public final class Launcher {
   private static final String CLEAN = "clean";
   private static final String PRINT_FIELDS = "print-fields";
   private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
+  private static final String CONFIGURATION_WIZARD = "configuration-wizard";
   private static final String HELP_TIP = "Please use the following commands: \n"
       + CREATE_DATA_SET + ", "
       + CREATE_VECTOR_MODEL + ", "
@@ -31,6 +32,7 @@ public final class Launcher {
       + CREATE_CONFLUENCE_VECTOR_MODEL + ", "
       + CLEAN + ", "
       + PRINT_FIELDS + ", "
+      + CONFIGURATION_WIZARD + ", "
       + TEST_SIMILARITY_PROCESSOR + ".";
 
   private Launcher() {
@@ -73,6 +75,10 @@ public final class Launcher {
         case PRINT_FIELDS:
           LOGGER.info("Start printing fields.");
           LaunchUtil.printFields();
+          break;
+        case CONFIGURATION_WIZARD:
+          LOGGER.info("Start configuration wizard.");
+          LaunchUtil.configurationWizard();
           break;
         case TEST_SIMILARITY_PROCESSOR:
           LOGGER.info("Start testing similarity processor.");

@@ -1,6 +1,6 @@
 package com.koval.jresolver.wizard.config;
 
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -24,9 +24,10 @@ public final class ConfigWizard {
     JFrame frame = new JFrame("Configuration Wizard");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+    frame.getContentPane().add(new JiraConnectorPanel());
+
     String javaVersion = System.getProperty("java.version");
-    String javafxVersion = System.getProperty("javafx.version");
-    JLabel info = new JLabel("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+    JLabel info = new JLabel("Hello, running on Java " + javaVersion + ".");
 
     JComboBox<String> options = new JComboBox<>();
     options.addItem("jira");
