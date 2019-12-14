@@ -11,6 +11,8 @@ import java.util.Properties;
 
 import javax.swing.*;
 
+import com.koval.jresolver.wizard.config.panel.connector.JiraConnectorPanel;
+
 
 @SuppressWarnings("PMD")
 public final class ConfigWizard {
@@ -20,6 +22,11 @@ public final class ConfigWizard {
 
   public static void main(String[] args) {
     JFrame.setDefaultLookAndFeelDecorated(true);
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
 
     JFrame frame = new JFrame("Configuration Wizard");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
