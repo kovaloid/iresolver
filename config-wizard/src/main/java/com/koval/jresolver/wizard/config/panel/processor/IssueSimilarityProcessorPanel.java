@@ -1,20 +1,34 @@
 package com.koval.jresolver.wizard.config.panel.processor;
 
-import java.awt.*;
+import java.util.Properties;
 
-import javax.swing.*;
+import com.koval.jresolver.wizard.config.panel.AbstractWizardPanel;
 
 
-public class IssueSimilarityProcessorPanel extends JPanel {
+@SuppressWarnings("PMD")
+public class IssueSimilarityProcessorPanel extends AbstractWizardPanel {
 
-  public IssueSimilarityProcessorPanel() {
-    super();
+  private static final String FILE_NAME = "similarity-processor.properties";
+
+  public IssueSimilarityProcessorPanel(String configFolder) {
+    super("Similarity Processor", configFolder);
     draw();
+    addDefaultButtons();
+    initFields();
   }
 
-  private void draw() {
-    setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-    JButton updateButton = new JButton("Update");
-    add(updateButton);
+  @Override
+  public void draw() {
+  }
+
+  @Override
+  public void initFields() {
+    Properties properties = getProperties(FILE_NAME);
+  }
+
+  @Override
+  public void saveFields() {
+    Properties properties = new Properties();
+    saveProperties(FILE_NAME, properties);
   }
 }

@@ -1,20 +1,34 @@
 package com.koval.jresolver.wizard.config.panel.reporter;
 
-import java.awt.*;
+import java.util.Properties;
 
-import javax.swing.*;
+import com.koval.jresolver.wizard.config.panel.AbstractWizardPanel;
 
 
-public class HtmlReporterPanel extends JPanel {
+@SuppressWarnings("PMD")
+public class HtmlReporterPanel extends AbstractWizardPanel {
 
-  public HtmlReporterPanel() {
-    super();
+  private static final String FILE_NAME = "html-reporter.properties";
+
+  public HtmlReporterPanel(String configFolder) {
+    super("HTML Reporter", configFolder);
     draw();
+    addDefaultButtons();
+    initFields();
   }
 
-  private void draw() {
-    setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-    JButton updateButton = new JButton("Update");
-    add(updateButton);
+  @Override
+  public void draw() {
+  }
+
+  @Override
+  public void initFields() {
+    Properties properties = getProperties(FILE_NAME);
+  }
+
+  @Override
+  public void saveFields() {
+    Properties properties = new Properties();
+    saveProperties(FILE_NAME, properties);
   }
 }

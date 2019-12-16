@@ -1,30 +1,40 @@
 package com.koval.jresolver.wizard.config.panel.connector;
 
-import java.awt.*;
+import java.util.Properties;
 
 import javax.swing.*;
 
+import com.koval.jresolver.wizard.config.panel.AbstractWizardPanel;
 
-public class JiraConnectorPanel extends JPanel {
 
-  public static final String TITLE = "Jira Connector";
+@SuppressWarnings("PMD")
+public class JiraConnectorPanel extends AbstractWizardPanel {
 
-  public JiraConnectorPanel() {
-    super();
+  private static final String FILE_NAME = "jira-connector.properties";
+
+  public JiraConnectorPanel(String configFolder) {
+    super("Jira Connector", configFolder);
     draw();
+    addDefaultButtons();
+    initFields();
   }
 
-  private void draw() {
-    setToolTipText(TITLE);
-    setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), TITLE));
-
+  @Override
+  public void draw() {
     JLabel urlLabel = new JLabel("URL");
     JTextField urlTextField = new JTextField(10);
     add(urlLabel);
     add(urlTextField);
-
-    JButton updateButton = new JButton("Update");
-    add(updateButton);
   }
 
+  @Override
+  public void initFields() {
+    Properties properties = getProperties(FILE_NAME);
+  }
+
+  @Override
+  public void saveFields() {
+    Properties properties = new Properties();
+    saveProperties(FILE_NAME, properties);
+  }
 }

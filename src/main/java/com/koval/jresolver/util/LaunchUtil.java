@@ -54,6 +54,7 @@ import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
+import com.koval.jresolver.wizard.config.ConfigWizard;
 
 
 public final class LaunchUtil {
@@ -223,7 +224,7 @@ public final class LaunchUtil {
   }
 
   public static void configurationWizard() {
-    // TODO: add ConfigWizard instance
+    new ConfigWizard();
   }
 
   public static void testSimilarityProcessor() {

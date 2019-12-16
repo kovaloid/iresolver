@@ -1,20 +1,34 @@
 package com.koval.jresolver.wizard.config.panel.connector;
 
-import java.awt.*;
+import java.util.Properties;
 
-import javax.swing.*;
+import com.koval.jresolver.wizard.config.panel.AbstractWizardPanel;
 
 
-public class BugzillaConnectorPanel extends JPanel {
+@SuppressWarnings("PMD")
+public class BugzillaConnectorPanel extends AbstractWizardPanel {
 
-  public BugzillaConnectorPanel() {
-    super();
+  private static final String FILE_NAME = "bugzilla-connector.properties";
+
+  public BugzillaConnectorPanel(String configFolder) {
+    super("Bugzilla Connector", configFolder);
     draw();
+    addDefaultButtons();
+    initFields();
   }
 
-  private void draw() {
-    setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-    JButton updateButton = new JButton("Update");
-    add(updateButton);
+  @Override
+  public void draw() {
+  }
+
+  @Override
+  public void initFields() {
+    Properties properties = getProperties(FILE_NAME);
+  }
+
+  @Override
+  public void saveFields() {
+    Properties properties = new Properties();
+    saveProperties(FILE_NAME, properties);
   }
 }
