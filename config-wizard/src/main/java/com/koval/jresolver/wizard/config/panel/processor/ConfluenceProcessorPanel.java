@@ -2,6 +2,7 @@ package com.koval.jresolver.wizard.config.panel.processor;
 
 import java.util.Properties;
 
+import com.koval.jresolver.wizard.config.ext.OrderedProperties;
 import com.koval.jresolver.wizard.config.panel.AbstractWizardPanel;
 
 
@@ -28,7 +29,7 @@ public class ConfluenceProcessorPanel extends AbstractWizardPanel {
 
   @Override
   public void saveFields() {
-    Properties properties = new Properties();
+    Properties properties = new OrderedProperties();
     saveProperties(FILE_NAME, properties);
   }
 }

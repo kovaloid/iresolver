@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import javax.swing.*;
 
+import com.koval.jresolver.wizard.config.ext.OrderedProperties;
+
 
 @SuppressWarnings("PMD")
 public class ControlPanel extends AbstractWizardPanel {
@@ -33,7 +35,7 @@ public class ControlPanel extends AbstractWizardPanel {
 
   @Override
   public void saveFields() {
-    Properties properties = new Properties();
+    Properties properties = new OrderedProperties();
     properties.setProperty("connector", (String)connector.getSelectedItem());
     properties.setProperty("processors", "value2");
     properties.setProperty("reporters", "value2");

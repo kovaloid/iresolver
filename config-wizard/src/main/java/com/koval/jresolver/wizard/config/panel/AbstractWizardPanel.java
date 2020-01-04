@@ -1,11 +1,15 @@
 package com.koval.jresolver.wizard.config.panel;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.Objects;
 import java.util.Properties;
 
 import javax.swing.*;
+
+import com.koval.jresolver.wizard.config.ext.OrderedProperties;
 
 
 @SuppressWarnings("PMD")
@@ -36,7 +40,7 @@ public abstract class AbstractWizardPanel extends JPanel {
   protected abstract void saveFields();
 
   protected Properties getProperties(String configFile) {
-    Properties properties = new Properties();
+    Properties properties = new OrderedProperties();
     try (InputStream input = new FileInputStream(new File(configFolder, configFile))) {
       properties.load(Objects.requireNonNull(input));
     } catch (IOException e) {
@@ -51,5 +55,20 @@ public abstract class AbstractWizardPanel extends JPanel {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void setTextFieldAsNumeric(JTextField component) {
+    component.addKeyListener(new KeyAdapter() {
+      public void keyPressed(KeyEvent ke) {
+        String value = component.getText();
+        int l = value.length();
+        if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
+          component.setEditable(true);
+        } else {
+          component.setEditable(false);
+          JOptionPane.showMessageDialog(null, "* Enter only numeric digits(0-9)");
+        }
+      }
+    });
   }
 }
