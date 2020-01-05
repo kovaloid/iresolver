@@ -13,6 +13,9 @@ import com.koval.jresolver.connector.bugzilla.exception.BugZillaConnectorExcepti
 
 import b4j.core.DefaultIssue;
 import b4j.core.session.BugzillaHttpSession;
+import b4j.util.HttpSessionParams;
+import rs.baselib.security.AuthorizationCallback;
+import rs.baselib.security.SimpleAuthorizationCallback;
 
 
 public class BugZillaIssueClientFactory implements IssueClientFactory {
@@ -35,9 +38,11 @@ public class BugZillaIssueClientFactory implements IssueClientFactory {
     session.setBaseUrl(getURL(host));
     session.setBugzillaBugClass(DefaultIssue.class);
 
-    // AuthorizationCallback authCallback = new SimpleAuthorizationCallback("username", "password");
-    // session.setAuthorizationCallback(authCallback);
-
+    AuthorizationCallback authCallback = new SimpleAuthorizationCallback(credentials.getUsername(), credentials.getPassword());
+    HttpSessionParams httpSessionParams = new HttpSessionParams();
+    httpSessionParams.setBasicAuthentication(true);
+    httpSessionParams.setAuthorizationCallback(authCallback);
+    session.setHttpSessionParams(httpSessionParams);
     return new BugZillaIssueClient(session);
   }
 

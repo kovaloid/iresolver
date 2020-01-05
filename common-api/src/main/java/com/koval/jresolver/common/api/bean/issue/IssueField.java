@@ -1,7 +1,7 @@
 package com.koval.jresolver.common.api.bean.issue;
 
-
 import java.util.Objects;
+
 
 public class IssueField {
 
@@ -11,6 +11,10 @@ public class IssueField {
   private Object value;
 
   public IssueField() {
+  }
+
+  public IssueField(String name) {
+    this.name = name;
   }
 
   public IssueField(String id, String name, String type, Object value) {

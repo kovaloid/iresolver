@@ -63,13 +63,13 @@ public class BugZillaIssueReceiver implements IssueReceiver {
             countWords(issue.getSummary()), countWords(issue.getDescription()), issue.getComments().size(),
             issue.getAttachments().size()));
     currentIndex += batchSize;
-    LOGGER.info("Progress {}/{}", (currentIndex > finishIndex) ? finishIndex : currentIndex, finishIndex);
+    LOGGER.info("Progress {}/{}", Math.min(currentIndex, finishIndex), finishIndex);
     if (batchDelay != 0) {
       delay();
     }
     progressMonitor.endMeasuringBatchTime();
     LOGGER.info("Remaining time: {}", progressMonitor.getFormattedRemainingTime(
-        (currentIndex > finishIndex) ? finishIndex : currentIndex));
+        Math.min(currentIndex, finishIndex)));
     return searchResult;
   }
 
