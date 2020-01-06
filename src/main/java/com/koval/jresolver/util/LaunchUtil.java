@@ -101,7 +101,7 @@ public final class LaunchUtil {
   public static void createConfluenceDataSet() {
     ConfluenceConnectorProperties properties = new ConfluenceConnectorProperties();
     ConfluenceConnector confluenceConnector = new ConfluenceConnector(properties);
-    confluenceConnector.create();
+    confluenceConnector.createDataSet();
   }
 
   public static void createConfluenceVectorModel() {

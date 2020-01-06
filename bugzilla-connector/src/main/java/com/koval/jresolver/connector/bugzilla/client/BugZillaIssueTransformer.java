@@ -158,8 +158,8 @@ public class BugZillaIssueTransformer implements IssueTransformer<b4j.core.Issue
         originalUser.getName(),
         originalUser.getRealName(),
         UNKNOWN,
-        originalUser.getTeam() == null ? new ArrayList<>() :
-            Collections.singletonList(originalUser.getTeam().getName()),
+        originalUser.getTeam() == null ? new ArrayList<>()
+            : Collections.singletonList(originalUser.getTeam().getName()),
         URI.create(""),
         URI.create("")
     );
