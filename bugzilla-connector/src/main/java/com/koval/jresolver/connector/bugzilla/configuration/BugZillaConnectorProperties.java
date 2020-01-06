@@ -16,7 +16,7 @@ import com.koval.jresolver.common.api.exception.ConfigurationException;
 public class BugZillaConnectorProperties {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BugZillaConnectorProperties.class);
-  private static final String CONNECTOR_PROPERTIES_FILE = "jira-connector.properties";
+  private static final String CONNECTOR_PROPERTIES_FILE = "bugzilla-connector.properties";
 
   private String url;
   private boolean anonymous = true;

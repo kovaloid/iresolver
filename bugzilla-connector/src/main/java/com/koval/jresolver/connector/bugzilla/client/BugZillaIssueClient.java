@@ -12,7 +12,6 @@ import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.issue.IssueField;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueTransformer;
-import com.koval.jresolver.common.api.util.CollectionsUtil;
 import com.koval.jresolver.connector.bugzilla.configuration.BugZillaQuery;
 import com.koval.jresolver.connector.bugzilla.configuration.BugZillaQueryParser;
 
@@ -35,10 +34,7 @@ public class BugZillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(String query) {
-    DefaultSearchData searchData = getSearchDataByQuery(query);
-    searchData.add("limit", "1000000000");
-    Iterable<b4j.core.Issue> issues = session.searchBugs(searchData, null);
-    return CollectionsUtil.convert(issues).size();
+    return 1000000;
   }
 
   @Override
@@ -50,10 +46,12 @@ public class BugZillaIssueClient implements IssueClient {
     searchData.add("limit", String.valueOf(maxResults));
 
     Iterable<b4j.core.Issue> issues = session.searchBugs(searchData, null);
+    List<b4j.core.Issue> rawIssueList = new ArrayList<>();
     for (b4j.core.Issue issue : issues) {
       LOGGER.info("Bug found: " + issue.getId() + " - " + issue.getSummary());
+      rawIssueList.add(issue);
     }
-    return issueTransformer.transform(CollectionsUtil.convert(issues));
+    return issueTransformer.transform(rawIssueList);
   }
 
   private DefaultSearchData getSearchDataByQuery(String query) {

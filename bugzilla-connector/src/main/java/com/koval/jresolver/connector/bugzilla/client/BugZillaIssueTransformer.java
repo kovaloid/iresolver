@@ -114,7 +114,7 @@ public class BugZillaIssueTransformer implements IssueTransformer<b4j.core.Issue
     if (originalIssue.getLinks() != null) {
       originalIssue.getLinks().forEach(originalIssueLink -> {
         IssueLink transformedIssueLink = new IssueLink(originalIssueLink.getIssueId(),
-            originalIssueLink.getLinkTypeName(), URI.create(originalIssueLink.getLinkTypeDescription()));
+            originalIssueLink.getLinkTypeName(), null);
         transformedIssueLinks.add(transformedIssueLink);
       });
     }
@@ -158,7 +158,8 @@ public class BugZillaIssueTransformer implements IssueTransformer<b4j.core.Issue
         originalUser.getName(),
         originalUser.getRealName(),
         UNKNOWN,
-        Collections.singletonList(originalUser.getTeam().getName()),
+        originalUser.getTeam() == null ? new ArrayList<>() :
+            Collections.singletonList(originalUser.getTeam().getName()),
         URI.create(""),
         URI.create("")
     );
@@ -171,6 +172,10 @@ public class BugZillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private Version transformVersion(b4j.core.Version originalVersion) {
+    Date releaseDate = originalVersion.getReleaseDate();
+    if (releaseDate == null) {
+      return new Version(originalVersion.getName(), "", false, false, null);
+    }
     return new Version(originalVersion.getName(), "", false,
         originalVersion.getReleaseDate().before(new Date()), new DateTime(originalVersion.getReleaseDate()));
   }
