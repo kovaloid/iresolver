@@ -224,7 +224,7 @@ public final class LaunchUtil {
   }
 
   public static void configurationWizard() {
-    new ConfigWizard();
+    new ConfigWizard("../config");
   }
 
   public static void testSimilarityProcessor() {

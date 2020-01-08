@@ -19,16 +19,14 @@ import com.koval.jresolver.wizard.config.panel.reporter.HtmlReporterPanel;
 public class ConfigWizard extends JFrame {
 
   public static void main(String[] args) {
-    new ConfigWizard();
+    new ConfigWizard("./build/resources/main/");
   }
 
-  public ConfigWizard() {
+  public ConfigWizard(String configFolder) {
     super("Configuration Wizard");
     initLookAndFeel();
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new GridLayout(3, 3, 5, 12));
-
-    String configFolder = "./build/resources/main/";
 
     add(new JiraConnectorPanel(configFolder));
     add(new BugzillaConnectorPanel(configFolder));
