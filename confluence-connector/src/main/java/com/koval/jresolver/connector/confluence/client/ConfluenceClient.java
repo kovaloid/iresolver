@@ -3,6 +3,7 @@ package com.koval.jresolver.connector.confluence.client;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,13 @@ public class ConfluenceClient implements Closeable {
     if (!connectorProperties.isAnonymous()) {
       provider.setAuthContext(connectorProperties.getUsername(), connectorProperties.getPassword().toCharArray());
     }
+    LOGGER.info("Confluence client created for {}", connectorProperties.getConfluenceBaseUrl());
   }
 
   public List<Space> getSpacesByKeys(List<String> spaceKeys) {
     RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
     PageRequest pageRequest = new SimplePageRequest(0, 1000);
-    LOGGER.info("Create page request: {} for spaces: {}", pageRequest, spaceKeys);
+    LOGGER.info("Get spaces by keys: {} with page request: {}", spaceKeys, pageRequest);
     return spaceService
         .find()
         .withKeys(spaceKeys.toArray(new String[spaceKeys.size()]))
@@ -50,10 +52,11 @@ public class ConfluenceClient implements Closeable {
         .getResults();
   }
 
-  public PageResponse<Content> getPagesBySpaceKeys(List<Space> spaces, int startIndex, int endIndex) {
+  public PageResponse<Content> getPagesBySpaceKeys(List<Space> spaces, int startIndex, int limit) {
     RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
-    PageRequest pageRequest = new SimplePageRequest(startIndex, endIndex);
-    LOGGER.info("Create page request: {}", pageRequest);
+    PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
+    LOGGER.info("Get pages by spaces: {} with page request: {}",
+        spaces.stream().map(Space::getKey).collect(Collectors.toList()), pageRequest);
     return contentService
         .find(new Expansion("body.storage"))
         .withSpace(spaces.toArray(new Space[spaces.size()]))
@@ -64,5 +67,6 @@ public class ConfluenceClient implements Closeable {
   @Override
   public void close() throws IOException {
     provider.close();
+    LOGGER.info("Confluence client has been closed");
   }
 }

@@ -22,8 +22,8 @@ public class ConfluenceConnectorProperties {
   private String username = "";
   private String password = "";
   private List<String> spaceKeys;
-  private int batchSize = 500;
-  private String docsFolder = "";
+  private int limitPerRequest = 500;
+  private String workFolder = "";
 
   public ConfluenceConnectorProperties() {
     loadProperties();
@@ -41,8 +41,8 @@ public class ConfluenceConnectorProperties {
       username = properties.getProperty("username");
       password = properties.getProperty("password");
       spaceKeys = Arrays.asList(properties.getProperty("spaceKeys").split(","));
-      batchSize = Integer.parseInt(properties.getProperty("batchSize"));
-      docsFolder = properties.getProperty("docsFolder");
+      limitPerRequest = Integer.parseInt(properties.getProperty("limitPerRequest"));
+      workFolder = properties.getProperty("workFolder");
     } catch (IOException e) {
       throw new ConfigurationException("Could not load the confluence connector properties.", e);
     }
@@ -81,12 +81,12 @@ public class ConfluenceConnectorProperties {
     this.password = password;
   }
 
-  public int getBatchSize() {
-    return batchSize;
+  public int getLimitPerRequest() {
+    return limitPerRequest;
   }
 
-  public void setBatchSize(int batchSize) {
-    this.batchSize = batchSize;
+  public void setLimitPerRequest(int limitPerRequest) {
+    this.limitPerRequest = limitPerRequest;
   }
 
   public List<String> getSpaceKeys() {
@@ -97,12 +97,12 @@ public class ConfluenceConnectorProperties {
     this.spaceKeys = spaceKeys;
   }
 
-  public String getDocsFolder() {
-    return docsFolder;
+  public String getWorkFolder() {
+    return workFolder;
   }
 
-  public void setDocsFolder(String docsFolder) {
-    this.docsFolder = docsFolder;
+  public void setWorkFolder(String workFolder) {
+    this.workFolder = workFolder;
   }
 
   @Override
@@ -112,9 +112,9 @@ public class ConfluenceConnectorProperties {
         + ", anonymous=" + anonymous
         + ", username='" + username + '\''
         + ", password='" + password + '\''
-        + ", batchSize=" + batchSize
-        + ", spaceKey='" + spaceKeys + '\''
-        + ", docsFolder='" + docsFolder + '\''
+        + ", spaceKeys='" + spaceKeys + '\''
+        + ", limitPerRequest=" + limitPerRequest
+        + ", workFolder='" + workFolder + '\''
         + '}';
   }
 }

@@ -65,6 +65,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     context.put("numberTool", new NumberTool());
     context.put("isSimilarityProcessorEnabled", enabledProcessors.contains(ProcessorConstants.SIMILARITY));
     context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(ProcessorConstants.DOCUMENTATION));
+    context.put("isConfluenceProcessorEnabled", enabledProcessors.contains(ProcessorConstants.CONFLUENCE));
     context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE));
     try (StringWriter writer = new StringWriter()) {
       template.merge(context, writer);

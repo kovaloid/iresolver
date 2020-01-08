@@ -14,6 +14,7 @@ public class IssueAnalysingResult {
   private List<Pair<String, Integer>> probableLabels;
   private List<AttachmentResult> probableAttachmentTypes;
   private List<DocumentationResult> documentationResults;
+  private List<ConfluenceResult> confluenceResults;
   private List<String> proposals;
 
   public Issue getOriginalIssue() {
@@ -62,6 +63,14 @@ public class IssueAnalysingResult {
 
   public void setDocumentationResults(List<DocumentationResult> documentationResults) {
     this.documentationResults = documentationResults;
+  }
+
+  public List<ConfluenceResult> getConfluenceResults() {
+    return confluenceResults;
+  }
+
+  public void setConfluenceResults(List<ConfluenceResult> confluenceResults) {
+    this.confluenceResults = confluenceResults;
   }
 
   public List<String> getProposals() {

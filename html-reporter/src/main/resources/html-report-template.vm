@@ -143,6 +143,29 @@
                 <br/>
             #end
 
+            #if($isConfluenceProcessorEnabled)
+                <details> <summary>Confluence pages</summary>
+                <table class="table table-hover table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Page ID</th>
+                            <th>Title</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        #foreach ($page in $result.getConfluenceResults())
+                        <tr>
+                            <td>$page.getPageId()</td>
+                            <td>$page.getTitle()</td>
+                            <td><a href="$page.getBrowseUrl()" target="_blank">$page.getBrowseUrl()</a></td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table></details>
+                <br/>
+            #end
+
             #if($isRuleEngineProcessorEnabled)
                 <h5 class="card-title">Proposals</h5>
                 #foreach ($proposal in $result.getProposals())

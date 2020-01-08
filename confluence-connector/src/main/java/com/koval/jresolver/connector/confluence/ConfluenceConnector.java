@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.connector.confluence.client.ConfluenceClient;
 import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
-import com.koval.jresolver.connector.confluence.core.ConfluenceDataSetCreator;
+import com.koval.jresolver.connector.confluence.core.ConfluenceDataSetWriter;
 import com.koval.jresolver.connector.confluence.core.ConfluencePageReceiver;
 
 
@@ -23,9 +23,9 @@ public final class ConfluenceConnector {
 
   public void createDataSet() {
     try (ConfluenceClient confluenceClient = new ConfluenceClient(connectorProperties);
-         ConfluenceDataSetCreator confluenceDataSetCreator = new ConfluenceDataSetCreator()) {
+         ConfluenceDataSetWriter confluenceDataSetWriter = new ConfluenceDataSetWriter(connectorProperties)) {
       ConfluencePageReceiver receiver = new ConfluencePageReceiver(confluenceClient, connectorProperties);
-      receiver.start(confluenceDataSetCreator);
+      receiver.start(confluenceDataSetWriter);
     } catch (IOException e) {
       LOGGER.error("Could not create confluence data set", e);
     }
