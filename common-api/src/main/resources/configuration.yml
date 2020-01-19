@@ -1,0 +1,90 @@
+
+administration:
+  connector: jira # bugzilla
+  processors:
+    - similarity
+    - rule-engine
+    - documentation
+    - confluence
+  reporters:
+    - html
+    - text
+  parallelExecution: false
+
+connectors:
+  jira:
+    url: https://issues.apache.org/jira
+    # browseUrl: https://issues.apache.org/jira/browse/
+    anonymous: true
+    credentialsFolder: ../data/
+    resolvedQuery: project = AMQ AND resolution = Resolved
+    unresolvedQuery: project = AMQ AND resolution = Unresolved AND priority = Blocker
+    batchSize: 10
+    batchDelay: 3000
+    resolvedIssueFields:
+      - summary
+      - description
+    # unresolvedIssueFields: "*all"
+  bugzilla:
+    url: https://bz.apache.org/bugzilla
+    anonymous: true
+    credentialsFolder: ../data/
+    resolvedQuery: product = Ant, status = Close
+    unresolvedQuery: product = Ant, status = Open
+    batchSize: 10
+    batchDelay: 3000
+    resolvedIssueFields:
+      - summary
+      - description
+    # unresolvedIssueFields: "*all"
+  confluence:
+    confluenceBaseUrl: https://cwiki.apache.org/confluence
+    anonymous: true
+    credentialsFolder: ../data/
+    spaceKeys:
+      - KAFKA
+    limitPerRequest: 500
+    workFolder: ../data/
+
+paragraphVectors:
+  minWordFrequency: 1
+  iterations: 5
+  epochs: 5
+  layerSize: 100
+  learningRate: 0.025
+  windowSize: 5
+  trainWordVectors: true
+  sampling: 0
+  language: English
+
+processors:
+  issues:
+    workFolder: ../data/
+    dataSetFileName: Issues_DataSet.txt
+    vectorModelFileName: Issues_VectorModel.zip
+
+  rules:
+    workFolder: ../rules/
+
+  documentation:
+    workFolder: ../data/
+    docsFolder: ../docs/
+    dataSetFileName: Documentation_DataSet.txt
+    vectorModelFileName: Documentation_VectorModel.zip
+
+  confluence:
+    workFolder: ../data/
+    dataSetFileName: Confluence_DataSet.txt
+    vectorModelFileName: Confluence_VectorModel.zip
+
+
+reporters:
+  html:
+    openBrowser: true
+	htmlTemplateFile: ../config/html-report-template.vm
+    outputFolder: ../output/
+    reportFileName: report.html
+
+  text:
+    outputFolder: ../output/
+    reportFileName: report.txt
