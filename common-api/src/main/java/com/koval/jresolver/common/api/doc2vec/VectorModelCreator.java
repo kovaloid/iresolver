@@ -19,6 +19,8 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.configuration.bean.ParagraphVectorsConfiguration;
+
 
 public class VectorModelCreator {
 
@@ -26,14 +28,14 @@ public class VectorModelCreator {
 
   private TokenPreProcess tokenPreprocessor;
   private List<String> stopWords;
-  private Doc2VecProperties properties;
+  private ParagraphVectorsConfiguration properties;
 
-  public VectorModelCreator(Doc2VecProperties properties) {
+  public VectorModelCreator(ParagraphVectorsConfiguration properties) {
     this(new StemmingPreprocessor().setLanguage(properties.getLanguage()), StopWords.getStopWords(),
         properties);
   }
 
-  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, Doc2VecProperties properties) {
+  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, ParagraphVectorsConfiguration properties) {
     this.tokenPreprocessor = tokenPreprocessor;
     this.stopWords = stopWords;
     this.properties = properties;

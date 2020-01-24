@@ -10,9 +10,10 @@ import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIte
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.configuration.ConfigurationManager;
+import com.koval.jresolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
 public class TestSimilarityProcessor {
@@ -20,17 +21,17 @@ public class TestSimilarityProcessor {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestSimilarityProcessor.class);
 
   public void test() throws IOException {
-    SimilarityProcessorProperties properties = new SimilarityProcessorProperties();
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
+    IssuesProcessorConfiguration properties = ConfigurationManager.getConfiguration().getProcessors().getIssues();
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
 
-    File vectorModelFile = new File(properties.getWorkFolder(), properties.getVectorModelFileName());
-    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile);
+    File vectorModelFile = new File(properties.getVectorModelFile());
+    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, "English");
 
     int errorCounter = 0;
     int totalCounter = 0;
     double errorRate;
 
-    try (InputStream inputStream = FileUtils.openInputStream(new File(properties.getWorkFolder(), properties.getDataSetFileName()))) {
+    try (InputStream inputStream = FileUtils.openInputStream(new File(properties.getDataSetFile()))) {
       LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
       while (iterator.hasNext()) {
         String currentSentence = iterator.nextSentence();

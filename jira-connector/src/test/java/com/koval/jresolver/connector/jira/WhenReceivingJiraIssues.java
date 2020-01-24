@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
-import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
+import com.koval.jresolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
 import com.koval.jresolver.connector.jira.core.JiraIssueReceiver;
 
 
@@ -21,7 +21,7 @@ public class WhenReceivingJiraIssues {
   @Before
   public void init() {
     IssueClient client = mock(IssueClient.class);
-    JiraConnectorProperties connectorProperties = mock(JiraConnectorProperties.class);
+    JiraConnectorConfiguration connectorProperties = mock(JiraConnectorConfiguration.class);
     when(connectorProperties.getResolvedQuery()).thenReturn("resolvedQuery");
     when(client.getTotalIssues(anyString())).thenReturn(10);
     receiver = new JiraIssueReceiver(client, connectorProperties, true);

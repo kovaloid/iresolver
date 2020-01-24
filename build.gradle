@@ -5,7 +5,7 @@ plugins {
 
 apply plugin: 'application'
 
-mainClassName = 'com.koval.jresolver.Launcher'
+mainClassName = 'com.koval.jresolver.JResolverApplication'
 
 def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME/config:\\$APP_HOME/rules:\\$APP_HOME/data'
 def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
@@ -77,21 +77,14 @@ distributions {
   main {
     baseName = 'jresolver'
     contents {
-      from('jira-connector/src/main/resources/jira-connector.properties') { into 'config' }
-      from('bugzilla-connector/src/main/resources/bugzilla-connector.properties') { into 'config' }
-      from('confluence-connector/src/main/resources/confluence-connector.properties') { into 'config' }
-      from('similarity-processor/src/main/resources/similarity-processor.properties') { into 'config' }
-      from('documentation-processor/src/main/resources/documentation-processor.properties') { into 'config' }
-      from('confluence-processor/src/main/resources/confluence-processor.properties') { into 'config' }
+      from('common-api/src/main/resources/configuration.yml') { into 'config' }
       from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
-      from('src/main/resources/control.properties') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
       exclude('**/*-android-*.jar')
       exclude('**/*-macosx-*.jar')
       exclude('**/*-linux-armhf.jar')
       exclude('**/*-linux-ppc64le.jar')
-      exclude('**/snakeyaml*.jar')
       exclude('**/sslext*.jar')
       exclude('**/oro*.jar')
       exclude('**/stax2*.jar')
@@ -169,7 +162,7 @@ applicationDistribution.into('bin') {
 }
 
 jar {
-  exclude('*.xml', '*.zip', '*.txt', '*.properties', '*.vm', '*.drl')
+  exclude('*.xml', '*.zip', '*.txt', '*.properties', '*.vm', '*.drl', '*.yml')
 }
 
 defaultTasks 'build'

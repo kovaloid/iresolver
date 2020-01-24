@@ -15,11 +15,15 @@ import com.atlassian.confluence.api.model.content.Space;
 import com.atlassian.confluence.api.model.pagination.PageRequest;
 import com.atlassian.confluence.api.model.pagination.PageResponse;
 import com.atlassian.confluence.api.model.pagination.SimplePageRequest;
-import com.atlassian.confluence.rest.client.*;
+import com.atlassian.confluence.rest.client.RemoteContentService;
+import com.atlassian.confluence.rest.client.RemoteContentServiceImpl;
+import com.atlassian.confluence.rest.client.RemoteSpaceService;
+import com.atlassian.confluence.rest.client.RemoteSpaceServiceImpl;
+import com.atlassian.confluence.rest.client.RestClientFactory;
 import com.atlassian.confluence.rest.client.authentication.AuthenticatedWebResourceProvider;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
+import com.koval.jresolver.common.api.configuration.bean.connectors.ConfluenceConnectorConfiguration;
 import com.sun.jersey.api.client.Client;
 
 
@@ -30,14 +34,15 @@ public class ConfluenceClient implements Closeable {
   private final ListeningExecutorService executor;
   private final AuthenticatedWebResourceProvider provider;
 
-  public ConfluenceClient(ConfluenceConnectorProperties connectorProperties) {
+  public ConfluenceClient(ConfluenceConnectorConfiguration connectorProperties) {
     Client client = RestClientFactory.newClient();
     executor = MoreExecutors.newDirectExecutorService();
-    provider = new AuthenticatedWebResourceProvider(client, connectorProperties.getConfluenceBaseUrl(), "");
+    provider = new AuthenticatedWebResourceProvider(client, connectorProperties.getUrl(), "");
     if (!connectorProperties.isAnonymous()) {
-      provider.setAuthContext(connectorProperties.getUsername(), connectorProperties.getPassword().toCharArray());
+      throw new UnsupportedOperationException("Basic authentication is not supported yet.");
+      // provider.setAuthContext(connectorProperties.getUsername(), connectorProperties.getPassword().toCharArray());
     }
-    LOGGER.info("Confluence client created for {}", connectorProperties.getConfluenceBaseUrl());
+    LOGGER.info("Confluence client created for {}", connectorProperties.getUrl());
   }
 
   public List<Space> getSpacesByKeys(List<String> spaceKeys) {

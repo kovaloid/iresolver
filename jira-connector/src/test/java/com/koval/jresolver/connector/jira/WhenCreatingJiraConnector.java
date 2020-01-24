@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
-import com.koval.jresolver.connector.jira.configuration.JiraConnectorProperties;
+import com.koval.jresolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
 
 
 public class WhenCreatingJiraConnector {
@@ -22,7 +22,7 @@ public class WhenCreatingJiraConnector {
   @Before
   public void init() {
     IssueClient client = mock(IssueClient.class);
-    JiraConnectorProperties properties = mock(JiraConnectorProperties.class);
+    JiraConnectorConfiguration properties = mock(JiraConnectorConfiguration.class);
     List searchResult = mock(List.class);
     when(properties.getResolvedQuery()).thenReturn("resolvedQuery");
     when(properties.getUnresolvedQuery()).thenReturn("unresolvedQuery");

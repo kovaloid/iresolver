@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.confluence.api.model.content.Content;
 import com.atlassian.confluence.api.model.content.Space;
 import com.atlassian.confluence.api.model.pagination.PageResponse;
+import com.koval.jresolver.common.api.configuration.bean.connectors.ConfluenceConnectorConfiguration;
 import com.koval.jresolver.connector.confluence.client.ConfluenceClient;
-import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
 
 
 public class ConfluencePageReceiver {
@@ -17,9 +17,9 @@ public class ConfluencePageReceiver {
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfluencePageReceiver.class);
 
   private final ConfluenceClient client;
-  private final ConfluenceConnectorProperties properties;
+  private final ConfluenceConnectorConfiguration properties;
 
-  public ConfluencePageReceiver(ConfluenceClient client, ConfluenceConnectorProperties properties) {
+  public ConfluencePageReceiver(ConfluenceClient client, ConfluenceConnectorConfiguration properties) {
     this.client = client;
     this.properties = properties;
   }

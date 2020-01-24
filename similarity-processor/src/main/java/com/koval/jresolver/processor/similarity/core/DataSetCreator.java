@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.jresolver.processor.similarity.configuration.SimilarityProcessorProperties;
 
 
 public class DataSetCreator {
@@ -23,15 +23,15 @@ public class DataSetCreator {
 
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final IssueReceiver receiver;
-  private final SimilarityProcessorProperties properties;
+  private final IssuesProcessorConfiguration properties;
 
-  public DataSetCreator(IssueReceiver receiver, SimilarityProcessorProperties properties) {
+  public DataSetCreator(IssueReceiver receiver, IssuesProcessorConfiguration properties) {
     this.receiver = receiver;
     this.properties = properties;
   }
 
   public void create() throws IOException {
-    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    File dataSetFile = new File(properties.getDataSetFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());

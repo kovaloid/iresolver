@@ -11,10 +11,10 @@ administration:
     - text
   parallelExecution: false
 
+
 connectors:
   jira:
     url: https://issues.apache.org/jira
-    # browseUrl: https://issues.apache.org/jira/browse/
     anonymous: true
     credentialsFolder: ../data/
     resolvedQuery: project = AMQ AND resolution = Resolved
@@ -24,7 +24,9 @@ connectors:
     resolvedIssueFields:
       - summary
       - description
-    # unresolvedIssueFields: "*all"
+    unresolvedIssueFields:
+      - "*all"
+
   bugzilla:
     url: https://bz.apache.org/bugzilla
     anonymous: true
@@ -33,18 +35,15 @@ connectors:
     unresolvedQuery: product = Ant, status = Open
     batchSize: 10
     batchDelay: 3000
-    resolvedIssueFields:
-      - summary
-      - description
-    # unresolvedIssueFields: "*all"
+
   confluence:
-    confluenceBaseUrl: https://cwiki.apache.org/confluence
+    url: https://cwiki.apache.org/confluence
     anonymous: true
     credentialsFolder: ../data/
     spaceKeys:
       - KAFKA
     limitPerRequest: 500
-    workFolder: ../data/
+
 
 paragraphVectors:
   minWordFrequency: 1
@@ -57,34 +56,33 @@ paragraphVectors:
   sampling: 0
   language: English
 
+
 processors:
   issues:
-    workFolder: ../data/
-    dataSetFileName: Issues_DataSet.txt
-    vectorModelFileName: Issues_VectorModel.zip
+    dataSetFile: ../data/Issues_DataSet.txt
+    vectorModelFile: ../data/Issues_VectorModel.zip
 
-  rules:
-    workFolder: ../rules/
+  ruleEngine:
+    rulesFolder: ../rules/
 
   documentation:
-    workFolder: ../data/
+    dataSetFile: ../data/Documentation_DataSet.txt
+    vectorModelFile: ../data/Documentation_VectorModel.zip
+    docsMetadataFile: ../data/Documentation_Metadata.txt
+    docsListFile: ../data/Documentation_List.txt
     docsFolder: ../docs/
-    dataSetFileName: Documentation_DataSet.txt
-    vectorModelFileName: Documentation_VectorModel.zip
 
   confluence:
-    workFolder: ../data/
-    dataSetFileName: Confluence_DataSet.txt
-    vectorModelFileName: Confluence_VectorModel.zip
+    dataSetFile: ../data/Confluence_DataSet.txt
+    vectorModelFile: ../data/Confluence_VectorModel.zip
+    confluenceMetadataFile: ../data/Confluence_Metadata.txt
 
 
 reporters:
   html:
     openBrowser: true
-	htmlTemplateFile: ../config/html-report-template.vm
-    outputFolder: ../output/
-    reportFileName: report.html
+    htmlTemplateFile: ../config/html-report-template.vm
+    outputFile: ../output/report.html
 
   text:
-    outputFolder: ../output/
-    reportFileName: report.txt
+    outputFile: ../output/report.txt

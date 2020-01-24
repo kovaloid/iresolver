@@ -1,6 +1,11 @@
 package com.koval.jresolver.connector.confluence.core;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -9,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.atlassian.confluence.api.model.content.Content;
 import com.atlassian.confluence.api.model.content.ContentRepresentation;
+import com.koval.jresolver.common.api.configuration.bean.processors.ConfluenceProcessorConfiguration;
 import com.koval.jresolver.common.api.util.TextUtil;
-import com.koval.jresolver.connector.confluence.configuration.ConfluenceConnectorProperties;
 
 
 public class ConfluenceDataSetWriter implements Closeable {
@@ -20,9 +25,9 @@ public class ConfluenceDataSetWriter implements Closeable {
   private final PrintWriter dataFileOutput;
   private final PrintWriter metadataFileOutput;
 
-  public ConfluenceDataSetWriter(ConfluenceConnectorProperties properties) throws FileNotFoundException, UnsupportedEncodingException {
-    dataFileOutput = new PrintWriter(new File(properties.getWorkFolder(), "Confluence_DataSet.txt"), StandardCharsets.UTF_8.name());
-    metadataFileOutput = new PrintWriter(new File(properties.getWorkFolder(), "MetadataConfluence_DataSet.txt"), StandardCharsets.UTF_8.name());
+  public ConfluenceDataSetWriter(ConfluenceProcessorConfiguration properties) throws FileNotFoundException, UnsupportedEncodingException {
+    dataFileOutput = new PrintWriter(new File(properties.getDataSetFile()), StandardCharsets.UTF_8.name());
+    metadataFileOutput = new PrintWriter(new File(properties.getConfluenceMetadataFile()), StandardCharsets.UTF_8.name());
     LOGGER.info("Confluence data set writer created");
   }
 

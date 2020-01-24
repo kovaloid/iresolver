@@ -14,12 +14,12 @@ import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.DocumentationResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
+import com.koval.jresolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.jresolver.processor.documentation.bean.DocFile;
 import com.koval.jresolver.processor.documentation.bean.DocMetadata;
-import com.koval.jresolver.processor.documentation.configuration.DocumentationProcessorProperties;
 import com.koval.jresolver.processor.documentation.core.DocOutputFilesParser;
 
 
@@ -32,10 +32,10 @@ public class DocumentationProcessor implements IssueProcessor {
   private final String docsPath;
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
 
-  public DocumentationProcessor(DocumentationProcessorProperties properties) throws IOException {
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties);
-    File vectorModelFile = new File(properties.getWorkFolder(), properties.getVectorModelFileName());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile);
+  public DocumentationProcessor(DocumentationProcessorConfiguration properties, String language) throws IOException {
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    File vectorModelFile = new File(properties.getVectorModelFile());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, language);
     this.docsPath = properties.getDocsFolder();
   }
 

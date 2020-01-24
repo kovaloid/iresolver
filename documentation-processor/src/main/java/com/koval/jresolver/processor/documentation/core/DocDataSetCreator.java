@@ -15,9 +15,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.jresolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.jresolver.common.api.util.TextUtil;
 import com.koval.jresolver.processor.documentation.bean.MediaType;
-import com.koval.jresolver.processor.documentation.configuration.DocumentationProcessorProperties;
 import com.koval.jresolver.processor.documentation.convert.FileConverter;
 import com.koval.jresolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.jresolver.processor.documentation.split.PageSplitter;
@@ -33,9 +33,9 @@ public class DocDataSetCreator {
 
   private final DocTypeDetector docTypeDetector = new DocTypeDetector();
   private final PageSplitter pageSplitter = new PdfPageSplitter();
-  private final DocumentationProcessorProperties properties;
+  private final DocumentationProcessorConfiguration properties;
 
-  public DocDataSetCreator(DocumentationProcessorProperties properties) {
+  public DocDataSetCreator(DocumentationProcessorConfiguration properties) {
     this.properties = properties;
   }
 
@@ -47,7 +47,7 @@ public class DocDataSetCreator {
       return;
     }
 
-    File dataSetFile = new File(properties.getWorkFolder(), properties.getDataSetFileName());
+    File dataSetFile = new File(properties.getDataSetFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
@@ -55,8 +55,8 @@ public class DocDataSetCreator {
     int pageIndex = 0;
     int documentIndex = 0;
 
-    File docMetadataFile = new File(properties.getWorkFolder(), "doc-metadata.txt");
-    File docListFile = new File(properties.getWorkFolder(), "doc-list.txt");
+    File docMetadataFile = new File(properties.getDocsMetadataFile());
+    File docListFile = new File(properties.getDocsListFile());
 
     try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
          PrintWriter metadataOutput = new PrintWriter(docMetadataFile, StandardCharsets.UTF_8.name());

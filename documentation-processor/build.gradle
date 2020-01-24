@@ -1,8 +1,4 @@
 
-jar {
-  exclude('documentation-processor.properties')
-}
-
 dependencies {
   compile project(':common-api')
   compile('org.apache.pdfbox:pdfbox:2.0.8') {

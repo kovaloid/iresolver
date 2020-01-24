@@ -1,5 +1,11 @@
 package com.koval.jresolver.common.api.configuration;
 
+import com.koval.jresolver.common.api.configuration.bean.AdministrationConfiguration;
+import com.koval.jresolver.common.api.configuration.bean.ConnectorsConfiguration;
+import com.koval.jresolver.common.api.configuration.bean.ParagraphVectorsConfiguration;
+import com.koval.jresolver.common.api.configuration.bean.ProcessorsConfiguration;
+import com.koval.jresolver.common.api.configuration.bean.ReportersConfiguration;
+
 
 public class Configuration {
 

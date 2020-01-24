@@ -15,12 +15,18 @@ import com.koval.jresolver.common.api.bean.result.AttachmentResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
+import com.koval.jresolver.common.api.configuration.bean.reporters.TextReporterConfiguration;
 
 
 public class TextReportGenerator implements ReportGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TextReportGenerator.class);
   private static final String DASH = " - ";
+  private final String outputFile;
+
+  public TextReportGenerator(TextReporterConfiguration configuration) {
+    this.outputFile = configuration.getOutputFile();
+  }
 
   @Override
   public void generate(List<IssueAnalysingResult> results) {
@@ -44,9 +50,9 @@ public class TextReportGenerator implements ReportGenerator {
     }
 
     try {
-      FileUtils.writeStringToFile(new File("../output/report.txt"), content.toString(), StandardCharsets.UTF_8);
+      FileUtils.writeStringToFile(new File(outputFile), content.toString(), StandardCharsets.UTF_8);
     } catch (IOException e) {
-      LOGGER.error("Could not save report.txt file", e);
+      LOGGER.error("Could not save file: " + outputFile, e);
     }
   }
 

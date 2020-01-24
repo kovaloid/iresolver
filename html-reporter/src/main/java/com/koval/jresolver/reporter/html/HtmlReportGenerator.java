@@ -24,14 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
+import com.koval.jresolver.common.api.configuration.bean.reporters.HtmlReporterConfiguration;
 import com.koval.jresolver.common.api.constant.ProcessorConstants;
-import com.koval.jresolver.reporter.html.configuration.HtmlReporterConfiguration;
 
 
 public class HtmlReportGenerator implements ReportGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
-  private static final String REPORT_FILE_NAME = "index.html";
 
   private final HtmlReporterConfiguration configuration;
   private final List<String> enabledProcessors;
@@ -39,7 +38,7 @@ public class HtmlReportGenerator implements ReportGenerator {
   public HtmlReportGenerator(HtmlReporterConfiguration configuration, List<String> enabledProcessors) throws IOException {
     this.configuration = configuration;
     this.enabledProcessors = enabledProcessors;
-    FileUtils.forceMkdir(new File(configuration.getOutputFolder()));
+    FileUtils.forceMkdirParent(new File(configuration.getOutputFile()));
   }
 
   @Override
@@ -71,20 +70,20 @@ public class HtmlReportGenerator implements ReportGenerator {
       template.merge(context, writer);
       LOGGER.debug(writer.toString());
     }
-    try (OutputStream outputStream = new FileOutputStream(new File(configuration.getOutputFolder(), REPORT_FILE_NAME));
+    try (OutputStream outputStream = new FileOutputStream(new File(configuration.getOutputFile()));
          Writer fileWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
       template.merge(context, fileWriter);
     }
   }
 
   private void openReport() throws IOException {
-    File file = new File(configuration.getOutputFolder(), REPORT_FILE_NAME);
+    File file = new File(configuration.getOutputFile());
     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
       Desktop.getDesktop().browse(getUriFromFile(file));
       LOGGER.warn("Opening the default browser with report...");
     } else {
       LOGGER.warn("Could not open default browser on the current platform");
-      LOGGER.warn("Please open the {} file manually", REPORT_FILE_NAME);
+      LOGGER.warn("Please open the {} file manually", configuration.getOutputFile());
     }
   }
 
