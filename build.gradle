@@ -21,9 +21,8 @@ def javaExecTasks = [
   [taskName: 'createDocumentationVectorModel', argName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSet', argName: 'create-confluence-data-set'],
   [taskName: 'createConfluenceVectorModel', argName: 'create-confluence-vector-model'],
-  [taskName: 'cleanWorkFolders', argName: 'clean'],
   [taskName: 'printFields', argName: 'print-fields'],
-  [taskName: 'configurationWizard', argName: 'run-ui'],
+  [taskName: 'runUI', argName: 'run-ui'],
   [taskName: 'testSimilarityProcessor', argName: 'test-similarity-processor']
 ]
 
@@ -116,9 +115,8 @@ def createStartScriptsTasks = [
   [taskName: 'createDocumentationVectorModelScript', scriptName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSetScript', scriptName: 'create-confluence-data-set'],
   [taskName: 'createConfluenceVectorModelScript', scriptName: 'create-confluence-vector-model'],
-  [taskName: 'cleanScript', scriptName: 'clean'],
   [taskName: 'printFieldsScript', scriptName: 'print-fields'],
-  [taskName: 'configurationWizardScript', scriptName: 'run-ui']
+  [taskName: 'runUIScript', scriptName: 'run-ui']
   // [taskName: 'testSimilarityProcessorScript', scriptName: 'test-similarity-processor']
 ]
 
