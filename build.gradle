@@ -23,7 +23,7 @@ def javaExecTasks = [
   [taskName: 'createConfluenceVectorModel', argName: 'create-confluence-vector-model'],
   [taskName: 'cleanWorkFolders', argName: 'clean'],
   [taskName: 'printFields', argName: 'print-fields'],
-  [taskName: 'configurationWizard', argName: 'configuration-wizard'],
+  [taskName: 'configurationWizard', argName: 'run-ui'],
   [taskName: 'testSimilarityProcessor', argName: 'test-similarity-processor']
 ]
 
@@ -60,7 +60,6 @@ dependencies {
       project(':confluence-processor'),
       project(':html-reporter'),
       project(':text-reporter'),
-      project(':config-wizard'),
       project(':test-similarity-processor')
 }
 
@@ -119,7 +118,7 @@ def createStartScriptsTasks = [
   [taskName: 'createConfluenceVectorModelScript', scriptName: 'create-confluence-vector-model'],
   [taskName: 'cleanScript', scriptName: 'clean'],
   [taskName: 'printFieldsScript', scriptName: 'print-fields'],
-  [taskName: 'configurationWizardScript', scriptName: 'configuration-wizard']
+  [taskName: 'configurationWizardScript', scriptName: 'run-ui']
   // [taskName: 'testSimilarityProcessorScript', scriptName: 'test-similarity-processor']
 ]
 
@@ -157,7 +156,7 @@ applicationDistribution.into('bin') {
 }
 
 jar {
-  exclude('*.xml', '*.zip', '*.txt', '*.properties', '*.vm', '*.drl', '*.yml')
+  exclude('*.xml', '*.zip', '*.txt', '*.properties', '*.vm', '*.drl', '*.yml', '*.pdf', '*.docx')
 }
 
 defaultTasks 'build'

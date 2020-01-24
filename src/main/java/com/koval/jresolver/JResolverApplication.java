@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.jresolver.common.api.configuration.Configuration;
 import com.koval.jresolver.common.api.configuration.ConfigurationManager;
-import com.koval.jresolver.util.Launcher;
+import com.koval.jresolver.core.Launcher;
 
 
 @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity"})
@@ -21,10 +21,9 @@ public final class JResolverApplication {
   private static final String CREATE_DOCUMENTATION_VECTOR_MODEL = "create-documentation-vector-model";
   private static final String CREATE_CONFLUENCE_DATA_SET = "create-confluence-data-set";
   private static final String CREATE_CONFLUENCE_VECTOR_MODEL = "create-confluence-vector-model";
-  private static final String CLEAN = "clean";
   private static final String PRINT_FIELDS = "print-fields";
   private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
-  private static final String CONFIGURATION_WIZARD = "configuration-wizard";
+  private static final String RUN_UI = "run-ui";
   private static final String HELP_TIP = "Please use the following commands: \n"
       + CREATE_DATA_SET + ", "
       + CREATE_VECTOR_MODEL + ", "
@@ -32,9 +31,8 @@ public final class JResolverApplication {
       + CREATE_DOCUMENTATION_VECTOR_MODEL + ", "
       + CREATE_CONFLUENCE_DATA_SET + ", "
       + CREATE_CONFLUENCE_VECTOR_MODEL + ", "
-      + CLEAN + ", "
       + PRINT_FIELDS + ", "
-      + CONFIGURATION_WIZARD + ", "
+      + RUN_UI + ", "
       + TEST_SIMILARITY_PROCESSOR + ".";
 
   private JResolverApplication() {
@@ -73,17 +71,13 @@ public final class JResolverApplication {
           LOGGER.info("Start creating documentation vector model.");
           launcher.createConfluenceVectorModel();
           break;
-        case CLEAN:
-          LOGGER.info("Start cleaning work folder.");
-          launcher.clean();
-          break;
         case PRINT_FIELDS:
           LOGGER.info("Start printing fields.");
           launcher.printFields();
           break;
-        case CONFIGURATION_WIZARD:
+        case RUN_UI:
           LOGGER.info("Start configuration wizard.");
-          launcher.configurationWizard();
+          launcher.runUI();
           break;
         case TEST_SIMILARITY_PROCESSOR:
           LOGGER.info("Start testing similarity processor.");

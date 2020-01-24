@@ -1,11 +1,10 @@
-package com.koval.jresolver.util;
+package com.koval.jresolver.core;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +45,7 @@ import com.koval.jresolver.processor.similarity.core.DataSetCreator;
 import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
-import com.koval.jresolver.wizard.config.ConfigWizard;
+import com.koval.jresolver.util.CommandLineUtil;
 
 
 public final class Launcher {
@@ -112,20 +111,6 @@ public final class Launcher {
       vectorModelSerializer.serialize(vectorModel, vectorModelFile);
     } catch (IOException e) {
       LOGGER.error(errorMessage, e);
-    }
-  }
-
-  public void clean() {
-    File folder = new File("../logs");
-    try {
-      if (folder.exists()) {
-        FileUtils.cleanDirectory(folder);
-        LOGGER.info("Folder {} was cleaned", folder.getAbsolutePath());
-      } else {
-        LOGGER.warn("Folder {} does not exist", folder.getAbsolutePath());
-      }
-    } catch (IOException e) {
-      LOGGER.error("Could not clean folder: " + folder.getAbsolutePath(), e);
     }
   }
 
@@ -209,8 +194,8 @@ public final class Launcher {
     }
   }
 
-  public void configurationWizard() {
-    new ConfigWizard("../config");
+  public void runUI() {
+    new LauncherUI(this);
   }
 
   public void testSimilarityProcessor() {
