@@ -58,7 +58,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
     velocityEngine.init();
-    Template template = velocityEngine.getTemplate("html-report-template.vm");
+    Template template = velocityEngine.getTemplate(configuration.getHtmlTemplateFileName());
     VelocityContext context = new VelocityContext();
     context.put("results", results);
     context.put("numberTool", new NumberTool());

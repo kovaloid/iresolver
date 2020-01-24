@@ -4,7 +4,7 @@ package com.koval.jresolver.common.api.configuration.bean.reporters;
 public class HtmlReporterConfiguration {
 
   private boolean openBrowser;
-  private String htmlTemplateFile;
+  private String htmlTemplateFileName;
   private String outputFile;
 
   public boolean isOpenBrowser() {
@@ -15,12 +15,12 @@ public class HtmlReporterConfiguration {
     this.openBrowser = openBrowser;
   }
 
-  public String getHtmlTemplateFile() {
-    return htmlTemplateFile;
+  public String getHtmlTemplateFileName() {
+    return htmlTemplateFileName;
   }
 
-  public void setHtmlTemplateFile(String htmlTemplateFile) {
-    this.htmlTemplateFile = htmlTemplateFile;
+  public void setHtmlTemplateFileName(String htmlTemplateFileName) {
+    this.htmlTemplateFileName = htmlTemplateFileName;
   }
 
   public String getOutputFile() {
@@ -35,7 +35,7 @@ public class HtmlReporterConfiguration {
   public String toString() {
     return "HtmlReporterConfiguration{"
         + "openBrowser=" + openBrowser
-        + ", htmlTemplateFile='" + htmlTemplateFile + '\''
+        + ", htmlTemplateFileName='" + htmlTemplateFileName + '\''
         + ", outputFile='" + outputFile + '\''
         + '}';
   }

@@ -18,7 +18,7 @@ import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.bean.result.Pair;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
-import com.koval.jresolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
+import com.koval.jresolver.common.api.configuration.Configuration;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
@@ -34,11 +34,11 @@ public class SimilarityProcessor implements IssueProcessor {
   private final IssueClient issueClient;
   private final VectorModel vectorModel;
 
-  public SimilarityProcessor(IssueClient issueClient, IssuesProcessorConfiguration properties, String language) throws IOException {
+  public SimilarityProcessor(IssueClient issueClient, Configuration properties) throws IOException {
     this.issueClient = issueClient;
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(properties.getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, language);
+    File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
   }
 
   @Override

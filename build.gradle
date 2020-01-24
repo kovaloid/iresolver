@@ -43,13 +43,8 @@ sourceSets {
       srcDir 'data'
       srcDir 'docs'
       srcDir 'src/main/resources'
-      srcDir 'jira-connector/src/main/resources'
-      srcDir 'bugzilla-connector/src/main/resources'
-      srcDir 'confluence-connector/src/main/resources'
-      srcDir 'similarity-processor/src/main/resources'
+      srcDir 'common-api/src/main/resources'
       srcDir 'rule-engine-processor/src/main/resources'
-      srcDir 'documentation-processor/src/main/resources'
-      srcDir 'confluence-processor/src/main/resources'
       srcDir 'html-reporter/src/main/resources'
     }
   }

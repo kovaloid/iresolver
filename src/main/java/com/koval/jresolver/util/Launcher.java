@@ -41,8 +41,6 @@ import com.koval.jresolver.processor.confluence.ConfluenceProcessor;
 import com.koval.jresolver.processor.documentation.DocumentationProcessor;
 import com.koval.jresolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
-import com.koval.jresolver.processor.rules.core.RuleEngine;
-import com.koval.jresolver.processor.rules.core.impl.DroolsRuleEngine;
 import com.koval.jresolver.processor.similarity.SimilarityProcessor;
 import com.koval.jresolver.processor.similarity.core.DataSetCreator;
 import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
@@ -133,12 +131,11 @@ public final class Launcher {
 
   public void run() {
     List<IssueAnalysingResult> results = new ArrayList<>();
-    try (IssueClient issueClient = getIssueClient();
-         RuleEngine ruleEngine = new DroolsRuleEngine()) {
+    try (IssueClient issueClient = getIssueClient()) {
       Connector connector = getConnector(issueClient);
       IssueReceiver receiver = connector.getUnresolvedIssuesReceiver();
       ProcessExecutor executor = new ProcessExecutor();
-      for (IssueProcessor issueProcessor : getIssueProcessors(issueClient, ruleEngine)) {
+      for (IssueProcessor issueProcessor : getIssueProcessors(issueClient)) {
         executor.add(issueProcessor);
       }
       if (configuration.getAdministration().isParallelExecution()) {
@@ -162,21 +159,20 @@ public final class Launcher {
     }
   }
 
-  private List<IssueProcessor> getIssueProcessors(IssueClient issueClient, RuleEngine ruleEngine) throws IOException {
+  private List<IssueProcessor> getIssueProcessors(IssueClient issueClient) throws IOException {
     List<String> processorNames = configuration.getAdministration().getProcessors();
-    String language = configuration.getParagraphVectors().getLanguage();
     List<IssueProcessor> issueProcessors = new ArrayList<>();
     if (processorNames.contains(ProcessorConstants.SIMILARITY)) {
-      issueProcessors.add(new SimilarityProcessor(issueClient, configuration.getProcessors().getIssues(), language));
+      issueProcessors.add(new SimilarityProcessor(issueClient, configuration));
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
-      issueProcessors.add(new DocumentationProcessor(configuration.getProcessors().getDocumentation(), language));
+      issueProcessors.add(new DocumentationProcessor(configuration));
     }
     if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
-      issueProcessors.add(new ConfluenceProcessor(configuration.getProcessors().getConfluence(), language));
+      issueProcessors.add(new ConfluenceProcessor(configuration));
     }
     if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
-      issueProcessors.add(new RuleEngineProcessor(ruleEngine));
+      issueProcessors.add(new RuleEngineProcessor(configuration));
     }
     if (issueProcessors.isEmpty()) {
       LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);

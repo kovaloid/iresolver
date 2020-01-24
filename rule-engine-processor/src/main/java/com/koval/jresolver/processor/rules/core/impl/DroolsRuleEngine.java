@@ -33,7 +33,15 @@ public class DroolsRuleEngine implements RuleEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
   private final KieSession kieSession;
 
-  public DroolsRuleEngine(Resource[] resources) throws IOException {
+  public DroolsRuleEngine() throws IOException {
+    this(getResources("classpath*:*.drl"));
+  }
+
+  public DroolsRuleEngine(String rulesLocation) throws IOException {
+    this(getResources(rulesLocation));
+  }
+
+  private DroolsRuleEngine(Resource[] resources) throws IOException {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder, resources);
     checkForErrors(knowledgeBuilder);
@@ -41,8 +49,10 @@ public class DroolsRuleEngine implements RuleEngine {
     LOGGER.info("Kie session was created.");
   }
 
-  public DroolsRuleEngine() throws IOException {
-      this(getDefaultResources());
+  private static Resource[] getResources(String location) throws IOException {
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
+    return resolver.getResources(location);
   }
 
   private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws IOException {
@@ -77,12 +87,6 @@ public class DroolsRuleEngine implements RuleEngine {
     final InternalKnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
     knowledgeBase.addPackages(packages);
     return knowledgeBase.newKieSession();
-  }
-
-  private static Resource[] getDefaultResources() throws IOException {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
-    return resolver.getResources("classpath*:*.drl");
   }
 
   public void setDebugMode() {

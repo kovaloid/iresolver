@@ -63,7 +63,7 @@ processors:
     vectorModelFile: ../data/Issues_VectorModel.zip
 
   ruleEngine:
-    rulesFolder: ../rules/
+    rulesLocation: classpath*:*.drl
 
   documentation:
     dataSetFile: ../data/Documentation_DataSet.txt
@@ -81,7 +81,7 @@ processors:
 reporters:
   html:
     openBrowser: true
-    htmlTemplateFile: ../config/html-report-template.vm
+    htmlTemplateFileName: html-report-template.vm
     outputFile: ../output/report.html
 
   text:

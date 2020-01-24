@@ -13,7 +13,7 @@ import com.koval.jresolver.common.api.bean.issue.Issue;
 import com.koval.jresolver.common.api.bean.result.ConfluenceResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
-import com.koval.jresolver.common.api.configuration.bean.processors.ConfluenceProcessorConfiguration;
+import com.koval.jresolver.common.api.configuration.Configuration;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
@@ -23,14 +23,17 @@ public class ConfluenceProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceProcessor.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
+  private static final String BROWSE_SUFFIX = "/display/pages/viewinfo.action?pageId=";
 
   private final VectorModel vectorModel;
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
+  private final String confluenceUrl;
 
-  public ConfluenceProcessor(ConfluenceProcessorConfiguration properties, String language) throws IOException {
+  public ConfluenceProcessor(Configuration properties) throws IOException {
+    this.confluenceUrl = properties.getConnectors().getConfluence().getUrl();
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(properties.getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, language);
+    File vectorModelFile = new File(properties.getProcessors().getConfluence().getVectorModelFile());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
   }
 
   @Override
@@ -49,7 +52,6 @@ public class ConfluenceProcessor implements IssueProcessor {
   }
 
   private String getBrowseUrl(String pageId) {
-    // TODO: get rif of hardcoded url
-    return "https://cwiki.apache.org/confluence/display/pages/viewinfo.action?pageId=" + pageId;
+    return confluenceUrl + BROWSE_SUFFIX + pageId;
   }
 }
