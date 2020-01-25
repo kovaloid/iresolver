@@ -8,8 +8,11 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.confluence.api.model.content.Content;
 import com.atlassian.confluence.api.model.content.Space;
 import com.atlassian.confluence.api.model.pagination.PageResponse;
+import com.koval.jresolver.common.api.bean.confluence.ConfluencePage;
+import com.koval.jresolver.common.api.component.processor.DataSetWriter;
 import com.koval.jresolver.common.api.configuration.bean.connectors.ConfluenceConnectorConfiguration;
 import com.koval.jresolver.connector.confluence.client.ConfluenceClient;
+import com.koval.jresolver.connector.confluence.client.ConfluenceTransformer;
 
 
 public class ConfluencePageReceiver {
@@ -24,14 +27,15 @@ public class ConfluencePageReceiver {
     this.properties = properties;
   }
 
-  public void start(ConfluenceDataSetWriter dataSetWriter) {
+  public void start(DataSetWriter<ConfluencePage> dataSetWriter) {
+    ConfluenceTransformer transformer = new ConfluenceTransformer();
     List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
     int startIndex = 0;
     int limit = properties.getLimitPerRequest();
     while (true) {
       PageResponse<Content> contentResponse = client.getPagesBySpaceKeys(spaces, startIndex, limit);
       LOGGER.info("Fetched confluence pages: {}", contentResponse.size());
-      dataSetWriter.write(contentResponse.getResults());
+      dataSetWriter.write(transformer.transform(contentResponse.getResults()));
 
       startIndex += contentResponse.size();
       if (!contentResponse.hasMore()) {

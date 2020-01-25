@@ -12,11 +12,13 @@ import com.koval.jresolver.common.api.ProcessExecutor;
 import com.koval.jresolver.common.api.auth.Credentials;
 import com.koval.jresolver.common.api.auth.CredentialsKeeper;
 import com.koval.jresolver.common.api.auth.CredentialsProtector;
+import com.koval.jresolver.common.api.bean.confluence.ConfluencePage;
 import com.koval.jresolver.common.api.bean.issue.IssueField;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.connector.Connector;
 import com.koval.jresolver.common.api.component.connector.IssueClient;
 import com.koval.jresolver.common.api.component.connector.IssueReceiver;
+import com.koval.jresolver.common.api.component.processor.DataSetWriter;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.common.api.component.reporter.ReportGenerator;
 import com.koval.jresolver.common.api.configuration.Configuration;
@@ -37,6 +39,7 @@ import com.koval.jresolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 import com.koval.jresolver.exception.ResolverException;
 import com.koval.jresolver.processor.confluence.ConfluenceProcessor;
+import com.koval.jresolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.jresolver.processor.documentation.DocumentationProcessor;
 import com.koval.jresolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
@@ -92,9 +95,12 @@ public final class Launcher {
   }
 
   public void createConfluenceDataSet() {
-    ConfluenceConnector confluenceConnector = new ConfluenceConnector(configuration.getConnectors().getConfluence(),
-        configuration.getProcessors().getConfluence());
-    confluenceConnector.createDataSet();
+    ConfluenceConnector confluenceConnector = new ConfluenceConnector(configuration.getConnectors().getConfluence());
+    try (DataSetWriter<ConfluencePage> confluenceDataSetWriter = new ConfluenceDataSetWriter(configuration.getProcessors().getConfluence())) {
+      confluenceConnector.createDataSet(confluenceDataSetWriter);
+    } catch (IOException e) {
+      LOGGER.error("Could not create confluence data set file.", e);
+    }
   }
 
   public void createConfluenceVectorModel() {

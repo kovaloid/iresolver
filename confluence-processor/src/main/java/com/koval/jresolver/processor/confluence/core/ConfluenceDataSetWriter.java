@@ -1,6 +1,5 @@
-package com.koval.jresolver.connector.confluence.core;
+package com.koval.jresolver.processor.confluence.core;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,13 +11,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.confluence.api.model.content.Content;
-import com.atlassian.confluence.api.model.content.ContentRepresentation;
+import com.koval.jresolver.common.api.bean.confluence.ConfluencePage;
+import com.koval.jresolver.common.api.component.processor.DataSetWriter;
 import com.koval.jresolver.common.api.configuration.bean.processors.ConfluenceProcessorConfiguration;
 import com.koval.jresolver.common.api.util.TextUtil;
 
 
-public class ConfluenceDataSetWriter implements Closeable {
+public class ConfluenceDataSetWriter implements DataSetWriter<ConfluencePage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceDataSetWriter.class);
 
@@ -31,21 +30,17 @@ public class ConfluenceDataSetWriter implements Closeable {
     LOGGER.info("Confluence data set writer created");
   }
 
-  public void write(List<Content> results) {
-    results.forEach((Content result) -> {
+  @Override
+  public void write(List<ConfluencePage> results) {
+    results.forEach((ConfluencePage result) -> {
       LOGGER.info("Page with id {} and name {} was written to the confluence data set",
-          result.getId().serialise(), result.getTitle());
+          result.getId(), result.getTitle());
 
-      dataFileOutput.print(result.getId().serialise());
+      dataFileOutput.print(result.getId());
       dataFileOutput.print("|");
-      String bodyWithoutTags = result.getBody()
-          .get(ContentRepresentation.STORAGE)
-          .getValue()
-          .replaceAll("nbsp", "")
-          .replaceAll("<.*?>", "");
-      dataFileOutput.println(TextUtil.simplify(bodyWithoutTags));
+      dataFileOutput.println(TextUtil.simplify(result.getBody()));
 
-      metadataFileOutput.print(result.getId().serialise());
+      metadataFileOutput.print(result.getId());
       metadataFileOutput.print(" ");
       metadataFileOutput.println(result.getTitle());
     });
