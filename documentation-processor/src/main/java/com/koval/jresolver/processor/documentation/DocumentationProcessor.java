@@ -15,6 +15,7 @@ import com.koval.jresolver.common.api.bean.result.DocumentationResult;
 import com.koval.jresolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.jresolver.common.api.component.processor.IssueProcessor;
 import com.koval.jresolver.common.api.configuration.Configuration;
+import com.koval.jresolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.jresolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.jresolver.common.api.doc2vec.VectorModel;
 import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
@@ -29,14 +30,16 @@ public class DocumentationProcessor implements IssueProcessor {
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
-  private final String docsPath;
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
+  private final String docsPath;
+  private final DocumentationProcessorConfiguration processorConfiguration;
 
   public DocumentationProcessor(Configuration properties) throws IOException {
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     File vectorModelFile = new File(properties.getProcessors().getDocumentation().getVectorModelFile());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
     this.docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
+    this.processorConfiguration = properties.getProcessors().getDocumentation();
   }
 
   @Override
@@ -46,7 +49,7 @@ public class DocumentationProcessor implements IssueProcessor {
         NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
     List<DocumentationResult> similarDocs = new ArrayList<>();
-    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser();
+    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(processorConfiguration);
     List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
     List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 

@@ -18,7 +18,7 @@ import com.koval.jresolver.connector.jira.exception.JiraConnectorException;
 public class JiraIssueClientFactory implements IssueClientFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JiraIssueClientFactory.class);
-  private static final String BROWSE_SUFFIX = "/browse";
+  private static final String BROWSE_SUFFIX = "/browse/";
 
   @Override
   public IssueClient getAnonymousClient(String host) throws JiraConnectorException {
