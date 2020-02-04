@@ -15,23 +15,23 @@ public final class JResolverApplication {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JResolverApplication.class);
 
-  private static final String CREATE_DATA_SET = "create-data-set";
-  private static final String CREATE_VECTOR_MODEL = "create-vector-model";
+  private static final String CREATE_ISSUES_DATA_SET = "create-issues-data-set";
+  private static final String CREATE_ISSUES_VECTOR_MODEL = "create-issues-vector-model";
   private static final String CREATE_DOCUMENTATION_DATA_SET = "create-documentation-data-set";
   private static final String CREATE_DOCUMENTATION_VECTOR_MODEL = "create-documentation-vector-model";
   private static final String CREATE_CONFLUENCE_DATA_SET = "create-confluence-data-set";
   private static final String CREATE_CONFLUENCE_VECTOR_MODEL = "create-confluence-vector-model";
-  private static final String PRINT_FIELDS = "print-fields";
+  private static final String PRINT_ISSUE_FIELDS = "print-issue-fields";
   private static final String TEST_SIMILARITY_PROCESSOR = "test-similarity-processor";
   private static final String RUN_UI = "run-ui";
   private static final String HELP_TIP = "Please use the following commands: \n"
-      + CREATE_DATA_SET + ", "
-      + CREATE_VECTOR_MODEL + ", "
+      + CREATE_ISSUES_DATA_SET + ", "
+      + CREATE_ISSUES_VECTOR_MODEL + ", "
       + CREATE_DOCUMENTATION_DATA_SET + ", "
       + CREATE_DOCUMENTATION_VECTOR_MODEL + ", "
       + CREATE_CONFLUENCE_DATA_SET + ", "
       + CREATE_CONFLUENCE_VECTOR_MODEL + ", "
-      + PRINT_FIELDS + ", "
+      + PRINT_ISSUE_FIELDS + ", "
       + RUN_UI + ", "
       + TEST_SIMILARITY_PROCESSOR + ".";
 
@@ -47,13 +47,13 @@ public final class JResolverApplication {
       launcher.run();
     } else if (args.length == 1) {
       switch (args[0]) {
-        case CREATE_DATA_SET:
-          LOGGER.info("Start creating data set.");
-          launcher.createSimilarityDataSet();
+        case CREATE_ISSUES_DATA_SET:
+          LOGGER.info("Start creating issues data set.");
+          launcher.createIssuesDataSet();
           break;
-        case CREATE_VECTOR_MODEL:
-          LOGGER.info("Start creating vector model.");
-          launcher.createSimilarityVectorModel();
+        case CREATE_ISSUES_VECTOR_MODEL:
+          LOGGER.info("Start creating issues vector model.");
+          launcher.createIssuesVectorModel();
           break;
         case CREATE_DOCUMENTATION_DATA_SET:
           LOGGER.info("Start creating documentation data set.");
@@ -71,9 +71,9 @@ public final class JResolverApplication {
           LOGGER.info("Start creating documentation vector model.");
           launcher.createConfluenceVectorModel();
           break;
-        case PRINT_FIELDS:
-          LOGGER.info("Start printing fields.");
-          launcher.printFields();
+        case PRINT_ISSUE_FIELDS:
+          LOGGER.info("Start printing issue fields.");
+          launcher.printIssueFields();
           break;
         case RUN_UI:
           LOGGER.info("Start configuration wizard.");

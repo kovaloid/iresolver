@@ -15,15 +15,15 @@ run {
 }
 
 def javaExecTasks = [
-  [taskName: 'createDataSet', argName: 'create-data-set'],
-  [taskName: 'createVectorModel', argName: 'create-vector-model'],
+  [taskName: 'createIssuesDataSet', argName: 'create-issues-data-set'],
+  [taskName: 'createIssuesVectorModel', argName: 'create-issues-vector-model'],
   [taskName: 'createDocumentationDataSet', argName: 'create-documentation-data-set'],
   [taskName: 'createDocumentationVectorModel', argName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSet', argName: 'create-confluence-data-set'],
   [taskName: 'createConfluenceVectorModel', argName: 'create-confluence-vector-model'],
-  [taskName: 'printFields', argName: 'print-fields'],
-  [taskName: 'runUI', argName: 'run-ui'],
-  [taskName: 'testSimilarityProcessor', argName: 'test-similarity-processor']
+  [taskName: 'printIssueFields', argName: 'print-issue-fields'],
+  [taskName: 'runUI', argName: 'run-ui']
+  // [taskName: 'testSimilarityProcessor', argName: 'test-similarity-processor']
 ]
 
 javaExecTasks.each { item ->
@@ -53,10 +53,10 @@ dependencies {
   compile project(':jira-connector'),
       project(':bugzilla-connector'),
       project(':confluence-connector'),
-      project(':similarity-processor'),
-      project(':rule-engine-processor'),
+      project(':issues-processor'),
       project(':documentation-processor'),
       project(':confluence-processor'),
+      project(':rule-engine-processor'),
       project(':html-reporter'),
       project(':text-reporter'),
       project(':test-similarity-processor')
@@ -109,13 +109,13 @@ startScripts {
 }
 
 def createStartScriptsTasks = [
-  [taskName: 'createDataSetScript', scriptName: 'create-data-set'],
-  [taskName: 'createVectorModelScript', scriptName: 'create-vector-model'],
+  [taskName: 'createIssuesDataSetScript', scriptName: 'create-issues-data-set'],
+  [taskName: 'createIssuesVectorModelScript', scriptName: 'create-issues-vector-model'],
   [taskName: 'createDocumentationDataSetScript', scriptName: 'create-documentation-data-set'],
   [taskName: 'createDocumentationVectorModelScript', scriptName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSetScript', scriptName: 'create-confluence-data-set'],
   [taskName: 'createConfluenceVectorModelScript', scriptName: 'create-confluence-vector-model'],
-  [taskName: 'printFieldsScript', scriptName: 'print-fields'],
+  [taskName: 'printIssueFieldsScript', scriptName: 'print-issue-fields'],
   [taskName: 'runUIScript', scriptName: 'run-ui']
   // [taskName: 'testSimilarityProcessorScript', scriptName: 'test-similarity-processor']
 ]

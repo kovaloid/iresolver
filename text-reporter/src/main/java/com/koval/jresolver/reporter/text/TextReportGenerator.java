@@ -37,7 +37,7 @@ public class TextReportGenerator implements ReportGenerator {
           .append(result.getOriginalIssue().getSummary());
 
       if (result.getSimilarIssues() != null) {
-        fillSimilarityProcessorResults(content, result);
+        fillIssuesProcessorResults(content, result);
       }
       if (result.getProposals() != null) {
         content.append("\nproposals: \n");
@@ -56,7 +56,7 @@ public class TextReportGenerator implements ReportGenerator {
     }
   }
 
-  private void fillSimilarityProcessorResults(StringBuilder content, IssueAnalysingResult result) {
+  private void fillIssuesProcessorResults(StringBuilder content, IssueAnalysingResult result) {
     content.append("\n\nsimilar issues: \n");
     for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
       content.append(similarIssue.getEntity().getKey())

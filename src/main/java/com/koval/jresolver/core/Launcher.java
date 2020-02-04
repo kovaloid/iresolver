@@ -42,10 +42,10 @@ import com.koval.jresolver.processor.confluence.ConfluenceProcessor;
 import com.koval.jresolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.jresolver.processor.documentation.DocumentationProcessor;
 import com.koval.jresolver.processor.documentation.core.DocDataSetCreator;
+import com.koval.jresolver.processor.issues.IssuesProcessor;
+import com.koval.jresolver.processor.issues.core.DataSetCreator;
+import com.koval.jresolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.jresolver.processor.rules.RuleEngineProcessor;
-import com.koval.jresolver.processor.similarity.SimilarityProcessor;
-import com.koval.jresolver.processor.similarity.core.DataSetCreator;
-import com.koval.jresolver.processor.similarity.test.TestSimilarityProcessor;
 import com.koval.jresolver.reporter.html.HtmlReportGenerator;
 import com.koval.jresolver.reporter.text.TextReportGenerator;
 import com.koval.jresolver.util.CommandLineUtil;
@@ -61,7 +61,7 @@ public final class Launcher {
     this.configuration = configuration;
   }
 
-  public void createSimilarityDataSet() {
+  public void createIssuesDataSet() {
     try (IssueClient issueClient = getIssueClient()) {
       Connector connector = getConnector(issueClient);
       IssueReceiver receiver = connector.getResolvedIssuesReceiver();
@@ -72,10 +72,10 @@ public final class Launcher {
     }
   }
 
-  public void createSimilarityVectorModel() {
+  public void createIssuesVectorModel() {
     String dataSetFile = configuration.getProcessors().getIssues().getDataSetFile();
     String vectorModelFile = configuration.getProcessors().getIssues().getVectorModelFile();
-    createVectorModel(dataSetFile, vectorModelFile, "Could not create similarity vector model file.");
+    createVectorModel(dataSetFile, vectorModelFile, "Could not create issues vector model file.");
   }
 
   public void createDocumentationDataSet() {
@@ -153,8 +153,8 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(IssueClient issueClient) throws IOException {
     List<String> processorNames = configuration.getAdministration().getProcessors();
     List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames.contains(ProcessorConstants.SIMILARITY)) {
-      issueProcessors.add(new SimilarityProcessor(issueClient, configuration));
+    if (processorNames.contains(ProcessorConstants.ISSUES)) {
+      issueProcessors.add(new IssuesProcessor(issueClient, configuration));
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
       issueProcessors.add(new DocumentationProcessor(configuration));
@@ -186,7 +186,7 @@ public final class Launcher {
     return reportGenerators;
   }
 
-  public void printFields() {
+  public void printIssueFields() {
     try (IssueClient issueClient = getIssueClient()) {
       List<IssueField> fields = issueClient.getIssueFields();
       if (fields.isEmpty()) {

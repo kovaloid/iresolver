@@ -22,14 +22,14 @@ class LauncherUI extends JFrame {
     JButton runBtn = new JButton("Run");
     JButton printFieldsBtn = new JButton("Print fields");
 
-    createIssuesDataSetBtn.addActionListener(e -> launcher.createSimilarityDataSet());
-    createIssuesVectorModelBtn.addActionListener(e -> launcher.createSimilarityVectorModel());
+    createIssuesDataSetBtn.addActionListener(e -> launcher.createIssuesDataSet());
+    createIssuesVectorModelBtn.addActionListener(e -> launcher.createIssuesVectorModel());
     createDocumentationDataSetBtn.addActionListener(e -> launcher.createDocumentationDataSet());
     createDocumentationVectorModelBtn.addActionListener(e -> launcher.createDocumentationVectorModel());
     createConfluenceDataSetBtn.addActionListener(e -> launcher.createConfluenceDataSet());
     createConfluenceVectorModelBtn.addActionListener(e -> launcher.createConfluenceVectorModel());
     runBtn.addActionListener(e -> launcher.run());
-    printFieldsBtn.addActionListener(e -> launcher.printFields());
+    printFieldsBtn.addActionListener(e -> launcher.printIssueFields());
 
     add(createIssuesDataSetBtn);
     add(createIssuesVectorModelBtn);

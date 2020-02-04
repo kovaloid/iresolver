@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity;
+package com.koval.jresolver.processor.issues;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,16 +25,16 @@ import com.koval.jresolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.jresolver.common.api.util.AttachmentTypeUtil;
 
 
-public class SimilarityProcessor implements IssueProcessor {
+public class IssuesProcessor implements IssueProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimilarityProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesProcessor.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final IssueClient issueClient;
   private final VectorModel vectorModel;
 
-  public SimilarityProcessor(IssueClient issueClient, Configuration properties) throws IOException {
+  public IssuesProcessor(IssueClient issueClient, Configuration properties) throws IOException {
     this.issueClient = issueClient;
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());

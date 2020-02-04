@@ -62,7 +62,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     VelocityContext context = new VelocityContext();
     context.put("results", results);
     context.put("numberTool", new NumberTool());
-    context.put("isSimilarityProcessorEnabled", enabledProcessors.contains(ProcessorConstants.SIMILARITY));
+    context.put("isIssuesProcessorEnabled", enabledProcessors.contains(ProcessorConstants.ISSUES));
     context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(ProcessorConstants.DOCUMENTATION));
     context.put("isConfluenceProcessorEnabled", enabledProcessors.contains(ProcessorConstants.CONFLUENCE));
     context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE));

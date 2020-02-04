@@ -1,4 +1,4 @@
-package com.koval.jresolver.processor.similarity.test;
+package com.koval.jresolver.processor.issues.test;
 
 import java.io.File;
 import java.io.IOException;

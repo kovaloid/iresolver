@@ -2,10 +2,10 @@
 administration:
   connector: jira # bugzilla
   processors:
-    - similarity
-    - rule-engine
+    - issues
     - documentation
     - confluence
+    - rule-engine
   reporters:
     - html
     - text
@@ -62,9 +62,6 @@ processors:
     dataSetFile: ../data/Issues_DataSet.txt
     vectorModelFile: ../data/Issues_VectorModel.zip
 
-  ruleEngine:
-    rulesLocation: classpath*:*.drl
-
   documentation:
     dataSetFile: ../data/Documentation_DataSet.txt
     vectorModelFile: ../data/Documentation_VectorModel.zip
@@ -76,6 +73,9 @@ processors:
     dataSetFile: ../data/Confluence_DataSet.txt
     vectorModelFile: ../data/Confluence_VectorModel.zip
     confluenceMetadataFile: ../data/Confluence_Metadata.txt
+
+  ruleEngine:
+    rulesLocation: classpath*:*.drl
 
 
 reporters:

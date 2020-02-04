@@ -30,7 +30,7 @@
             </div>
             <div class="card-body">
 
-            #if($isSimilarityProcessorEnabled)
+            #if($isIssuesProcessorEnabled)
                 <details> <summary>Similar Issues</summary>
                 <table class="table table-hover table-bordered table-sm">
                     <thead>
