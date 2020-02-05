@@ -43,3 +43,10 @@ The tool consists of modules. There are three types of modules:
 * Connectors, which task is to receive data from data source (Jira, BugZilla, Confluence, etc.)
 * Processors, which task is to handle each unresolved issue and generate issue analyzing result
 * Reporters, which task is to get processors results and create reports for user in specific format (html, txt)
+
+## Planned To Do
+
+* Add connectors for YouTrack, Wrike, Slack, GitHub, etc.
+* Add converters for audio, images, webex videos and MS Office documents to simple text
+* Add reporter to email
+* Add tracking for data set retrieving process so that it can be downloaded in parts
