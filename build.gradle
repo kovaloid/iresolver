@@ -5,7 +5,7 @@ plugins {
 
 apply plugin: 'application'
 
-mainClassName = 'com.koval.jresolver.JResolverApplication'
+mainClassName = 'com.koval.resolver.IResolverApplication'
 
 def unixClassPath = 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME/config:\\$APP_HOME/rules:\\$APP_HOME/data'
 def windowsClassPath = 'CLASSPATH=%APP_HOME%/lib/;%APP_HOME%/lib/*;%APP_HOME%/config;%APP_HOME%/rules;%APP_HOME%/data'
@@ -68,7 +68,7 @@ wrapper {
 
 distributions {
   main {
-    baseName = 'jresolver'
+    baseName = 'iresolver'
     contents {
       from('common-api/src/main/resources/configuration.yml') { into 'config' }
       from('html-reporter/src/main/resources') { into 'config' }
@@ -164,7 +164,7 @@ allprojects {
   apply plugin: 'idea'
   apply plugin: 'eclipse'
 
-  group = 'com.koval.jresolver'
+  group = 'com.koval.iresolver'
   sourceCompatibility = 1.8
 
   repositories {

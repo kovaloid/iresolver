@@ -1,4 +1,4 @@
-# Rule Editor for Jira Resolver
+# Rule Editor for Issue Resolver
 
 ## Getting Started
 

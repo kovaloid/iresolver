@@ -1,4 +1,4 @@
-rootProject.name = 'jresolver'
+rootProject.name = 'iresolver'
 
 include 'common-api'
 include 'jira-connector'

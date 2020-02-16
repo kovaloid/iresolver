@@ -11,9 +11,9 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-         <file>../logs/jresolver-${startTimestamp}.log</file>
+         <file>../logs/iresolver-${startTimestamp}.log</file>
          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>../logs/jresolver-${startTimestamp}-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+            <fileNamePattern>../logs/iresolver-${startTimestamp}-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
             <maxHistory>1</maxHistory>
              <TimeBasedFileNamingAndTriggeringPolicy
                      class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

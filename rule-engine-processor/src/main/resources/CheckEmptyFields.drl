@@ -3,9 +3,9 @@
 TODO: Request customer name, ITSM hyperlink from TSE
 */
 
-package com.koval.jresolver.rules
+package com.koval.resolver.rules
 
-import com.koval.jresolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.bean.issue.Issue;
 global java.util.List results
 
 

@@ -27,9 +27,9 @@ export class RuleListComponent implements OnInit {
   createRule() {
     this.chosenRule = {
       id: null,
-      pack:'com.koval.jresolver.rules',
-      imports: ['com.koval.jresolver.connector.jira.bean.JiraIssue;', 'com.koval.jresolver.connector.jira.bean.JiraStatus;'],
-      globals: ['com.koval.jresolver.rules.results.RulesResult results'],
+      pack:'com.koval.resolver.rules',
+      imports: ['com.koval.resolver.connector.jira.bean.JiraIssue;', 'com.koval.resolver.connector.jira.bean.JiraStatus;'],
+      globals: ['com.koval.resolver.rules.results.RulesResult results'],
       name:'NewRuleCollection',
       rules: []
     };

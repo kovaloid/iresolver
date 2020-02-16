@@ -1,9 +1,9 @@
 [![License: MIT](https://img.shields.io/badge/license-mit-ff69b4.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/kovaloid/jresolver.svg?branch=master)](https://travis-ci.org/kovaloid/jresolver)
+[![Build Status](https://travis-ci.org/kovaloid/iresolver.svg?branch=master)](https://travis-ci.org/kovaloid/iresolver)
 
-# Jira Resolver
+# Issue Resolver
 
-The goal of this project is to make life easier for Jira users.
+The purpose of this tool is to reduce the complexity of resolving customer requests in issue tracking systems such as Jira.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ After the distribution is built, it is located in the following path:
 build/distributions
 ```
 
-The last release version of distribution can be downloaded from [the release tab of the repository](https://github.com/kovaloid/jresolver/releases).
+The last release version of distribution can be downloaded from [the release tab of the repository](https://github.com/kovaloid/iresolver/releases).
 
 Unzip the distribution, go to the bin folder and launch one of the scripts below.
 

@@ -21,7 +21,7 @@ apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-mainClassName = 'com.jresolver.editor.RuleEditorLauncher'
+mainClassName = 'com.koval.resolver.rule.editor.RuleEditorLauncher'
 
 node {
     version = '8.11.3'
