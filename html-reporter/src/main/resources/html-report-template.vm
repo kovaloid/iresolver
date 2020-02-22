@@ -69,7 +69,11 @@
                         <tr>
                             <td>$qualifiedUser.getEntity().getName()</td>
                             <td>$qualifiedUser.getEntity().getDisplayName()</td>
-                            <td><a href="mailto:$qualifiedUser.getEntity().getEmailAddress()">$qualifiedUser.getEntity().getEmailAddress()</a></td>
+                            <td>
+                            #if($qualifiedUser.getEntity().getEmailAddress())
+                                <a href="mailto:$qualifiedUser.getEntity().getEmailAddress()">$qualifiedUser.getEntity().getEmailAddress()</a>
+                            #end
+                            </td>
                             <td>$qualifiedUser.getMetric()</td>
                         </tr>
                         #end
