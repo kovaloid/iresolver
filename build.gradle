@@ -74,6 +74,7 @@ distributions {
       from('html-reporter/src/main/resources') { into 'config' }
       from('src/main/resources/logback.xml') { into 'config' }
       from('rule-engine-processor/src/main/resources') { into 'rules' }
+      from('docs') { into 'docs' }
       exclude('**/*-android-*.jar')
       exclude('**/*-macosx-*.jar')
       exclude('**/*-linux-armhf.jar')

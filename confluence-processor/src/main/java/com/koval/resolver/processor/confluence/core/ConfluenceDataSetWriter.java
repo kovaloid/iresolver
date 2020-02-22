@@ -1,13 +1,12 @@
 package com.koval.resolver.processor.confluence.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +23,16 @@ public class ConfluenceDataSetWriter implements DataSetWriter<ConfluencePage> {
   private final PrintWriter dataFileOutput;
   private final PrintWriter metadataFileOutput;
 
-  public ConfluenceDataSetWriter(ConfluenceProcessorConfiguration properties) throws FileNotFoundException, UnsupportedEncodingException {
-    dataFileOutput = new PrintWriter(new File(properties.getDataSetFile()), StandardCharsets.UTF_8.name());
-    metadataFileOutput = new PrintWriter(new File(properties.getConfluenceMetadataFile()), StandardCharsets.UTF_8.name());
+  public ConfluenceDataSetWriter(ConfluenceProcessorConfiguration properties) throws IOException {
+    File dataSetFile = new File(properties.getDataSetFile());
+    File metadataFile = new File(properties.getConfluenceMetadataFile());
+    FileUtils.forceMkdir(dataSetFile.getParentFile());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
+    FileUtils.forceMkdir(metadataFile.getParentFile());
+    LOGGER.info("Folder to store metadata file created: {}", metadataFile.getParentFile().getCanonicalPath());
+
+    dataFileOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
+    metadataFileOutput = new PrintWriter(metadataFile, StandardCharsets.UTF_8.name());
     LOGGER.info("Confluence data set writer created");
   }
 

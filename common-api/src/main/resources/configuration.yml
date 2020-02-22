@@ -17,8 +17,8 @@ connectors:
     url: https://issues.apache.org/jira
     anonymous: true
     credentialsFolder: ../data/
-    resolvedQuery: project = AMQ AND resolution = Resolved
-    unresolvedQuery: project = AMQ AND resolution = Unresolved AND priority = Blocker
+    resolvedQuery: project = KAFKA AND resolution = Resolved ORDER BY priority DESC, updated DESC
+    unresolvedQuery: project = KAFKA AND priority = Blocker AND resolution = Unresolved AND fixVersion = 2.5.0 ORDER BY priority DESC, updated DESC
     batchSize: 10
     batchDelay: 3000
     resolvedIssueFields:
