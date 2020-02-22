@@ -216,7 +216,7 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
       USER_CACHE.put(originalBasicUser.getName(), user);
       return user;
     } catch (RestClientException e) {
-      LOGGER.error("Could not get full data about user {}", e.getErrorCollections());
+      LOGGER.debug("Could not get full data about user {}", e.getErrorCollections());
       User user = getIncompleteUserByBasicUser(originalBasicUser);
       USER_CACHE.put(originalBasicUser.getName(), user);
       return user;
