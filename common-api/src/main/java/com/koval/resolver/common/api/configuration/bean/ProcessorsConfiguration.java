@@ -2,6 +2,7 @@ package com.koval.resolver.common.api.configuration.bean;
 
 import com.koval.resolver.common.api.configuration.bean.processors.ConfluenceProcessorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.bean.processors.GranularIssuesProcessorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.processors.RuleEngineProcessorConfiguration;
 
@@ -9,6 +10,7 @@ import com.koval.resolver.common.api.configuration.bean.processors.RuleEnginePro
 public class ProcessorsConfiguration {
 
   private IssuesProcessorConfiguration issues;
+  private GranularIssuesProcessorConfiguration granularIssues;
   private RuleEngineProcessorConfiguration ruleEngine;
   private DocumentationProcessorConfiguration documentation;
   private ConfluenceProcessorConfiguration confluence;
@@ -19,6 +21,14 @@ public class ProcessorsConfiguration {
 
   public void setIssues(IssuesProcessorConfiguration issues) {
     this.issues = issues;
+  }
+
+  public GranularIssuesProcessorConfiguration getGranularIssues() {
+    return granularIssues;
+  }
+
+  public void setGranularIssues(GranularIssuesProcessorConfiguration granularIssues) {
+    this.granularIssues = granularIssues;
   }
 
   public RuleEngineProcessorConfiguration getRuleEngine() {
@@ -49,6 +59,7 @@ public class ProcessorsConfiguration {
   public String toString() {
     return "ProcessorsConfiguration{"
         + "issues=" + issues
+        + ", granularIssues=" + granularIssues
         + ", ruleEngine=" + ruleEngine
         + ", documentation=" + documentation
         + ", confluence=" + confluence

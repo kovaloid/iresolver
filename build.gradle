@@ -17,6 +17,8 @@ run {
 def javaExecTasks = [
   [taskName: 'createIssuesDataSet', argName: 'create-issues-data-set'],
   [taskName: 'createIssuesVectorModel', argName: 'create-issues-vector-model'],
+  [taskName: 'createGranularIssuesDataSets', argName: 'create-granular-issues-data-sets'],
+  [taskName: 'createGranularIssuesVectorModels', argName: 'create-granular-issues-vector-models'],
   [taskName: 'createDocumentationDataSet', argName: 'create-documentation-data-set'],
   [taskName: 'createDocumentationVectorModel', argName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSet', argName: 'create-confluence-data-set'],
@@ -54,6 +56,7 @@ dependencies {
       project(':bugzilla-connector'),
       project(':confluence-connector'),
       project(':issues-processor'),
+      project(':granular-issues-processor'),
       project(':documentation-processor'),
       project(':confluence-processor'),
       project(':rule-engine-processor'),
@@ -112,6 +115,8 @@ startScripts {
 def createStartScriptsTasks = [
   [taskName: 'createIssuesDataSetScript', scriptName: 'create-issues-data-set'],
   [taskName: 'createIssuesVectorModelScript', scriptName: 'create-issues-vector-model'],
+  [taskName: 'createGranularIssuesDataSetsScript', scriptName: 'create-granular-issues-data-sets'],
+  [taskName: 'createGranularIssuesVectorModelsScript', scriptName: 'create-granular-issues-vector-models'],
   [taskName: 'createDocumentationDataSetScript', scriptName: 'create-documentation-data-set'],
   [taskName: 'createDocumentationVectorModelScript', scriptName: 'create-documentation-vector-model'],
   [taskName: 'createConfluenceDataSetScript', scriptName: 'create-confluence-data-set'],

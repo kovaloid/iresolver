@@ -3,6 +3,7 @@ administration:
   connector: jira # bugzilla
   processors:
     - issues
+    #- granular-issues
     - documentation
     - confluence
     - rule-engine
@@ -61,6 +62,18 @@ processors:
   issues:
     dataSetFile: ../data/Issues_DataSet.txt
     vectorModelFile: ../data/Issues_VectorModel.zip
+
+  granularIssues:
+    affectedIssueParts:
+      - summary
+      - description
+      #- comments
+    summaryDataSetFile: ../data/SummaryIssues_DataSet.txt
+    descriptionDataSetFile: ../data/DescriptionIssues_DataSet.txt
+    commentsDataSetFile: ../data/CommentsIssues_DataSet.txt
+    summaryVectorModelFile: ../data/SummaryIssues_VectorModel.zip
+    descriptionVectorModelFile: ../data/DescriptionIssues_VectorModel.zip
+    commentsVectorModelFile: ../data/CommentsIssues_VectorModel.zip
 
   documentation:
     dataSetFile: ../data/Documentation_DataSet.txt
