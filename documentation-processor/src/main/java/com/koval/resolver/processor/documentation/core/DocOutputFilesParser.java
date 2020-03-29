@@ -1,20 +1,15 @@
 package com.koval.resolver.processor.documentation.core;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DocOutputFilesParser {
@@ -46,17 +41,27 @@ public class DocOutputFilesParser {
   }
 
   public List<DocMetadata> parseDocumentationMetadata() {
-    List<DocMetadata> docMetadata = new ArrayList<>();
+    List<DocMetadata> docMetadataList = new ArrayList<>();
     try (InputStream in = new FileInputStream(properties.getDocsMetadataFile());
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String[] split = line.split(SPACE);
-        docMetadata.add(new DocMetadata(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+        DocMetadata docMetadata = parseLineIntoDocMetadata(line);
+        docMetadataList.add(docMetadata);
       }
     } catch (IOException e) {
       LOGGER.error("Could not read file: " + properties.getDocsMetadataFile(), e);
     }
-    return docMetadata;
+    
+    return docMetadataList;
+  }
+
+  private DocMetadata parseLineIntoDocMetadata(String line) {
+    String[] split = line.split(SPACE);
+
+    String key = split[0];
+    int fileIndex = Integer.parseInt(split[1]);
+    int pageNumber = Integer.parseInt(split[2]);
+    return new DocMetadata(key, fileIndex, pageNumber);
   }
 }
