@@ -42,8 +42,11 @@ public class DocOutputFilesParser {
 
   public List<DocMetadata> parseDocumentationMetadata() {
     List<DocMetadata> docMetadataList = new ArrayList<>();
-    try (InputStream in = new FileInputStream(properties.getDocsMetadataFile());
-         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+    try (
+            InputStream fileInputStream = new FileInputStream(properties.getDocsMetadataFile());
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(inputStreamReader)
+    ) {
       String line;
       while ((line = reader.readLine()) != null) {
         DocMetadata docMetadata = parseLineIntoDocMetadata(line);
@@ -52,7 +55,7 @@ public class DocOutputFilesParser {
     } catch (IOException e) {
       LOGGER.error("Could not read file: " + properties.getDocsMetadataFile(), e);
     }
-    
+
     return docMetadataList;
   }
 
@@ -62,6 +65,7 @@ public class DocOutputFilesParser {
     String key = split[0];
     int fileIndex = Integer.parseInt(split[1]);
     int pageNumber = Integer.parseInt(split[2]);
+
     return new DocMetadata(key, fileIndex, pageNumber);
   }
 }
