@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DocTypeDetectorTest {
+
     private static final String FILE_NAME = "filename";
     private static final String EXTENSION_DELIMITER = ".";
 
@@ -49,5 +50,4 @@ class DocTypeDetectorTest {
                 arguments(UNKNOWN_EXTENSION, MediaType.UNKNOWN)
         );
     }
-
 }
