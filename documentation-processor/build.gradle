@@ -1,3 +1,6 @@
+ext {
+  junitVersion = '5.4.2'
+}
 
 dependencies {
   compile project(':common-api')
@@ -11,4 +14,12 @@ dependencies {
   compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.core', version: '1.0.6'
   compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.pdf', version: '1.0.6'
   compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.itext.extension', version: '2.0.0'
+
+  testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+  testCompileOnly "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+
+  test {
+    useJUnitPlatform()
+  }
 }
