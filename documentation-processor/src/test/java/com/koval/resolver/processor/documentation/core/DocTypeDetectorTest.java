@@ -13,41 +13,41 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DocTypeDetectorTest {
 
-    private static final String FILE_NAME = "filename";
-    private static final String EXTENSION_DELIMITER = ".";
+  private static final String FILE_NAME = "filename";
+  private static final String EXTENSION_DELIMITER = ".";
 
-    private static final String PDF_EXTENSION = "pdf";
-    private static final String DOC_EXTENSION = "doc";
-    private static final String DOCX_EXTENSION = "docx";
-    private static final String UNKNOWN_EXTENSION = "zzzz";
+  private static final String PDF_EXTENSION = "pdf";
+  private static final String DOC_EXTENSION = "doc";
+  private static final String DOCX_EXTENSION = "docx";
+  private static final String UNKNOWN_EXTENSION = "zzzz";
 
-    private DocTypeDetector mDocTypeDetector;
+  private DocTypeDetector mDocTypeDetector;
 
-    @BeforeEach
-    void onSetup() {
-        mDocTypeDetector = new DocTypeDetector();
-    }
+  @BeforeEach
+  void onSetup() {
+    mDocTypeDetector = new DocTypeDetector();
+  }
 
-    @ParameterizedTest
-    @MethodSource("createFileExtensionsAndExpectedMediaTypes")
-    void testDetectingFileExtension(String fileExtension, MediaType expectedMediaType) {
-        MediaType detectedType = detectType(fileExtension);
+  @ParameterizedTest
+  @MethodSource("createFileExtensionsAndExpectedMediaTypes")
+  void testDetectingFileExtension(String fileExtension, MediaType expectedMediaType) {
+    MediaType detectedType = detectType(fileExtension);
 
-        assertEquals(expectedMediaType, detectedType);
-    }
+    assertEquals(expectedMediaType, detectedType);
+  }
 
-    private MediaType detectType(String fileExtension) {
-        String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
+  private MediaType detectType(String fileExtension) {
+    String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
 
-        return mDocTypeDetector.detectType(fileName);
-    }
+    return mDocTypeDetector.detectType(fileName);
+  }
 
-    static Stream<Arguments> createFileExtensionsAndExpectedMediaTypes() {
-        return Stream.of(
-                arguments(PDF_EXTENSION, MediaType.PDF),
-                arguments(DOC_EXTENSION, MediaType.WORD),
-                arguments(DOCX_EXTENSION, MediaType.WORD),
-                arguments(UNKNOWN_EXTENSION, MediaType.UNKNOWN)
-        );
-    }
+  static Stream<Arguments> createFileExtensionsAndExpectedMediaTypes() {
+    return Stream.of(
+            arguments(PDF_EXTENSION, MediaType.PDF),
+            arguments(DOC_EXTENSION, MediaType.WORD),
+            arguments(DOCX_EXTENSION, MediaType.WORD),
+            arguments(UNKNOWN_EXTENSION, MediaType.UNKNOWN)
+    );
+  }
 }
