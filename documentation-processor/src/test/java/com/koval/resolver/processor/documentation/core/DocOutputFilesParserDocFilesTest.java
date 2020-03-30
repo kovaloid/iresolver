@@ -1,7 +1,7 @@
 package com.koval.resolver.processor.documentation.core;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
+import com.koval.resolver.processor.documentation.bean.DocFile;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,14 +15,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DocOutputFilesParserTest {
-  private static final DocMetadata DOC_METADATA_1 = new DocMetadata("key1", 14, 23);
-  private static final String METADATA_STRING_1 = "key1 14 23\n";
+//TODO: This and other DocOutputFilesParser test will test different classes after refactoring
+public class DocOutputFilesParserDocFilesTest {
+  private static final DocFile DOC_FILE_1 = new DocFile(15, "filename1");
+  private static final String DOC_FILE_STRING_1 = "15 filename1\n";
 
-  private static final DocMetadata DOC_METADATA_2 = new DocMetadata("key2", 25, 67);
-  private static final String METADATA_STRING_2 = "key2 25 67";
+  private static final DocFile DOC_FILE_2 = new DocFile(26, "filename2");
+  private static final String DOC_FILE_STRING_2 = "26 filename2";
 
-  private static final List<String> METADATA_STRINGS = Arrays.asList(METADATA_STRING_1, METADATA_STRING_2);
+  private static final List<String> DOC_FILE_STRINGS = Arrays.asList(DOC_FILE_STRING_1, DOC_FILE_STRING_2);
 
   @TempDir
   File tempDirectory;
@@ -35,39 +36,38 @@ class DocOutputFilesParserTest {
   void onSetup() throws IOException {
     tempFile = new File(tempDirectory, "tempFile.txt");
 
-    DocumentationProcessorConfiguration properties = createProperties(METADATA_STRINGS);
+    DocumentationProcessorConfiguration properties = createProperties(DOC_FILE_STRINGS);
 
     mDocOutputFilesParser = new DocOutputFilesParser(properties);
   }
 
   @Test
   void testParsingOneLineDocMeta() {
-    DocMetadata actualMetaData = mDocOutputFilesParser.parseDocumentationMetadata().get(0);
+    DocFile actualDocFile = mDocOutputFilesParser.parseDocumentationFilesList().get(0);
 
-    assertMetadataEqual(DOC_METADATA_1, actualMetaData);
+    assertDocFilesEqual(DOC_FILE_1, actualDocFile);
   }
 
   @Test
   void testParsingMultipleDocMeta() {
-    List<DocMetadata> metadataList = mDocOutputFilesParser.parseDocumentationMetadata();
+    List<DocFile> docFiles = mDocOutputFilesParser.parseDocumentationFilesList();
 
-    assertMetadataEqual(DOC_METADATA_1, metadataList.get(0));
-    assertMetadataEqual(DOC_METADATA_2, metadataList.get(1));
+    assertDocFilesEqual(DOC_FILE_1, docFiles.get(0));
+    assertDocFilesEqual(DOC_FILE_2, docFiles.get(1));
   }
 
   private DocumentationProcessorConfiguration createProperties(List<String> metadataStrings) throws IOException {
     final File tempFile = writeStringsToFile(metadataStrings);
 
     DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
-    properties.setDocsMetadataFile(tempFile.getPath());
+    properties.setDocsListFile(tempFile.getPath());
 
     return properties;
   }
 
-  private void assertMetadataEqual(DocMetadata expectedMetaData, DocMetadata actualMetaData) {
-    assertEquals(expectedMetaData.getKey(), actualMetaData.getKey());
-    assertEquals(expectedMetaData.getFileIndex(), actualMetaData.getFileIndex());
-    assertEquals(expectedMetaData.getPageNumber(), actualMetaData.getPageNumber());
+  private void assertDocFilesEqual(DocFile expectedDocFile, DocFile actualDocFile) {
+    assertEquals(expectedDocFile.getFileIndex(), actualDocFile.getFileIndex());
+    assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
   }
 
   private File writeStringsToFile(List<String> metadataStrings) throws IOException {
@@ -77,6 +77,4 @@ class DocOutputFilesParserTest {
 
     return tempFile;
   }
-
-
 }

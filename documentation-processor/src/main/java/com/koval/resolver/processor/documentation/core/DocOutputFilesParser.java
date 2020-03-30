@@ -11,7 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
+//TODO: Refactor DocOutputFilesParser in order to test it without creating files
 public class DocOutputFilesParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocOutputFilesParser.class);
@@ -25,19 +26,27 @@ public class DocOutputFilesParser {
 
   public List<DocFile> parseDocumentationFilesList() {
     List<DocFile> docFiles = new ArrayList<>();
-    try (InputStream in = new FileInputStream(properties.getDocsListFile());
-         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+    try (
+            InputStream fileInputStream = new FileInputStream(properties.getDocsListFile());
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(inputStreamReader)
+    ) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String[] split = line.split(SPACE);
-        int fileIndex = Integer.parseInt(split[0]);
-        String fileName = split[1];
-        docFiles.add(new DocFile(fileIndex, fileName));
+        DocFile docFile = parseLineIntoDocFile(line);
+        docFiles.add(docFile);
       }
     } catch (IOException e) {
       LOGGER.error("Could not read file: " + properties.getDocsListFile(), e);
     }
     return docFiles;
+  }
+
+  private DocFile parseLineIntoDocFile(String line) {
+    String[] split = line.split(SPACE);
+    int fileIndex = Integer.parseInt(split[0]);
+    String fileName = split[1];
+    return new DocFile(fileIndex, fileName);
   }
 
   public List<DocMetadata> parseDocumentationMetadata() {
