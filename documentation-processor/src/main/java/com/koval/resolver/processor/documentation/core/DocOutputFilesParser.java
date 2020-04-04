@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
-//TODO: Refactor DocOutputFilesParser in order to test it without creating files
 public class DocOutputFilesParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocOutputFilesParser.class);
@@ -24,6 +23,7 @@ public class DocOutputFilesParser {
   private final DocumentationProcessorConfiguration properties;
 
   private DocFileRepository docFileRepository;
+  private DocMetadataParser docMetadataParser;
 
   public DocOutputFilesParser(
           DocumentationProcessorConfiguration properties,
@@ -31,12 +31,13 @@ public class DocOutputFilesParser {
   ) {
     this.properties = properties;
     this.docFileRepository = docFileRepository;
+    this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), docFileRepository);
   }
 
   public List<DocFile> parseDocumentationFilesList() {
     List<DocFile> docFiles = new ArrayList<>();
     try (
-            InputStream fileInputStream = docFileRepository.getFile(properties.getDocsListFile());//new FileInputStream(properties.getDocsListFile());
+            InputStream fileInputStream = docFileRepository.getFile(properties.getDocsListFile());
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(inputStreamReader)
     ) {
@@ -59,31 +60,6 @@ public class DocOutputFilesParser {
   }
 
   public List<DocMetadata> parseDocumentationMetadata() {
-    List<DocMetadata> docMetadataList = new ArrayList<>();
-    try (
-            InputStream fileInputStream = docFileRepository.getFile(properties.getDocsMetadataFile());
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-            BufferedReader reader = new BufferedReader(inputStreamReader)
-    ) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        DocMetadata docMetadata = parseLineIntoDocMetadata(line);
-        docMetadataList.add(docMetadata);
-      }
-    } catch (IOException e) {
-      LOGGER.error("Could not read file: " + properties.getDocsMetadataFile(), e);
-    }
-
-    return docMetadataList;
-  }
-
-  private DocMetadata parseLineIntoDocMetadata(String line) {
-    String[] split = line.split(DELIMITER);
-
-    String key = split[0];
-    int fileIndex = Integer.parseInt(split[1]);
-    int pageNumber = Integer.parseInt(split[2]);
-
-    return new DocMetadata(key, fileIndex, pageNumber);
+    return docMetadataParser.parseDocumentationMetadata();
   }
 }

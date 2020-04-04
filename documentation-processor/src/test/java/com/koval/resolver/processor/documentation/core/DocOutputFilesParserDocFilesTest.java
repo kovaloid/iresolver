@@ -59,7 +59,7 @@ public class DocOutputFilesParserDocFilesTest {
 
   //TODO: make this test pass
   @Test
-  void testParsingInvalidCharacterString() throws IOException {
+  void testParsingInvalidStringOnlyChars() throws IOException {
     initDocOutputFileParser(INVALID_STRING_ONLY_CHARS);
 
     mDocOutputFilesParser.parseDocumentationFilesList();
@@ -67,10 +67,19 @@ public class DocOutputFilesParserDocFilesTest {
 
   //TODO: make this test pass
   @Test
-  void testParsingInvalidCharacterStringg() throws IOException {
+  void testParsingInvalidStringOnlyNumber() throws IOException {
     initDocOutputFileParser(INVALID_STRING_ONLY_NUMBER);
 
     mDocOutputFilesParser.parseDocumentationFilesList();
+  }
+
+  private void initDocOutputFileParser(String testString) throws IOException {
+    DocumentationProcessorConfiguration properties = createProperties(testString);
+
+    mDocOutputFilesParser = new DocOutputFilesParser(
+            properties,
+            mDocFileRepository
+    );
   }
 
   private DocumentationProcessorConfiguration createProperties(String testString) throws IOException {
@@ -86,14 +95,5 @@ public class DocOutputFilesParserDocFilesTest {
   private void assertDocFilesEqual(DocFile expectedDocFile, DocFile actualDocFile) {
     assertEquals(expectedDocFile.getFileIndex(), actualDocFile.getFileIndex());
     assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
-  }
-
-  private void initDocOutputFileParser(String testString) throws IOException {
-    DocumentationProcessorConfiguration properties = createProperties(testString);
-
-    mDocOutputFilesParser = new DocOutputFilesParser(
-            properties,
-            mDocFileRepository
-    );
   }
 }
