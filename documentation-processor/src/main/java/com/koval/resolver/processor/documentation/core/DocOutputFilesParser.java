@@ -6,12 +6,13 @@ import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 //TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
 //TODO: Refactor DocOutputFilesParser in order to test it without creating files
@@ -22,14 +23,20 @@ public class DocOutputFilesParser {
 
   private final DocumentationProcessorConfiguration properties;
 
-  public DocOutputFilesParser(DocumentationProcessorConfiguration properties) {
+  private DocFileRepository docFileRepository;
+
+  public DocOutputFilesParser(
+          DocumentationProcessorConfiguration properties,
+          DocFileRepository docFileRepository
+  ) {
     this.properties = properties;
+    this.docFileRepository = docFileRepository;
   }
 
   public List<DocFile> parseDocumentationFilesList() {
     List<DocFile> docFiles = new ArrayList<>();
     try (
-            InputStream fileInputStream = new FileInputStream(properties.getDocsListFile());
+            InputStream fileInputStream = docFileRepository.getFile(properties.getDocsListFile());//new FileInputStream(properties.getDocsListFile());
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(inputStreamReader)
     ) {
@@ -54,7 +61,7 @@ public class DocOutputFilesParser {
   public List<DocMetadata> parseDocumentationMetadata() {
     List<DocMetadata> docMetadataList = new ArrayList<>();
     try (
-            InputStream fileInputStream = new FileInputStream(properties.getDocsMetadataFile());
+            InputStream fileInputStream = docFileRepository.getFile(properties.getDocsMetadataFile());
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(inputStreamReader)
     ) {

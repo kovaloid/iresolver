@@ -20,6 +20,7 @@ dependencies {
   testCompileOnly "org.junit.jupiter:junit-jupiter-params:$junitVersion"
 
   testCompile "org.mockito:mockito-core:3.3.3"
+  testCompile 'org.mockito:mockito-junit-jupiter:3.3.3'
 
   test {
     useJUnitPlatform()

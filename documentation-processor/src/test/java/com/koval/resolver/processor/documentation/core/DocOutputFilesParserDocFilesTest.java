@@ -2,39 +2,44 @@ package com.koval.resolver.processor.documentation.core;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.DocFile;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 //TODO: This and other DocOutputFilesParser test will test different classes after refactoring
+@ExtendWith(MockitoExtension.class)
 public class DocOutputFilesParserDocFilesTest {
+  private static final String FILE_NAME = "FILE_NAME";
+
   private static final DocFile DOC_FILE_1 = new DocFile(15, "filename1");
-  private static final String DOC_FILE_STRING_1 = "15 filename1\n";
+  private static final String DOC_FILE_STRING_1 = "15 filename1";
 
   private static final DocFile DOC_FILE_2 = new DocFile(26, "filename2");
   private static final String DOC_FILE_STRING_2 = "26 filename2";
 
-  private static final List<String> DOC_FILE_STRINGS = Arrays.asList(DOC_FILE_STRING_1, DOC_FILE_STRING_2);
+  private static final String BOTH_FILES_STRING = DOC_FILE_STRING_1 + "\n" + DOC_FILE_STRING_2;
 
-  @TempDir
-  File tempDirectory;
+  private static final String INVALID_STRING_ONLY_NUMBER = "5";
+  private static final String INVALID_STRING_ONLY_CHARS = "a\nb";
 
-  private File tempFile;
+  @Mock
+  private DocFileRepository mDocFileRepository;
 
   private DocOutputFilesParser mDocOutputFilesParser;
 
   @BeforeEach
   void onSetup() throws IOException {
-    initDocOutputFileParser(DOC_FILE_STRINGS);
+    initDocOutputFileParser(BOTH_FILES_STRING);
   }
 
   @Test
@@ -55,24 +60,25 @@ public class DocOutputFilesParserDocFilesTest {
   //TODO: make this test pass
   @Test
   void testParsingInvalidCharacterString() throws IOException {
-    initDocOutputFileParser(Arrays.asList("a", "b"));
+    initDocOutputFileParser(INVALID_STRING_ONLY_CHARS);
 
-    List<DocFile> actualDocFile = mDocOutputFilesParser.parseDocumentationFilesList();
+    mDocOutputFilesParser.parseDocumentationFilesList();
   }
 
   //TODO: make this test pass
   @Test
   void testParsingInvalidCharacterStringg() throws IOException {
-    initDocOutputFileParser(Arrays.asList("5"));
+    initDocOutputFileParser(INVALID_STRING_ONLY_NUMBER);
 
-    List<DocFile> actualDocFile = mDocOutputFilesParser.parseDocumentationFilesList();
+    mDocOutputFilesParser.parseDocumentationFilesList();
   }
 
-  private DocumentationProcessorConfiguration createProperties(List<String> metadataStrings) throws IOException {
-    final File tempFile = writeStringsToFile(metadataStrings);
+  private DocumentationProcessorConfiguration createProperties(String testString) throws IOException {
+    InputStream inputStream = new ByteArrayInputStream(testString.getBytes());
+    when(mDocFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
 
     DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
-    properties.setDocsListFile(tempFile.getPath());
+    properties.setDocsListFile(FILE_NAME);
 
     return properties;
   }
@@ -82,23 +88,12 @@ public class DocOutputFilesParserDocFilesTest {
     assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
   }
 
-  private File writeStringsToFile(List<String> metadataStrings) throws IOException {
-    for (String metadataString : metadataStrings) {
-      FileUtils.writeStringToFile(tempFile, metadataString, Charset.defaultCharset(), true);
-    }
+  private void initDocOutputFileParser(String testString) throws IOException {
+    DocumentationProcessorConfiguration properties = createProperties(testString);
 
-    return tempFile;
-  }
-
-  private void initDocOutputFileParser(List<String> docFileStrings) throws IOException {
-    if(tempFile != null) {
-      tempFile.delete();
-    }
-
-    tempFile = new File(tempDirectory, "tempFile.txt");
-
-    DocumentationProcessorConfiguration properties = createProperties(docFileStrings);
-
-    mDocOutputFilesParser = new DocOutputFilesParser(properties);
+    mDocOutputFilesParser = new DocOutputFilesParser(
+            properties,
+            mDocFileRepository
+    );
   }
 }
