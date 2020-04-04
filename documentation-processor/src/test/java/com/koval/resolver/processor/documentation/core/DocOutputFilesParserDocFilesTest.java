@@ -34,11 +34,7 @@ public class DocOutputFilesParserDocFilesTest {
 
   @BeforeEach
   void onSetup() throws IOException {
-    tempFile = new File(tempDirectory, "tempFile.txt");
-
-    DocumentationProcessorConfiguration properties = createProperties(DOC_FILE_STRINGS);
-
-    mDocOutputFilesParser = new DocOutputFilesParser(properties);
+    initDocOutputFileParser(DOC_FILE_STRINGS);
   }
 
   @Test
@@ -54,6 +50,22 @@ public class DocOutputFilesParserDocFilesTest {
 
     assertDocFilesEqual(DOC_FILE_1, docFiles.get(0));
     assertDocFilesEqual(DOC_FILE_2, docFiles.get(1));
+  }
+
+  //TODO: make this test pass
+  @Test
+  void testParsingInvalidCharacterString() throws IOException {
+    initDocOutputFileParser(Arrays.asList("a", "b"));
+
+    List<DocFile> actualDocFile = mDocOutputFilesParser.parseDocumentationFilesList();
+  }
+
+  //TODO: make this test pass
+  @Test
+  void testParsingInvalidCharacterStringg() throws IOException {
+    initDocOutputFileParser(Arrays.asList("5"));
+
+    List<DocFile> actualDocFile = mDocOutputFilesParser.parseDocumentationFilesList();
   }
 
   private DocumentationProcessorConfiguration createProperties(List<String> metadataStrings) throws IOException {
@@ -76,5 +88,17 @@ public class DocOutputFilesParserDocFilesTest {
     }
 
     return tempFile;
+  }
+
+  private void initDocOutputFileParser(List<String> docFileStrings) throws IOException {
+    if(tempFile != null) {
+      tempFile.delete();
+    }
+
+    tempFile = new File(tempDirectory, "tempFile.txt");
+
+    DocumentationProcessorConfiguration properties = createProperties(docFileStrings);
+
+    mDocOutputFilesParser = new DocOutputFilesParser(properties);
   }
 }

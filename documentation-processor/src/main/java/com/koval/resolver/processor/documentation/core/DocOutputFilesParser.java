@@ -11,12 +11,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 //TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
 //TODO: Refactor DocOutputFilesParser in order to test it without creating files
 public class DocOutputFilesParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocOutputFilesParser.class);
-  private static final String SPACE = " ";
+  private static final String DELIMITER = " ";
 
   private final DocumentationProcessorConfiguration properties;
 
@@ -43,7 +45,7 @@ public class DocOutputFilesParser {
   }
 
   private DocFile parseLineIntoDocFile(String line) {
-    String[] split = line.split(SPACE);
+    String[] split = line.split(DELIMITER);
     int fileIndex = Integer.parseInt(split[0]);
     String fileName = split[1];
     return new DocFile(fileIndex, fileName);
@@ -69,7 +71,7 @@ public class DocOutputFilesParser {
   }
 
   private DocMetadata parseLineIntoDocMetadata(String line) {
-    String[] split = line.split(SPACE);
+    String[] split = line.split(DELIMITER);
 
     String key = split[0];
     int fileIndex = Integer.parseInt(split[1]);
