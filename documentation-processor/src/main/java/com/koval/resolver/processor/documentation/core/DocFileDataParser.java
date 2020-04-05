@@ -30,6 +30,7 @@ public class DocFileDataParser {
 
   public List<DocFile> parseDocumentationFilesList() {
     List<DocFile> docFiles = new ArrayList<>();
+
     try (
             InputStream fileInputStream = docFileRepository.getFile(docFileDataFileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
@@ -43,6 +44,7 @@ public class DocFileDataParser {
     } catch (IOException e) {
       LOGGER.error("Could not read file: " + docFileDataFileName, e);
     }
+
     return docFiles;
   }
 

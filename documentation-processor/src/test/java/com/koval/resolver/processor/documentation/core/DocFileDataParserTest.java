@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 //TODO: This and other DocOutputFilesParser test will test different classes after refactoring
 @ExtendWith(MockitoExtension.class)
-public class DocOutputFilesParserDocFilesTest {
+public class DocFileDataParserTest {
   private static final String FILE_NAME = "FILE_NAME";
 
   private static final DocFile DOC_FILE_1 = new DocFile(15, "filename1");

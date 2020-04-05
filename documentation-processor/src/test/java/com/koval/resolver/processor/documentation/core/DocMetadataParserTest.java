@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 //TODO: This and other DocOutputFilesParser test will test different classes after refactoring
 @ExtendWith(MockitoExtension.class)
-class DocOutputFilesParserDocumentationTest {
+class DocMetadataParserTest {
   private static final DocMetadata DOC_METADATA_1 = new DocMetadata("key1", 14, 23);
   private static final String METADATA_STRING_1 = "key1 14 23\n";
 
@@ -77,6 +77,5 @@ class DocOutputFilesParserDocumentationTest {
     assertEquals(expectedMetaData.getFileIndex(), actualMetaData.getFileIndex());
     assertEquals(expectedMetaData.getPageNumber(), actualMetaData.getPageNumber());
   }
-
 
 }
