@@ -2,7 +2,7 @@ package com.koval.resolver.processor.documentation.core;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
-public class MetadataParser implements LineParser<DocMetadata> {
+public class MetadataLineParser implements LineParser<DocMetadata> {
   private static final String DELIMITER = " ";
 
   @Override
