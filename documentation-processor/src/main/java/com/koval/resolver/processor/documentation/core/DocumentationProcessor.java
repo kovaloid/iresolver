@@ -1,4 +1,4 @@
-package com.koval.resolver.processor.documentation;
+package com.koval.resolver.processor.documentation.core;
 
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
@@ -9,10 +9,9 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.processor.documentation.DocumentationProcessorDelegate;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
-import com.koval.resolver.processor.documentation.core.DocFileRepository;
-import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 public class DocumentationProcessor implements IssueProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessorDelegate.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
@@ -45,8 +43,9 @@ public class DocumentationProcessor implements IssueProcessor {
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
+
     Collection<String> similarDocKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-        NUMBER_OF_NEAREST_LABELS);
+            NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
     List<DocumentationResult> similarDocs = new ArrayList<>();
     DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
@@ -67,24 +66,25 @@ public class DocumentationProcessor implements IssueProcessor {
                         .orElse(new DocFile(0, "no_such_file"));
                 double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarDocKey);
                 return new DocumentationResult(
-                    docFile.getFileName(),
-                    getFileUri(docsPath, docFile.getFileName()),
-                    metadata.getPageNumber(),
-                    Math.abs(similarity * 100)
+                        docFile.getFileName(),
+                        getFileUri(docsPath, docFile.getFileName()),
+                        metadata.getPageNumber(),
+                        Math.abs(similarity * 100)
                 );
               })
               .ifPresent(similarDocs::add);
     });
+
     result.setDocumentationResults(similarDocs);
   }
 
   private String getFileUri(String path, String fileName) {
     return FileSystems.getDefault()
-        .getPath(path, fileName)
-        .toAbsolutePath()
-        .normalize()
-        .toUri()
-        .toString();
+            .getPath(path, fileName)
+            .toAbsolutePath()
+            .normalize()
+            .toUri()
+            .toString();
   }
 
 }
