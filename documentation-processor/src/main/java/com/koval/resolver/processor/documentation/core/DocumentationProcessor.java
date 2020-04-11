@@ -71,7 +71,9 @@ public class DocumentationProcessor implements IssueProcessor {
                         .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
                         .findFirst()
                         .orElse(new DocFile(0, "no_such_file"));
+
                 double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarDocKey);
+
                 return new DocumentationResult(
                         docFile.getFileName(),
                         getFileUri(docsPath, docFile.getFileName()),
