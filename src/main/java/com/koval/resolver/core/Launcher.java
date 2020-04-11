@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.koval.resolver.common.api.constant.ConnectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,6 @@ import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
-import com.koval.resolver.common.api.constant.ConnectorConstants;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
@@ -213,24 +213,27 @@ public final class Launcher {
   }
 
   private Connector getConnector(IssueClient issueClient) {
-    String connectorName = configuration.getAdministration().getConnector();
-    if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
-      return new JiraConnector(issueClient, configuration.getConnectors().getJira());
-    } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      return new BugzillaConnector(issueClient, configuration.getConnectors().getBugzilla());
-    } else {
-      throw new IResolverException("Could not get connector with name: " + connectorName);
+    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    switch (connectorType) {
+      case JIRA:
+        return new JiraConnector(issueClient, configuration.getConnectors().getJira());
+      case BUGZILLA:
+        return new BugzillaConnector(issueClient, configuration.getConnectors().getBugzilla());
+      default:
+        throw new IResolverException("Could not get connector with name: " + connectorType);
     }
   }
 
   private IssueClient getIssueClient() {
-    String connectorName = configuration.getAdministration().getConnector();
-    if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
-      return getJiraClientInstance();
-    } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      return getBugzillaClientInstance();
-    } else {
-      throw new IResolverException("Could not get issue client for connector with name: " + connectorName);
+    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    switch (connectorType) {
+      case JIRA:
+        return getJiraClientInstance();
+      case BUGZILLA:
+        return getBugzillaClientInstance();
+      default:
+        throw new IResolverException("Could not get issue client for connector with name: " + connectorType);
+
     }
   }
 

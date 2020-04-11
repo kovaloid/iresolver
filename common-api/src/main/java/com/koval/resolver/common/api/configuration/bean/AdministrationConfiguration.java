@@ -1,21 +1,23 @@
 package com.koval.resolver.common.api.configuration.bean;
 
+import com.koval.resolver.common.api.constant.ConnectorType;
+
 import java.util.List;
 
 
 public class AdministrationConfiguration {
 
-  private String connector;
+  private ConnectorType connectorType;
   private List<String> processors;
   private List<String> reporters;
   private boolean parallelExecution;
 
-  public String getConnector() {
-    return connector;
+  public ConnectorType getConnectorType() {
+    return connectorType;
   }
 
-  public void setConnector(String connector) {
-    this.connector = connector;
+  public void setConnectorType(ConnectorType connectorType) {
+    this.connectorType = connectorType;
   }
 
   public List<String> getProcessors() {
@@ -45,7 +47,7 @@ public class AdministrationConfiguration {
   @Override
   public String toString() {
     return "AdministrationConfiguration{"
-        + "connector='" + connector + '\''
+        + "connector='" + connectorType + '\''
         + ", processors=" + processors
         + ", reporters=" + reporters
         + ", parallelExecution=" + parallelExecution
