@@ -93,6 +93,8 @@ public class DocumentationProcessorTest {
     assertEquals(metadata.get(0).getPageNumber(), documentationResult.getPageNumber());
     //TODO: get rid of this implementation detail
     assertEquals(Math.abs(similarity * 100), documentationResult.getRank());
+
+    assertEquals(issue, result.getOriginalIssue());
   }
 
 }
