@@ -5,17 +5,14 @@ import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.processor.documentation.DocumentationProcessorDelegate;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
@@ -28,16 +25,29 @@ public class DocumentationProcessor implements IssueProcessor {
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
-  private final TextDataExtractor textDataExtractor = new TextDataExtractor();
+  private final TextDataExtractor textDataExtractor;// = new TextDataExtractor();
   private final String docsPath;
-  private final DocumentationProcessorConfiguration processorConfiguration;
+//  private final DocumentationProcessorConfiguration processorConfiguration;
 
-  public DocumentationProcessor(Configuration properties) throws IOException {
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(properties.getProcessors().getDocumentation().getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
-    this.docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
-    this.processorConfiguration = properties.getProcessors().getDocumentation();
+  private final DocOutputFilesParser docOutputFilesParser;
+
+  public DocumentationProcessor(
+          Configuration properties,
+          DocOutputFilesParser docOutputFilesParser,
+          VectorModel vectorModel,
+          TextDataExtractor textDataExtractor,
+          String docsPath
+  ) throws IOException {
+//    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+//    File vectorModelFile = new File(properties.getProcessors().getDocumentation().getVectorModelFile());
+//    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
+//    this.docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
+//    this.processorConfiguration = properties.getProcessors().getDocumentation();
+
+    this.docOutputFilesParser = docOutputFilesParser;
+    this.vectorModel = vectorModel;
+    this.textDataExtractor = textDataExtractor;
+    this.docsPath = docsPath;
   }
 
   @Override
@@ -48,10 +58,7 @@ public class DocumentationProcessor implements IssueProcessor {
             NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
     List<DocumentationResult> similarDocs = new ArrayList<>();
-    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
-            processorConfiguration,
-            new DocFileRepository()
-    );
+
     List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
     List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 
