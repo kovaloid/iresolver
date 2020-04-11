@@ -1,15 +1,5 @@
 package com.koval.resolver.processor.documentation;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
@@ -21,7 +11,17 @@ import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
+import com.koval.resolver.processor.documentation.core.DocFileRepository;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class DocumentationProcessor implements IssueProcessor {
@@ -49,7 +49,10 @@ public class DocumentationProcessor implements IssueProcessor {
         NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
     List<DocumentationResult> similarDocs = new ArrayList<>();
-    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(processorConfiguration);
+    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
+            processorConfiguration,
+            new DocFileRepository()
+    );
     List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
     List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 
