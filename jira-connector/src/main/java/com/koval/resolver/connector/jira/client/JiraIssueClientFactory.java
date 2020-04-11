@@ -26,10 +26,10 @@ public class JiraIssueClientFactory implements IssueClientFactory {
 
   public JiraIssueClientFactory(JiraConnectorConfiguration connectorConfiguration) {
     host = connectorConfiguration.getUrl();
-    if (!connectorConfiguration.isAnonymous()) {
-      credentials = Credentials.getCredentials(connectorConfiguration.getCredentialsFolder());
-    } else {
+    if (connectorConfiguration.isAnonymous()) {
       credentials = null;
+    } else {
+      credentials = Credentials.getCredentials(connectorConfiguration.getCredentialsFolder());
     }
   }
 
