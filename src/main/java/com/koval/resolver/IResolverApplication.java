@@ -17,6 +17,8 @@ public final class IResolverApplication {
 
   private static final String CREATE_ISSUES_DATA_SET = "create-issues-data-set";
   private static final String CREATE_ISSUES_VECTOR_MODEL = "create-issues-vector-model";
+  private static final String CREATE_GRANULAR_ISSUES_DATA_SETS = "create-granular-issues-data-sets";
+  private static final String CREATE_GRANULAR_ISSUES_VECTOR_MODELS = "create-granular-issues-vector-models";
   private static final String CREATE_DOCUMENTATION_DATA_SET = "create-documentation-data-set";
   private static final String CREATE_DOCUMENTATION_VECTOR_MODEL = "create-documentation-vector-model";
   private static final String CREATE_CONFLUENCE_DATA_SET = "create-confluence-data-set";
@@ -27,6 +29,8 @@ public final class IResolverApplication {
   private static final String HELP_TIP = "Please use the following commands: \n"
       + CREATE_ISSUES_DATA_SET + ", "
       + CREATE_ISSUES_VECTOR_MODEL + ", "
+      + CREATE_GRANULAR_ISSUES_DATA_SETS + ", "
+      + CREATE_GRANULAR_ISSUES_VECTOR_MODELS + ", "
       + CREATE_DOCUMENTATION_DATA_SET + ", "
       + CREATE_DOCUMENTATION_VECTOR_MODEL + ", "
       + CREATE_CONFLUENCE_DATA_SET + ", "
@@ -54,6 +58,14 @@ public final class IResolverApplication {
         case CREATE_ISSUES_VECTOR_MODEL:
           LOGGER.info("Start creating issues vector model.");
           launcher.createIssuesVectorModel();
+          break;
+        case CREATE_GRANULAR_ISSUES_DATA_SETS:
+          LOGGER.info("Start creating granular issues data sets.");
+          launcher.createGranularIssuesDataSets();
+          break;
+        case CREATE_GRANULAR_ISSUES_VECTOR_MODELS:
+          LOGGER.info("Start creating granular issues vector models.");
+          launcher.createGranularIssuesVectorModels();
           break;
         case CREATE_DOCUMENTATION_DATA_SET:
           LOGGER.info("Start creating documentation data set.");

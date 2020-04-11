@@ -16,16 +16,16 @@ import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcess
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 
 
-public class DataSetCreator {
+public class IssuesDataSetCreator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DataSetCreator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesDataSetCreator.class);
   private static final String SEPARATOR = " | ";
 
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final IssueReceiver receiver;
   private final IssuesProcessorConfiguration properties;
 
-  public DataSetCreator(IssueReceiver receiver, IssuesProcessorConfiguration properties) {
+  public IssuesDataSetCreator(IssueReceiver receiver, IssuesProcessorConfiguration properties) {
     this.receiver = receiver;
     this.properties = properties;
   }

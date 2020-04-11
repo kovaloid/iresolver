@@ -25,6 +25,7 @@ import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
+import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
@@ -43,7 +44,9 @@ import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.resolver.processor.issues.IssuesProcessor;
-import com.koval.resolver.processor.issues.core.DataSetCreator;
+import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
+import com.koval.resolver.processor.issues.granular.GranularIssuesProcessor;
+import com.koval.resolver.processor.issues.granular.core.GranularIssuesDataSetsCreator;
 import com.koval.resolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
@@ -65,7 +68,7 @@ public final class Launcher {
     try (IssueClient issueClient = getIssueClient()) {
       Connector connector = getConnector(issueClient);
       IssueReceiver receiver = connector.getResolvedIssuesReceiver();
-      DataSetCreator dataSetCreator = new DataSetCreator(receiver, configuration.getProcessors().getIssues());
+      IssuesDataSetCreator dataSetCreator = new IssuesDataSetCreator(receiver, configuration.getProcessors().getIssues());
       dataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create data set file.", e);
@@ -76,6 +79,36 @@ public final class Launcher {
     String dataSetFile = configuration.getProcessors().getIssues().getDataSetFile();
     String vectorModelFile = configuration.getProcessors().getIssues().getVectorModelFile();
     createVectorModel(dataSetFile, vectorModelFile, "Could not create issues vector model file.");
+  }
+
+  public void createGranularIssuesDataSets() {
+    try (IssueClient issueClient = getIssueClient()) {
+      Connector connector = getConnector(issueClient);
+      IssueReceiver receiver = connector.getResolvedIssuesReceiver();
+      GranularIssuesDataSetsCreator dataSetCreator = new GranularIssuesDataSetsCreator(receiver, configuration.getProcessors().getGranularIssues());
+      dataSetCreator.create();
+    } catch (IOException e) {
+      LOGGER.error("Could not create data set files.", e);
+    }
+  }
+
+  public void createGranularIssuesVectorModels() {
+    List<String> affectedIssueParts = configuration.getProcessors().getGranularIssues().getAffectedIssueParts();
+    if (affectedIssueParts.contains(IssueParts.SUMMARY)) {
+      String dataSetFile = configuration.getProcessors().getGranularIssues().getSummaryDataSetFile();
+      String vectorModelFile = configuration.getProcessors().getGranularIssues().getSummaryVectorModelFile();
+      createVectorModel(dataSetFile, vectorModelFile, "Could not create summary granular issues vector model file.");
+    }
+    if (affectedIssueParts.contains(IssueParts.DESCRIPTION)) {
+      String dataSetFile = configuration.getProcessors().getGranularIssues().getDescriptionDataSetFile();
+      String vectorModelFile = configuration.getProcessors().getGranularIssues().getDescriptionVectorModelFile();
+      createVectorModel(dataSetFile, vectorModelFile, "Could not create description granular issues vector model file.");
+    }
+    if (affectedIssueParts.contains(IssueParts.COMMENTS)) {
+      String dataSetFile = configuration.getProcessors().getGranularIssues().getCommentsDataSetFile();
+      String vectorModelFile = configuration.getProcessors().getGranularIssues().getCommentsVectorModelFile();
+      createVectorModel(dataSetFile, vectorModelFile, "Could not create comments granular issues vector model file.");
+    }
   }
 
   public void createDocumentationDataSet() {
@@ -156,6 +189,9 @@ public final class Launcher {
     if (processorNames.contains(ProcessorConstants.ISSUES)) {
       issueProcessors.add(new IssuesProcessor(issueClient, configuration));
     }
+    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES)) {
+      issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
+    }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
       issueProcessors.add(new DocumentationProcessor(configuration));
     }
@@ -233,7 +269,6 @@ public final class Launcher {
         return getBugzillaClientInstance();
       default:
         throw new IResolverException("Could not get issue client for connector with name: " + connectorType);
-
     }
   }
 
