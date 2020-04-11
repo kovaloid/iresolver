@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.koval.resolver.common.api.component.connector.IssueClientFactory;
+import com.koval.resolver.common.api.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.ProcessExecutor;
 import com.koval.resolver.common.api.auth.Credentials;
-import com.koval.resolver.common.api.auth.CredentialsKeeper;
-import com.koval.resolver.common.api.auth.CredentialsProtector;
 import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
 import com.koval.resolver.common.api.bean.issue.IssueField;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
@@ -51,7 +51,6 @@ import com.koval.resolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
-import com.koval.resolver.util.CommandLineUtil;
 
 
 public final class Launcher {
@@ -261,61 +260,19 @@ public final class Launcher {
 
   private IssueClient getIssueClient() {
     String connectorName = configuration.getAdministration().getConnector();
+    IssueClientFactory clientFactory;
     if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
-      return getJiraClientInstance();
+      clientFactory = new JiraIssueClientFactory(configuration.getConnectors().getJira());
     } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      return getBugzillaClientInstance();
+      clientFactory = new BugzillaIssueClientFactory(configuration.getConnectors().getBugzilla());
     } else {
       throw new IResolverException("Could not get issue client for connector with name: " + connectorName);
     }
-  }
 
-  private IssueClient getJiraClientInstance() {
-    JiraConnectorConfiguration connectorConfiguration = configuration.getConnectors().getJira();
-    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
-    IssueClient jiraClient;
     try {
-      if (connectorConfiguration.isAnonymous()) {
-        jiraClient = jiraIssueClientFactory.getAnonymousClient(connectorConfiguration.getUrl());
-      } else {
-        Credentials credentials = getCredentials(connectorConfiguration.getCredentialsFolder());
-        jiraClient = jiraIssueClientFactory.getBasicClient(connectorConfiguration.getUrl(), credentials);
-      }
-    } catch (JiraConnectorException e) {
-      throw new IResolverException("Could not initialize Jira client.", e);
+      return clientFactory.getClient();
+    } catch (ConnectorException e) {
+      throw new IResolverException("Could not initialize client.", e);
     }
-    return jiraClient;
-  }
-
-  private IssueClient getBugzillaClientInstance() {
-    BugzillaConnectorConfiguration connectorConfiguration = configuration.getConnectors().getBugzilla();
-    BugzillaIssueClientFactory bugzillaIssueClientFactory = new BugzillaIssueClientFactory();
-    IssueClient bugzillaClient;
-    try {
-      if (connectorConfiguration.isAnonymous()) {
-        bugzillaClient = bugzillaIssueClientFactory.getAnonymousClient(connectorConfiguration.getUrl());
-      } else {
-        Credentials credentials = getCredentials(connectorConfiguration.getCredentialsFolder());
-        bugzillaClient = bugzillaIssueClientFactory.getBasicClient(connectorConfiguration.getUrl(), credentials);
-      }
-    } catch (BugzillaConnectorException e) {
-      throw new IResolverException("Could not initialize Bugzilla client.", e);
-    }
-    return bugzillaClient;
-  }
-
-  private Credentials getCredentials(String credentialsFolder) {
-    CredentialsProtector protector = new CredentialsProtector();
-    CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
-    Credentials credentials;
-    if (keeper.isStored()) {
-      credentials = keeper.load();
-    } else {
-      String username = CommandLineUtil.getUsername();
-      String password = CommandLineUtil.getPassword();
-      credentials = new Credentials(username, password);
-      keeper.store(credentials);
-    }
-    return credentials;
   }
 }
