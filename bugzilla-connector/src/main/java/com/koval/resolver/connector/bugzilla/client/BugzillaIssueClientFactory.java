@@ -1,20 +1,22 @@
 package com.koval.resolver.connector.bugzilla.client;
 
-import b4j.core.DefaultIssue;
-import b4j.core.session.BugzillaHttpSession;
-import b4j.util.HttpSessionParams;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
 import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.connector.bugzilla.exception.BugzillaConnectorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import b4j.core.DefaultIssue;
+import b4j.core.session.BugzillaHttpSession;
+import b4j.util.HttpSessionParams;
 import rs.baselib.security.AuthorizationCallback;
 import rs.baselib.security.SimpleAuthorizationCallback;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 public class BugzillaIssueClientFactory implements IssueClientFactory {

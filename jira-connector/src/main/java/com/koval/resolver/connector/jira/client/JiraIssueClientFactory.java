@@ -3,7 +3,6 @@ package com.koval.resolver.connector.jira.client;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,7 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
+import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
 import com.koval.resolver.connector.jira.exception.JiraConnectorException;
 
 
