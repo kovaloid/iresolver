@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koval.resolver.common.api.constant.ConnectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +24,7 @@ import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
+import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;

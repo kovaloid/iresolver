@@ -1,8 +1,8 @@
 package com.koval.resolver.common.api.configuration.bean;
 
-import com.koval.resolver.common.api.constant.ConnectorType;
-
 import java.util.List;
+
+import com.koval.resolver.common.api.constant.ConnectorType;
 
 
 public class AdministrationConfiguration {
