@@ -37,7 +37,8 @@ public final class AttachmentTypeUtil {
 
   public static String getExtension(Attachment attachment) {
     String fileName = attachment.getFileName();
-    return fileName.substring(fileName.lastIndexOf('.'));
+    int dotIndex = fileName.lastIndexOf('.');
+    return dotIndex > 0 ? fileName.substring(dotIndex) : "";
   }
 
   public static List<String> getExtensions(List<Attachment> attachments) {
