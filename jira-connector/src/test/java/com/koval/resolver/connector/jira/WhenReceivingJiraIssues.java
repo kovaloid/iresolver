@@ -29,6 +29,6 @@ public class WhenReceivingJiraIssues {
 
   @Test
   public void shouldGetResolvedIssues() {
-    assertTrue("Receiver has next Issue",receiver.hasNextIssues());
+    assertTrue("Receiver has next Issue", receiver.hasNextIssues());
   }
 }
