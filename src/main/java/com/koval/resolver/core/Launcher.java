@@ -1,17 +1,6 @@
 package com.koval.resolver.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.koval.resolver.common.api.ProcessExecutor;
-import com.koval.resolver.common.api.auth.Credentials;
-import com.koval.resolver.common.api.auth.CredentialsKeeper;
-import com.koval.resolver.common.api.auth.CredentialsProtector;
 import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
 import com.koval.resolver.common.api.bean.issue.IssueField;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
@@ -33,11 +22,9 @@ import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
-import com.koval.resolver.connector.bugzilla.exception.BugzillaConnectorException;
 import com.koval.resolver.connector.confluence.ConfluenceConnector;
 import com.koval.resolver.connector.jira.JiraConnector;
 import com.koval.resolver.connector.jira.client.JiraIssueClientFactory;
-import com.koval.resolver.connector.jira.exception.JiraConnectorException;
 import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
@@ -51,7 +38,13 @@ import com.koval.resolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
-import com.koval.resolver.util.CommandLineUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class Launcher {
