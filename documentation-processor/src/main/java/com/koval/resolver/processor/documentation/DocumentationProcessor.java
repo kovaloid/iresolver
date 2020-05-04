@@ -2,86 +2,46 @@ package com.koval.resolver.processor.documentation;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
-import com.koval.resolver.processor.documentation.bean.DocFile;
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
+import com.koval.resolver.processor.documentation.core.DocFileRepository;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
+import com.koval.resolver.processor.documentation.core.DocumentationProcessorDelegate;
 
 
 public class DocumentationProcessor implements IssueProcessor {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessor.class);
-  private static final int NUMBER_OF_NEAREST_LABELS = 10;
-
-  private final VectorModel vectorModel;
-  private final TextDataExtractor textDataExtractor = new TextDataExtractor();
-  private final String docsPath;
-  private final DocumentationProcessorConfiguration processorConfiguration;
+  private DocumentationProcessorDelegate mDocumentationProcessorDelegate;
 
   public DocumentationProcessor(Configuration properties) throws IOException {
+    DocFileRepository docFileRepository = new DocFileRepository();
+    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
+            properties.getProcessors().getDocumentation(),
+            docFileRepository
+    );
+
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     File vectorModelFile = new File(properties.getProcessors().getDocumentation().getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
-    this.docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
-    this.processorConfiguration = properties.getProcessors().getDocumentation();
+    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
+    String docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
+    TextDataExtractor textDataExtractor = new TextDataExtractor();
+
+    mDocumentationProcessorDelegate = new DocumentationProcessorDelegate(
+            properties,
+            docOutputFilesParser,
+            vectorModel,
+            textDataExtractor,
+            docsPath
+    );
   }
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
-    setOriginalIssueToResults(issue, result);
-    Collection<String> similarDocKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-        NUMBER_OF_NEAREST_LABELS);
-    LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
-    List<DocumentationResult> similarDocs = new ArrayList<>();
-    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(processorConfiguration);
-    List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
-    List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
-
-    similarDocKeys.forEach((String similarDocKey) -> {
-      docMetadata.stream()
-              .filter((DocMetadata metadata) -> metadata.getKey().equals(similarDocKey))
-              .findFirst()
-              .map((DocMetadata metadata) -> {
-                DocFile docFile = docFiles.stream()
-                        .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
-                        .findFirst()
-                        .orElse(new DocFile(0, "no_such_file"));
-                double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarDocKey);
-                return new DocumentationResult(
-                    docFile.getFileName(),
-                    getFileUri(docsPath, docFile.getFileName()),
-                    metadata.getPageNumber(),
-                    Math.abs(similarity * 100)
-                );
-              })
-              .ifPresent(similarDocs::add);
-    });
-    result.setDocumentationResults(similarDocs);
+    mDocumentationProcessorDelegate.run(issue, result);
   }
-
-  private String getFileUri(String path, String fileName) {
-    return FileSystems.getDefault()
-        .getPath(path, fileName)
-        .toAbsolutePath()
-        .normalize()
-        .toUri()
-        .toString();
-  }
-
 }

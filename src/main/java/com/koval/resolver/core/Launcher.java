@@ -47,7 +47,6 @@ import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
 
-
 public final class Launcher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
