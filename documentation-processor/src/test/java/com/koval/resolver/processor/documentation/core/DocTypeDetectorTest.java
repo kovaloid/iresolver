@@ -22,11 +22,11 @@ class DocTypeDetectorTest {
   private static final String DOCX_EXTENSION = "docx";
   private static final String UNKNOWN_EXTENSION = "zzzz";
 
-  private DocTypeDetector mDocTypeDetector;
+  private DocTypeDetector docTypeDetector;
 
   @BeforeEach
   void onSetup() {
-    mDocTypeDetector = new DocTypeDetector();
+    docTypeDetector = new DocTypeDetector();
   }
 
   @ParameterizedTest
@@ -40,7 +40,7 @@ class DocTypeDetectorTest {
   private MediaType detectType(String fileExtension) {
     String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
 
-    return mDocTypeDetector.detectType(fileName);
+    return docTypeDetector.detectType(fileName);
   }
 
   static Stream<Arguments> createFileExtensionsAndExpectedMediaTypes() {

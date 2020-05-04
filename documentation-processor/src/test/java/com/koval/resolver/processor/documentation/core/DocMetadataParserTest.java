@@ -32,33 +32,33 @@ class DocMetadataParserTest {
   private static final String FILE_NAME = "tempFile.txt";
 
   @Mock
-  DocFileRepository mDocFileRepository;
+  private DocFileRepository docFileRepository;
 
-  private DocMetadataParser mDocMetadataParser;
+  private DocMetadataParser docMetadataParser;
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
     MockitoAnnotations.initMocks(this);
 
     InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
-    when(mDocFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
+    when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
 
-    mDocMetadataParser = new DocMetadataParser(
+    docMetadataParser = new DocMetadataParser(
             FILE_NAME,
-            mDocFileRepository
+            docFileRepository
     );
   }
 
   @Test
   void testParsingOneLineDocMeta() {
-    DocMetadata actualMetaData = mDocMetadataParser.parseDocumentationMetadata().get(0);
+    DocMetadata actualMetaData = docMetadataParser.parseDocumentationMetadata().get(0);
 
     assertMetadataEqual(DOC_METADATA_1, actualMetaData);
   }
 
   @Test
   void testParsingMultipleDocMeta() {
-    List<DocMetadata> metadataList = mDocMetadataParser.parseDocumentationMetadata();
+    List<DocMetadata> metadataList = docMetadataParser.parseDocumentationMetadata();
 
     assertMetadataEqual(DOC_METADATA_1, metadataList.get(0));
     assertMetadataEqual(DOC_METADATA_2, metadataList.get(1));

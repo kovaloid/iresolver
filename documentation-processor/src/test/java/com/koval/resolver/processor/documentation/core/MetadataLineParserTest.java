@@ -18,33 +18,33 @@ public class MetadataLineParserTest {
   private static final String INVALID_STRING_FILE_INDEX_NOT_NUMBER = "a b";
   private static final String INVALID_STRING_PAGE_NUMBER_NOT_NUMBER = "a 5 c";
 
-  private MetadataLineParser mMetadataLineParser;
+  private MetadataLineParser metadataLineParser;
 
   @BeforeEach
   void onSetup() {
-    mMetadataLineParser = new MetadataLineParser(DELIMITER);
+    metadataLineParser = new MetadataLineParser(DELIMITER);
   }
 
   @Test
   void testParseValidString() {
-    DocMetadata actualMetaData = mMetadataLineParser.parseLine(METADATA_STRING);
+    DocMetadata actualMetaData = metadataLineParser.parseLine(METADATA_STRING);
 
     assertMetadataEqual(EXPECTED_METADATA, actualMetaData);
   }
 
   @Test
   void testParsingInvalidStringOnlyKey() {
-    mMetadataLineParser.parseLine(INVALID_STRING_ONLY_KEY);
+    metadataLineParser.parseLine(INVALID_STRING_ONLY_KEY);
   }
 
   @Test
   void testParsingInvalidStringFileIndexNotNumber() {
-    mMetadataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);
+    metadataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);
   }
 
   @Test
   void testParsingInvalidStringPageNumberNotNumber() {
-    mMetadataLineParser.parseLine(INVALID_STRING_PAGE_NUMBER_NOT_NUMBER);
+    metadataLineParser.parseLine(INVALID_STRING_PAGE_NUMBER_NOT_NUMBER);
   }
 
   private static String constructTestString(DocMetadata docMetadata) {
