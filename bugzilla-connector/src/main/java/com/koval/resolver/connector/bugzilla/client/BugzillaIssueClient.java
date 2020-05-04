@@ -34,7 +34,7 @@ public class BugzillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(String query) {
-    return 1000000;
+    return 1_000_000;
   }
 
   @Override
