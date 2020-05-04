@@ -1,6 +1,7 @@
 package com.koval.resolver.common.api.auth;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,13 +44,16 @@ public class CredentialsKeeper {
         throw new CredentialException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
       }
     }
-    try (PrintWriter fileWriter = new PrintWriter(credentialsFile, charset.name())) {
-      fileWriter.println(protector.encrypt(credentials.getUsername()));
-      fileWriter.println(protector.encrypt(credentials.getPassword()));
+    try (PrintWriter printWriter = new PrintWriter(credentialsFile, charset.name());
+            BufferedWriter fileWriter = new BufferedWriter(printWriter)) {
+      fileWriter.write(protector.encrypt(credentials.getUsername()));
+      fileWriter.write(protector.encrypt(credentials.getPassword()));
     } catch (FileNotFoundException e) {
       throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
     } catch (UnsupportedEncodingException e) {
       throw new CredentialException("Charset " + charset.name() + " does not supported.", e);
+    } catch (IOException e) {
+      throw new CredentialException("Could not write credentials to file " + credentialsFile.getAbsolutePath(), e);
     }
   }
 
