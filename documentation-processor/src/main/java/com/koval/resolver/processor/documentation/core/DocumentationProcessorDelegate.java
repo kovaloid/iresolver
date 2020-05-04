@@ -1,5 +1,14 @@
 package com.koval.resolver.processor.documentation.core;
 
+import java.nio.file.FileSystems;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
@@ -10,14 +19,6 @@ import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.file.FileSystems;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class DocumentationProcessorDelegate implements IssueProcessor {
 

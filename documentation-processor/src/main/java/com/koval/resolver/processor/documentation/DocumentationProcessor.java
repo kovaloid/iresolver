@@ -1,5 +1,8 @@
 package com.koval.resolver.processor.documentation;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
@@ -10,9 +13,6 @@ import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.processor.documentation.core.DocFileRepository;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
 import com.koval.resolver.processor.documentation.core.DocumentationProcessorDelegate;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class DocumentationProcessor implements IssueProcessor {

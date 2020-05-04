@@ -1,5 +1,13 @@
 package com.koval.resolver.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.ProcessExecutor;
 import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
 import com.koval.resolver.common.api.bean.issue.IssueField;
@@ -38,13 +46,6 @@ import com.koval.resolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Launcher {
 

@@ -1,10 +1,10 @@
 package com.koval.resolver.processor.documentation.core;
 
+import java.util.List;
+
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
-
-import java.util.List;
 
 //TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
 public class DocOutputFilesParser {
