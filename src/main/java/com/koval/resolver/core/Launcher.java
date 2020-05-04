@@ -1,13 +1,5 @@
 package com.koval.resolver.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.koval.resolver.common.api.ProcessExecutor;
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.auth.CredentialsKeeper;
@@ -52,6 +44,13 @@ import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
 import com.koval.resolver.util.CommandLineUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class Launcher {
@@ -193,6 +192,7 @@ public final class Launcher {
       issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
+
       issueProcessors.add(new DocumentationProcessor(configuration));
     }
     if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
