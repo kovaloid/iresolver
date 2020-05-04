@@ -27,15 +27,20 @@ public class DocDataSetCreator {
   private final PageSplitter pageSplitter = new PdfPageSplitter();
   private final FileConverter fileConverter;
 
+  private final String docsFolderPath;
+
   private final DocumentationProcessorConfiguration properties;
 
   public DocDataSetCreator(
           DocumentationProcessorConfiguration properties,
           DocTypeDetector docTypeDetector,
-          FileConverter fileConverter
+          FileConverter fileConverter,
+          String docsFolderPath
   ) {
     this.docTypeDetector = docTypeDetector;
     this.fileConverter = fileConverter;
+
+    this.docsFolderPath = docsFolderPath;
 
     this.properties = properties;
   }
@@ -104,7 +109,7 @@ public class DocDataSetCreator {
   }
 
   public void convertWordFilesToPdf() {
-    File docsFolder = new File(properties.getDocsFolder());
+    File docsFolder = new File(docsFolderPath);
     File[] docFiles = docsFolder.listFiles();
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");

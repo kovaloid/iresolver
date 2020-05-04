@@ -9,7 +9,11 @@ import org.apache.commons.io.FileUtils;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 
-public class ConfigurationPropertiesCreator {
+public final class ConfigurationPropertiesCreator {
+
+  private ConfigurationPropertiesCreator() {
+
+  }
 
   public static DocumentationProcessorConfiguration createProperties(
           List<String> metadataStrings,
