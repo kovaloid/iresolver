@@ -1,10 +1,12 @@
 package com.koval.resolver.processor.documentation.core;
 
-import com.koval.resolver.processor.documentation.bean.DocFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.koval.resolver.processor.documentation.bean.DocFile;
+
 
 //TODO: make tests of handling invalid strings pass
 public class DocDataLineParserTest {
