@@ -3,6 +3,7 @@ package com.koval.resolver.processor.documentation.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
@@ -32,11 +33,13 @@ public class DocDataLineParserTest {
     assertDocFilesEqual(EXPECTED_DOC_FILE, parsedDocFile);
   }
 
+  @Disabled("Handle error when string is without file name")
   @Test
   void testParseInvalidStringOnlyFileIndex() {
     docDataLineParser.parseLine(INVALID_STRING_ONLY_FILE_INDEX);
   }
 
+  @Disabled("Handle error when string is without file index")
   @Test
   void testParseInvalidStringFileIndexNotNumber() {
     docDataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);

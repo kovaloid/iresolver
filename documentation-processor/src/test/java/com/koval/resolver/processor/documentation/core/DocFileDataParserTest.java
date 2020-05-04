@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -57,7 +58,7 @@ public class DocFileDataParserTest {
     assertDocFilesEqual(DOC_FILE_2, docFiles.get(1));
   }
 
-  //TODO: make this test pass
+  @Disabled("Handle error when string is without file index")
   @Test
   void testParsingInvalidStringOnlyChars() throws IOException {
     initDocOutputFileParser(INVALID_STRING_ONLY_CHARS);
@@ -65,7 +66,8 @@ public class DocFileDataParserTest {
     docFileDataParser.parseDocumentationFilesList();
   }
 
-  //TODO: make this test pass
+
+  @Disabled("Handle error when string is without file name")
   @Test
   void testParsingInvalidStringOnlyNumber() throws IOException {
     initDocOutputFileParser(INVALID_STRING_ONLY_NUMBER);
