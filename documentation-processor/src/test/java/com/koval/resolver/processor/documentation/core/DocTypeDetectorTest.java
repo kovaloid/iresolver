@@ -1,15 +1,16 @@
 package com.koval.resolver.processor.documentation.core;
 
-import com.koval.resolver.processor.documentation.bean.MediaType;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import com.koval.resolver.processor.documentation.bean.MediaType;
 
 class DocTypeDetectorTest {
 
@@ -21,11 +22,11 @@ class DocTypeDetectorTest {
   private static final String DOCX_EXTENSION = "docx";
   private static final String UNKNOWN_EXTENSION = "zzzz";
 
-  private DocTypeDetector mDocTypeDetector;
+  private DocTypeDetector docTypeDetector;
 
   @BeforeEach
   void onSetup() {
-    mDocTypeDetector = new DocTypeDetector();
+    docTypeDetector = new DocTypeDetector();
   }
 
   @ParameterizedTest
@@ -39,7 +40,7 @@ class DocTypeDetectorTest {
   private MediaType detectType(String fileExtension) {
     String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
 
-    return mDocTypeDetector.detectType(fileName);
+    return docTypeDetector.detectType(fileName);
   }
 
   static Stream<Arguments> createFileExtensionsAndExpectedMediaTypes() {

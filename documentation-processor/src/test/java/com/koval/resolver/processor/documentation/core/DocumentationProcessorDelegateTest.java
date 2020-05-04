@@ -1,20 +1,5 @@
 package com.koval.resolver.processor.documentation.core;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.DocumentationResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.processor.documentation.bean.DocFile;
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,56 +8,72 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.bean.result.DocumentationResult;
+import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.configuration.Configuration;
+import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
+import com.koval.resolver.common.api.doc2vec.VectorModel;
+import com.koval.resolver.processor.documentation.bean.DocFile;
+import com.koval.resolver.processor.documentation.bean.DocMetadata;
+
 @ExtendWith(MockitoExtension.class)
 public class DocumentationProcessorDelegateTest {
-  private String docsPath = "docsPath";
+  private static final String DOCS_PATH = "docsPath";
 
-  private String extractedText = "asdfasdfsadf";
+  private static final String EXTRACTED_TEXT = "asdfasdfsadf";
 
-  private List<String> nearestLabels = Arrays.asList("a");
+  private static final List<String> NEAREST_LABELS = Arrays.asList("a");
 
-  private List<DocMetadata> metadata = Arrays.asList(
+  private static final List<DocMetadata> DOC_METADATA = Arrays.asList(
           new DocMetadata("a", 1, 5)
   );
 
-  private List<DocFile> docFiles = Arrays.asList(
+  private static final List<DocFile> DOC_FILES = Arrays.asList(
           new DocFile(1, "filename")
   );
 
-  private double similarity = 0.5;
+  private static final double SIMILARITY = 0.5;
 
   @Mock
-  DocOutputFilesParser mDocOutputFilesParser;
+  private DocOutputFilesParser docOutputFilesParser;
 
   @Mock
-  VectorModel mVectorModel;
+  private VectorModel vectorModel;
 
   @Mock
-  TextDataExtractor mTextDataExtractor;
+  private TextDataExtractor textDataExtractor;
 
-  private DocumentationProcessorDelegate mDocumentationProcessorDelegate;
+  private DocumentationProcessorDelegate documentationProcessorDelegate;
 
   @BeforeEach
   void onSetup() throws IOException {
     MockitoAnnotations.initMocks(this);
 
     Configuration configuration = new Configuration();
-    mDocumentationProcessorDelegate = new DocumentationProcessorDelegate(
+    documentationProcessorDelegate = new DocumentationProcessorDelegate(
             configuration,
-            mDocOutputFilesParser,
-            mVectorModel,
-            mTextDataExtractor,
-            docsPath
+            docOutputFilesParser,
+            vectorModel,
+            textDataExtractor,
+            DOCS_PATH
     );
 
-    when(mTextDataExtractor.extract(any(Issue.class))).thenReturn(extractedText);
+    when(textDataExtractor.extract(any(Issue.class))).thenReturn(EXTRACTED_TEXT);
 
-    when(mVectorModel.getNearestLabels(anyString(), anyInt())).thenReturn(nearestLabels);
+    when(vectorModel.getNearestLabels(anyString(), anyInt())).thenReturn(NEAREST_LABELS);
 
-    when(mDocOutputFilesParser.parseDocumentationMetadata()).thenReturn(metadata);
-    when(mDocOutputFilesParser.parseDocumentationFilesList()).thenReturn(docFiles);
+    when(docOutputFilesParser.parseDocumentationMetadata()).thenReturn(DOC_METADATA);
+    when(docOutputFilesParser.parseDocumentationFilesList()).thenReturn(DOC_FILES);
 
-    when(mVectorModel.similarityToLabel(anyString(), anyString())).thenReturn(similarity);
+    when(vectorModel.similarityToLabel(anyString(), anyString())).thenReturn(SIMILARITY);
   }
 
   @Test
@@ -80,7 +81,7 @@ public class DocumentationProcessorDelegateTest {
     Issue issue = new Issue();
     IssueAnalysingResult result = new IssueAnalysingResult();
 
-    mDocumentationProcessorDelegate.run(
+    documentationProcessorDelegate.run(
             issue,
             result
     );
@@ -89,10 +90,10 @@ public class DocumentationProcessorDelegateTest {
 
     DocumentationResult documentationResult = documentationResults.get(0);
 
-    assertEquals(docFiles.get(0).getFileName(), documentationResult.getFileName());
-    assertEquals(metadata.get(0).getPageNumber(), documentationResult.getPageNumber());
+    assertEquals(DOC_FILES.get(0).getFileName(), documentationResult.getFileName());
+    assertEquals(DOC_METADATA.get(0).getPageNumber(), documentationResult.getPageNumber());
     //TODO: get rid of this implementation detail
-    assertEquals(Math.abs(similarity * 100), documentationResult.getRank());
+    assertEquals(Math.abs(SIMILARITY * 100), documentationResult.getRank());
 
     assertEquals(issue, result.getOriginalIssue());
   }

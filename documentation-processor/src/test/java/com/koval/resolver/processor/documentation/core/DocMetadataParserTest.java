@@ -1,13 +1,5 @@
 package com.koval.resolver.processor.documentation.core;
 
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -15,6 +7,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 @ExtendWith(MockitoExtension.class)
 class DocMetadataParserTest {
@@ -31,33 +32,33 @@ class DocMetadataParserTest {
   private static final String FILE_NAME = "tempFile.txt";
 
   @Mock
-  DocFileRepository mDocFileRepository;
+  private DocFileRepository docFileRepository;
 
-  private DocMetadataParser mDocMetadataParser;
+  private DocMetadataParser docMetadataParser;
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
     MockitoAnnotations.initMocks(this);
 
     InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
-    when(mDocFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
+    when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
 
-    mDocMetadataParser = new DocMetadataParser(
+    docMetadataParser = new DocMetadataParser(
             FILE_NAME,
-            mDocFileRepository
+            docFileRepository
     );
   }
 
   @Test
   void testParsingOneLineDocMeta() {
-    DocMetadata actualMetaData = mDocMetadataParser.parseDocumentationMetadata().get(0);
+    DocMetadata actualMetaData = docMetadataParser.parseDocumentationMetadata().get(0);
 
     assertMetadataEqual(DOC_METADATA_1, actualMetaData);
   }
 
   @Test
   void testParsingMultipleDocMeta() {
-    List<DocMetadata> metadataList = mDocMetadataParser.parseDocumentationMetadata();
+    List<DocMetadata> metadataList = docMetadataParser.parseDocumentationMetadata();
 
     assertMetadataEqual(DOC_METADATA_1, metadataList.get(0));
     assertMetadataEqual(DOC_METADATA_2, metadataList.get(1));

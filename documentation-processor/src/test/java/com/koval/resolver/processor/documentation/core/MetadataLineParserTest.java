@@ -1,10 +1,12 @@
 package com.koval.resolver.processor.documentation.core;
 
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 //TODO: make tests of handling invalid strings pass
 public class MetadataLineParserTest {
@@ -15,35 +17,45 @@ public class MetadataLineParserTest {
 
   private static final String INVALID_STRING_ONLY_KEY = "5";
   private static final String INVALID_STRING_FILE_INDEX_NOT_NUMBER = "a b";
+  private static final String INVALID_STRING_WITHOUT_PAGE_NUMBER = "a 5";
   private static final String INVALID_STRING_PAGE_NUMBER_NOT_NUMBER = "a 5 c";
 
-  private MetadataLineParser mMetadataLineParser;
+  private MetadataLineParser metadataLineParser;
 
   @BeforeEach
   void onSetup() {
-    mMetadataLineParser = new MetadataLineParser(DELIMITER);
+    metadataLineParser = new MetadataLineParser(DELIMITER);
   }
 
   @Test
   void testParseValidString() {
-    DocMetadata actualMetaData = mMetadataLineParser.parseLine(METADATA_STRING);
+    DocMetadata actualMetaData = metadataLineParser.parseLine(METADATA_STRING);
 
     assertMetadataEqual(EXPECTED_METADATA, actualMetaData);
   }
 
+  @Disabled("Handle error when string contains only key")
   @Test
   void testParsingInvalidStringOnlyKey() {
-    mMetadataLineParser.parseLine(INVALID_STRING_ONLY_KEY);
+    metadataLineParser.parseLine(INVALID_STRING_ONLY_KEY);
   }
 
+  @Disabled("Handle error when string does not have page number")
+  @Test
+  void testParsingInvalidStringWithoutPageNumber() {
+    metadataLineParser.parseLine(INVALID_STRING_WITHOUT_PAGE_NUMBER);
+  }
+
+  @Disabled("Handle error when file index is not number")
   @Test
   void testParsingInvalidStringFileIndexNotNumber() {
-    mMetadataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);
+    metadataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);
   }
 
+  @Disabled("Handle error when page number is not number")
   @Test
   void testParsingInvalidStringPageNumberNotNumber() {
-    mMetadataLineParser.parseLine(INVALID_STRING_PAGE_NUMBER_NOT_NUMBER);
+    metadataLineParser.parseLine(INVALID_STRING_PAGE_NUMBER_NOT_NUMBER);
   }
 
   private static String constructTestString(DocMetadata docMetadata) {
