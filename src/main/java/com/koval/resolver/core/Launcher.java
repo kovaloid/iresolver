@@ -1,5 +1,13 @@
 package com.koval.resolver.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.ProcessExecutor;
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.auth.CredentialsKeeper;
@@ -9,20 +17,20 @@ import com.koval.resolver.common.api.bean.issue.IssueField;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.connector.Connector;
 import com.koval.resolver.common.api.component.connector.IssueClient;
+import com.koval.resolver.common.api.component.connector.IssueClientFactory;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
 import com.koval.resolver.common.api.component.processor.DataSetWriter;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
-import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
-import com.koval.resolver.common.api.constant.ConnectorConstants;
+import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
 import com.koval.resolver.connector.bugzilla.exception.BugzillaConnectorException;
@@ -44,13 +52,6 @@ import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
 import com.koval.resolver.util.CommandLineUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public final class Launcher {
@@ -192,7 +193,6 @@ public final class Launcher {
       issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
-
       issueProcessors.add(new DocumentationProcessor(configuration));
     }
     if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
@@ -249,73 +249,35 @@ public final class Launcher {
   }
 
   private Connector getConnector(IssueClient issueClient) {
-    String connectorName = configuration.getAdministration().getConnector();
-    if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
-      return new JiraConnector(issueClient, configuration.getConnectors().getJira());
-    } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      return new BugzillaConnector(issueClient, configuration.getConnectors().getBugzilla());
-    } else {
-      throw new IResolverException("Could not get connector with name: " + connectorName);
+    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    switch (connectorType) {
+      case JIRA:
+        return new JiraConnector(issueClient, configuration.getConnectors().getJira());
+      case BUGZILLA:
+        return new BugzillaConnector(issueClient, configuration.getConnectors().getBugzilla());
+      default:
+        throw new IResolverException("Could not get connector with name: " + connectorType);
     }
   }
 
   private IssueClient getIssueClient() {
-    String connectorName = configuration.getAdministration().getConnector();
-    if (ConnectorConstants.JIRA.equalsIgnoreCase(connectorName)) {
-      return getJiraClientInstance();
-    } else if (ConnectorConstants.BUGZILLA.equalsIgnoreCase(connectorName)) {
-      return getBugzillaClientInstance();
-    } else {
-      throw new IResolverException("Could not get issue client for connector with name: " + connectorName);
+    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    IssueClientFactory clientFactory;
+    switch (connectorType) {
+      case JIRA:
+        clientFactory = new JiraIssueClientFactory(configuration.getConnectors().getJira());
+        break;
+      case BUGZILLA:
+        clientFactory = new BugzillaIssueClientFactory(configuration.getConnectors().getBugzilla());
+        break;
+      default:
+        throw new IResolverException("Could not get issue client for connector with name: " + connectorType);
     }
-  }
 
-  private IssueClient getJiraClientInstance() {
-    JiraConnectorConfiguration connectorConfiguration = configuration.getConnectors().getJira();
-    JiraIssueClientFactory jiraIssueClientFactory = new JiraIssueClientFactory();
-    IssueClient jiraClient;
     try {
-      if (connectorConfiguration.isAnonymous()) {
-        jiraClient = jiraIssueClientFactory.getAnonymousClient(connectorConfiguration.getUrl());
-      } else {
-        Credentials credentials = getCredentials(connectorConfiguration.getCredentialsFolder());
-        jiraClient = jiraIssueClientFactory.getBasicClient(connectorConfiguration.getUrl(), credentials);
-      }
-    } catch (JiraConnectorException e) {
-      throw new IResolverException("Could not initialize Jira client.", e);
+      return clientFactory.getClient();
+    } catch (ConnectorException e) {
+      throw new IResolverException("Could not initialize client.", e);
     }
-    return jiraClient;
-  }
-
-  private IssueClient getBugzillaClientInstance() {
-    BugzillaConnectorConfiguration connectorConfiguration = configuration.getConnectors().getBugzilla();
-    BugzillaIssueClientFactory bugzillaIssueClientFactory = new BugzillaIssueClientFactory();
-    IssueClient bugzillaClient;
-    try {
-      if (connectorConfiguration.isAnonymous()) {
-        bugzillaClient = bugzillaIssueClientFactory.getAnonymousClient(connectorConfiguration.getUrl());
-      } else {
-        Credentials credentials = getCredentials(connectorConfiguration.getCredentialsFolder());
-        bugzillaClient = bugzillaIssueClientFactory.getBasicClient(connectorConfiguration.getUrl(), credentials);
-      }
-    } catch (BugzillaConnectorException e) {
-      throw new IResolverException("Could not initialize Bugzilla client.", e);
-    }
-    return bugzillaClient;
-  }
-
-  private Credentials getCredentials(String credentialsFolder) {
-    CredentialsProtector protector = new CredentialsProtector();
-    CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
-    Credentials credentials;
-    if (keeper.isStored()) {
-      credentials = keeper.load();
-    } else {
-      String username = CommandLineUtil.getUsername();
-      String password = CommandLineUtil.getPassword();
-      credentials = new Credentials(username, password);
-      keeper.store(credentials);
-    }
-    return credentials;
   }
 }
