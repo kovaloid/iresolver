@@ -7,7 +7,7 @@ import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.processor.documentation.DocumentationProcessorDelegate;
+import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import org.slf4j.Logger;
@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DocumentationProcessor implements IssueProcessor {
+public class DocumentationProcessorDelegate implements IssueProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessorDelegate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessor.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
@@ -30,7 +30,7 @@ public class DocumentationProcessor implements IssueProcessor {
 
   private final DocOutputFilesParser docOutputFilesParser;
 
-  public DocumentationProcessor(
+  public DocumentationProcessorDelegate(
           Configuration properties,
           DocOutputFilesParser docOutputFilesParser,
           VectorModel vectorModel,

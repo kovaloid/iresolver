@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DocumentationProcessorTest {
+public class DocumentationProcessorDelegateTest {
   private String docsPath = "docsPath";
 
   private String extractedText = "asdfasdfsadf";
@@ -50,14 +50,14 @@ public class DocumentationProcessorTest {
   @Mock
   TextDataExtractor mTextDataExtractor;
 
-  private DocumentationProcessor mDocumentationProcessor;
+  private DocumentationProcessorDelegate mDocumentationProcessorDelegate;
 
   @BeforeEach
   void onSetup() throws IOException {
     MockitoAnnotations.initMocks(this);
 
     Configuration configuration = new Configuration();
-    mDocumentationProcessor = new DocumentationProcessor(
+    mDocumentationProcessorDelegate = new DocumentationProcessorDelegate(
             configuration,
             mDocOutputFilesParser,
             mVectorModel,
@@ -80,7 +80,7 @@ public class DocumentationProcessorTest {
     Issue issue = new Issue();
     IssueAnalysingResult result = new IssueAnalysingResult();
 
-    mDocumentationProcessor.run(
+    mDocumentationProcessorDelegate.run(
             issue,
             result
     );

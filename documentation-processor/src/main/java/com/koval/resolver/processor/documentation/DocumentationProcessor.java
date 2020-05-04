@@ -9,16 +9,16 @@ import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.processor.documentation.core.DocFileRepository;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
-import com.koval.resolver.processor.documentation.core.DocumentationProcessor;
+import com.koval.resolver.processor.documentation.core.DocumentationProcessorDelegate;
 
 import java.io.File;
 import java.io.IOException;
 
 
-public class DocumentationProcessorDelegate implements IssueProcessor {
-  private DocumentationProcessor mDocumentationProcessor;
+public class DocumentationProcessor implements IssueProcessor {
+  private DocumentationProcessorDelegate mDocumentationProcessorDelegate;
 
-  public DocumentationProcessorDelegate(Configuration properties) throws IOException {
+  public DocumentationProcessor(Configuration properties) throws IOException {
     DocFileRepository docFileRepository = new DocFileRepository();
     DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
             properties.getProcessors().getDocumentation(),
@@ -31,7 +31,7 @@ public class DocumentationProcessorDelegate implements IssueProcessor {
     String docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
     TextDataExtractor textDataExtractor = new TextDataExtractor();
 
-    mDocumentationProcessor = new DocumentationProcessor(
+    mDocumentationProcessorDelegate = new DocumentationProcessorDelegate(
             properties,
             docOutputFilesParser,
             vectorModel,
@@ -42,6 +42,6 @@ public class DocumentationProcessorDelegate implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
-    mDocumentationProcessor.run(issue, result);
+    mDocumentationProcessorDelegate.run(issue, result);
   }
 }

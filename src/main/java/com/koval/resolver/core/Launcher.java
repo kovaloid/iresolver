@@ -33,7 +33,7 @@ import com.koval.resolver.connector.jira.exception.JiraConnectorException;
 import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
-import com.koval.resolver.processor.documentation.DocumentationProcessorDelegate;
+import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.resolver.processor.issues.IssuesProcessor;
 import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
@@ -193,7 +193,7 @@ public final class Launcher {
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
 
-      issueProcessors.add(new DocumentationProcessorDelegate(configuration));
+      issueProcessors.add(new DocumentationProcessor(configuration));
     }
     if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
       issueProcessors.add(new ConfluenceProcessor(configuration));
