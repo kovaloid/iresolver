@@ -1,8 +1,8 @@
-/*
+
 apply plugin: 'jacoco'
 
 jacoco {
-  toolVersion = '0.8.1'
+  toolVersion = '0.8.5'
 }
 
 ext.limits = [
@@ -11,9 +11,10 @@ ext.limits = [
 ]
 
 jacocoTestReport {
-  dependsOn 'test'
+  dependsOn test
   reports {
     xml.enabled true
+    html.destination file("${buildDir}/jacocoHtml")
   }
   doLast {
     def report = file("${jacoco.reportsDir}/test/jacocoTestReport.xml")
@@ -46,12 +47,11 @@ jacocoTestReport {
         logger.error(it)
       }
       logger.error('---------------------------------------------------------------')
-      throw new GradleException('Code coverage failed')
+      //throw new GradleException('Code coverage failed')
     } else {
       logger.debug('Passed Code Coverage Checks')
     }
   }
 }
-*/
 
-// check.dependsOn jacocoTestReport
+check.dependsOn jacocoTestReport

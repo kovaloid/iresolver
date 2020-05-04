@@ -18,5 +18,6 @@ public interface IssueClient extends Closeable {
 
   List<IssueField> getIssueFields();
 
+  @Override
   void close() throws IOException;
 }
