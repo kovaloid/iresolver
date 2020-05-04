@@ -8,8 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mock;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.processor.documentation.convert.FileConverter;
 
 import static util.ConfigurationPropertiesCreator.createProperties;
 
@@ -20,6 +22,11 @@ public class DocDataSetCreatorTest {
 
   private static final List<String> DOC_FILE_STRINGS = Arrays.asList(DOC_FILE_STRING_1, DOC_FILE_STRING_2);
 
+  @Mock
+  private DocTypeDetector docTypeDetector;
+
+  @Mock
+  private FileConverter fileConverter;
 
   private DocDataSetCreator docDataSetCreator;
 
@@ -31,7 +38,11 @@ public class DocDataSetCreatorTest {
   @BeforeEach
   void onSetup() throws IOException {
     DocumentationProcessorConfiguration properties = createConfigurationProperties();
-    docDataSetCreator = new DocDataSetCreator(properties);
+    docDataSetCreator = new DocDataSetCreator(
+            properties,
+            docTypeDetector,
+            fileConverter
+    );
   }
 
   @Test

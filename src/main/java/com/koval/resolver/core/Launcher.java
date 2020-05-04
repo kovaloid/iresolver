@@ -20,6 +20,7 @@ import com.koval.resolver.common.api.component.processor.DataSetWriter;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
+import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
@@ -37,7 +38,9 @@ import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
+import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
+import com.koval.resolver.processor.documentation.core.DocTypeDetector;
 import com.koval.resolver.processor.issues.IssuesProcessor;
 import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
 import com.koval.resolver.processor.issues.granular.GranularIssuesProcessor;
@@ -105,7 +108,16 @@ public final class Launcher {
   }
 
   public void createDocumentationDataSet() {
-    DocDataSetCreator docDataSetCreator = new DocDataSetCreator(configuration.getProcessors().getDocumentation());
+    DocumentationProcessorConfiguration documentationConfiguration = configuration.getProcessors().getDocumentation();
+    DocTypeDetector docTypeDetector = new DocTypeDetector();
+    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter();
+
+    DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
+            documentationConfiguration,
+            docTypeDetector,
+            wordToPdfFileConverter
+    );
+
     docDataSetCreator.convertWordFilesToPdf();
     try {
       docDataSetCreator.create();
