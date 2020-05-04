@@ -3,7 +3,7 @@ package com.koval.resolver.processor.documentation.core;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 public class MetadataLineParser implements LineParser<DocMetadata> {
-  private String delimiter;
+  private final String delimiter;
 
   MetadataLineParser(String delimiter) {
     this.delimiter = delimiter;

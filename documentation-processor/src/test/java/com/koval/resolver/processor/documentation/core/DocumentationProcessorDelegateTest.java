@@ -1,6 +1,5 @@
 package com.koval.resolver.processor.documentation.core;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.processor.documentation.bean.DocFile;
@@ -54,12 +52,10 @@ public class DocumentationProcessorDelegateTest {
   private DocumentationProcessorDelegate documentationProcessorDelegate;
 
   @BeforeEach
-  void onSetup() throws IOException {
+  void onSetup() {
     MockitoAnnotations.initMocks(this);
 
-    Configuration configuration = new Configuration();
     documentationProcessorDelegate = new DocumentationProcessorDelegate(
-            configuration,
             docOutputFilesParser,
             vectorModel,
             textDataExtractor,

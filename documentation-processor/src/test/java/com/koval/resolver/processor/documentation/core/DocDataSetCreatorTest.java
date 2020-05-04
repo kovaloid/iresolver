@@ -37,7 +37,8 @@ public class DocDataSetCreatorTest {
   private DocDataSetCreator docDataSetCreator;
 
   @TempDir
-  private File tempDirectory;
+  @SuppressWarnings("checkstyle:visibilitymodifier")
+  File tempDirectory;
 
   private File tempFile;
 

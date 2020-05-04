@@ -16,7 +16,7 @@ import com.koval.resolver.processor.documentation.core.DocumentationProcessorDel
 
 
 public class DocumentationProcessor implements IssueProcessor {
-  private DocumentationProcessorDelegate mDocumentationProcessorDelegate;
+  private final DocumentationProcessorDelegate documentationProcessorDelegate;
 
   public DocumentationProcessor(Configuration properties) throws IOException {
     DocFileRepository docFileRepository = new DocFileRepository();
@@ -31,8 +31,7 @@ public class DocumentationProcessor implements IssueProcessor {
     String docsPath = properties.getProcessors().getDocumentation().getDocsFolder();
     TextDataExtractor textDataExtractor = new TextDataExtractor();
 
-    mDocumentationProcessorDelegate = new DocumentationProcessorDelegate(
-            properties,
+    documentationProcessorDelegate = new DocumentationProcessorDelegate(
             docOutputFilesParser,
             vectorModel,
             textDataExtractor,
@@ -42,6 +41,6 @@ public class DocumentationProcessor implements IssueProcessor {
 
   @Override
   public void run(Issue issue, IssueAnalysingResult result) {
-    mDocumentationProcessorDelegate.run(issue, result);
+    documentationProcessorDelegate.run(issue, result);
   }
 }
