@@ -45,6 +45,7 @@ public class DocDataSetCreator {
     this.properties = properties;
   }
 
+  //TODO: Refactor this method so we can test it safely
   public void create() throws IOException {
     File docsFolder = new File(properties.getDocsFolder());
     File[] docFiles = docsFolder.listFiles();

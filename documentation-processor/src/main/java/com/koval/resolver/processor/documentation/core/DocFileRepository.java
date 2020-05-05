@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class DocFileRepository {
+
   InputStream getFile(String fileName) throws FileNotFoundException {
     return new FileInputStream(fileName);
   }

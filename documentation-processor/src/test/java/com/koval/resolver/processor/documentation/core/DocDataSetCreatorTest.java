@@ -9,9 +9,10 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.MediaType;
@@ -19,6 +20,8 @@ import com.koval.resolver.processor.documentation.convert.FileConverter;
 
 import static util.ConfigurationPropertiesCreator.createProperties;
 
+//TODO: Refactor DocDataSetCreator to get rid of real files in this test
+@ExtendWith(MockitoExtension.class)
 public class DocDataSetCreatorTest {
 
   private static final String FILE_NAME = "tempfile.txt";
@@ -44,8 +47,6 @@ public class DocDataSetCreatorTest {
 
   @BeforeEach
   void onSetup() throws IOException {
-    MockitoAnnotations.initMocks(this);
-
     DocumentationProcessorConfiguration properties = createConfigurationProperties();
     docDataSetCreator = new DocDataSetCreator(
             properties,
@@ -82,5 +83,4 @@ public class DocDataSetCreatorTest {
 
     return createProperties(DOC_FILE_STRINGS, tempFile);
   }
-
 }

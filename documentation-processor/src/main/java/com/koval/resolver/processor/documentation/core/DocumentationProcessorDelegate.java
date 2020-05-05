@@ -107,5 +107,4 @@ public class DocumentationProcessorDelegate implements IssueProcessor {
             .toUri()
             .toString();
   }
-
 }

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.common.api.bean.issue.Issue;
@@ -24,6 +23,7 @@ import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 @ExtendWith(MockitoExtension.class)
 public class DocumentationProcessorDelegateTest {
+
   private static final String DOCS_PATH = "docsPath";
 
   private static final String EXTRACTED_TEXT = "asdfasdfsadf";
@@ -53,8 +53,6 @@ public class DocumentationProcessorDelegateTest {
 
   @BeforeEach
   void onSetup() {
-    MockitoAnnotations.initMocks(this);
-
     documentationProcessorDelegate = new DocumentationProcessorDelegate(
             docOutputFilesParser,
             vectorModel,
@@ -93,5 +91,4 @@ public class DocumentationProcessorDelegateTest {
 
     assertEquals(issue, result.getOriginalIssue());
   }
-
 }

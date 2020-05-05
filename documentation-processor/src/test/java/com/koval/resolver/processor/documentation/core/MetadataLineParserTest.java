@@ -10,6 +10,7 @@ import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 //TODO: make tests of handling invalid strings pass
 public class MetadataLineParserTest {
+
   private static final String DELIMITER = " ";
 
   private static final DocMetadata EXPECTED_METADATA = new DocMetadata("key1", 14, 23);
@@ -69,5 +70,4 @@ public class MetadataLineParserTest {
     assertEquals(expectedMetaData.getFileIndex(), actualMetaData.getFileIndex());
     assertEquals(expectedMetaData.getPageNumber(), actualMetaData.getPageNumber());
   }
-
 }

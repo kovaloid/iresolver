@@ -37,5 +37,4 @@ public final class ConfigurationPropertiesCreator {
 
     return file;
   }
-
 }

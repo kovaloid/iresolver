@@ -16,6 +16,7 @@ import com.koval.resolver.processor.documentation.core.DocumentationProcessorDel
 
 
 public class DocumentationProcessor implements IssueProcessor {
+
   private final DocumentationProcessorDelegate documentationProcessorDelegate;
 
   public DocumentationProcessor(Configuration properties) throws IOException {
