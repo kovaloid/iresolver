@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,8 +37,6 @@ public class FileParserTest {
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
-    MockitoAnnotations.initMocks(this);
-
     InputStream inputStream = new ByteArrayInputStream(FILE_STRINGS.getBytes());
     when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
 
@@ -65,5 +62,4 @@ public class FileParserTest {
     assertEquals(PARSED_STRING_1, parsedStrings.get(0));
     assertEquals(PARSED_STRING_2, parsedStrings.get(1));
   }
-
 }

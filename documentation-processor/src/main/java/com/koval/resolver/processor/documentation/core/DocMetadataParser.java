@@ -5,10 +5,11 @@ import java.util.List;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 public class DocMetadataParser {
+
   private static final String DELIMITER = " ";
 
-  private String docMetadataFileName;
-  private DocFileRepository docFileRepository;
+  private final String docMetadataFileName;
+  private final DocFileRepository docFileRepository;
 
   public DocMetadataParser(
           String docMetadataFileName,
@@ -24,5 +25,4 @@ public class DocMetadataParser {
 
     return fileParser.parseFile(docMetadataFileName, metadataLineParser);
   }
-
 }

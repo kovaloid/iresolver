@@ -6,10 +6,10 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
-//TODO: Split DocOutputFilesParser in multiple classes because it has several very different responsibilities
 public class DocOutputFilesParser {
-  private DocMetadataParser docMetadataParser;
-  private DocFileDataParser docFileDataParser;
+
+  private final DocMetadataParser docMetadataParser;
+  private final DocFileDataParser docFileDataParser;
 
   public DocOutputFilesParser(
           DocumentationProcessorConfiguration properties,

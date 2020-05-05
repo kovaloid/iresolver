@@ -16,7 +16,7 @@ public class FileParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocOutputFilesParser.class);
 
-  private DocFileRepository docFileRepository;
+  private final DocFileRepository docFileRepository;
 
   public FileParser(DocFileRepository docFileRepository) {
     this.docFileRepository = docFileRepository;
@@ -42,5 +42,4 @@ public class FileParser {
 
     return parsedClasses;
   }
-
 }

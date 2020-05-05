@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
-
 //TODO: make tests of handling invalid strings pass
 public class DocDataLineParserTest {
+
   private static final String DELIMITER = " ";
 
   private static final DocFile EXPECTED_DOC_FILE = new DocFile(15, "filename1");
@@ -53,6 +53,4 @@ public class DocDataLineParserTest {
     assertEquals(expectedDocFile.getFileIndex(), actualDocFile.getFileIndex());
     assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
   }
-
 }
-

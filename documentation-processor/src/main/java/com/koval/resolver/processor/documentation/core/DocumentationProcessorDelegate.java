@@ -13,16 +13,14 @@ import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
-import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 public class DocumentationProcessorDelegate implements IssueProcessor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessorDelegate.class);
   private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
@@ -32,7 +30,6 @@ public class DocumentationProcessorDelegate implements IssueProcessor {
   private final DocOutputFilesParser docOutputFilesParser;
 
   public DocumentationProcessorDelegate(
-          Configuration properties,
           DocOutputFilesParser docOutputFilesParser,
           VectorModel vectorModel,
           TextDataExtractor textDataExtractor,
@@ -110,5 +107,4 @@ public class DocumentationProcessorDelegate implements IssueProcessor {
             .toUri()
             .toString();
   }
-
 }

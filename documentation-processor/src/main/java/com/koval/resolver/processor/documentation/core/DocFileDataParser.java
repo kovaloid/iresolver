@@ -5,10 +5,11 @@ import java.util.List;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
 public class DocFileDataParser {
+
   private static final String DELIMITER = " ";
 
-  private String docFileDataFileName;
-  private DocFileRepository docFileRepository;
+  private final String docFileDataFileName;
+  private final DocFileRepository docFileRepository;
 
   public DocFileDataParser(
           String docFileDataFileName,

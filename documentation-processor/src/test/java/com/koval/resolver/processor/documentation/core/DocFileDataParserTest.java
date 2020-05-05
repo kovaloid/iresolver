@@ -19,6 +19,7 @@ import com.koval.resolver.processor.documentation.bean.DocFile;
 
 @ExtendWith(MockitoExtension.class)
 public class DocFileDataParserTest {
+
   private static final String FILE_NAME = "FILE_NAME";
   private static final String DELIMITER = " ";
 
@@ -93,5 +94,4 @@ public class DocFileDataParserTest {
   private static String constructTestString(DocFile docFile) {
     return docFile.getFileIndex() + DELIMITER + docFile.getFileName();
   }
-
 }

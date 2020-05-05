@@ -12,13 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 @ExtendWith(MockitoExtension.class)
 class DocMetadataParserTest {
+
   private static final String DELIMITER = " ";
 
   private static final DocMetadata DOC_METADATA_1 = new DocMetadata("key1", 14, 23);
@@ -38,8 +38,6 @@ class DocMetadataParserTest {
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
-    MockitoAnnotations.initMocks(this);
-
     InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
     when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
 
@@ -75,5 +73,4 @@ class DocMetadataParserTest {
             + DELIMITER + docMetadata.getFileIndex()
             + DELIMITER + docMetadata.getPageNumber();
   }
-
 }
