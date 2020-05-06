@@ -22,10 +22,8 @@ public final class ConfigurationManager {
 
   public static Configuration getConfiguration() {
     Yaml yaml = new Yaml(new Constructor(Configuration.class));
-    try (InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(CONFIGURATION_FILE);
-         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, UTF_8.name());
-         BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-      return yaml.load(bufferedReader);
+    try (InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(CONFIGURATION_FILE)) {
+      return yaml.load(inputStream);
     } catch (Exception e) {
       throw new ConfigurationException("Could not load configuration from the file: " + CONFIGURATION_FILE, e);
     }

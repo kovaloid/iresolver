@@ -47,7 +47,9 @@ public class CredentialsKeeper {
     try (PrintWriter printWriter = new PrintWriter(credentialsFile, charset.name());
             BufferedWriter fileWriter = new BufferedWriter(printWriter)) {
       fileWriter.write(protector.encrypt(credentials.getUsername()));
+      fileWriter.write("\n");
       fileWriter.write(protector.encrypt(credentials.getPassword()));
+      fileWriter.write("\n");
     } catch (FileNotFoundException e) {
       throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
     } catch (UnsupportedEncodingException e) {

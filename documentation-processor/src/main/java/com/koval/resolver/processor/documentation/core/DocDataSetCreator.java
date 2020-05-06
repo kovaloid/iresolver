@@ -79,18 +79,21 @@ public class DocDataSetCreator {
 
                 dataSetBufferedWriter.write(docPageKey);
                 dataSetBufferedWriter.write(SEPARATOR);
-                dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()) + "\n");
+                dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
+                dataSetBufferedWriter.write("\n");
 
                 metadataBufferedWriter.write(docPageKey);
                 metadataBufferedWriter.write(SPACE);
                 metadataBufferedWriter.write(documentIndex);
                 metadataBufferedWriter.write(SPACE);
-                metadataBufferedWriter.write(docPage.getKey() + "\n");
+                metadataBufferedWriter.write(docPage.getKey());
+                metadataBufferedWriter.write("\n");
               }
 
               docListBufferedWriter.write(documentIndex);
               docListOutput.write(SPACE);
-              docListOutput.write(docFile.getName() + "\n");
+              docListOutput.write(docFile.getName());
+              docListOutput.write("\n");
               documentIndex++;
             }
           } catch (FileNotFoundException e) {
