@@ -1,10 +1,6 @@
 package com.koval.resolver.common.api.configuration;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -15,7 +11,6 @@ import com.koval.resolver.common.api.exception.ConfigurationException;
 public final class ConfigurationManager {
 
   private static final String CONFIGURATION_FILE = "configuration.yml";
-  private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
   private ConfigurationManager() {
   }
