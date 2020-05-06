@@ -25,6 +25,7 @@ import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
+import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
@@ -40,6 +41,8 @@ import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
+import com.koval.resolver.processor.documentation.core.DocFileRepository;
+import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
 import com.koval.resolver.processor.documentation.core.DocTypeDetector;
 import com.koval.resolver.processor.issues.IssuesProcessor;
 import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
@@ -199,7 +202,7 @@ public final class Launcher {
       issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
     }
     if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
-      issueProcessors.add(new DocumentationProcessor(configuration));
+      issueProcessors.add(createDocumentationProcessor());
     }
     if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
       issueProcessors.add(new ConfluenceProcessor(configuration));
@@ -211,6 +214,27 @@ public final class Launcher {
       LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
     }
     return issueProcessors;
+  }
+
+  private DocumentationProcessor createDocumentationProcessor() throws IOException {
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
+    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, configuration.getParagraphVectors().getLanguage());
+
+    DocFileRepository docFileRepository = new DocFileRepository();
+    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
+            configuration.getProcessors().getDocumentation(),
+            docFileRepository
+    );
+
+    TextDataExtractor textDataExtractor = new TextDataExtractor();
+
+    return new DocumentationProcessor(
+            configuration.getProcessors().getDocumentation(),
+            docOutputFilesParser,
+            vectorModel,
+            textDataExtractor
+    );
   }
 
   private List<ReportGenerator> getReportGenerators() throws IOException {
