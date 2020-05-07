@@ -1,5 +1,6 @@
 package com.koval.resolver.processor.issues.core;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,20 +36,21 @@ public class IssuesDataSetCreator {
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
-    try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name())) {
+    try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
+         BufferedWriter writer = new BufferedWriter(output)) {
       while (receiver.hasNextIssues()) {
         Collection<Issue> issues = receiver.getNextIssues();
-        issues.forEach(issue -> {
+        for (Issue issue : issues) {
           String textData = textDataExtractor.extract(issue);
           if (textData.isEmpty()) {
             LOGGER.info("Issue with key {} was ignored due to empty body", issue.getKey());
           } else {
-            output.print(issue.getKey());
-            output.print(SEPARATOR);
-            output.println(textData);
+            writer.write(issue.getKey());
+            writer.write(SEPARATOR);
+            writer.write(textData + "\n");
             LOGGER.info("Issue with key {} was added to data set", issue.getKey());
           }
-        });
+        }
         output.flush();
       }
     }

@@ -21,7 +21,7 @@ public class RuleCollectionSaver {
   public void save(RuleCollection ruleCollection) {
     File file = new File(path, ruleCollection.getName() + ".drl");
     try (OutputStream outputStream = new FileOutputStream(file);
-         Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+         Writer writer = new BufferedWriter(outputStream, StandardCharsets.UTF_8)) {
       writer.write("package " + ruleCollection.getPack() + "\n\n");
       ruleCollection.getImports().forEach(i -> {
         try {
