@@ -1,12 +1,12 @@
 package com.koval.resolver.core;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
+import java.util.logging.Logger;
 
 
 class LauncherUI extends JFrame {
-
+  
   LauncherUI(Launcher launcher) {
     super("IResolver Application");
     initLookAndFeel();
@@ -46,18 +46,12 @@ class LauncherUI extends JFrame {
   }
 
   private void initLookAndFeel() {
+    final Logger logger = Logger.getLogger(LauncherUI.class.getName());
     JFrame.setDefaultLookAndFeelDecorated(true);
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (UnsupportedLookAndFeelException e) {
-      e.printStackTrace();
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+      logger.severe(e.getMessage());
     }
-  
   }
 }
