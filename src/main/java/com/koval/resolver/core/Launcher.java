@@ -118,8 +118,7 @@ public final class Launcher {
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
             documentationConfiguration,
             docTypeDetector,
-            wordToPdfFileConverter,
-            documentationConfiguration.getDocsFolder()
+            wordToPdfFileConverter
     );
 
     docDataSetCreator.convertWordFilesToPdf();
