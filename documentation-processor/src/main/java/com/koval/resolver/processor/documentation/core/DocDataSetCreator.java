@@ -34,13 +34,12 @@ public class DocDataSetCreator {
   public DocDataSetCreator(
           DocumentationProcessorConfiguration properties,
           DocTypeDetector docTypeDetector,
-          FileConverter fileConverter,
-          String docsFolderPath
+          FileConverter fileConverter
   ) {
     this.docTypeDetector = docTypeDetector;
     this.fileConverter = fileConverter;
 
-    this.docsFolderPath = docsFolderPath;
+    docsFolderPath = properties.getDocsFolder();
 
     this.properties = properties;
   }

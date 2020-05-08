@@ -16,13 +16,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.result.DocumentationResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
+import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
 @ExtendWith(MockitoExtension.class)
-public class DocumentationProcessorDelegateTest {
+public class DocumentationProcessorTest {
 
   private static final String DOCS_PATH = "docsPath";
 
@@ -49,15 +51,18 @@ public class DocumentationProcessorDelegateTest {
   @Mock
   private TextDataExtractor textDataExtractor;
 
-  private DocumentationProcessorDelegate documentationProcessorDelegate;
+  private DocumentationProcessor documentationProcessor;
 
   @BeforeEach
   void onSetup() {
-    documentationProcessorDelegate = new DocumentationProcessorDelegate(
+    DocumentationProcessorConfiguration configuration = new DocumentationProcessorConfiguration();
+    configuration.setDocsFolder(DOCS_PATH);
+
+    documentationProcessor = new DocumentationProcessor(
+            configuration,
             docOutputFilesParser,
             vectorModel,
-            textDataExtractor,
-            DOCS_PATH
+            textDataExtractor
     );
 
     when(textDataExtractor.extract(any(Issue.class))).thenReturn(EXTRACTED_TEXT);
@@ -75,7 +80,7 @@ public class DocumentationProcessorDelegateTest {
     Issue issue = new Issue();
     IssueAnalysingResult result = new IssueAnalysingResult();
 
-    documentationProcessorDelegate.run(
+    documentationProcessor.run(
             issue,
             result
     );

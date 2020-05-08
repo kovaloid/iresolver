@@ -23,6 +23,7 @@ public final class ConfigurationPropertiesCreator {
 
     DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
     properties.setDocsListFile(tempFile.getPath());
+    properties.setDocsFolder(tempFile.getParent());
 
     return properties;
   }

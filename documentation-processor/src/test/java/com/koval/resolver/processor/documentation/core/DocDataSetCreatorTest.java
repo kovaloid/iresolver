@@ -51,8 +51,7 @@ public class DocDataSetCreatorTest {
     docDataSetCreator = new DocDataSetCreator(
             properties,
             docTypeDetector,
-            fileConverter,
-            tempFile.getParent()
+            fileConverter
     );
   }
 
