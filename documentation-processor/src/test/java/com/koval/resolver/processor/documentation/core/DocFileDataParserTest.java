@@ -35,7 +35,7 @@ public class DocFileDataParserTest {
   private static final String INVALID_STRING_ONLY_CHARS = "a\nb";
 
   @Mock
-  private DocFileRepository docFileRepository;
+  private FileRepository fileRepository;
 
   private DocFileDataParser docFileDataParser;
 
@@ -78,11 +78,11 @@ public class DocFileDataParserTest {
 
   private void initDocOutputFileParser(String testString) throws IOException {
     InputStream inputStream = new ByteArrayInputStream(testString.getBytes());
-    when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
+    when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     docFileDataParser = new DocFileDataParser(
             FILE_NAME,
-            docFileRepository
+            fileRepository
     );
   }
 

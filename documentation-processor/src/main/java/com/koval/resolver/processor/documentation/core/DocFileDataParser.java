@@ -9,18 +9,18 @@ public class DocFileDataParser {
   private static final String DELIMITER = " ";
 
   private final String docFileDataFileName;
-  private final DocFileRepository docFileRepository;
+  private final FileRepository fileRepository;
 
   public DocFileDataParser(
           String docFileDataFileName,
-          DocFileRepository docFileRepository
+          FileRepository fileRepository
   ) {
     this.docFileDataFileName = docFileDataFileName;
-    this.docFileRepository = docFileRepository;
+    this.fileRepository = fileRepository;
   }
 
   public List<DocFile> parseDocumentationFilesList() {
-    FileParser fileParser = new FileParser(docFileRepository);
+    FileParser fileParser = new FileParser(fileRepository);
     DocDataLineParser docDataLineParser = new DocDataLineParser(DELIMITER);
 
     return fileParser.parseFile(docFileDataFileName, docDataLineParser);
