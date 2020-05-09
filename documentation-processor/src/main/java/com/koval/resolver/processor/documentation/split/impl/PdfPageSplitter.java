@@ -18,12 +18,14 @@ public class PdfPageSplitter implements PageSplitter {
     Map<Integer, String> result = new HashMap<>();
     PDDocument doc = PDDocument.load(input);
     PDFTextStripper stripper = new PDFTextStripper();
+
     for (int i = 1; i <= doc.getNumberOfPages(); i++) {
       stripper.setStartPage(i);
       stripper.setEndPage(i);
       String pageText = stripper.getText(doc);
       result.put(i, pageText);
     }
+
     return result;
   }
 }

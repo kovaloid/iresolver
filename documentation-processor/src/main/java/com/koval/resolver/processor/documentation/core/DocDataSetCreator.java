@@ -18,9 +18,13 @@ import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
 public class DocDataSetCreator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
+
   private static final String KEY_PREFIX = "doc_";
   private static final String SPACE = " ";
   private static final String SEPARATOR = "|";
+
+  private static final String EXTENSION_PDF = ".pdf";
+  private static final String DOC_FILES_LOCATION = "../docs";
 
   private final DocTypeDetector docTypeDetector;
   private final PageSplitter pageSplitter = new PdfPageSplitter();
@@ -127,9 +131,15 @@ public class DocDataSetCreator {
       if (docFile.isFile()) {
         MediaType mediaType = docTypeDetector.detectType(docFile.getName());
         if (mediaType.equals(MediaType.WORD)) {
-          fileConverter.convert(docFile);
+          String wordFilePath = docFile.getName();
+          String pdfFilePath = (new File(DOC_FILES_LOCATION, createPdfFilePath(wordFilePath))).getName();
+          fileConverter.convert(wordFilePath, pdfFilePath);
         }
       }
     }
+  }
+
+  private String createPdfFilePath(String wordFileName) {
+    return wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(EXTENSION_PDF);
   }
 }

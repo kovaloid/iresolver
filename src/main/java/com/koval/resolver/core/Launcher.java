@@ -40,6 +40,7 @@ import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
 import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
 import com.koval.resolver.processor.documentation.core.DocTypeDetector;
@@ -115,8 +116,12 @@ public final class Launcher {
     DocTypeDetector docTypeDetector = new DocTypeDetector();
 
     FileRepository fileRepository = new FileRepository();
+    XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
 
-    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(fileRepository);
+    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
+            fileRepository,
+            pdfConverter
+    );
 
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
             documentationConfiguration,

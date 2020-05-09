@@ -61,7 +61,7 @@ public class DocDataSetCreatorTest {
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter).convert(tempFile);
+    verify(fileConverter).convert(eq(tempFile.getName()), anyString());
   }
 
   @Test
@@ -70,7 +70,7 @@ public class DocDataSetCreatorTest {
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter, never()).convert(tempFile);
+    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
   }
 
   private DocumentationProcessorConfiguration createConfigurationProperties() throws IOException {
