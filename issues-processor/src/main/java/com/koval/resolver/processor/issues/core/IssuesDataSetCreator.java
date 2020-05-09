@@ -47,7 +47,8 @@ public class IssuesDataSetCreator {
           } else {
             writer.write(issue.getKey());
             writer.write(SEPARATOR);
-            writer.write(textData + "\n");
+            writer.write(textData);
+            writer.newLine();
             LOGGER.info("Issue with key {} was added to data set", issue.getKey());
           }
         }
