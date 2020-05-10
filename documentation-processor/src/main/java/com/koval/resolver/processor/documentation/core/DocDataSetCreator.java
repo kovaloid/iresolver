@@ -124,7 +124,7 @@ public class DocDataSetCreator {
     );
 
     DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-    writeDocList(docListBufferedWriter, docFileData);
+    writeDocListFileEntry(docListBufferedWriter, docFileData);
 
     currentDocumentIndex++;
   }
@@ -138,15 +138,15 @@ public class DocDataSetCreator {
       String docPageKey = KEY_PREFIX + currentPageIndex;
       currentPageIndex++;
 
-      writeDataSet(dataSetBufferedWriter, docPage, docPageKey);
+      writeDataSetFileEntry(dataSetBufferedWriter, docPage, docPageKey);
 
       int docPageNumber = docPage.getKey();
       DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
-      writeMetadata(metadataBufferedWriter, docMetadata);
+      writeMetadataFileEntry(metadataBufferedWriter, docMetadata);
     }
   }
 
-  private void writeDocList(
+  private void writeDocListFileEntry(
           BufferedWriter docListBufferedWriter,
           DocFile docFileData
   ) throws IOException {
@@ -156,7 +156,7 @@ public class DocDataSetCreator {
     docListBufferedWriter.newLine();
   }
 
-  private void writeMetadata(
+  private void writeMetadataFileEntry(
           BufferedWriter metadataBufferedWriter,
           DocMetadata docMetadata
   ) throws IOException {
@@ -168,7 +168,7 @@ public class DocDataSetCreator {
     metadataBufferedWriter.newLine();
   }
 
-  private void writeDataSet(
+  private void writeDataSetFileEntry(
           BufferedWriter dataSetBufferedWriter,
           Map.Entry<Integer, String> docPage,
           String docPageKey
