@@ -13,7 +13,7 @@ public class ReportersConfiguration {
     return html;
   }
 
-  public void setHtml(HtmlReporterConfiguration html) {
+  public void setHtml(final HtmlReporterConfiguration html) {
     this.html = html;
   }
 
@@ -21,7 +21,7 @@ public class ReportersConfiguration {
     return text;
   }
 
-  public void setText(TextReporterConfiguration text) {
+  public void setText(final TextReporterConfiguration text) {
     this.text = text;
   }
 

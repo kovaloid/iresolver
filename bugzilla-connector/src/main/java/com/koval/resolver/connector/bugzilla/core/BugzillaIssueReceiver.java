@@ -25,7 +25,7 @@ public class BugzillaIssueReceiver implements IssueReceiver {
   private final int finishIndex;
   private final int batchDelay;
 
-  public BugzillaIssueReceiver(IssueClient client, BugzillaConnectorConfiguration properties, boolean isResolvedMode) {
+  public BugzillaIssueReceiver(final IssueClient client, final BugzillaConnectorConfiguration properties, final boolean isResolvedMode) {
     this.client = client;
     this.query = isResolvedMode ? properties.getResolvedQuery() : properties.getUnresolvedQuery();
     this.batchSize = properties.getBatchSize();
@@ -70,7 +70,7 @@ public class BugzillaIssueReceiver implements IssueReceiver {
     return searchResult;
   }
 
-  private int countWords(String text) {
+  private int countWords(final String text) {
     if (text == null) {
       return 0;
     }

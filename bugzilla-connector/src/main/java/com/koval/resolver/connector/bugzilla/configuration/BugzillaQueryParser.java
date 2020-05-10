@@ -4,7 +4,7 @@ package com.koval.resolver.connector.bugzilla.configuration;
 public class BugzillaQueryParser {
 
   @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity"})
-  public BugzillaQuery parse(String rawQuery) {
+  public BugzillaQuery parse(final String rawQuery) {
     BugzillaQuery query = new BugzillaQuery();
     String[] expressions = rawQuery.split(",");
     for (String expression: expressions) {

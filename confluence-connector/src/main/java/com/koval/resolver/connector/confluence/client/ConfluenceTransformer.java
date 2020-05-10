@@ -12,7 +12,7 @@ import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
 
 public class ConfluenceTransformer {
 
-  public ConfluencePage transform(Content content) {
+  public ConfluencePage transform(final Content content) {
     ConfluencePage page = new ConfluencePage();
     page.setId(content.getId().asLong());
     page.setTitle(content.getTitle());
@@ -25,7 +25,7 @@ public class ConfluenceTransformer {
     return page;
   }
 
-  public List<ConfluencePage> transform(Collection<Content> contents) {
+  public List<ConfluencePage> transform(final Collection<Content> contents) {
     List<ConfluencePage> pages = new ArrayList<>();
     for (Content content : contents) {
       pages.add(transform(content));

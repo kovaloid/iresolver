@@ -9,7 +9,7 @@ public class TextReporterConfiguration {
     return outputFile;
   }
 
-  public void setOutputFile(String outputFile) {
+  public void setOutputFile(final String outputFile) {
     this.outputFile = outputFile;
   }
 

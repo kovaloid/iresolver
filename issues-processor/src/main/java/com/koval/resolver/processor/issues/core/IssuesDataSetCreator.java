@@ -26,7 +26,7 @@ public class IssuesDataSetCreator {
   private final IssueReceiver receiver;
   private final IssuesProcessorConfiguration properties;
 
-  public IssuesDataSetCreator(IssueReceiver receiver, IssuesProcessorConfiguration properties) {
+  public IssuesDataSetCreator(final IssueReceiver receiver, final IssuesProcessorConfiguration properties) {
     this.receiver = receiver;
     this.properties = properties;
   }

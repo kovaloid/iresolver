@@ -13,7 +13,7 @@ public class DocumentationProcessorConfiguration {
     return dataSetFile;
   }
 
-  public void setDataSetFile(String dataSetFile) {
+  public void setDataSetFile(final String dataSetFile) {
     this.dataSetFile = dataSetFile;
   }
 
@@ -21,7 +21,7 @@ public class DocumentationProcessorConfiguration {
     return vectorModelFile;
   }
 
-  public void setVectorModelFile(String vectorModelFile) {
+  public void setVectorModelFile(final String vectorModelFile) {
     this.vectorModelFile = vectorModelFile;
   }
 
@@ -29,7 +29,7 @@ public class DocumentationProcessorConfiguration {
     return docsMetadataFile;
   }
 
-  public void setDocsMetadataFile(String docsMetadataFile) {
+  public void setDocsMetadataFile(final String docsMetadataFile) {
     this.docsMetadataFile = docsMetadataFile;
   }
 
@@ -37,7 +37,7 @@ public class DocumentationProcessorConfiguration {
     return docsListFile;
   }
 
-  public void setDocsListFile(String docsListFile) {
+  public void setDocsListFile(final String docsListFile) {
     this.docsListFile = docsListFile;
   }
 
@@ -45,7 +45,7 @@ public class DocumentationProcessorConfiguration {
     return docsFolder;
   }
 
-  public void setDocsFolder(String docsFolder) {
+  public void setDocsFolder(final String docsFolder) {
     this.docsFolder = docsFolder;
   }
 

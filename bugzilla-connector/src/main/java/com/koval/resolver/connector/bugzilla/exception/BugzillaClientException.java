@@ -5,11 +5,11 @@ import com.koval.resolver.common.api.exception.ClientException;
 
 public class BugzillaClientException extends ClientException {
 
-  public BugzillaClientException(String message) {
+  public BugzillaClientException(final String message) {
     super(message);
   }
 
-  public BugzillaClientException(String message, Throwable cause) {
+  public BugzillaClientException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

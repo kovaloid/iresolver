@@ -62,13 +62,13 @@ class DocMetadataParserTest {
     assertMetadataEqual(DOC_METADATA_2, metadataList.get(1));
   }
 
-  private void assertMetadataEqual(DocMetadata expectedMetaData, DocMetadata actualMetaData) {
+  private void assertMetadataEqual(final DocMetadata expectedMetaData, final DocMetadata actualMetaData) {
     assertEquals(expectedMetaData.getKey(), actualMetaData.getKey());
     assertEquals(expectedMetaData.getFileIndex(), actualMetaData.getFileIndex());
     assertEquals(expectedMetaData.getPageNumber(), actualMetaData.getPageNumber());
   }
 
-  private static String constructTestString(DocMetadata docMetadata) {
+  private static String constructTestString(final DocMetadata docMetadata) {
     return docMetadata.getKey()
             + DELIMITER + docMetadata.getFileIndex()
             + DELIMITER + docMetadata.getPageNumber();

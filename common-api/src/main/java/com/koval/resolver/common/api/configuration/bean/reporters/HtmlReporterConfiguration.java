@@ -11,7 +11,7 @@ public class HtmlReporterConfiguration {
     return openBrowser;
   }
 
-  public void setOpenBrowser(boolean openBrowser) {
+  public void setOpenBrowser(final boolean openBrowser) {
     this.openBrowser = openBrowser;
   }
 
@@ -19,7 +19,7 @@ public class HtmlReporterConfiguration {
     return htmlTemplateFileName;
   }
 
-  public void setHtmlTemplateFileName(String htmlTemplateFileName) {
+  public void setHtmlTemplateFileName(final String htmlTemplateFileName) {
     this.htmlTemplateFileName = htmlTemplateFileName;
   }
 
@@ -27,7 +27,7 @@ public class HtmlReporterConfiguration {
     return outputFile;
   }
 
-  public void setOutputFile(String outputFile) {
+  public void setOutputFile(final String outputFile) {
     this.outputFile = outputFile;
   }
 

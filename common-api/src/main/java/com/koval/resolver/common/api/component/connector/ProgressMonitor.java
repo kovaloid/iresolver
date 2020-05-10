@@ -13,7 +13,7 @@ public class ProgressMonitor {
   private long totalEnd;
   private long batchEnd;
 
-  public ProgressMonitor(int batchSize, int finishIndex) {
+  public ProgressMonitor(final int batchSize, final int finishIndex) {
     this.batchSize = batchSize;
     this.finishIndex = finishIndex;
   }
@@ -30,12 +30,12 @@ public class ProgressMonitor {
     batchEnd = new DateTime().getMillis();
   }
 
-  public String getFormattedRemainingTime(int currentIndex) {
+  public String getFormattedRemainingTime(final int currentIndex) {
     DateTime dateTime = getRemainingTime(currentIndex);
     return dateTime.toString("HH:mm:ss");
   }
 
-  private DateTime getRemainingTime(int currentIndex) {
+  private DateTime getRemainingTime(final int currentIndex) {
     if (batchSize == 0) {
       return new DateTime(0).withZone(DateTimeZone.UTC);
     }

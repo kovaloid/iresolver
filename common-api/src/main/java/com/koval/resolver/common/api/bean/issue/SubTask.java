@@ -3,7 +3,6 @@ package com.koval.resolver.common.api.bean.issue;
 import java.net.URI;
 import java.util.Objects;
 
-
 public class SubTask {
 
   private String issueKey;
@@ -15,7 +14,8 @@ public class SubTask {
   public SubTask() {
   }
 
-  public SubTask(String issueKey, URI issueUri, String summary, IssueType issueType, String status) {
+  public SubTask(
+    final String issueKey, final URI issueUri, final String summary, final IssueType issueType, final String status) {
     this.issueKey = issueKey;
     this.issueUri = issueUri;
     this.summary = summary;
@@ -27,7 +27,7 @@ public class SubTask {
     return issueKey;
   }
 
-  public void setIssueKey(String issueKey) {
+  public void setIssueKey(final String issueKey) {
     this.issueKey = issueKey;
   }
 
@@ -35,7 +35,7 @@ public class SubTask {
     return issueUri;
   }
 
-  public void setIssueUri(URI issueUri) {
+  public void setIssueUri(final URI issueUri) {
     this.issueUri = issueUri;
   }
 
@@ -43,7 +43,7 @@ public class SubTask {
     return summary;
   }
 
-  public void setSummary(String summary) {
+  public void setSummary(final String summary) {
     this.summary = summary;
   }
 
@@ -51,7 +51,7 @@ public class SubTask {
     return issueType;
   }
 
-  public void setIssueType(IssueType issueType) {
+  public void setIssueType(final IssueType issueType) {
     this.issueType = issueType;
   }
 
@@ -59,12 +59,17 @@ public class SubTask {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(final String status) {
     this.status = status;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public int hashCode() {
+    return Objects.hash(issueKey, issueUri, summary, issueType, status);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -73,14 +78,10 @@ public class SubTask {
     }
     SubTask subTask = (SubTask)o;
     return Objects.equals(issueKey, subTask.issueKey)
-        && Objects.equals(issueUri, subTask.issueUri)
-        && Objects.equals(summary, subTask.summary)
-        && Objects.equals(issueType, subTask.issueType)
-        && Objects.equals(status, subTask.status);
+           && Objects.equals(issueUri, subTask.issueUri)
+           && Objects.equals(summary, subTask.summary)
+           && Objects.equals(issueType, subTask.issueType)
+           && Objects.equals(status, subTask.status);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(issueKey, issueUri, summary, issueType, status);
-  }
 }

@@ -3,11 +3,11 @@ package com.koval.resolver.common.api.exception;
 
 public class ClientException extends RuntimeException {
 
-  public ClientException(String message) {
+  public ClientException(final String message) {
     super(message);
   }
 
-  public ClientException(String message, Throwable cause) {
+  public ClientException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

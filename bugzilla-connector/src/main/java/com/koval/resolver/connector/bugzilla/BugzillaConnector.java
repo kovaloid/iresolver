@@ -12,7 +12,7 @@ public class BugzillaConnector implements Connector {
   private final IssueClient issueClient;
   private final BugzillaConnectorConfiguration connectorProperties;
 
-  public BugzillaConnector(IssueClient issueClient, BugzillaConnectorConfiguration connectorProperties) {
+  public BugzillaConnector(final IssueClient issueClient, final BugzillaConnectorConfiguration connectorProperties) {
     this.issueClient = issueClient;
     this.connectorProperties = connectorProperties;
   }

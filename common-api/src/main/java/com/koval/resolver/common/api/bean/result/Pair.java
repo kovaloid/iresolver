@@ -8,7 +8,7 @@ public class Pair<E, M> {
   private final E entity;
   private M metric;
 
-  public Pair(E entity, M metric) {
+  public Pair(final E entity, final M metric) {
     this.entity = entity;
     this.metric = metric;
   }
@@ -21,12 +21,12 @@ public class Pair<E, M> {
     return metric;
   }
 
-  public void setMetric(M metric) {
+  public void setMetric(final M metric) {
     this.metric = metric;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

@@ -24,7 +24,7 @@ public class JiraIssueClientFactory implements IssueClientFactory {
   private final String host;
   private final Credentials credentials;
 
-  public JiraIssueClientFactory(JiraConnectorConfiguration connectorConfiguration) {
+  public JiraIssueClientFactory(final JiraConnectorConfiguration connectorConfiguration) {
     host = connectorConfiguration.getUrl();
     if (connectorConfiguration.isAnonymous()) {
       credentials = null;
@@ -60,7 +60,7 @@ public class JiraIssueClientFactory implements IssueClientFactory {
     return new JiraIssueClient(restClient, host + BROWSE_SUFFIX);
   }
 
-  private static URI getURI(String host) throws JiraConnectorException {
+  private static URI getURI(final String host) throws JiraConnectorException {
     try {
       return new URI(host);
     } catch (URISyntaxException e) {

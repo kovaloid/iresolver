@@ -33,10 +33,10 @@ public class DocumentationProcessor implements IssueProcessor {
   private final DocOutputFilesParser docOutputFilesParser;
 
   public DocumentationProcessor(
-          DocumentationProcessorConfiguration configuration,
-          DocOutputFilesParser docOutputFilesParser,
-          VectorModel vectorModel,
-          TextDataExtractor textDataExtractor
+    final DocumentationProcessorConfiguration configuration,
+    final DocOutputFilesParser docOutputFilesParser,
+    final VectorModel vectorModel,
+    final TextDataExtractor textDataExtractor
   ) {
     this.docOutputFilesParser = docOutputFilesParser;
     this.vectorModel = vectorModel;
@@ -45,7 +45,7 @@ public class DocumentationProcessor implements IssueProcessor {
   }
 
   @Override
-  public void run(Issue issue, IssueAnalysingResult result) {
+  public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
 
     String extractedIssueText = textDataExtractor.extract(issue);
@@ -69,10 +69,10 @@ public class DocumentationProcessor implements IssueProcessor {
   }
 
   private Optional<DocumentationResult> getResultForKey(
-          String extractedIssueText,
-          List<DocMetadata> docMetadata,
-          List<DocFile> docFiles,
-          String similarDocKey
+    final String extractedIssueText,
+    final List<DocMetadata> docMetadata,
+    final List<DocFile> docFiles,
+    final String similarDocKey
   ) {
     return docMetadata.stream()
             .filter((DocMetadata metadata) -> metadata.getKey().equals(similarDocKey))
@@ -81,10 +81,10 @@ public class DocumentationProcessor implements IssueProcessor {
   }
 
   private DocumentationResult getResultForMetaData(
-          String extractedIssueText,
-          List<DocFile> docFiles,
-          String similarDocKey,
-          DocMetadata metadata
+    final String extractedIssueText,
+    final List<DocFile> docFiles,
+    final String similarDocKey,
+    final DocMetadata metadata
   ) {
     DocFile docFile = docFiles.stream()
             .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
@@ -102,7 +102,7 @@ public class DocumentationProcessor implements IssueProcessor {
   }
 
 
-  private String getFileUri(String path, String fileName) {
+  private String getFileUri(final String path, final String fileName) {
     return FileSystems.getDefault()
             .getPath(path, fileName)
             .toAbsolutePath()

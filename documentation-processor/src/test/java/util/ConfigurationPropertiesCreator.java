@@ -16,8 +16,8 @@ public final class ConfigurationPropertiesCreator {
   }
 
   public static DocumentationProcessorConfiguration createProperties(
-          List<String> metadataStrings,
-          File file
+    final List<String> metadataStrings,
+    final File file
   ) throws IOException {
     final File tempFile = writeStringsToFile(metadataStrings, file);
 
@@ -29,8 +29,8 @@ public final class ConfigurationPropertiesCreator {
   }
 
   static File writeStringsToFile(
-          List<String> metadataStrings,
-          File file
+    final List<String> metadataStrings,
+    final File file
   ) throws IOException {
     for (String metadataString : metadataStrings) {
       FileUtils.writeStringToFile(file, metadataString, Charset.defaultCharset(), true);

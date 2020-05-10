@@ -1,6 +1,5 @@
 package com.koval.resolver.common.api.bean.result;
 
-
 public class AttachmentResult {
 
   private String extension;
@@ -8,7 +7,8 @@ public class AttachmentResult {
   private String type;
   private boolean presentInCurrentIssue;
 
-  public AttachmentResult(String extension, int rank, String type, boolean presentInCurrentIssue) {
+  public AttachmentResult(
+    final String extension, final int rank, final String type, final boolean presentInCurrentIssue) {
     this.extension = extension;
     this.rank = rank;
     this.type = type;
@@ -19,7 +19,7 @@ public class AttachmentResult {
     return extension;
   }
 
-  public void setExtension(String extension) {
+  public void setExtension(final String extension) {
     this.extension = extension;
   }
 
@@ -27,7 +27,7 @@ public class AttachmentResult {
     return rank;
   }
 
-  public void setRank(int rank) {
+  public void setRank(final int rank) {
     this.rank = rank;
   }
 
@@ -35,7 +35,7 @@ public class AttachmentResult {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(final String type) {
     this.type = type;
   }
 
@@ -43,7 +43,8 @@ public class AttachmentResult {
     return presentInCurrentIssue;
   }
 
-  public void setPresentInCurrentIssue(boolean presentInCurrentIssue) {
+  public void setPresentInCurrentIssue(final boolean presentInCurrentIssue) {
     this.presentInCurrentIssue = presentInCurrentIssue;
   }
+
 }

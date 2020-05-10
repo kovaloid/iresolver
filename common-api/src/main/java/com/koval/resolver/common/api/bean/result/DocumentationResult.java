@@ -8,7 +8,7 @@ public class DocumentationResult {
   private int pageNumber;
   private double rank;
 
-  public DocumentationResult(String fileName, String fileUri, int pageNumber, double rank) {
+  public DocumentationResult(final String fileName, final String fileUri, final int pageNumber, final double rank) {
     this.fileName = fileName;
     this.fileUri = fileUri;
     this.pageNumber = pageNumber;
@@ -19,7 +19,7 @@ public class DocumentationResult {
     return fileName;
   }
 
-  public void setFileName(String fileName) {
+  public void setFileName(final String fileName) {
     this.fileName = fileName;
   }
 
@@ -27,7 +27,7 @@ public class DocumentationResult {
     return fileUri;
   }
 
-  public void setFileUri(String fileUri) {
+  public void setFileUri(final String fileUri) {
     this.fileUri = fileUri;
   }
 
@@ -35,7 +35,7 @@ public class DocumentationResult {
     return pageNumber;
   }
 
-  public void setPageNumber(int pageNumber) {
+  public void setPageNumber(final int pageNumber) {
     this.pageNumber = pageNumber;
   }
 
@@ -43,7 +43,7 @@ public class DocumentationResult {
     return rank;
   }
 
-  public void setRank(double rank) {
+  public void setRank(final double rank) {
     this.rank = rank;
   }
 }

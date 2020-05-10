@@ -18,7 +18,7 @@ public final class CommandLineUtil {
     return getStringFromConsole("Enter your Jira password: ");
   }
 
-  private static String getStringFromConsole(String question) {
+  private static String getStringFromConsole(final String question) {
     Console console = System.console();
     if (console == null) {
       throw new CommandLineException("Could not get console instance.");

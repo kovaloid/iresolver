@@ -45,11 +45,11 @@ public class DocDataLineParserTest {
     docDataLineParser.parseLine(INVALID_STRING_FILE_INDEX_NOT_NUMBER);
   }
 
-  private static String constructTestString(DocFile docFile) {
+  private static String constructTestString(final DocFile docFile) {
     return docFile.getFileIndex() + DELIMITER + docFile.getFileName();
   }
 
-  private void assertDocFilesEqual(DocFile expectedDocFile, DocFile actualDocFile) {
+  private void assertDocFilesEqual(final DocFile expectedDocFile, final DocFile actualDocFile) {
     assertEquals(expectedDocFile.getFileIndex(), actualDocFile.getFileIndex());
     assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
   }

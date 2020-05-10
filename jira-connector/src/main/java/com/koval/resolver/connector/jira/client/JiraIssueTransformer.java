@@ -1,11 +1,7 @@
 package com.koval.resolver.connector.jira.client;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicUser;
-import com.koval.resolver.common.api.bean.issue.Attachment;
-import com.koval.resolver.common.api.bean.issue.Comment;
-import com.koval.resolver.common.api.bean.issue.Component;
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.IssueField;
-import com.koval.resolver.common.api.bean.issue.IssueLink;
-import com.koval.resolver.common.api.bean.issue.IssueType;
-import com.koval.resolver.common.api.bean.issue.Project;
-import com.koval.resolver.common.api.bean.issue.SubTask;
-import com.koval.resolver.common.api.bean.issue.User;
-import com.koval.resolver.common.api.bean.issue.Version;
+import com.koval.resolver.common.api.bean.issue.*;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
 import com.koval.resolver.common.api.util.CollectionsUtil;
-
 
 public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> {
 
@@ -37,13 +22,13 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
   private final JiraRestClient restClient;
   private final String browseUrl;
 
-  public JiraIssueTransformer(JiraRestClient restClient, String browseUrl) {
+  public JiraIssueTransformer(final JiraRestClient restClient, final String browseUrl) {
     this.restClient = restClient;
     this.browseUrl = browseUrl;
   }
 
   @Override
-  public Issue transform(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  public Issue transform(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     Issue transformedIssue = new Issue();
 
     transformedIssue.setLink(URI.create(browseUrl + originalIssue.getKey()));
@@ -74,9 +59,9 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
     }
 
     transformedIssue.setIssueType(new IssueType(originalIssue.getIssueType().getName(),
-        originalIssue.getIssueType().isSubtask()));
+                                                originalIssue.getIssueType().isSubtask()));
     transformedIssue.setProject(new Project(originalIssue.getProject().getKey(),
-        originalIssue.getProject().getName()));
+                                            originalIssue.getProject().getName()));
     transformedIssue.setCreationDate(originalIssue.getCreationDate());
     transformedIssue.setUpdateDate(originalIssue.getUpdateDate());
     transformedIssue.setDueDate(originalIssue.getDueDate());
@@ -94,7 +79,16 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
     return transformedIssue;
   }
 
-  private List<Component> transformComponents(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  @Override
+  public List<Issue> transform(final Collection<com.atlassian.jira.rest.client.api.domain.Issue> originalIssues) {
+    List<Issue> transformedIssues = new ArrayList<>();
+    for (com.atlassian.jira.rest.client.api.domain.Issue originalIssue : originalIssues) {
+      transformedIssues.add(transform(originalIssue));
+    }
+    return transformedIssues;
+  }
+
+  private List<Component> transformComponents(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Component> transformedComponents = new ArrayList<>();
     if (originalIssue.getComponents() != null) {
       originalIssue.getComponents().forEach(originalComponent -> {
@@ -105,91 +99,95 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
     return transformedComponents;
   }
 
-  private List<Version> transformFixVersions(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<Version> transformFixVersions(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Version> transformedFixVersions = new ArrayList<>();
     if (originalIssue.getFixVersions() != null) {
-      originalIssue.getFixVersions().forEach(originalFixVersion -> {
-        transformedFixVersions.add(transformVersion(originalFixVersion));
-      });
+      originalIssue.getFixVersions().forEach(
+        originalFixVersion -> transformedFixVersions.add(transformVersion(originalFixVersion)));
     }
     return transformedFixVersions;
   }
 
-  private List<Version> transformAffectedVersions(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<Version> transformAffectedVersions(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Version> transformedAffectedVersions = new ArrayList<>();
     if (originalIssue.getAffectedVersions() != null) {
-      originalIssue.getAffectedVersions().forEach(originalAffectedVersion -> {
-        transformedAffectedVersions.add(transformVersion(originalAffectedVersion));
-      });
+      originalIssue.getAffectedVersions().forEach(
+        originalAffectedVersion -> transformedAffectedVersions.add(transformVersion(originalAffectedVersion)));
     }
     return transformedAffectedVersions;
   }
 
-  private List<Comment> transformComments(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<Comment> transformComments(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Comment> transformedComments = new ArrayList<>();
     if (originalIssue.getComments() != null) {
       originalIssue.getComments().forEach(originalComment -> {
         Comment transformedComment = new Comment(transformBasicUser(originalComment.getAuthor()),
-            transformBasicUser(originalComment.getUpdateAuthor()), originalComment.getCreationDate(),
-            originalComment.getUpdateDate(), originalComment.getBody());
+                                                 transformBasicUser(originalComment.getUpdateAuthor()),
+                                                 originalComment.getCreationDate(),
+                                                 originalComment.getUpdateDate(), originalComment.getBody());
         transformedComments.add(transformedComment);
       });
     }
     return transformedComments;
   }
 
-  private List<IssueLink> transformIssueLinks(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<IssueLink> transformIssueLinks(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<IssueLink> transformedIssueLinks = new ArrayList<>();
     if (originalIssue.getIssueLinks() != null) {
       originalIssue.getIssueLinks().forEach(originalIssueLink -> {
         IssueLink transformedIssueLink = new IssueLink(originalIssueLink.getTargetIssueKey(),
-            originalIssueLink.getIssueLinkType().getName(), originalIssueLink.getTargetIssueUri());
+                                                       originalIssueLink.getIssueLinkType().getName(),
+                                                       originalIssueLink.getTargetIssueUri());
         transformedIssueLinks.add(transformedIssueLink);
       });
     }
     return transformedIssueLinks;
   }
 
-  private List<Attachment> transformAttachments(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<Attachment> transformAttachments(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<Attachment> transformedAttachments = new ArrayList<>();
     if (originalIssue.getAttachments() != null) {
       originalIssue.getAttachments().forEach(originalAttachment -> {
         Attachment transformedAttachment = new Attachment(originalAttachment.getFilename(),
-            transformBasicUser(originalAttachment.getAuthor()), originalAttachment.getCreationDate(),
-            originalAttachment.getSize(), originalAttachment.getMimeType(), originalAttachment.getContentUri());
+                                                          transformBasicUser(originalAttachment.getAuthor()),
+                                                          originalAttachment.getCreationDate(),
+                                                          originalAttachment.getSize(),
+                                                          originalAttachment.getMimeType(),
+                                                          originalAttachment.getContentUri());
         transformedAttachments.add(transformedAttachment);
       });
     }
     return transformedAttachments;
   }
 
-  private List<SubTask> transformSubTasks(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<SubTask> transformSubTasks(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<SubTask> transformedSubTasks = new ArrayList<>();
     if (originalIssue.getSubtasks() != null) {
       originalIssue.getSubtasks().forEach(originalSubTask -> {
         IssueType subTaskIssueType = new IssueType(originalSubTask.getIssueType().getName(),
-            originalSubTask.getIssueType().isSubtask());
+                                                   originalSubTask.getIssueType().isSubtask());
         SubTask transformedSubTask = new SubTask(originalSubTask.getIssueKey(), originalSubTask.getIssueUri(),
-            originalSubTask.getSummary(), subTaskIssueType, originalSubTask.getStatus().getName());
+                                                 originalSubTask.getSummary(), subTaskIssueType,
+                                                 originalSubTask.getStatus().getName());
         transformedSubTasks.add(transformedSubTask);
       });
     }
     return transformedSubTasks;
   }
 
-  private List<IssueField> transformIssueFields(com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
+  private List<IssueField> transformIssueFields(final com.atlassian.jira.rest.client.api.domain.Issue originalIssue) {
     List<IssueField> transformedIssueFields = new ArrayList<>();
     if (originalIssue.getFields() != null) {
       originalIssue.getFields().forEach(originalIssueField -> {
         IssueField transformedIssueField = new IssueField(originalIssueField.getId(), originalIssueField.getName(),
-            originalIssueField.getType(), originalIssueField.getValue());
+                                                          originalIssueField.getType(), originalIssueField.getValue());
         transformedIssueFields.add(transformedIssueField);
       });
     }
     return transformedIssueFields;
   }
 
-  private User transformUser(com.atlassian.jira.rest.client.api.domain.User originalUser) {
+  private User transformUser(final com.atlassian.jira.rest.client.api.domain.User originalUser) {
     User transformedUser = new User();
     transformedUser.setName(originalUser.getName());
     transformedUser.setDisplayName(originalUser.getDisplayName());
@@ -204,7 +202,7 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
     return transformedUser;
   }
 
-  private User transformBasicUser(BasicUser originalBasicUser) {
+  private User transformBasicUser(final BasicUser originalBasicUser) {
     if (originalBasicUser == null) {
       return getUnknownUser();
     }
@@ -225,34 +223,26 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
 
   private User getUnknownUser() {
     return new User(UNKNOWN, UNKNOWN, UNKNOWN, new ArrayList<>(),
-        URI.create(""), URI.create(""));
+                    URI.create(""), URI.create(""));
   }
 
-  private User getFullUserByBasicUser(BasicUser basicUser) {
+  private User getFullUserByBasicUser(final BasicUser basicUser) {
     com.atlassian.jira.rest.client.api.domain.User fullUser = restClient.getUserClient()
-        .getUser(basicUser.getSelf()).claim();
+                                                                        .getUser(basicUser.getSelf()).claim();
     List<String> userGroups = fullUser.getGroups() == null ? new ArrayList<>()
-        : CollectionsUtil.convert(fullUser.getGroups().getItems());
+                                                           : CollectionsUtil.convert(fullUser.getGroups().getItems());
     return new User(basicUser.getName(), basicUser.getDisplayName(), fullUser.getEmailAddress(),
-        userGroups, fullUser.getAvatarUri(), fullUser.getSmallAvatarUri());
+                    userGroups, fullUser.getAvatarUri(), fullUser.getSmallAvatarUri());
   }
 
-  private User getIncompleteUserByBasicUser(BasicUser basicUser) {
+  private User getIncompleteUserByBasicUser(final BasicUser basicUser) {
     return new User(basicUser.getName(), basicUser.getDisplayName(), UNKNOWN, new ArrayList<>(), URI.create(""),
-        URI.create(""));
+                    URI.create(""));
   }
 
-  private Version transformVersion(com.atlassian.jira.rest.client.api.domain.Version originalVersion) {
+  private Version transformVersion(final com.atlassian.jira.rest.client.api.domain.Version originalVersion) {
     return new Version(originalVersion.getName(), originalVersion.getDescription(), originalVersion.isArchived(),
-        originalVersion.isReleased(), originalVersion.getReleaseDate());
+                       originalVersion.isReleased(), originalVersion.getReleaseDate());
   }
 
-  @Override
-  public List<Issue> transform(Collection<com.atlassian.jira.rest.client.api.domain.Issue> originalIssues) {
-    List<Issue> transformedIssues = new ArrayList<>();
-    for (com.atlassian.jira.rest.client.api.domain.Issue originalIssue : originalIssues) {
-      transformedIssues.add(transform(originalIssue));
-    }
-    return transformedIssues;
-  }
 }

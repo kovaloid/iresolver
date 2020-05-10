@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-
 public class User {
 
   private String name;
@@ -17,7 +16,9 @@ public class User {
   public User() {
   }
 
-  public User(String name, String displayName, String emailAddress, List<String> groups, URI avatarUri, URI smallAvatarUri) {
+  public User(
+    final String name, final String displayName, final String emailAddress, final List<String> groups,
+    final URI avatarUri, final URI smallAvatarUri) {
     this.name = name;
     this.displayName = displayName;
     this.emailAddress = emailAddress;
@@ -30,7 +31,7 @@ public class User {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -38,7 +39,7 @@ public class User {
     return displayName;
   }
 
-  public void setDisplayName(String displayName) {
+  public void setDisplayName(final String displayName) {
     this.displayName = displayName;
   }
 
@@ -46,7 +47,7 @@ public class User {
     return emailAddress;
   }
 
-  public void setEmailAddress(String emailAddress) {
+  public void setEmailAddress(final String emailAddress) {
     this.emailAddress = emailAddress;
   }
 
@@ -54,7 +55,7 @@ public class User {
     return groups;
   }
 
-  public void setGroups(List<String> groups) {
+  public void setGroups(final List<String> groups) {
     this.groups = groups;
   }
 
@@ -62,7 +63,7 @@ public class User {
     return avatarUri;
   }
 
-  public void setAvatarUri(URI avatarUri) {
+  public void setAvatarUri(final URI avatarUri) {
     this.avatarUri = avatarUri;
   }
 
@@ -70,12 +71,17 @@ public class User {
     return smallAvatarUri;
   }
 
-  public void setSmallAvatarUri(URI smallAvatarUri) {
+  public void setSmallAvatarUri(final URI smallAvatarUri) {
     this.smallAvatarUri = smallAvatarUri;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public int hashCode() {
+    return Objects.hash(name, displayName, emailAddress, groups, avatarUri, smallAvatarUri);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -84,15 +90,11 @@ public class User {
     }
     User user = (User)o;
     return Objects.equals(name, user.name)
-        && Objects.equals(displayName, user.displayName)
-        && Objects.equals(emailAddress, user.emailAddress)
-        && Objects.equals(groups, user.groups)
-        && Objects.equals(avatarUri, user.avatarUri)
-        && Objects.equals(smallAvatarUri, user.smallAvatarUri);
+           && Objects.equals(displayName, user.displayName)
+           && Objects.equals(emailAddress, user.emailAddress)
+           && Objects.equals(groups, user.groups)
+           && Objects.equals(avatarUri, user.avatarUri)
+           && Objects.equals(smallAvatarUri, user.smallAvatarUri);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, displayName, emailAddress, groups, avatarUri, smallAvatarUri);
-  }
 }
