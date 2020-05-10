@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.DocFile;
+import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
@@ -90,7 +91,9 @@ public class DocDataSetCreator {
 
                 writeDataSet(dataSetBufferedWriter, docPage, docPageKey);
 
-                writeMetadata(documentIndex, metadataBufferedWriter, docPage, docPageKey);
+                int docPageNumber = docPage.getKey();
+                DocMetadata docMetadata = new DocMetadata(docPageKey, documentIndex, docPageNumber);
+                writeMetadata(metadataBufferedWriter, docMetadata);
               }
 
               DocFile docFileData = new DocFile(documentIndex, docFile.getName());
@@ -123,16 +126,14 @@ public class DocDataSetCreator {
   }
 
   private void writeMetadata(
-          int documentIndex,
           BufferedWriter metadataBufferedWriter,
-          Map.Entry<Integer, String> docPage,
-          String docPageKey
+          DocMetadata docMetadata
   ) throws IOException {
-    metadataBufferedWriter.write(docPageKey);
+    metadataBufferedWriter.write(docMetadata.getKey());
     metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(documentIndex));
+    metadataBufferedWriter.write(String.valueOf(docMetadata.getFileIndex()));
     metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(docPage.getKey()));
+    metadataBufferedWriter.write(String.valueOf(docMetadata.getPageNumber()));
     metadataBufferedWriter.newLine();
   }
 
