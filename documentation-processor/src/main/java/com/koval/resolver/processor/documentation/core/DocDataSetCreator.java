@@ -86,18 +86,13 @@ public class DocDataSetCreator {
             MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
             if (mediaType.equals(MediaType.PDF)) {
-              Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
-
-              writeEntriesForDocPages(
-                      docPages,
+              writeEntriesForDocFile(
+                      docFile,
+                      inputFileStream,
                       dataSetBufferedWriter,
-                      metadataBufferedWriter
+                      metadataBufferedWriter,
+                      docListBufferedWriter
               );
-
-              DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-              writeDocList(docListBufferedWriter, docFileData);
-
-              currentDocumentIndex++;
             }
           } catch (FileNotFoundException e) {
             LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
@@ -111,6 +106,27 @@ public class DocDataSetCreator {
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       LOGGER.error("Could not write to output file", e);
     }
+  }
+
+  private void writeEntriesForDocFile(
+          File docFile,
+          InputStream inputFileStream,
+          BufferedWriter dataSetBufferedWriter,
+          BufferedWriter metadataBufferedWriter,
+          BufferedWriter docListBufferedWriter
+  ) throws IOException {
+    Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
+
+    writeEntriesForDocPages(
+            docPages,
+            dataSetBufferedWriter,
+            metadataBufferedWriter
+    );
+
+    DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
+    writeDocList(docListBufferedWriter, docFileData);
+
+    currentDocumentIndex++;
   }
 
   private void writeEntriesForDocPages(
