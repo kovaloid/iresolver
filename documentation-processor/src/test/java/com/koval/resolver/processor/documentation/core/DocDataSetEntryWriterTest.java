@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 
+//TODO: This test knows too much implementation details,
+// we need to extract each entry parsing into separate classes
 @ExtendWith(MockitoExtension.class)
 class DocDataSetEntryWriterTest {
 
@@ -78,11 +80,11 @@ class DocDataSetEntryWriterTest {
     metadataWriter.flush();
     docListWriter.flush();
 
-    String result1 = dataSetStringWriter.toString();
-    String result2 = metadataStringWriter.toString();
-    String result3 = docListStringWriter.toString();
+    String dataSetEntry = dataSetStringWriter.toString();
+    String metadataEntry = metadataStringWriter.toString();
+    String docListEntry = docListStringWriter.toString();
 
-    assertTrue(true);
+    assertEquals(docListEntry, "0 " + FILE_NAME + System.lineSeparator());
 
   }
 }
