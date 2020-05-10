@@ -36,6 +36,9 @@ public class DocDataSetCreator {
 
   private final DocumentationProcessorConfiguration properties;
 
+  private int currentPageIndex;
+  private int currentDocumentIndex;
+
   public DocDataSetCreator(
           DocumentationProcessorConfiguration properties,
           DocTypeDetector docTypeDetector,
@@ -64,8 +67,8 @@ public class DocDataSetCreator {
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
 
-    int pageIndex = 0;
-    int documentIndex = 0;
+    currentPageIndex = 0;
+    currentDocumentIndex = 0;
 
     File docMetadataFile = new File(properties.getDocsMetadataFile());
     File docListFile = new File(properties.getDocsListFile());
@@ -85,21 +88,16 @@ public class DocDataSetCreator {
             if (mediaType.equals(MediaType.PDF)) {
               Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
-              for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
-                String docPageKey = KEY_PREFIX + pageIndex;
-                pageIndex++;
+              writeEntriesForDocPages(
+                      docPages,
+                      dataSetBufferedWriter,
+                      metadataBufferedWriter
+              );
 
-                writeDataSet(dataSetBufferedWriter, docPage, docPageKey);
-
-                int docPageNumber = docPage.getKey();
-                DocMetadata docMetadata = new DocMetadata(docPageKey, documentIndex, docPageNumber);
-                writeMetadata(metadataBufferedWriter, docMetadata);
-              }
-
-              DocFile docFileData = new DocFile(documentIndex, docFile.getName());
+              DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
               writeDocList(docListBufferedWriter, docFileData);
 
-              documentIndex++;
+              currentDocumentIndex++;
             }
           } catch (FileNotFoundException e) {
             LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
@@ -112,6 +110,23 @@ public class DocDataSetCreator {
       LOGGER.info("Doc list file was created: {}", docListFile.getCanonicalPath());
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       LOGGER.error("Could not write to output file", e);
+    }
+  }
+
+  private void writeEntriesForDocPages(
+          Map<Integer, String> docPages,
+          BufferedWriter dataSetBufferedWriter,
+          BufferedWriter metadataBufferedWriter
+  ) throws IOException {
+    for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
+      String docPageKey = KEY_PREFIX + currentPageIndex;
+      currentPageIndex++;
+
+      writeDataSet(dataSetBufferedWriter, docPage, docPageKey);
+
+      int docPageNumber = docPage.getKey();
+      DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
+      writeMetadata(metadataBufferedWriter, docMetadata);
     }
   }
 
