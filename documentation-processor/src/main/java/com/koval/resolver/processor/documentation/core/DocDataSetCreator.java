@@ -2,42 +2,30 @@ package com.koval.resolver.processor.documentation.core;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
-import com.koval.resolver.common.api.util.TextUtil;
-import com.koval.resolver.processor.documentation.bean.DocFile;
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
-import com.koval.resolver.processor.documentation.split.PageSplitter;
-import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
 
 public class DocDataSetCreator {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
-
-  private static final String KEY_PREFIX = "doc_";
-  private static final String SPACE = " ";
-  private static final String SEPARATOR = "|";
 
   private static final String EXTENSION_PDF = ".pdf";
   private static final String DOC_FILES_LOCATION = "../docs";
 
+  private final DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter();
+
   private final DocTypeDetector docTypeDetector;
-  private final PageSplitter pageSplitter = new PdfPageSplitter();
+
   private final FileConverter fileConverter;
 
   private final String docsFolderPath;
 
   private final DocumentationProcessorConfiguration properties;
-
-  private int currentPageIndex;
-  private int currentDocumentIndex;
 
   public DocDataSetCreator(
           DocumentationProcessorConfiguration properties,
@@ -67,8 +55,7 @@ public class DocDataSetCreator {
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
 
-    currentPageIndex = 0;
-    currentDocumentIndex = 0;
+    docDataSetEntryWriter.resetIndices();
 
     File docMetadataFile = new File(properties.getDocsMetadataFile());
     File docListFile = new File(properties.getDocsListFile());
@@ -85,7 +72,7 @@ public class DocDataSetCreator {
           MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
           if (mediaType.equals(MediaType.PDF)) {
-            writeEntriesForDocFile(
+            docDataSetEntryWriter.writeEntriesForDocFile(
                     docFile,
                     dataSetBufferedWriter,
                     metadataBufferedWriter,
@@ -103,79 +90,6 @@ public class DocDataSetCreator {
     }
   }
 
-  private void writeEntriesForDocFile(
-          File docFile,
-          BufferedWriter dataSetBufferedWriter,
-          BufferedWriter metadataBufferedWriter,
-          BufferedWriter docListBufferedWriter
-  ) throws IOException {
-    try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-      Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
-
-      writeEntriesForDocPages(
-              docPages,
-              dataSetBufferedWriter,
-              metadataBufferedWriter
-      );
-
-      DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-      writeDocListFileEntry(docListBufferedWriter, docFileData);
-
-      currentDocumentIndex++;
-    } catch (FileNotFoundException e) {
-      LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
-    }
-  }
-
-  private void writeEntriesForDocPages(
-          Map<Integer, String> docPages,
-          BufferedWriter dataSetBufferedWriter,
-          BufferedWriter metadataBufferedWriter
-  ) throws IOException {
-    for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
-      String docPageKey = KEY_PREFIX + currentPageIndex;
-      currentPageIndex++;
-
-      writeDataSetFileEntry(dataSetBufferedWriter, docPage, docPageKey);
-
-      int docPageNumber = docPage.getKey();
-      DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
-      writeMetadataFileEntry(metadataBufferedWriter, docMetadata);
-    }
-  }
-
-  private void writeDocListFileEntry(
-          BufferedWriter docListBufferedWriter,
-          DocFile docFileData
-  ) throws IOException {
-    docListBufferedWriter.write(String.valueOf(docFileData.getFileIndex()));
-    docListBufferedWriter.write(SPACE);
-    docListBufferedWriter.write(docFileData.getFileName());
-    docListBufferedWriter.newLine();
-  }
-
-  private void writeMetadataFileEntry(
-          BufferedWriter metadataBufferedWriter,
-          DocMetadata docMetadata
-  ) throws IOException {
-    metadataBufferedWriter.write(docMetadata.getKey());
-    metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(docMetadata.getFileIndex()));
-    metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(docMetadata.getPageNumber()));
-    metadataBufferedWriter.newLine();
-  }
-
-  private void writeDataSetFileEntry(
-          BufferedWriter dataSetBufferedWriter,
-          Map.Entry<Integer, String> docPage,
-          String docPageKey
-  ) throws IOException {
-    dataSetBufferedWriter.write(docPageKey);
-    dataSetBufferedWriter.write(SEPARATOR);
-    dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
-    dataSetBufferedWriter.newLine();
-  }
 
   public void convertWordFilesToPdf() {
     File docsFolder = new File(docsFolderPath);
