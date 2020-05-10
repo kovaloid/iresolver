@@ -14,12 +14,12 @@ public class RuleEngineProcessor implements IssueProcessor {
 
   private final RuleEngine ruleEngine;
 
-  public RuleEngineProcessor(Configuration configuration) throws IOException {
+  public RuleEngineProcessor(final Configuration configuration) throws IOException {
     this.ruleEngine = new DroolsRuleEngine(configuration.getProcessors().getRuleEngine().getRulesLocation());
   }
 
   @Override
-  public void run(Issue issue, IssueAnalysingResult result) {
+  public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
     result.setProposals(ruleEngine.execute(issue));
   }

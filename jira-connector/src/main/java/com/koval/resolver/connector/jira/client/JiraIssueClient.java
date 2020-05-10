@@ -30,13 +30,13 @@ public class JiraIssueClient implements IssueClient {
   private final JiraRestClient restClient;
   private final IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> issueTransformer;
 
-  JiraIssueClient(JiraRestClient restClient, String browseUrl) {
+  JiraIssueClient(final JiraRestClient restClient, final String browseUrl) {
     this.restClient = restClient;
     this.issueTransformer = new JiraIssueTransformer(restClient, browseUrl);
   }
 
   @Override
-  public int getTotalIssues(String query) {
+  public int getTotalIssues(final String query) {
     LOGGER.debug("Send total issues request: Query = '{}'.", query);
     SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
@@ -45,7 +45,7 @@ public class JiraIssueClient implements IssueClient {
   }
 
   @Override
-  public List<Issue> search(String query, int maxResults, int startAt, List<String> fields) {
+  public List<Issue> search(final String query, final int maxResults, final int startAt, final List<String> fields) {
     LOGGER.debug("Send search request: Query = '{}' MaxResults = '{}' StartAt = '{}'.", query, maxResults, startAt);
     if (fields.isEmpty()) {
       fields.add("*all");
@@ -65,7 +65,7 @@ public class JiraIssueClient implements IssueClient {
   }
 
   @Override
-  public Issue getIssueByKey(String issueKey) {
+  public Issue getIssueByKey(final String issueKey) {
     LOGGER.debug("Send issue request: IssueKey = '{}'.", issueKey);
     com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
         () -> restClient.getIssueClient().getIssue(issueKey).claim(),
@@ -91,7 +91,7 @@ public class JiraIssueClient implements IssueClient {
   }
 
   @SuppressWarnings("PMD.PreserveStackTrace")
-  private <T> T checkRestExceptions(Supplier<T> supplier, String message) {
+  private <T> T checkRestExceptions(final Supplier<T> supplier, final String message) {
     try {
       return supplier.get();
     } catch (RestClientException e) {

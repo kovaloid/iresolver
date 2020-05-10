@@ -12,8 +12,8 @@ public class DocOutputFilesParser {
   private final DocFileDataParser docFileDataParser;
 
   public DocOutputFilesParser(
-          DocumentationProcessorConfiguration properties,
-          DocFileRepository docFileRepository
+    final DocumentationProcessorConfiguration properties,
+    final DocFileRepository docFileRepository
   ) {
     this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), docFileRepository);
     this.docFileDataParser = new DocFileDataParser(properties.getDocsListFile(), docFileRepository);

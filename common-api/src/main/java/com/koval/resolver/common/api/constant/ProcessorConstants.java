@@ -9,7 +9,7 @@ public enum ProcessorConstants {
 
   private String content;
 
-  ProcessorConstants(String content) {
+  ProcessorConstants(final String content) {
     this.content = content;
   }
 

@@ -30,35 +30,35 @@ public class VectorModelCreator {
   private List<String> stopWords;
   private ParagraphVectorsConfiguration properties;
 
-  public VectorModelCreator(ParagraphVectorsConfiguration properties) {
+  public VectorModelCreator(final ParagraphVectorsConfiguration properties) {
     this(new StemmingPreprocessor().setLanguage(properties.getLanguage()), StopWords.getStopWords(),
         properties);
   }
 
-  public VectorModelCreator(TokenPreProcess tokenPreprocessor, List<String> stopWords, ParagraphVectorsConfiguration properties) {
+  public VectorModelCreator(final TokenPreProcess tokenPreprocessor, final List<String> stopWords, final ParagraphVectorsConfiguration properties) {
     this.tokenPreprocessor = tokenPreprocessor;
     this.stopWords = stopWords;
     this.properties = properties;
   }
 
-  public VectorModel createFromFile(File inputFile) throws IOException {
+  public VectorModel createFromFile(final File inputFile) throws IOException {
     try (InputStream inputStream = new FileInputStream(inputFile)) {
       return createFromInputStream(inputStream);
     }
   }
 
-  public VectorModel createFromResource(String dataSetFileName) throws IOException {
+  public VectorModel createFromResource(final String dataSetFileName) throws IOException {
     try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dataSetFileName)) {
       return createFromInputStream(inputStream);
     }
   }
 
-  public VectorModel createFromInputStream(InputStream inputStream) throws IOException {
+  public VectorModel createFromInputStream(final InputStream inputStream) throws IOException {
     LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
     return createVectorModelWithIterator(iterator);
   }
 
-  private VectorModel createVectorModelWithIterator(LabelAwareSentenceIterator iterator) {
+  private VectorModel createVectorModelWithIterator(final LabelAwareSentenceIterator iterator) {
     AbstractCache<VocabWord> cache = new AbstractCache<>();
 
     TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();

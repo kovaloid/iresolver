@@ -22,12 +22,12 @@ public class ConfluencePageReceiver {
   private final ConfluenceClient client;
   private final ConfluenceConnectorConfiguration properties;
 
-  public ConfluencePageReceiver(ConfluenceClient client, ConfluenceConnectorConfiguration properties) {
+  public ConfluencePageReceiver(final ConfluenceClient client, final ConfluenceConnectorConfiguration properties) {
     this.client = client;
     this.properties = properties;
   }
 
-  public void start(DataSetWriter<ConfluencePage> dataSetWriter) {
+  public void start(final DataSetWriter<ConfluencePage> dataSetWriter) {
     ConfluenceTransformer transformer = new ConfluenceTransformer();
     List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
     int startIndex = 0;

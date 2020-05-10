@@ -59,7 +59,7 @@ public final class Launcher {
 
   private final Configuration configuration;
 
-  public Launcher(Configuration configuration) {
+  public Launcher(final Configuration configuration) {
     this.configuration = configuration;
   }
 
@@ -150,7 +150,7 @@ public final class Launcher {
     createVectorModel(dataSetFile, vectorModelFile, "Could not create confluence vector model file.");
   }
 
-  private void createVectorModel(String dataSetFile, String vectorModelFile, String errorMessage) {
+  private void createVectorModel(final String dataSetFile, final String vectorModelFile, final String errorMessage) {
     VectorModelCreator vectorModelCreator = new VectorModelCreator(configuration.getParagraphVectors());
     try {
       VectorModel vectorModel = vectorModelCreator.createFromFile(new File(dataSetFile));
@@ -191,7 +191,7 @@ public final class Launcher {
     }
   }
 
-  private List<IssueProcessor> getIssueProcessors(IssueClient issueClient) throws IOException {
+  private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
     List<String> processorNames = configuration.getAdministration().getProcessors();
     List<IssueProcessor> issueProcessors = new ArrayList<>();
     if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
@@ -277,7 +277,7 @@ public final class Launcher {
     }
   }
 
-  private Connector getConnector(IssueClient issueClient) {
+  private Connector getConnector(final IssueClient issueClient) {
     ConnectorType connectorType = configuration.getAdministration().getConnectorType();
     switch (connectorType) {
       case JIRA:

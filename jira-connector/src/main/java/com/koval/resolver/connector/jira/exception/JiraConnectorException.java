@@ -5,7 +5,7 @@ import com.koval.resolver.common.api.exception.ConnectorException;
 
 public class JiraConnectorException extends ConnectorException {
 
-  public JiraConnectorException(String message, Throwable cause) {
+  public JiraConnectorException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

@@ -11,7 +11,7 @@ public class Component {
   public Component() {
   }
 
-  public Component(String name, String description) {
+  public Component(final String name, final String description) {
     this.name = name;
     this.description = description;
   }
@@ -20,7 +20,7 @@ public class Component {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -28,12 +28,12 @@ public class Component {
     return description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(final String description) {
     this.description = description;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

@@ -26,7 +26,7 @@ public class BugzillaIssueClientFactory implements IssueClientFactory {
   private final String host;
   private final Credentials credentials;
 
-  public BugzillaIssueClientFactory(BugzillaConnectorConfiguration connectorConfiguration) {
+  public BugzillaIssueClientFactory(final BugzillaConnectorConfiguration connectorConfiguration) {
     host = connectorConfiguration.getUrl();
     if (connectorConfiguration.isAnonymous()) {
       credentials = null;
@@ -70,7 +70,7 @@ public class BugzillaIssueClientFactory implements IssueClientFactory {
     return new BugzillaIssueClient(session);
   }
 
-  private static URL getURL(String host) throws BugzillaConnectorException {
+  private static URL getURL(final String host) throws BugzillaConnectorException {
     try {
       return new URL(host);
     } catch (MalformedURLException e) {

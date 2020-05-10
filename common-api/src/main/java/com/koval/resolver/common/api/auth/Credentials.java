@@ -8,7 +8,7 @@ public class Credentials {
   private final String username;
   private final String password;
 
-  Credentials(String username, String password) {
+  Credentials(final String username, final String password) {
     this.username = username;
     this.password = password;
   }
@@ -21,7 +21,7 @@ public class Credentials {
     return password;
   }
 
-  public static Credentials getCredentials(String credentialsFolder) {
+  public static Credentials getCredentials(final String credentialsFolder) {
     CredentialsProtector protector = new CredentialsProtector();
     CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
     Credentials credentials;

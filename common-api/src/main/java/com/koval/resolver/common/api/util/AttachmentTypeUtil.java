@@ -14,7 +14,7 @@ public final class AttachmentTypeUtil {
   }
 
   @SuppressWarnings({"PMD.CyclomaticComplexity"})
-  public static String getType(String extension) {
+  public static String getType(final String extension) {
     if (extension.endsWith(".txt") || extension.endsWith(".log")) {
       return "Log";
     } else if (extension.endsWith(".pdf") || extension.endsWith(".doc") || extension.endsWith(".docx") || extension.endsWith(".rtf")) {
@@ -35,13 +35,13 @@ public final class AttachmentTypeUtil {
     }
   }
 
-  public static String getExtension(Attachment attachment) {
+  public static String getExtension(final Attachment attachment) {
     String fileName = attachment.getFileName();
     int dotIndex = fileName.lastIndexOf('.');
     return dotIndex > 0 ? fileName.substring(dotIndex) : "";
   }
 
-  public static List<String> getExtensions(List<Attachment> attachments) {
+  public static List<String> getExtensions(final List<Attachment> attachments) {
     Set<String> types = new HashSet<>();
     for (Attachment attachment: attachments) {
       types.add(getExtension(attachment));

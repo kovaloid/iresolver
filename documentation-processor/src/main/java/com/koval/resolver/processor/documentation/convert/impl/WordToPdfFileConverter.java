@@ -21,7 +21,7 @@ public class WordToPdfFileConverter implements FileConverter {
   private static final Logger LOGGER = LoggerFactory.getLogger(WordToPdfFileConverter.class);
 
   @Override
-  public void convert(File inputFile) {
+  public void convert(final File inputFile) {
     String wordFileName = inputFile.getName();
     String pdfFileName = wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(".pdf");
 

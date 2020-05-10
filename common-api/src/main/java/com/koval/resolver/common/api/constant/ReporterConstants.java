@@ -6,7 +6,7 @@ public enum ReporterConstants {
 
   private String content;
 
-  ReporterConstants(String content) {
+  ReporterConstants(final String content) {
     this.content = content;
   }
 

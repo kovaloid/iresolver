@@ -18,13 +18,13 @@ public class FileParser {
 
   private final DocFileRepository docFileRepository;
 
-  public FileParser(DocFileRepository docFileRepository) {
+  public FileParser(final DocFileRepository docFileRepository) {
     this.docFileRepository = docFileRepository;
   }
 
   public <T> List<T> parseFile(
-          String fileName,
-          LineParser<T> lineParser
+    final String fileName,
+    final LineParser<T> lineParser
   ) {
     List<T> parsedClasses = new ArrayList<>();
 

@@ -7,7 +7,7 @@ public enum IssueParts {
 
   private String content;
 
-  IssueParts(String content) {
+  IssueParts(final String content) {
     this.content = content;
   }
 

@@ -26,7 +26,7 @@ public class GranularIssuesDataSetsCreator {
   private final IssueReceiver receiver;
   private final GranularIssuesProcessorConfiguration properties;
 
-  public GranularIssuesDataSetsCreator(IssueReceiver receiver, GranularIssuesProcessorConfiguration properties) {
+  public GranularIssuesDataSetsCreator(final IssueReceiver receiver, final GranularIssuesProcessorConfiguration properties) {
     this.receiver = receiver;
     this.properties = properties;
   }
@@ -97,7 +97,7 @@ public class GranularIssuesDataSetsCreator {
     }
   }
 
-  private PrintWriter getDataSetWriter(String dataSetPath) throws IOException {
+  private PrintWriter getDataSetWriter(final String dataSetPath) throws IOException {
     File dataSetFile = new File(dataSetPath);
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());

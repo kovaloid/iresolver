@@ -15,7 +15,7 @@ public class BugzillaQuery {
     return product;
   }
 
-  public void setProduct(String product) {
+  public void setProduct(final String product) {
     this.product = product;
   }
 
@@ -23,7 +23,7 @@ public class BugzillaQuery {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(final String status) {
     this.status = status;
   }
 
@@ -31,7 +31,7 @@ public class BugzillaQuery {
     return resolution;
   }
 
-  public void setResolution(String resolution) {
+  public void setResolution(final String resolution) {
     this.resolution = resolution;
   }
 
@@ -39,7 +39,7 @@ public class BugzillaQuery {
     return assignee;
   }
 
-  public void setAssignee(String assignee) {
+  public void setAssignee(final String assignee) {
     this.assignee = assignee;
   }
 
@@ -47,7 +47,7 @@ public class BugzillaQuery {
     return reporter;
   }
 
-  public void setReporter(String reporter) {
+  public void setReporter(final String reporter) {
     this.reporter = reporter;
   }
 
@@ -55,7 +55,7 @@ public class BugzillaQuery {
     return version;
   }
 
-  public void setVersion(String version) {
+  public void setVersion(final String version) {
     this.version = version;
   }
 
@@ -63,7 +63,7 @@ public class BugzillaQuery {
     return priority;
   }
 
-  public void setPriority(String priority) {
+  public void setPriority(final String priority) {
     this.priority = priority;
   }
 

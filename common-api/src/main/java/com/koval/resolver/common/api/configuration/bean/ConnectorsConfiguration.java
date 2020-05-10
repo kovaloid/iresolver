@@ -15,7 +15,7 @@ public class ConnectorsConfiguration {
     return jira;
   }
 
-  public void setJira(JiraConnectorConfiguration jira) {
+  public void setJira(final JiraConnectorConfiguration jira) {
     this.jira = jira;
   }
 
@@ -23,7 +23,7 @@ public class ConnectorsConfiguration {
     return bugzilla;
   }
 
-  public void setBugzilla(BugzillaConnectorConfiguration bugzilla) {
+  public void setBugzilla(final BugzillaConnectorConfiguration bugzilla) {
     this.bugzilla = bugzilla;
   }
 
@@ -31,7 +31,7 @@ public class ConnectorsConfiguration {
     return confluence;
   }
 
-  public void setConfluence(ConfluenceConnectorConfiguration confluence) {
+  public void setConfluence(final ConfluenceConnectorConfiguration confluence) {
     this.confluence = confluence;
   }
 

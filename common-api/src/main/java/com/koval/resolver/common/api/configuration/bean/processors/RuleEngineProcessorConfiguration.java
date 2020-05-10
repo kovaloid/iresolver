@@ -9,7 +9,7 @@ public class RuleEngineProcessorConfiguration {
     return rulesLocation;
   }
 
-  public void setRulesLocation(String rulesLocation) {
+  public void setRulesLocation(final String rulesLocation) {
     this.rulesLocation = rulesLocation;
   }
 

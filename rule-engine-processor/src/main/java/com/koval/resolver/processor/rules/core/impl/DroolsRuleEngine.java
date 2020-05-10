@@ -27,7 +27,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.processor.rules.core.RuleEngine;
 
-
 public class DroolsRuleEngine implements RuleEngine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);
@@ -37,11 +36,11 @@ public class DroolsRuleEngine implements RuleEngine {
     this(getResources("classpath*:*.drl"));
   }
 
-  public DroolsRuleEngine(String rulesLocation) throws IOException {
+  public DroolsRuleEngine(final String rulesLocation) throws IOException {
     this(getResources(rulesLocation));
   }
 
-  private DroolsRuleEngine(Resource[] resources) throws IOException {
+  private DroolsRuleEngine(final Resource[] resources) throws IOException {
     final KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
     addRulesToKnowledgeBuilder(knowledgeBuilder, resources);
     checkForErrors(knowledgeBuilder);
@@ -49,18 +48,40 @@ public class DroolsRuleEngine implements RuleEngine {
     LOGGER.info("Kie session was created.");
   }
 
-  private static Resource[] getResources(String location) throws IOException {
+  private static Resource[] getResources(final String location) throws IOException {
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     return resolver.getResources(location);
   }
 
-  private void addRulesToKnowledgeBuilder(KnowledgeBuilder knowledgeBuilder, Resource[] resources) throws IOException {
+  public void setDebugMode() {
+    kieSession.addEventListener(new DebugAgendaEventListener());
+    kieSession.addEventListener(new DebugRuleRuntimeEventListener());
+  }
+
+  @Override
+  public List<String> execute(final Issue actualIssue) {
+    List<String> results = new ArrayList<>();
+    kieSession.setGlobal("results", results);
+    // insert facts into the session
+    kieSession.insert(actualIssue);
+    kieSession.fireAllRules();
+    return results;
+  }
+
+  @Override
+  public void close() {
+    kieSession.dispose();
+    LOGGER.info("Kie session was disposed.");
+  }
+
+  private void addRulesToKnowledgeBuilder(final KnowledgeBuilder knowledgeBuilder, final Resource[] resources)
+  throws IOException {
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any *.drl files.");
     }
     List<String> rules = new LinkedList<>();
-    for (Resource resource: resources) {
+    for (Resource resource : resources) {
       if (!rules.contains(resource.getFilename())) {
         if (resource instanceof FileSystemResource) {
           String filePath = resource.getFile().getCanonicalPath();
@@ -75,38 +96,18 @@ public class DroolsRuleEngine implements RuleEngine {
     }
   }
 
-  private void checkForErrors(KnowledgeBuilder knowledgeBuilder) {
+  private void checkForErrors(final KnowledgeBuilder knowledgeBuilder) {
     if (knowledgeBuilder.hasErrors()) {
       LOGGER.error(knowledgeBuilder.getErrors().toString());
       throw new RuntimeException("Unable to compile *.drl files.");
     }
   }
 
-  private KieSession createSession(KnowledgeBuilder knowledgeBuilder) {
+  private KieSession createSession(final KnowledgeBuilder knowledgeBuilder) {
     final Collection<KiePackage> packages = knowledgeBuilder.getKnowledgePackages();
     final InternalKnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
     knowledgeBase.addPackages(packages);
     return knowledgeBase.newKieSession();
   }
 
-  public void setDebugMode() {
-    kieSession.addEventListener(new DebugAgendaEventListener());
-    kieSession.addEventListener(new DebugRuleRuntimeEventListener());
-  }
-
-  @Override
-  public List<String> execute(Issue actualIssue) {
-    List<String> results = new ArrayList<>();
-    kieSession.setGlobal("results", results);
-    // insert facts into the session
-    kieSession.insert(actualIssue);
-    kieSession.fireAllRules();
-    return results;
-  }
-
-  @Override
-  public void close() {
-    kieSession.dispose();
-    LOGGER.info("Kie session was disposed.");
-  }
 }

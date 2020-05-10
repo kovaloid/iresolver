@@ -1,13 +1,7 @@
 package com.koval.resolver.reporter.html;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -27,7 +21,6 @@ import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.bean.reporters.HtmlReporterConfiguration;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 
-
 public class HtmlReportGenerator implements ReportGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
@@ -35,14 +28,15 @@ public class HtmlReportGenerator implements ReportGenerator {
   private final HtmlReporterConfiguration configuration;
   private final List<String> enabledProcessors;
 
-  public HtmlReportGenerator(HtmlReporterConfiguration configuration, List<String> enabledProcessors) throws IOException {
+  public HtmlReportGenerator(final HtmlReporterConfiguration configuration, final List<String> enabledProcessors)
+  throws IOException {
     this.configuration = configuration;
     this.enabledProcessors = enabledProcessors;
     FileUtils.forceMkdirParent(new File(configuration.getOutputFile()));
   }
 
   @Override
-  public void generate(List<IssueAnalysingResult> results) {
+  public void generate(final List<IssueAnalysingResult> results) {
     try {
       fillTemplate(results);
       if (configuration.isOpenBrowser()) {
@@ -53,7 +47,7 @@ public class HtmlReportGenerator implements ReportGenerator {
     }
   }
 
-  private void fillTemplate(List<IssueAnalysingResult> results) throws IOException {
+  private void fillTemplate(final List<IssueAnalysingResult> results) throws IOException {
     VelocityEngine velocityEngine = new VelocityEngine();
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
@@ -66,7 +60,8 @@ public class HtmlReportGenerator implements ReportGenerator {
     context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(
       ProcessorConstants.DOCUMENTATION.getContent()));
     context.put("isConfluenceProcessorEnabled", enabledProcessors.contains(ProcessorConstants.CONFLUENCE.getContent()));
-    context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE.getContent()));
+    context.put("isRuleEngineProcessorEnabled",
+                enabledProcessors.contains(ProcessorConstants.RULE_ENGINE.getContent()));
     try (StringWriter writer = new StringWriter()) {
       template.merge(context, writer);
       LOGGER.debug(writer.toString());
@@ -88,9 +83,10 @@ public class HtmlReportGenerator implements ReportGenerator {
     }
   }
 
-  private URI getUriFromFile(File file) throws IOException {
+  private URI getUriFromFile(final File file) throws IOException {
     String prefix = "file:///";
     String path = file.getCanonicalPath().replace('\\', '/');
     return URI.create(prefix + path);
   }
+
 }

@@ -31,9 +31,9 @@ public class DocDataSetCreator {
   private final DocumentationProcessorConfiguration properties;
 
   public DocDataSetCreator(
-          DocumentationProcessorConfiguration properties,
-          DocTypeDetector docTypeDetector,
-          FileConverter fileConverter
+    final DocumentationProcessorConfiguration properties,
+    final DocTypeDetector docTypeDetector,
+    final FileConverter fileConverter
   ) {
     this.docTypeDetector = docTypeDetector;
     this.fileConverter = fileConverter;

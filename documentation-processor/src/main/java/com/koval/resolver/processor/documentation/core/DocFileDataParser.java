@@ -12,8 +12,8 @@ public class DocFileDataParser {
   private final DocFileRepository docFileRepository;
 
   public DocFileDataParser(
-          String docFileDataFileName,
-          DocFileRepository docFileRepository
+    final String docFileDataFileName,
+    final DocFileRepository docFileRepository
   ) {
     this.docFileDataFileName = docFileDataFileName;
     this.docFileRepository = docFileRepository;

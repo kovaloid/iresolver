@@ -17,7 +17,7 @@ public class GranularIssuesProcessorConfiguration {
     return affectedIssueParts;
   }
 
-  public void setAffectedIssueParts(List<String> affectedIssueParts) {
+  public void setAffectedIssueParts(final List<String> affectedIssueParts) {
     this.affectedIssueParts = affectedIssueParts;
   }
 
@@ -25,7 +25,7 @@ public class GranularIssuesProcessorConfiguration {
     return summaryDataSetFile;
   }
 
-  public void setSummaryDataSetFile(String summaryDataSetFile) {
+  public void setSummaryDataSetFile(final String summaryDataSetFile) {
     this.summaryDataSetFile = summaryDataSetFile;
   }
 
@@ -33,7 +33,7 @@ public class GranularIssuesProcessorConfiguration {
     return descriptionDataSetFile;
   }
 
-  public void setDescriptionDataSetFile(String descriptionDataSetFile) {
+  public void setDescriptionDataSetFile(final String descriptionDataSetFile) {
     this.descriptionDataSetFile = descriptionDataSetFile;
   }
 
@@ -41,7 +41,7 @@ public class GranularIssuesProcessorConfiguration {
     return commentsDataSetFile;
   }
 
-  public void setCommentsDataSetFile(String commentsDataSetFile) {
+  public void setCommentsDataSetFile(final String commentsDataSetFile) {
     this.commentsDataSetFile = commentsDataSetFile;
   }
 
@@ -49,7 +49,7 @@ public class GranularIssuesProcessorConfiguration {
     return summaryVectorModelFile;
   }
 
-  public void setSummaryVectorModelFile(String summaryVectorModelFile) {
+  public void setSummaryVectorModelFile(final String summaryVectorModelFile) {
     this.summaryVectorModelFile = summaryVectorModelFile;
   }
 
@@ -57,7 +57,7 @@ public class GranularIssuesProcessorConfiguration {
     return descriptionVectorModelFile;
   }
 
-  public void setDescriptionVectorModelFile(String descriptionVectorModelFile) {
+  public void setDescriptionVectorModelFile(final String descriptionVectorModelFile) {
     this.descriptionVectorModelFile = descriptionVectorModelFile;
   }
 
@@ -65,7 +65,7 @@ public class GranularIssuesProcessorConfiguration {
     return commentsVectorModelFile;
   }
 
-  public void setCommentsVectorModelFile(String commentsVectorModelFile) {
+  public void setCommentsVectorModelFile(final String commentsVectorModelFile) {
     this.commentsVectorModelFile = commentsVectorModelFile;
   }
 
