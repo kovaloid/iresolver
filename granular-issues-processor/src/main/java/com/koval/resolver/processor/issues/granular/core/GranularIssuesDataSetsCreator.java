@@ -39,13 +39,13 @@ public class GranularIssuesDataSetsCreator {
     PrintWriter commentsWriter = null;
     List<String> affectedIssueParts = properties.getAffectedIssueParts();
     try {
-      if (affectedIssueParts.contains(IssueParts.SUMMARY)) {
+      if (affectedIssueParts.contains(IssueParts.SUMMARY.getContent())) {
         summaryWriter = getDataSetWriter(properties.getSummaryDataSetFile());
       }
-      if (affectedIssueParts.contains(IssueParts.DESCRIPTION)) {
+      if (affectedIssueParts.contains(IssueParts.DESCRIPTION.getContent())) {
         descriptionWriter = getDataSetWriter(properties.getDescriptionDataSetFile());
       }
-      if (affectedIssueParts.contains(IssueParts.COMMENTS)) {
+      if (affectedIssueParts.contains(IssueParts.COMMENTS.getContent())) {
         commentsWriter = getDataSetWriter(properties.getCommentsDataSetFile());
       }
 

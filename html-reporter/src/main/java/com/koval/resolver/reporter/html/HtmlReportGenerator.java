@@ -62,10 +62,11 @@ public class HtmlReportGenerator implements ReportGenerator {
     VelocityContext context = new VelocityContext();
     context.put("results", results);
     context.put("numberTool", new NumberTool());
-    context.put("isIssuesProcessorEnabled", enabledProcessors.contains(ProcessorConstants.ISSUES));
-    context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(ProcessorConstants.DOCUMENTATION));
-    context.put("isConfluenceProcessorEnabled", enabledProcessors.contains(ProcessorConstants.CONFLUENCE));
-    context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE));
+    context.put("isIssuesProcessorEnabled", enabledProcessors.contains(ProcessorConstants.ISSUES.getContent()));
+    context.put("isDocumentationProcessorEnabled", enabledProcessors.contains(
+      ProcessorConstants.DOCUMENTATION.getContent()));
+    context.put("isConfluenceProcessorEnabled", enabledProcessors.contains(ProcessorConstants.CONFLUENCE.getContent()));
+    context.put("isRuleEngineProcessorEnabled", enabledProcessors.contains(ProcessorConstants.RULE_ENGINE.getContent()));
     try (StringWriter writer = new StringWriter()) {
       template.merge(context, writer);
       LOGGER.debug(writer.toString());

@@ -93,17 +93,17 @@ public final class Launcher {
 
   public void createGranularIssuesVectorModels() {
     List<String> affectedIssueParts = configuration.getProcessors().getGranularIssues().getAffectedIssueParts();
-    if (affectedIssueParts.contains(IssueParts.SUMMARY)) {
+    if (affectedIssueParts.contains(IssueParts.SUMMARY.getContent())) {
       String dataSetFile = configuration.getProcessors().getGranularIssues().getSummaryDataSetFile();
       String vectorModelFile = configuration.getProcessors().getGranularIssues().getSummaryVectorModelFile();
       createVectorModel(dataSetFile, vectorModelFile, "Could not create summary granular issues vector model file.");
     }
-    if (affectedIssueParts.contains(IssueParts.DESCRIPTION)) {
+    if (affectedIssueParts.contains(IssueParts.DESCRIPTION.getContent())) {
       String dataSetFile = configuration.getProcessors().getGranularIssues().getDescriptionDataSetFile();
       String vectorModelFile = configuration.getProcessors().getGranularIssues().getDescriptionVectorModelFile();
       createVectorModel(dataSetFile, vectorModelFile, "Could not create description granular issues vector model file.");
     }
-    if (affectedIssueParts.contains(IssueParts.COMMENTS)) {
+    if (affectedIssueParts.contains(IssueParts.COMMENTS.getContent())) {
       String dataSetFile = configuration.getProcessors().getGranularIssues().getCommentsDataSetFile();
       String vectorModelFile = configuration.getProcessors().getGranularIssues().getCommentsVectorModelFile();
       createVectorModel(dataSetFile, vectorModelFile, "Could not create comments granular issues vector model file.");
@@ -194,19 +194,19 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(IssueClient issueClient) throws IOException {
     List<String> processorNames = configuration.getAdministration().getProcessors();
     List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames.contains(ProcessorConstants.ISSUES)) {
+    if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
       issueProcessors.add(new IssuesProcessor(issueClient, configuration));
     }
-    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES)) {
+    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
       issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
     }
-    if (processorNames.contains(ProcessorConstants.DOCUMENTATION)) {
+    if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
       issueProcessors.add(createDocumentationProcessor());
     }
-    if (processorNames.contains(ProcessorConstants.CONFLUENCE)) {
+    if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
       issueProcessors.add(new ConfluenceProcessor(configuration));
     }
-    if (processorNames.contains(ProcessorConstants.RULE_ENGINE)) {
+    if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
       issueProcessors.add(new RuleEngineProcessor(configuration));
     }
     if (issueProcessors.isEmpty()) {
@@ -239,10 +239,10 @@ public final class Launcher {
   private List<ReportGenerator> getReportGenerators() throws IOException {
     List<String> reporterNames = configuration.getAdministration().getReporters();
     List<ReportGenerator> reportGenerators = new ArrayList<>();
-    if (reporterNames.contains(ReporterConstants.HTML)) {
+    if (reporterNames.contains(ReporterConstants.HTML.getContent())) {
       reportGenerators.add(new HtmlReportGenerator(configuration.getReporters().getHtml(), configuration.getAdministration().getProcessors()));
     }
-    if (reporterNames.contains(ReporterConstants.TEXT)) {
+    if (reporterNames.contains(ReporterConstants.TEXT.getContent())) {
       reportGenerators.add(new TextReportGenerator(configuration.getReporters().getText()));
     }
     if (reportGenerators.isEmpty()) {
