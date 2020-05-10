@@ -1,14 +1,6 @@
 package com.koval.resolver.processor.documentation.core;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -20,10 +12,8 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
-import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
-
 
 public class DocDataSetCreator {
 
@@ -32,17 +22,32 @@ public class DocDataSetCreator {
   private static final String SPACE = " ";
   private static final String SEPARATOR = "|";
 
-  private final DocTypeDetector docTypeDetector = new DocTypeDetector();
+  private final DocTypeDetector docTypeDetector;
   private final PageSplitter pageSplitter = new PdfPageSplitter();
+  private final FileConverter fileConverter;
+
+  private final String docsFolderPath;
+
   private final DocumentationProcessorConfiguration properties;
 
-  public DocDataSetCreator(DocumentationProcessorConfiguration properties) {
+  public DocDataSetCreator(
+          DocumentationProcessorConfiguration properties,
+          DocTypeDetector docTypeDetector,
+          FileConverter fileConverter
+  ) {
+    this.docTypeDetector = docTypeDetector;
+    this.fileConverter = fileConverter;
+
+    docsFolderPath = properties.getDocsFolder();
+
     this.properties = properties;
   }
 
+  //TODO: Refactor this method so we can test it safely
   public void create() throws IOException {
-    File docsFolder = new File(properties.getDocsFolder());
+    File docsFolder = new File(docsFolderPath);
     File[] docFiles = docsFolder.listFiles();
+
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
@@ -80,20 +85,20 @@ public class DocDataSetCreator {
                 dataSetBufferedWriter.write(docPageKey);
                 dataSetBufferedWriter.write(SEPARATOR);
                 dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
-                dataSetBufferedWriter.write("\n");
+                dataSetBufferedWriter.newLine();
 
                 metadataBufferedWriter.write(docPageKey);
                 metadataBufferedWriter.write(SPACE);
-                metadataBufferedWriter.write(documentIndex);
+                metadataBufferedWriter.write(String.valueOf(documentIndex));
                 metadataBufferedWriter.write(SPACE);
-                metadataBufferedWriter.write(docPage.getKey());
-                metadataBufferedWriter.write("\n");
+                metadataBufferedWriter.write(String.valueOf(docPage.getKey()));
+                metadataBufferedWriter.newLine();
               }
 
-              docListBufferedWriter.write(documentIndex);
-              docListOutput.write(SPACE);
-              docListOutput.write(docFile.getName());
-              docListOutput.write("\n");
+              docListBufferedWriter.write(String.valueOf(documentIndex));
+              docListBufferedWriter.write(SPACE);
+              docListBufferedWriter.write(docFile.getName());
+              docListBufferedWriter.newLine();
               documentIndex++;
             }
           } catch (FileNotFoundException e) {
@@ -110,13 +115,14 @@ public class DocDataSetCreator {
   }
 
   public void convertWordFilesToPdf() {
-    File docsFolder = new File(properties.getDocsFolder());
+    File docsFolder = new File(docsFolderPath);
     File[] docFiles = docsFolder.listFiles();
+
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
     }
-    FileConverter fileConverter = new WordToPdfFileConverter();
+
     for (final File docFile : docFiles) {
       if (docFile.isFile()) {
         MediaType mediaType = docTypeDetector.detectType(docFile.getName());
