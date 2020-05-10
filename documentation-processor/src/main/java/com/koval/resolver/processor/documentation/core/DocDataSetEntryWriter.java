@@ -10,7 +10,6 @@ import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
-import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
 
 public class DocDataSetEntryWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetEntryWriter.class);
@@ -19,10 +18,19 @@ public class DocDataSetEntryWriter {
   private static final String SPACE = " ";
   private static final String SEPARATOR = "|";
 
-  private final PageSplitter pageSplitter = new PdfPageSplitter();
+  private final FileRepository fileRepository;
+  private final PageSplitter pageSplitter;
 
   private int currentPageIndex;
   private int currentDocumentIndex;
+
+  public DocDataSetEntryWriter(
+          FileRepository fileRepository,
+          PageSplitter pageSplitter
+  ) {
+    this.fileRepository = fileRepository;
+    this.pageSplitter = pageSplitter;
+  }
 
   //TODO: Come up with something better
   public void resetIndices() {
@@ -36,7 +44,7 @@ public class DocDataSetEntryWriter {
           BufferedWriter metadataBufferedWriter,
           BufferedWriter docListBufferedWriter
   ) throws IOException {
-    try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
+    try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getName())/*new FileInputStream(docFile)*/)) {
       Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
       writeEntriesForDocPages(

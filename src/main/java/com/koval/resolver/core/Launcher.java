@@ -41,10 +41,8 @@ import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
-import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
-import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
-import com.koval.resolver.processor.documentation.core.DocTypeDetector;
-import com.koval.resolver.processor.documentation.core.FileRepository;
+import com.koval.resolver.processor.documentation.core.*;
+import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
 import com.koval.resolver.processor.issues.IssuesProcessor;
 import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
 import com.koval.resolver.processor.issues.granular.GranularIssuesProcessor;
@@ -123,8 +121,15 @@ public final class Launcher {
             pdfConverter
     );
 
+    PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
+    DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
+            fileRepository,
+            pdfPageSplitter
+    );
+
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
             documentationConfiguration,
+            docDataSetEntryWriter,
             docTypeDetector,
             wordToPdfFileConverter
     );

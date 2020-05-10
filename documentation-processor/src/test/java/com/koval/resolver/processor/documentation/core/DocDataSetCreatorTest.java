@@ -32,6 +32,9 @@ public class DocDataSetCreatorTest {
   private static final List<String> DOC_FILE_STRINGS = Arrays.asList(DOC_FILE_STRING_1, DOC_FILE_STRING_2);
 
   @Mock
+  private DocDataSetEntryWriter docDataSetEntryWriter;
+
+  @Mock
   private DocTypeDetector docTypeDetector;
 
   @Mock
@@ -50,6 +53,7 @@ public class DocDataSetCreatorTest {
     DocumentationProcessorConfiguration properties = createConfigurationProperties();
     docDataSetCreator = new DocDataSetCreator(
             properties,
+            docDataSetEntryWriter,
             docTypeDetector,
             fileConverter
     );

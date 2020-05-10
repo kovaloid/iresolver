@@ -17,7 +17,7 @@ public class DocDataSetCreator {
   private static final String EXTENSION_PDF = ".pdf";
   private static final String DOC_FILES_LOCATION = "../docs";
 
-  private final DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter();
+  private final DocDataSetEntryWriter docDataSetEntryWriter;
 
   private final DocTypeDetector docTypeDetector;
 
@@ -29,15 +29,16 @@ public class DocDataSetCreator {
 
   public DocDataSetCreator(
           DocumentationProcessorConfiguration properties,
+          DocDataSetEntryWriter docDataSetEntryWriter,
           DocTypeDetector docTypeDetector,
           FileConverter fileConverter
   ) {
+    this.properties = properties;
+    this.docDataSetEntryWriter = docDataSetEntryWriter;
     this.docTypeDetector = docTypeDetector;
     this.fileConverter = fileConverter;
 
     docsFolderPath = properties.getDocsFolder();
-
-    this.properties = properties;
   }
 
   //TODO: Refactor this method so we can test it safely
