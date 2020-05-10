@@ -82,10 +82,10 @@ public class DocDataSetCreator {
 
       for (final File docFile : docFiles) {
         if (docFile.isFile()) {
-          try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-            MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+          MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
-            if (mediaType.equals(MediaType.PDF)) {
+          if (mediaType.equals(MediaType.PDF)) {
+            try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
               writeEntriesForDocFile(
                       docFile,
                       inputFileStream,
@@ -93,9 +93,9 @@ public class DocDataSetCreator {
                       metadataBufferedWriter,
                       docListBufferedWriter
               );
+            } catch (FileNotFoundException e) {
+              LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
             }
-          } catch (FileNotFoundException e) {
-            LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
           }
         }
       }
