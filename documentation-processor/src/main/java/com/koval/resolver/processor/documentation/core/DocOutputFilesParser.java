@@ -6,6 +6,7 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 public class DocOutputFilesParser {
 
   private final DocMetadataParser docMetadataParser;

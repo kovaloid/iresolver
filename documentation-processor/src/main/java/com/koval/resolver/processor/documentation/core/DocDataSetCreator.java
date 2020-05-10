@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.util.TextUtil;
+import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
@@ -79,6 +80,7 @@ public class DocDataSetCreator {
         if (docFile.isFile()) {
           try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
             MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+
             if (mediaType.equals(MediaType.PDF)) {
               Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
@@ -86,23 +88,14 @@ public class DocDataSetCreator {
                 String docPageKey = KEY_PREFIX + pageIndex;
                 pageIndex++;
 
-                dataSetBufferedWriter.write(docPageKey);
-                dataSetBufferedWriter.write(SEPARATOR);
-                dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
-                dataSetBufferedWriter.newLine();
+                writeDataSet(dataSetBufferedWriter, docPage, docPageKey);
 
-                metadataBufferedWriter.write(docPageKey);
-                metadataBufferedWriter.write(SPACE);
-                metadataBufferedWriter.write(String.valueOf(documentIndex));
-                metadataBufferedWriter.write(SPACE);
-                metadataBufferedWriter.write(String.valueOf(docPage.getKey()));
-                metadataBufferedWriter.newLine();
+                writeMetadata(documentIndex, metadataBufferedWriter, docPage, docPageKey);
               }
 
-              docListBufferedWriter.write(String.valueOf(documentIndex));
-              docListBufferedWriter.write(SPACE);
-              docListBufferedWriter.write(docFile.getName());
-              docListBufferedWriter.newLine();
+              DocFile docFileData = new DocFile(documentIndex, docFile.getName());
+              writeDocList(docListBufferedWriter, docFileData);
+
               documentIndex++;
             }
           } catch (FileNotFoundException e) {
@@ -110,12 +103,48 @@ public class DocDataSetCreator {
           }
         }
       }
+
       LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
       LOGGER.info("Doc metadata file was created: {}", docMetadataFile.getCanonicalPath());
       LOGGER.info("Doc list file was created: {}", docListFile.getCanonicalPath());
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
       LOGGER.error("Could not write to output file", e);
     }
+  }
+
+  private void writeDocList(
+          BufferedWriter docListBufferedWriter,
+          DocFile docFileData
+  ) throws IOException {
+    docListBufferedWriter.write(String.valueOf(docFileData.getFileIndex()));
+    docListBufferedWriter.write(SPACE);
+    docListBufferedWriter.write(docFileData.getFileName());
+    docListBufferedWriter.newLine();
+  }
+
+  private void writeMetadata(
+          int documentIndex,
+          BufferedWriter metadataBufferedWriter,
+          Map.Entry<Integer, String> docPage,
+          String docPageKey
+  ) throws IOException {
+    metadataBufferedWriter.write(docPageKey);
+    metadataBufferedWriter.write(SPACE);
+    metadataBufferedWriter.write(String.valueOf(documentIndex));
+    metadataBufferedWriter.write(SPACE);
+    metadataBufferedWriter.write(String.valueOf(docPage.getKey()));
+    metadataBufferedWriter.newLine();
+  }
+
+  private void writeDataSet(
+          BufferedWriter dataSetBufferedWriter,
+          Map.Entry<Integer, String> docPage,
+          String docPageKey
+  ) throws IOException {
+    dataSetBufferedWriter.write(docPageKey);
+    dataSetBufferedWriter.write(SEPARATOR);
+    dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
+    dataSetBufferedWriter.newLine();
   }
 
   public void convertWordFilesToPdf() {
@@ -132,14 +161,20 @@ public class DocDataSetCreator {
         MediaType mediaType = docTypeDetector.detectType(docFile.getName());
         if (mediaType.equals(MediaType.WORD)) {
           String wordFilePath = docFile.getName();
-          String pdfFilePath = (new File(DOC_FILES_LOCATION, createPdfFilePath(wordFilePath))).getName();
+          String pdfFilePath = createPdfFilePath(wordFilePath);
           fileConverter.convert(wordFilePath, pdfFilePath);
         }
       }
     }
   }
 
-  private String createPdfFilePath(String wordFileName) {
+  private String createPdfFilePath(String wordFilePath) {
+    File pdfOutputFile = new File(DOC_FILES_LOCATION, replaceExtensionWithPdf(wordFilePath));
+
+    return pdfOutputFile.getName();
+  }
+
+  private String replaceExtensionWithPdf(String wordFileName) {
     return wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(EXTENSION_PDF);
   }
 }

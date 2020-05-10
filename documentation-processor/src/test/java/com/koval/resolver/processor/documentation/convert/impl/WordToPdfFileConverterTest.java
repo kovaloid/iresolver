@@ -16,11 +16,11 @@ import com.koval.resolver.processor.documentation.core.FileRepository;
 @ExtendWith(MockitoExtension.class)
 class WordToPdfFileConverterTest {
 
-  private final static String DOC_TEXT = "doc text";
+  private static final String DOC_TEXT = "doc text";
 
-  private final static String FILE_NAME = "file";
-  private final static String DOC_FILE_PATH = FILE_NAME + ".doc";
-  private final static String PDF_FILE_PATH = FILE_NAME + ".pdf";
+  private static final String FILE_NAME = "file";
+  private static final String DOC_FILE_PATH = FILE_NAME + ".doc";
+  private static final String PDF_FILE_PATH = FILE_NAME + ".pdf";
 
   @Mock
   private FileRepository fileRepository;
@@ -31,7 +31,7 @@ class WordToPdfFileConverterTest {
   private WordToPdfFileConverter wordToPdfFileConverter;
 
   @BeforeEach
-  void setUp() {
+  void onSetup() {
     wordToPdfFileConverter = new WordToPdfFileConverter(
             fileRepository,
             pdfConverter

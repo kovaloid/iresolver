@@ -15,8 +15,8 @@ public class WordToPdfFileConverter implements FileConverter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WordToPdfFileConverter.class);
 
-  private FileRepository fileRepository;
-  private XwpfPdfConverter pdfConverter;
+  private final FileRepository fileRepository;
+  private final XwpfPdfConverter pdfConverter;
 
   public WordToPdfFileConverter(
           FileRepository fileRepository,
