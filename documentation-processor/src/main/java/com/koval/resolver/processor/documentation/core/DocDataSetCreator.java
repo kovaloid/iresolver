@@ -85,17 +85,12 @@ public class DocDataSetCreator {
           MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
           if (mediaType.equals(MediaType.PDF)) {
-            try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-              writeEntriesForDocFile(
-                      docFile,
-                      inputFileStream,
-                      dataSetBufferedWriter,
-                      metadataBufferedWriter,
-                      docListBufferedWriter
-              );
-            } catch (FileNotFoundException e) {
-              LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
-            }
+            writeEntriesForDocFile(
+                    docFile,
+                    dataSetBufferedWriter,
+                    metadataBufferedWriter,
+                    docListBufferedWriter
+            );
           }
         }
       }
@@ -110,23 +105,26 @@ public class DocDataSetCreator {
 
   private void writeEntriesForDocFile(
           File docFile,
-          InputStream inputFileStream,
           BufferedWriter dataSetBufferedWriter,
           BufferedWriter metadataBufferedWriter,
           BufferedWriter docListBufferedWriter
   ) throws IOException {
-    Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
+    try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
+      Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
-    writeEntriesForDocPages(
-            docPages,
-            dataSetBufferedWriter,
-            metadataBufferedWriter
-    );
+      writeEntriesForDocPages(
+              docPages,
+              dataSetBufferedWriter,
+              metadataBufferedWriter
+      );
 
-    DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-    writeDocListFileEntry(docListBufferedWriter, docFileData);
+      DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
+      writeDocListFileEntry(docListBufferedWriter, docFileData);
 
-    currentDocumentIndex++;
+      currentDocumentIndex++;
+    } catch (FileNotFoundException e) {
+      LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
+    }
   }
 
   private void writeEntriesForDocPages(
