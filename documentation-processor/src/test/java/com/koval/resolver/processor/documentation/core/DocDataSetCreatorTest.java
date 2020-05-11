@@ -1,5 +1,6 @@
 package com.koval.resolver.processor.documentation.core;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,6 +26,9 @@ import static util.ConfigurationPropertiesCreator.createProperties;
 public class DocDataSetCreatorTest {
 
   private static final String FILE_NAME = "tempfile.txt";
+  private static final String DATA_SET_FILE_NAME = "dataset.txt";
+  private static final String METADATA_FILE_NAME = "metadata.txt";
+  private static final String DOC_LIST_FILE_NAME = "doclist.txt";
 
   private static final String DOC_FILE_STRING_1 = "15 filename1\n";
   private static final String DOC_FILE_STRING_2 = "26 filename2";
@@ -46,7 +50,7 @@ public class DocDataSetCreatorTest {
   @SuppressWarnings("checkstyle:visibilitymodifier")
   File tempDirectory;
 
-  private File tempFile;
+  private File docFile;
 
   @BeforeEach
   void onSetup() throws IOException {
@@ -60,12 +64,31 @@ public class DocDataSetCreatorTest {
   }
 
   @Test
+  void testCreateFromPdf() throws IOException {
+    when(docTypeDetector.detectType(FILE_NAME)).thenReturn(MediaType.PDF);
+
+    docDataSetCreator.create();
+
+    verifyWriteEntriesCalled();
+  }
+
+  private void verifyWriteEntriesCalled() throws IOException {
+    verify(docDataSetEntryWriter)
+            .writeEntriesForDocFile(
+                    eq(docFile),
+                    any(BufferedWriter.class),
+                    any(BufferedWriter.class),
+                    any(BufferedWriter.class)
+            );
+  }
+
+  @Test
   void testConvertingDocFile() {
     when(docTypeDetector.detectType(FILE_NAME)).thenReturn(MediaType.WORD);
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter).convert(eq(tempFile.getName()), anyString());
+    verify(fileConverter).convert(eq(docFile.getName()), anyString());
   }
 
   @Test
@@ -74,36 +97,39 @@ public class DocDataSetCreatorTest {
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
+    verify(fileConverter, never()).convert(eq(docFile.getName()), anyString());
   }
 
   @Test
   void testHandlingInvalidDirectory() {
-    tempFile.delete();
+    docFile.delete();
     tempDirectory.delete();
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
+    verify(fileConverter, never()).convert(eq(docFile.getName()), anyString());
   }
 
   @Test
   void testHandlingOnlyDirectories() {
-    tempFile.delete();
+    docFile.delete();
     new File(tempDirectory, FILE_NAME).mkdir();
 
     docDataSetCreator.convertWordFilesToPdf();
 
-    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
+    verify(fileConverter, never()).convert(eq(docFile.getName()), anyString());
   }
 
   private DocumentationProcessorConfiguration createConfigurationProperties() throws IOException {
-    if (tempFile != null) {
-      tempFile.delete();
+    if (docFile != null) {
+      docFile.delete();
     }
 
-    tempFile = new File(tempDirectory, FILE_NAME);
+    docFile = new File(tempDirectory, FILE_NAME);
+    File dataSetFile = new File(tempDirectory, DATA_SET_FILE_NAME);
+    File metadataFile = new File(tempDirectory, METADATA_FILE_NAME);
+    File docListFile = new File(tempDirectory, DOC_LIST_FILE_NAME);
 
-    return createProperties(DOC_FILE_STRINGS, tempFile);
+    return createProperties(DOC_FILE_STRINGS, docFile, dataSetFile, metadataFile, docListFile);
   }
 }
