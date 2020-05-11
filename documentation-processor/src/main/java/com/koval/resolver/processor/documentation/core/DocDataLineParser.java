@@ -6,7 +6,7 @@ public class DocDataLineParser implements LineParser<DocFile> {
 
   private final String delimiter;
 
-  DocDataLineParser(String delimiter) {
+  public DocDataLineParser(String delimiter) {
     this.delimiter = delimiter;
   }
 
