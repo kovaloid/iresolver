@@ -6,30 +6,39 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.DocFile;
-import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 
 public class DocDataSetEntryWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetEntryWriter.class);
 
   private static final String KEY_PREFIX = "doc_";
-  private static final String SPACE = " ";
-  private static final String SEPARATOR = "|";
+  private static final String DELIMITER = " ";
+  private static final String DATA_SET_SEPARATOR = "|";
 
   private final FileRepository fileRepository;
   private final PageSplitter pageSplitter;
+
+  private final MetadataFileEntryWriter metadataFileEntryWriter;
+  private final DocListFileEntryWriter docListFileEntryWriter;
+  private final DataSetFileEntryWriter dataSetFileEntryWriter;
 
   private int currentPageIndex;
   private int currentDocumentIndex;
 
   public DocDataSetEntryWriter(
           FileRepository fileRepository,
-          PageSplitter pageSplitter
+          PageSplitter pageSplitter,
+          MetadataFileEntryWriter metadataFileEntryWriter,
+          DocListFileEntryWriter docListFileEntryWriter,
+          DataSetFileEntryWriter dataSetFileEntryWriter
   ) {
     this.fileRepository = fileRepository;
     this.pageSplitter = pageSplitter;
+
+    this.metadataFileEntryWriter = metadataFileEntryWriter;
+    this.docListFileEntryWriter = docListFileEntryWriter;
+    this.dataSetFileEntryWriter = dataSetFileEntryWriter;
   }
 
   //TODO: Come up with something better
@@ -44,7 +53,7 @@ public class DocDataSetEntryWriter {
           BufferedWriter metadataBufferedWriter,
           BufferedWriter docListBufferedWriter
   ) throws IOException {
-    try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getName())/*new FileInputStream(docFile)*/)) {
+    try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getName()))) {
       Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
       writeEntriesForDocPages(
@@ -54,7 +63,7 @@ public class DocDataSetEntryWriter {
       );
 
       DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-      writeDocListFileEntry(docListBufferedWriter, docFileData);
+      docListFileEntryWriter.write(docListBufferedWriter, docFileData, DELIMITER);
 
       currentDocumentIndex++;
     } catch (FileNotFoundException e) {
@@ -71,44 +80,11 @@ public class DocDataSetEntryWriter {
       String docPageKey = KEY_PREFIX + currentPageIndex;
       currentPageIndex++;
 
-      writeDataSetFileEntry(dataSetBufferedWriter, docPage, docPageKey);
+      dataSetFileEntryWriter.write(dataSetBufferedWriter, docPage, docPageKey, DATA_SET_SEPARATOR);
 
       int docPageNumber = docPage.getKey();
-      DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
-      writeMetadataFileEntry(metadataBufferedWriter, docMetadata);
+
+      metadataFileEntryWriter.write(metadataBufferedWriter, docPageKey, currentDocumentIndex, docPageNumber, DELIMITER);
     }
-  }
-
-  private void writeDocListFileEntry(
-          BufferedWriter docListBufferedWriter,
-          DocFile docFileData
-  ) throws IOException {
-    docListBufferedWriter.write(String.valueOf(docFileData.getFileIndex()));
-    docListBufferedWriter.write(SPACE);
-    docListBufferedWriter.write(docFileData.getFileName());
-    docListBufferedWriter.newLine();
-  }
-
-  private void writeMetadataFileEntry(
-          BufferedWriter metadataBufferedWriter,
-          DocMetadata docMetadata
-  ) throws IOException {
-    metadataBufferedWriter.write(docMetadata.getKey());
-    metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(docMetadata.getFileIndex()));
-    metadataBufferedWriter.write(SPACE);
-    metadataBufferedWriter.write(String.valueOf(docMetadata.getPageNumber()));
-    metadataBufferedWriter.newLine();
-  }
-
-  private void writeDataSetFileEntry(
-          BufferedWriter dataSetBufferedWriter,
-          Map.Entry<Integer, String> docPage,
-          String docPageKey
-  ) throws IOException {
-    dataSetBufferedWriter.write(docPageKey);
-    dataSetBufferedWriter.write(SEPARATOR);
-    dataSetBufferedWriter.write(TextUtil.simplify(docPage.getValue()));
-    dataSetBufferedWriter.newLine();
   }
 }

@@ -122,9 +122,16 @@ public final class Launcher {
     );
 
     PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
+    MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
+    DocListFileEntryWriter docListFileEntryWriter = new DocListFileEntryWriter();
+    DataSetFileEntryWriter dataSetFileEntryWriter = new DataSetFileEntryWriter();
+
     DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
             fileRepository,
-            pdfPageSplitter
+            pdfPageSplitter,
+            metadataFileEntryWriter,
+            docListFileEntryWriter,
+            dataSetFileEntryWriter
     );
 
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(

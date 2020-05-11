@@ -1,12 +1,15 @@
 package com.koval.resolver.processor.documentation.core;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +26,18 @@ class DocDataSetEntryWriterTest {
 
   private static final String FILE_NAME = "filename";
 
+  private static final String DELIMITER = " ";
+
   private static final String DATA = "bla bla bla\n tralalal tralala";
 
   private static final Map<Integer, String> MAPPINGS = Map.of(
           1, "lol",
           2, "kek",
           3, "cheburek"
+  );
+
+  private static final Map<Integer, String> METADATA_MAPPING = Map.of(
+          0, "lol"
   );
 
   @Mock
@@ -40,51 +49,68 @@ class DocDataSetEntryWriterTest {
   @Mock
   private PageSplitter pageSplitter;
 
+  @Mock
+  private MetadataFileEntryWriter metadataFileEntryWriter;
+
+  @Mock
+  private DocListFileEntryWriter docListFileEntryWriter;
+
+  @Mock
+  private DataSetFileEntryWriter dataSetFileEntryWriter;
+
+  @Mock
+  private BufferedWriter mockWriter;
+
   private DocDataSetEntryWriter docDataSetEntryWriter;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws IOException {
     docDataSetEntryWriter = new DocDataSetEntryWriter(
             fileRepository,
-            pageSplitter
+            pageSplitter,
+            metadataFileEntryWriter,
+            docListFileEntryWriter,
+            dataSetFileEntryWriter
     );
   }
 
   @Test
   void testWriteEntriesForDocFile() throws IOException {
-    String charset = StandardCharsets.UTF_8.name();
+//    docDataSetEntryWriter.writeEntriesForDocFile(
+//            docFile,
+//            mockWriter,
+//            mockWriter,
+//            mockWriter
+//    );
+  }
 
-    doReturn(FILE_NAME).when(docFile).getName();
+  @Test
+  void testWritingMetadataEntry() throws IOException {
+    doReturn(METADATA_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
+  }
 
-    InputStream inputStream = new ByteArrayInputStream(DATA.getBytes());
-    doReturn(inputStream).when(fileRepository).readFile(FILE_NAME);
-    doReturn(MAPPINGS).when(pageSplitter).getMapping(any(InputStream.class));
-
-    StringWriter dataSetStringWriter = new StringWriter();
-    BufferedWriter dataSetWriter = new BufferedWriter(dataSetStringWriter);
-
-    StringWriter metadataStringWriter = new StringWriter();
-    BufferedWriter metadataWriter = new BufferedWriter(metadataStringWriter);
-
-    StringWriter docListStringWriter = new StringWriter();
-    BufferedWriter docListWriter = new BufferedWriter(docListStringWriter);
+  @Test
+  void testWritingMetadataTwoEntries() throws  IOException {
+    HashMap<Integer, String> map = new HashMap<>();
+    map.put(0, "lol");
+    map.put(1, "kek");
+    doReturn(map).when(pageSplitter).getMapping(any(InputStream.class));
 
     docDataSetEntryWriter.writeEntriesForDocFile(
             docFile,
-            dataSetWriter,
-            metadataWriter,
-            docListWriter
+            mockWriter,
+            mockWriter,
+            mockWriter
     );
-
-    dataSetWriter.flush();
-    metadataWriter.flush();
-    docListWriter.flush();
-
-    String dataSetEntry = dataSetStringWriter.toString();
-    String metadataEntry = metadataStringWriter.toString();
-    String docListEntry = docListStringWriter.toString();
-
-    assertEquals(docListEntry, "0 " + FILE_NAME + System.lineSeparator());
-
+    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, "doc_1", 0, 1, DELIMITER);
   }
+
 }
