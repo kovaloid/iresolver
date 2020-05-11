@@ -78,7 +78,7 @@ public class DocDataSetEntryWriter {
       String docPageKey = KEY_PREFIX + currentPageIndex;
       currentPageIndex++;
 
-      dataSetFileEntryWriter.write(dataSetBufferedWriter, docPage, docPageKey, DATA_SET_SEPARATOR);
+      dataSetFileEntryWriter.write(dataSetBufferedWriter, docPageKey, docPage.getValue(), DATA_SET_SEPARATOR);
 
       int docPageNumber = docPage.getKey();
 

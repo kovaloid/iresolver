@@ -26,6 +26,7 @@ class DocDataSetEntryWriterTest {
   private static final String FILE_NAME_2 = "filename2";
 
   private static final String DELIMITER = " ";
+  private static final String DATA_SET_SEPARATOR = "|";
 
   private static final String DATA = "bla bla bla\n tralalal tralala";
 
@@ -35,8 +36,10 @@ class DocDataSetEntryWriterTest {
           3, "cheburek"
   );
 
+  private static final int PAGE_NUMBER = 0;
+  private static final String PAGE_TEXT = "lol";
   private static final Map<Integer, String> ONE_PAGE_MAPPING = Map.of(
-          0, "lol"
+          PAGE_NUMBER, PAGE_TEXT
   );
 
   @Mock
@@ -86,6 +89,20 @@ class DocDataSetEntryWriterTest {
     );
 
     verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
+  }
+
+  @Test
+  void testWritingDatasetFileEntry() throws IOException {
+    doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    verify(dataSetFileEntryWriter).write(mockWriter, "doc_0", PAGE_TEXT, DATA_SET_SEPARATOR);
   }
 
   @Test
