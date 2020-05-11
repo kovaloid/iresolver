@@ -17,13 +17,18 @@ public final class ConfigurationPropertiesCreator {
 
   public static DocumentationProcessorConfiguration createProperties(
           List<String> metadataStrings,
-          File file
+          File docFile,
+          File datasetFile,
+          File metadataFile,
+          File docListFile
   ) throws IOException {
-    final File tempFile = writeStringsToFile(metadataStrings, file);
-
+    final File tempFile = writeStringsToFile(metadataStrings, docFile);
     DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
-    properties.setDocsListFile(tempFile.getPath());
     properties.setDocsFolder(tempFile.getParent());
+
+    properties.setDataSetFile(datasetFile.getPath());
+    properties.setDocsMetadataFile(metadataFile.getPath());
+    properties.setDocsListFile(docListFile.getPath());
 
     return properties;
   }

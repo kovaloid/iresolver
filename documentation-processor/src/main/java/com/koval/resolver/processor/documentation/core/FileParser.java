@@ -16,10 +16,10 @@ public class FileParser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocOutputFilesParser.class);
 
-  private final DocFileRepository docFileRepository;
+  private final FileRepository fileRepository;
 
-  public FileParser(DocFileRepository docFileRepository) {
-    this.docFileRepository = docFileRepository;
+  public FileParser(FileRepository fileRepository) {
+    this.fileRepository = fileRepository;
   }
 
   public <T> List<T> parseFile(
@@ -29,7 +29,7 @@ public class FileParser {
     List<T> parsedClasses = new ArrayList<>();
 
     try (
-            InputStream fileInputStream = docFileRepository.getFile(fileName);
+            InputStream fileInputStream = fileRepository.readFile(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(inputStreamReader)
     ) {

@@ -40,10 +40,9 @@ import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
-import com.koval.resolver.processor.documentation.core.DocDataSetCreator;
-import com.koval.resolver.processor.documentation.core.DocFileRepository;
-import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
-import com.koval.resolver.processor.documentation.core.DocTypeDetector;
+import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
+import com.koval.resolver.processor.documentation.core.*;
+import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
 import com.koval.resolver.processor.issues.IssuesProcessor;
 import com.koval.resolver.processor.issues.core.IssuesDataSetCreator;
 import com.koval.resolver.processor.issues.granular.GranularIssuesProcessor;
@@ -113,10 +112,31 @@ public final class Launcher {
   public void createDocumentationDataSet() {
     DocumentationProcessorConfiguration documentationConfiguration = configuration.getProcessors().getDocumentation();
     DocTypeDetector docTypeDetector = new DocTypeDetector();
-    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter();
+
+    FileRepository fileRepository = new FileRepository();
+    XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
+
+    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
+            fileRepository,
+            pdfConverter
+    );
+
+    PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
+    MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
+    DocListFileEntryWriter docListFileEntryWriter = new DocListFileEntryWriter();
+    DataSetFileEntryWriter dataSetFileEntryWriter = new DataSetFileEntryWriter();
+
+    DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
+            fileRepository,
+            pdfPageSplitter,
+            metadataFileEntryWriter,
+            docListFileEntryWriter,
+            dataSetFileEntryWriter
+    );
 
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
             documentationConfiguration,
+            docDataSetEntryWriter,
             docTypeDetector,
             wordToPdfFileConverter
     );
@@ -220,10 +240,10 @@ public final class Launcher {
     File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
     VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, configuration.getParagraphVectors().getLanguage());
 
-    DocFileRepository docFileRepository = new DocFileRepository();
+    FileRepository fileRepository = new FileRepository();
     DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
             configuration.getProcessors().getDocumentation(),
-            docFileRepository
+            fileRepository
     );
 
     TextDataExtractor textDataExtractor = new TextDataExtractor();

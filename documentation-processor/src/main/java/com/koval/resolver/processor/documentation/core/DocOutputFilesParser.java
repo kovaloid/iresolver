@@ -6,6 +6,7 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 public class DocOutputFilesParser {
 
   private final DocMetadataParser docMetadataParser;
@@ -13,10 +14,10 @@ public class DocOutputFilesParser {
 
   public DocOutputFilesParser(
           DocumentationProcessorConfiguration properties,
-          DocFileRepository docFileRepository
+          FileRepository fileRepository
   ) {
-    this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), docFileRepository);
-    this.docFileDataParser = new DocFileDataParser(properties.getDocsListFile(), docFileRepository);
+    this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), fileRepository);
+    this.docFileDataParser = new DocFileDataParser(properties.getDocsListFile(), fileRepository);
   }
 
   public List<DocFile> parseDocumentationFilesList() {
