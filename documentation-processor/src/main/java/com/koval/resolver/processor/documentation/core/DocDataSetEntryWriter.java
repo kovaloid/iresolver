@@ -52,7 +52,7 @@ public class DocDataSetEntryWriter {
           BufferedWriter metadataBufferedWriter,
           BufferedWriter docListBufferedWriter
   ) throws IOException {
-    try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getName()))) {
+    try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getCanonicalPath()))) {
       Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
       writeEntriesForDocPages(
