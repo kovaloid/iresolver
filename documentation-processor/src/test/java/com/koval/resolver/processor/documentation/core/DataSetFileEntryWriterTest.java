@@ -27,7 +27,7 @@ class DataSetFileEntryWriterTest {
   private DataSetFileEntryWriter dataSetFileEntryWriter;
 
   @BeforeEach
-  void setUp() {
+  void onSetup() {
     dataSetFileEntryWriter = new DataSetFileEntryWriter();
   }
 

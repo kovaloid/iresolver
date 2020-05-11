@@ -28,7 +28,7 @@ class DocListFileEntryWriterTest {
   private DocListFileEntryWriter docListFileEntryWriter;
 
   @BeforeEach
-  void setUp() {
+  void onSetup() {
     docListFileEntryWriter = new DocListFileEntryWriter();
   }
 

@@ -31,7 +31,7 @@ class MetadataFileEntryWriterTest {
   private MetadataFileEntryWriter metadataFileEntryWriter;
 
   @BeforeEach
-  void setUp() {
+  void onSetup() {
     metadataFileEntryWriter = new MetadataFileEntryWriter();
   }
 
