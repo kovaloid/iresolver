@@ -14,7 +14,7 @@ import com.koval.resolver.processor.documentation.split.PageSplitter;
 public class PdfPageSplitter implements PageSplitter {
 
   @Override
-  public Map<Integer, String> getMapping(InputStream input) throws IOException {
+  public Map<Integer, String> getMapping(final InputStream input) throws IOException {
     Map<Integer, String> result = new HashMap<>();
     PDDocument doc = PDDocument.load(input);
     PDFTextStripper stripper = new PDFTextStripper();

@@ -26,7 +26,7 @@ public class CredentialsKeeper {
   private final File credentialsFile;
   private final Charset charset = StandardCharsets.UTF_8;
 
-  public CredentialsKeeper(CredentialsProtector protector, String credentialsPath) {
+  public CredentialsKeeper(final CredentialsProtector protector, final String credentialsPath) {
     this.protector = protector;
     this.credentialsFile = new File(credentialsPath, CREDENTIALS_FILE_NAME);
   }
@@ -35,7 +35,7 @@ public class CredentialsKeeper {
     return credentialsFile.exists();
   }
 
-  public void store(Credentials credentials) {
+  public void store(final Credentials credentials) {
     if (!isStored()) {
       try {
         FileUtils.forceMkdir(credentialsFile.getParentFile());

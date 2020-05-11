@@ -19,7 +19,7 @@ public class Configuration {
     return administration;
   }
 
-  public void setAdministration(AdministrationConfiguration administration) {
+  public void setAdministration(final AdministrationConfiguration administration) {
     this.administration = administration;
   }
 
@@ -27,7 +27,7 @@ public class Configuration {
     return connectors;
   }
 
-  public void setConnectors(ConnectorsConfiguration connectors) {
+  public void setConnectors(final ConnectorsConfiguration connectors) {
     this.connectors = connectors;
   }
 
@@ -35,7 +35,7 @@ public class Configuration {
     return paragraphVectors;
   }
 
-  public void setParagraphVectors(ParagraphVectorsConfiguration paragraphVectors) {
+  public void setParagraphVectors(final ParagraphVectorsConfiguration paragraphVectors) {
     this.paragraphVectors = paragraphVectors;
   }
 
@@ -43,7 +43,7 @@ public class Configuration {
     return processors;
   }
 
-  public void setProcessors(ProcessorsConfiguration processors) {
+  public void setProcessors(final ProcessorsConfiguration processors) {
     this.processors = processors;
   }
 
@@ -51,7 +51,7 @@ public class Configuration {
     return reporters;
   }
 
-  public void setReporters(ReportersConfiguration reporters) {
+  public void setReporters(final ReportersConfiguration reporters) {
     this.reporters = reporters;
   }
 

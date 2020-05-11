@@ -1,9 +1,18 @@
 package com.koval.resolver.common.api.constant;
 
+public enum IssueParts {
+  SUMMARY("summary"),
+  DESCRIPTION("description"),
+  COMMENTS("comments");
 
-public interface IssueParts {
+  private String content;
 
-  String SUMMARY = "summary";
-  String DESCRIPTION = "description";
-  String COMMENTS = "comments";
+  IssueParts(final String content) {
+    this.content = content;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
 }

@@ -28,10 +28,10 @@ public class DocDataSetCreator {
   private final DocumentationProcessorConfiguration properties;
 
   public DocDataSetCreator(
-          DocumentationProcessorConfiguration properties,
-          DocDataSetEntryWriter docDataSetEntryWriter,
-          DocTypeDetector docTypeDetector,
-          FileConverter fileConverter
+          final DocumentationProcessorConfiguration properties,
+          final DocDataSetEntryWriter docDataSetEntryWriter,
+          final DocTypeDetector docTypeDetector,
+          final FileConverter fileConverter
   ) {
     this.properties = properties;
     this.docDataSetEntryWriter = docDataSetEntryWriter;

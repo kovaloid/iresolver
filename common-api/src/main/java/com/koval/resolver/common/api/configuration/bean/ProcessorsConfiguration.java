@@ -19,7 +19,7 @@ public class ProcessorsConfiguration {
     return issues;
   }
 
-  public void setIssues(IssuesProcessorConfiguration issues) {
+  public void setIssues(final IssuesProcessorConfiguration issues) {
     this.issues = issues;
   }
 
@@ -27,7 +27,7 @@ public class ProcessorsConfiguration {
     return granularIssues;
   }
 
-  public void setGranularIssues(GranularIssuesProcessorConfiguration granularIssues) {
+  public void setGranularIssues(final GranularIssuesProcessorConfiguration granularIssues) {
     this.granularIssues = granularIssues;
   }
 
@@ -35,7 +35,7 @@ public class ProcessorsConfiguration {
     return ruleEngine;
   }
 
-  public void setRuleEngine(RuleEngineProcessorConfiguration ruleEngine) {
+  public void setRuleEngine(final RuleEngineProcessorConfiguration ruleEngine) {
     this.ruleEngine = ruleEngine;
   }
 
@@ -43,7 +43,7 @@ public class ProcessorsConfiguration {
     return documentation;
   }
 
-  public void setDocumentation(DocumentationProcessorConfiguration documentation) {
+  public void setDocumentation(final DocumentationProcessorConfiguration documentation) {
     this.documentation = documentation;
   }
 
@@ -51,7 +51,7 @@ public class ProcessorsConfiguration {
     return confluence;
   }
 
-  public void setConfluence(ConfluenceProcessorConfiguration confluence) {
+  public void setConfluence(final ConfluenceProcessorConfiguration confluence) {
     this.confluence = confluence;
   }
 

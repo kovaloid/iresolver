@@ -10,7 +10,7 @@ public class IssuesProcessorConfiguration {
     return dataSetFile;
   }
 
-  public void setDataSetFile(String dataSetFile) {
+  public void setDataSetFile(final String dataSetFile) {
     this.dataSetFile = dataSetFile;
   }
 
@@ -18,7 +18,7 @@ public class IssuesProcessorConfiguration {
     return vectorModelFile;
   }
 
-  public void setVectorModelFile(String vectorModelFile) {
+  public void setVectorModelFile(final String vectorModelFile) {
     this.vectorModelFile = vectorModelFile;
   }
 

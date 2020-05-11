@@ -29,7 +29,7 @@ public class ConfluenceProcessor implements IssueProcessor {
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final String confluenceUrl;
 
-  public ConfluenceProcessor(Configuration properties) throws IOException {
+  public ConfluenceProcessor(final Configuration properties) throws IOException {
     this.confluenceUrl = properties.getConnectors().getConfluence().getUrl();
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     File vectorModelFile = new File(properties.getProcessors().getConfluence().getVectorModelFile());
@@ -37,7 +37,7 @@ public class ConfluenceProcessor implements IssueProcessor {
   }
 
   @Override
-  public void run(Issue issue, IssueAnalysingResult result) {
+  public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
     Collection<String> similarPageKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
         NUMBER_OF_NEAREST_LABELS);
@@ -51,7 +51,7 @@ public class ConfluenceProcessor implements IssueProcessor {
     result.setConfluenceResults(confluenceResults);
   }
 
-  private String getBrowseUrl(String pageId) {
+  private String getBrowseUrl(final String pageId) {
     return confluenceUrl + BROWSE_SUFFIX + pageId;
   }
 }

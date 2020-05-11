@@ -12,8 +12,8 @@ public class DocMetadataParser {
   private final FileRepository fileRepository;
 
   public DocMetadataParser(
-          String docMetadataFileName,
-          FileRepository fileRepository
+          final String docMetadataFileName,
+          final FileRepository fileRepository
   ) {
     this.docMetadataFileName = docMetadataFileName;
     this.fileRepository = fileRepository;

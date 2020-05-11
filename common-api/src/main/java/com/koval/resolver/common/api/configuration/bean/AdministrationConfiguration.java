@@ -16,7 +16,7 @@ public class AdministrationConfiguration {
     return connectorType;
   }
 
-  public void setConnectorType(ConnectorType connectorType) {
+  public void setConnectorType(final ConnectorType connectorType) {
     this.connectorType = connectorType;
   }
 
@@ -24,7 +24,7 @@ public class AdministrationConfiguration {
     return processors;
   }
 
-  public void setProcessors(List<String> processors) {
+  public void setProcessors(final List<String> processors) {
     this.processors = processors;
   }
 
@@ -32,7 +32,7 @@ public class AdministrationConfiguration {
     return reporters;
   }
 
-  public void setReporters(List<String> reporters) {
+  public void setReporters(final List<String> reporters) {
     this.reporters = reporters;
   }
 
@@ -40,7 +40,7 @@ public class AdministrationConfiguration {
     return parallelExecution;
   }
 
-  public void setParallelExecution(boolean parallelExecution) {
+  public void setParallelExecution(final boolean parallelExecution) {
     this.parallelExecution = parallelExecution;
   }
 

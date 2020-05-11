@@ -6,12 +6,12 @@ public class DocDataLineParser implements LineParser<DocFile> {
 
   private final String delimiter;
 
-  public DocDataLineParser(String delimiter) {
+  public DocDataLineParser(final String delimiter) {
     this.delimiter = delimiter;
   }
 
   @Override
-  public DocFile parseLine(String line) {
+  public DocFile parseLine(final String line) {
     String[] split = line.split(delimiter);
 
     int fileIndex = Integer.parseInt(split[0]);

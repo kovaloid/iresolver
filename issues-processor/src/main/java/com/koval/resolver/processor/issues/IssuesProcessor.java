@@ -2,11 +2,7 @@ package com.koval.resolver.processor.issues;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +20,6 @@ import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 import com.koval.resolver.common.api.util.AttachmentTypeUtil;
 
-
 public class IssuesProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuesProcessor.class);
@@ -34,18 +29,19 @@ public class IssuesProcessor implements IssueProcessor {
   private final IssueClient issueClient;
   private final VectorModel vectorModel;
 
-  public IssuesProcessor(IssueClient issueClient, Configuration properties) throws IOException {
+  public IssuesProcessor(final IssueClient issueClient, final Configuration properties) throws IOException {
     this.issueClient = issueClient;
     VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
+                                                         properties.getParagraphVectors().getLanguage());
   }
 
   @Override
-  public void run(Issue issue, IssueAnalysingResult result) {
+  public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
     Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-        NUMBER_OF_NEAREST_LABELS);
+                                                                       NUMBER_OF_NEAREST_LABELS);
     List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
     Map<String, Integer> probableLabelsMap = new HashMap<>();
     Map<User, Integer> qualifiedUsersMap = new HashMap<>();
@@ -64,15 +60,17 @@ public class IssuesProcessor implements IssueProcessor {
       }
       similarIssue.getComments().forEach(comment -> addEntityOrUpdateMetric(qualifiedUsersMap, comment.getAuthor()));
       similarIssue.getAttachments().forEach(attachment ->
-          addEntityOrUpdateMetric(probableAttachmentExtensionsMap, AttachmentTypeUtil.getExtension(attachment)));
+                                              addEntityOrUpdateMetric(probableAttachmentExtensionsMap,
+                                                                      AttachmentTypeUtil.getExtension(attachment)));
     });
     result.setSimilarIssues(similarIssuesWithSimilarity);
     result.setProbableLabels(convertMapToPairList(probableLabelsMap));
     result.setQualifiedUsers(convertMapToPairList(qualifiedUsersMap));
-    result.setProbableAttachmentTypes(getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentExtensionsMap)));
+    result.setProbableAttachmentTypes(
+      getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentExtensionsMap)));
   }
 
-  private <E> void addEntityOrUpdateMetric(Map<E, Integer> map, E entity) {
+  private <E> void addEntityOrUpdateMetric(final Map<E, Integer> map, final E entity) {
     if (map.containsKey(entity)) {
       Integer oldMetricNumber = map.get(entity);
       map.replace(entity, oldMetricNumber + 1);
@@ -81,25 +79,27 @@ public class IssuesProcessor implements IssueProcessor {
     }
   }
 
-  private <E> List<Pair<E, Integer>> convertMapToPairList(Map<E, Integer> map) {
+  private <E> List<Pair<E, Integer>> convertMapToPairList(final Map<E, Integer> map) {
     List<Pair<E, Integer>> pairList = new ArrayList<>();
     map.forEach((key, value) -> pairList.add(new Pair<>(key, value)));
     return pairList;
   }
 
-  private List<AttachmentResult> getAttachmentMetrics(Issue issue, List<Pair<String, Integer>> probableAttachmentExtensions) {
+  private List<AttachmentResult> getAttachmentMetrics(
+    final Issue issue, final List<Pair<String, Integer>> probableAttachmentExtensions) {
     List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
     List<AttachmentResult> attachmentResults = new ArrayList<>();
-    for (Pair<String, Integer> probableAttachmentExtension: probableAttachmentExtensions) {
+    for (Pair<String, Integer> probableAttachmentExtension : probableAttachmentExtensions) {
       attachmentResults.add(
-          new AttachmentResult(
-              probableAttachmentExtension.getEntity(),
-              probableAttachmentExtension.getMetric(),
-              AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
-              currentIssueAttachmentTypes.contains(probableAttachmentExtension.getEntity())
-          )
-      );
+        new AttachmentResult(
+          probableAttachmentExtension.getEntity(),
+          probableAttachmentExtension.getMetric(),
+          AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
+          currentIssueAttachmentTypes.contains(probableAttachmentExtension.getEntity())
+        )
+                           );
     }
     return attachmentResults;
   }
+
 }

@@ -3,7 +3,7 @@ package com.koval.resolver.common.api.exception;
 
 public class ProcessorException extends Exception {
 
-  public ProcessorException(String message, Throwable cause) {
+  public ProcessorException(final String message, final Throwable cause) {
       super(message, cause);
     }
 }
