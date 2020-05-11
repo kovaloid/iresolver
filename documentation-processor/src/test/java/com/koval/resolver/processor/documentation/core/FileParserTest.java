@@ -28,7 +28,7 @@ public class FileParserTest {
   private static final String PARSED_STRING_2 = "z";
 
   @Mock
-  private DocFileRepository docFileRepository;
+  private FileRepository fileRepository;
 
   @Mock
   private LineParser<String> stringLineParser;
@@ -38,12 +38,12 @@ public class FileParserTest {
   @BeforeEach
   void onSetup() throws FileNotFoundException {
     InputStream inputStream = new ByteArrayInputStream(FILE_STRINGS.getBytes());
-    when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
+    when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     when(stringLineParser.parseLine(FILE_STRING_1)).thenReturn(PARSED_STRING_1);
     when(stringLineParser.parseLine(FILE_STRING_2)).thenReturn(PARSED_STRING_2);
 
-    fileParser = new FileParser(docFileRepository);
+    fileParser = new FileParser(fileRepository);
   }
 
   @Test

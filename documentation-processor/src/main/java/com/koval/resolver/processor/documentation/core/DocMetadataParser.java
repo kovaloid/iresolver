@@ -9,18 +9,18 @@ public class DocMetadataParser {
   private static final String DELIMITER = " ";
 
   private final String docMetadataFileName;
-  private final DocFileRepository docFileRepository;
+  private final FileRepository fileRepository;
 
   public DocMetadataParser(
-    final String docMetadataFileName,
-    final DocFileRepository docFileRepository
+          final String docMetadataFileName,
+          final FileRepository fileRepository
   ) {
     this.docMetadataFileName = docMetadataFileName;
-    this.docFileRepository = docFileRepository;
+    this.fileRepository = fileRepository;
   }
 
   public List<DocMetadata> parseDocumentationMetadata() {
-    FileParser fileParser = new FileParser(docFileRepository);
+    FileParser fileParser = new FileParser(fileRepository);
     MetadataLineParser metadataLineParser = new MetadataLineParser(DELIMITER);
 
     return fileParser.parseFile(docMetadataFileName, metadataLineParser);

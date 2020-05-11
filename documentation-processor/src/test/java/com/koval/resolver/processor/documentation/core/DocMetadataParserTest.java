@@ -32,18 +32,18 @@ class DocMetadataParserTest {
   private static final String FILE_NAME = "tempFile.txt";
 
   @Mock
-  private DocFileRepository docFileRepository;
+  private FileRepository fileRepository;
 
   private DocMetadataParser docMetadataParser;
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
     InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
-    when(docFileRepository.getFile(FILE_NAME)).thenReturn(inputStream);
+    when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     docMetadataParser = new DocMetadataParser(
             FILE_NAME,
-            docFileRepository
+            fileRepository
     );
   }
 

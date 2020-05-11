@@ -6,7 +6,7 @@ public class MetadataLineParser implements LineParser<DocMetadata> {
 
   private final String delimiter;
 
-  MetadataLineParser(final String delimiter) {
+  public MetadataLineParser(final String delimiter) {
     this.delimiter = delimiter;
   }
 

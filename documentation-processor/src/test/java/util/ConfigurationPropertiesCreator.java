@@ -16,21 +16,26 @@ public final class ConfigurationPropertiesCreator {
   }
 
   public static DocumentationProcessorConfiguration createProperties(
-    final List<String> metadataStrings,
-    final File file
+          final List<String> metadataStrings,
+          final File docFile,
+          final File datasetFile,
+          final File metadataFile,
+          final File docListFile
   ) throws IOException {
-    final File tempFile = writeStringsToFile(metadataStrings, file);
-
+    final File tempFile = writeStringsToFile(metadataStrings, docFile);
     DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
-    properties.setDocsListFile(tempFile.getPath());
     properties.setDocsFolder(tempFile.getParent());
+
+    properties.setDataSetFile(datasetFile.getPath());
+    properties.setDocsMetadataFile(metadataFile.getPath());
+    properties.setDocsListFile(docListFile.getPath());
 
     return properties;
   }
 
   static File writeStringsToFile(
-    final List<String> metadataStrings,
-    final File file
+          final List<String> metadataStrings,
+          final File file
   ) throws IOException {
     for (String metadataString : metadataStrings) {
       FileUtils.writeStringToFile(file, metadataString, Charset.defaultCharset(), true);

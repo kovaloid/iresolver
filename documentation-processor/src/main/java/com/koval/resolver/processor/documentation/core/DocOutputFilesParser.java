@@ -12,11 +12,11 @@ public class DocOutputFilesParser {
   private final DocFileDataParser docFileDataParser;
 
   public DocOutputFilesParser(
-    final DocumentationProcessorConfiguration properties,
-    final DocFileRepository docFileRepository
+          final DocumentationProcessorConfiguration properties,
+          final FileRepository fileRepository
   ) {
-    this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), docFileRepository);
-    this.docFileDataParser = new DocFileDataParser(properties.getDocsListFile(), docFileRepository);
+    this.docMetadataParser = new DocMetadataParser(properties.getDocsMetadataFile(), fileRepository);
+    this.docFileDataParser = new DocFileDataParser(properties.getDocsListFile(), fileRepository);
   }
 
   public List<DocFile> parseDocumentationFilesList() {
