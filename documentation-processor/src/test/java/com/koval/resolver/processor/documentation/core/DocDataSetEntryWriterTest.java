@@ -30,18 +30,29 @@ class DocDataSetEntryWriterTest {
   private static final String DELIMITER = " ";
   private static final String DATA_SET_SEPARATOR = "|";
 
-  private static final int PAGE_NUMBER = 0;
-  private static final String PAGE_TEXT = "lol";
-  private static final Map<Integer, String> ONE_PAGE_MAPPING = createPages();
-
   private static final String FIRST_PAGE_KEY = "doc_0";
   private static final String SECOND_PAGE_KEY = "doc_1";
 
-  private static Map<Integer, String> createPages() {
-    HashMap<Integer, String> pages = new HashMap<>();
-    pages.put(PAGE_NUMBER, PAGE_TEXT);
-    return pages;
-  }
+  private static final int FIRST_DOCUMENT_INDEX = 0;
+  private static final int FIRST_PAGE_NUMBER = 0;
+  private static final String FIRST_PAGE_TEXT = "first page text";
+
+  private static final int SECOND_DOCUMENT_INDEX = 1;
+  private static final int SECOND_PAGE_NUMBER = 1;
+  private static final String SECOND_PAGE_TEXT = "second page text";
+
+  private static final Map<Integer, String> ONE_PAGE_MAPPING = new HashMap<Integer, String>() {
+    {
+      put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
+    }
+  };
+
+  private static final Map<Integer, String> TWO_PAGE_MAPPING = new HashMap<Integer, String>() {
+    {
+      put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
+      put(SECOND_PAGE_NUMBER, SECOND_PAGE_TEXT);
+    }
+  };
 
   @Mock
   private File docFile;
@@ -84,16 +95,7 @@ class DocDataSetEntryWriterTest {
 
     writeEntriesForDocFile();
 
-    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
-  }
-
-  private void writeEntriesForDocFile() throws IOException {
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    verify(docListFileEntryWriter).write(mockWriter, FIRST_DOCUMENT_INDEX, FILE_NAME_1, DELIMITER);
   }
 
   @Test
@@ -102,7 +104,17 @@ class DocDataSetEntryWriterTest {
 
     writeEntriesForDocFile();
 
-    verify(dataSetFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, PAGE_TEXT, DATA_SET_SEPARATOR);
+    verify(dataSetFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, FIRST_PAGE_TEXT, DATA_SET_SEPARATOR);
+  }
+
+  @Test
+  void testWritingDatasetTwoFileEntries() throws IOException {
+    doReturn(TWO_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+
+    writeEntriesForDocFile();
+
+    verify(dataSetFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, FIRST_PAGE_TEXT, DATA_SET_SEPARATOR);
+    verify(dataSetFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, SECOND_PAGE_TEXT, DATA_SET_SEPARATOR);
   }
 
   @Test
@@ -112,31 +124,31 @@ class DocDataSetEntryWriterTest {
 
     writeEntriesForDocFile();
 
-    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
+    verify(docListFileEntryWriter).write(mockWriter, FIRST_DOCUMENT_INDEX, FILE_NAME_1, DELIMITER);
 
     when(docFile.getName()).thenReturn(FILE_NAME_2);
     writeEntriesForDocFile();
 
-    verify(docListFileEntryWriter).write(mockWriter, 1, FILE_NAME_2, DELIMITER);
+    verify(docListFileEntryWriter).write(mockWriter, SECOND_DOCUMENT_INDEX, FILE_NAME_2, DELIMITER);
   }
 
   @Test
   void testWritingMetadataEntry() throws IOException {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+
     writeEntriesForDocFile();
-    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
+
+    verifyMetadataEntryWritten(FIRST_PAGE_KEY, FIRST_DOCUMENT_INDEX, FIRST_PAGE_NUMBER);
   }
 
   @Test
   void testWritingMetadataTwoEntries() throws IOException {
-    HashMap<Integer, String> map = new HashMap<>();
-    map.put(0, "lol");
-    map.put(1, "kek");
-    doReturn(map).when(pageSplitter).getMapping(any(InputStream.class));
+    doReturn(TWO_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
 
     writeEntriesForDocFile();
-    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
-    verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 0, 1, DELIMITER);
+
+    verifyMetadataEntryWritten(FIRST_PAGE_KEY, FIRST_DOCUMENT_INDEX, FIRST_PAGE_NUMBER);
+    verifyMetadataEntryWritten(SECOND_PAGE_KEY, FIRST_DOCUMENT_INDEX, SECOND_PAGE_NUMBER);
   }
 
   @Test
@@ -150,10 +162,10 @@ class DocDataSetEntryWriterTest {
     when(pageSplitter.getMapping(any(InputStream.class))).thenReturn(map).thenReturn(map2);
 
     writeEntriesForDocFile();
-    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
+    verifyMetadataEntryWritten(FIRST_PAGE_KEY, FIRST_DOCUMENT_INDEX, FIRST_PAGE_NUMBER);
 
     writeEntriesForDocFile();
-    verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 1, 0, DELIMITER);
+    verifyMetadataEntryWritten(SECOND_PAGE_KEY, SECOND_DOCUMENT_INDEX, FIRST_PAGE_NUMBER);
   }
 
   @Test
@@ -161,15 +173,50 @@ class DocDataSetEntryWriterTest {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
 
     writeEntriesForDocFile();
-
     writeEntriesForDocFile();
 
     docDataSetEntryWriter.resetIndices();
 
     writeEntriesForDocFile();
-    ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-    verify(metadataFileEntryWriter, atLeastOnce()).write(eq(mockWriter), captor.capture(), eq(0), eq(0), eq(DELIMITER));
-    assertEquals(FIRST_PAGE_KEY, captor.getValue());
+
+    verifyLastMetadataEntryCall();
+  }
+
+  private void writeEntriesForDocFile() throws IOException {
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+  }
+
+  private void verifyMetadataEntryWritten(
+          String expectedPageKey,
+          int expectedDocumentIndex,
+          int expectedPageNumber
+  ) throws IOException {
+    verify(metadataFileEntryWriter).write(
+            mockWriter,
+            expectedPageKey,
+            expectedDocumentIndex,
+            expectedPageNumber,
+            DELIMITER
+    );
+  }
+
+  private void verifyLastMetadataEntryCall() throws IOException {
+    ArgumentCaptor<String> pageKeyCaptor = ArgumentCaptor.forClass(String.class);
+
+    verify(metadataFileEntryWriter, atLeastOnce()).write(
+            eq(mockWriter),
+            pageKeyCaptor.capture(),
+            eq(FIRST_DOCUMENT_INDEX),
+            eq(FIRST_PAGE_NUMBER),
+            eq(DELIMITER)
+    );
+
+    assertEquals(FIRST_PAGE_KEY, pageKeyCaptor.getValue());
   }
 
 }
