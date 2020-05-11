@@ -7,12 +7,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -183,6 +185,37 @@ class DocDataSetEntryWriterTest {
             mockWriter
     );
     verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 1, 0, DELIMITER);
+  }
+
+  @Test
+  void testResettingIndices() throws IOException {
+    doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    docDataSetEntryWriter.resetIndices();
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+    ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+    verify(metadataFileEntryWriter, atLeastOnce()).write(eq(mockWriter), captor.capture(), eq(0), eq(0), eq(DELIMITER));
+    assertEquals(FIRST_PAGE_KEY, captor.getValue());
   }
 
 }
