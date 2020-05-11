@@ -69,8 +69,28 @@ public class DocDataSetCreatorTest {
   }
 
   @Test
-  void testConvertingOtherExtension() {
+  void testNotConvertingOtherExtension() {
     when(docTypeDetector.detectType(FILE_NAME)).thenReturn(MediaType.UNKNOWN);
+
+    docDataSetCreator.convertWordFilesToPdf();
+
+    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
+  }
+
+  @Test
+  void testHandlingInvalidDirectory() {
+    tempFile.delete();
+    tempDirectory.delete();
+
+    docDataSetCreator.convertWordFilesToPdf();
+
+    verify(fileConverter, never()).convert(eq(tempFile.getName()), anyString());
+  }
+
+  @Test
+  void testHandlingOnlyDirectories() {
+    tempFile.delete();
+    new File(tempDirectory, FILE_NAME).mkdir();
 
     docDataSetCreator.convertWordFilesToPdf();
 
