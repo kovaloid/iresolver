@@ -41,18 +41,26 @@ class DocDataSetEntryWriterTest {
   private static final int SECOND_PAGE_NUMBER = 1;
   private static final String SECOND_PAGE_TEXT = "second page text";
 
-  private static final Map<Integer, String> ONE_PAGE_MAPPING = new HashMap<Integer, String>() {
-    {
-      put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
-    }
-  };
+  private static final Map<Integer, String> ONE_PAGE_MAPPING = createOnePageMapping();
 
-  private static final Map<Integer, String> TWO_PAGE_MAPPING = new HashMap<Integer, String>() {
-    {
-      put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
-      put(SECOND_PAGE_NUMBER, SECOND_PAGE_TEXT);
-    }
-  };
+  private static final Map<Integer, String> TWO_PAGE_MAPPING = createTwoPageMapping();
+
+  private static Map<Integer, String> createOnePageMapping() {
+    Map<Integer, String> map = new HashMap<>();
+
+    map.put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
+
+    return map;
+  }
+
+  private static Map<Integer, String> createTwoPageMapping() {
+    Map<Integer, String> map = new HashMap<>();
+
+    map.put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
+    map.put(SECOND_PAGE_NUMBER, SECOND_PAGE_TEXT);
+
+    return map;
+  }
 
   @Mock
   private File docFile;
