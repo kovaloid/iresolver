@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 
-//TODO: This test knows too much implementation details,
-// we need to extract each entry parsing into separate classes
+//TODO: This test knows too much implementation details
 @ExtendWith(MockitoExtension.class)
 class DocDataSetEntryWriterTest {
 
@@ -76,12 +74,7 @@ class DocDataSetEntryWriterTest {
 
   @Test
   void testWriteEntriesForDocFile() throws IOException {
-//    docDataSetEntryWriter.writeEntriesForDocFile(
-//            docFile,
-//            mockWriter,
-//            mockWriter,
-//            mockWriter
-//    );
+
   }
 
   @Test
@@ -111,6 +104,33 @@ class DocDataSetEntryWriterTest {
     );
     verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
     verify(metadataFileEntryWriter).write(mockWriter, "doc_1", 0, 1, DELIMITER);
+  }
+
+  @Test
+  void testWritingMetadataChangingDocumentIndex() throws IOException {
+    HashMap<Integer, String> map = new HashMap<>();
+    map.put(0, "lol");
+
+    HashMap<Integer, String> map2 = new HashMap<>();
+    map2.put(0, "kek");
+
+    when(pageSplitter.getMapping(any(InputStream.class))).thenReturn(map).thenReturn(map2);
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+    verify(metadataFileEntryWriter).write(mockWriter, "doc_1", 1, 0, DELIMITER);
   }
 
 }
