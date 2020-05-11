@@ -67,7 +67,7 @@ class DocDataSetEntryWriterTest {
   private DocDataSetEntryWriter docDataSetEntryWriter;
 
   @BeforeEach
-  void onSetup() throws IOException {
+  void onSetup() {
     docDataSetEntryWriter = new DocDataSetEntryWriter(
             fileRepository,
             pageSplitter,
@@ -82,26 +82,25 @@ class DocDataSetEntryWriterTest {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
     when(docFile.getName()).thenReturn(FILE_NAME_1);
 
+    writeEntriesForDocFile();
+
+    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
+  }
+
+  private void writeEntriesForDocFile() throws IOException {
     docDataSetEntryWriter.writeEntriesForDocFile(
             docFile,
             mockWriter,
             mockWriter,
             mockWriter
     );
-
-    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
   }
 
   @Test
   void testWritingDatasetFileEntry() throws IOException {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
 
     verify(dataSetFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, PAGE_TEXT, DATA_SET_SEPARATOR);
   }
@@ -111,22 +110,12 @@ class DocDataSetEntryWriterTest {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
     when(docFile.getName()).thenReturn(FILE_NAME_1);
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
 
     verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
 
     when(docFile.getName()).thenReturn(FILE_NAME_2);
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
 
     verify(docListFileEntryWriter).write(mockWriter, 1, FILE_NAME_2, DELIMITER);
   }
@@ -134,12 +123,7 @@ class DocDataSetEntryWriterTest {
   @Test
   void testWritingMetadataEntry() throws IOException {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
     verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
   }
 
@@ -150,12 +134,7 @@ class DocDataSetEntryWriterTest {
     map.put(1, "kek");
     doReturn(map).when(pageSplitter).getMapping(any(InputStream.class));
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
     verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
     verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 0, 1, DELIMITER);
   }
@@ -170,20 +149,10 @@ class DocDataSetEntryWriterTest {
 
     when(pageSplitter.getMapping(any(InputStream.class))).thenReturn(map).thenReturn(map2);
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
     verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
     verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 1, 0, DELIMITER);
   }
 
@@ -191,28 +160,13 @@ class DocDataSetEntryWriterTest {
   void testResettingIndices() throws IOException {
     doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
 
     docDataSetEntryWriter.resetIndices();
 
-    docDataSetEntryWriter.writeEntriesForDocFile(
-            docFile,
-            mockWriter,
-            mockWriter,
-            mockWriter
-    );
+    writeEntriesForDocFile();
     ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
     verify(metadataFileEntryWriter, atLeastOnce()).write(eq(mockWriter), captor.capture(), eq(0), eq(0), eq(DELIMITER));
     assertEquals(FIRST_PAGE_KEY, captor.getValue());

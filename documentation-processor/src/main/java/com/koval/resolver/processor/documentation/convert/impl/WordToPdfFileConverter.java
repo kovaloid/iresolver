@@ -27,8 +27,10 @@ public class WordToPdfFileConverter implements FileConverter {
   }
 
   @Override
-  public void convert(String inputFilePath,
-                      String outputFilePath) {
+  public void convert(
+          String inputFilePath,
+          String outputFilePath
+  ) {
     try (InputStream doc = fileRepository.readFile(inputFilePath);
          OutputStream out = fileRepository.writeToFile(outputFilePath)) {
       pdfConverter.convert(doc, out);
