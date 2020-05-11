@@ -28,19 +28,18 @@ class DocDataSetEntryWriterTest {
   private static final String DELIMITER = " ";
   private static final String DATA_SET_SEPARATOR = "|";
 
-  private static final String DATA = "bla bla bla\n tralalal tralala";
-
-  private static final Map<Integer, String> MAPPINGS = Map.of(
-          1, "lol",
-          2, "kek",
-          3, "cheburek"
-  );
-
   private static final int PAGE_NUMBER = 0;
   private static final String PAGE_TEXT = "lol";
-  private static final Map<Integer, String> ONE_PAGE_MAPPING = Map.of(
-          PAGE_NUMBER, PAGE_TEXT
-  );
+  private static final Map<Integer, String> ONE_PAGE_MAPPING = createPages();
+
+  private static final String FIRST_PAGE_KEY = "doc_0";
+  private static final String SECOND_PAGE_KEY = "doc_1";
+
+  private static Map<Integer, String> createPages() {
+    HashMap<Integer, String> pages = new HashMap<>();
+    pages.put(PAGE_NUMBER, PAGE_TEXT);
+    return pages;
+  }
 
   @Mock
   private File docFile;
@@ -66,7 +65,7 @@ class DocDataSetEntryWriterTest {
   private DocDataSetEntryWriter docDataSetEntryWriter;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void onSetup() throws IOException {
     docDataSetEntryWriter = new DocDataSetEntryWriter(
             fileRepository,
             pageSplitter,
@@ -102,7 +101,7 @@ class DocDataSetEntryWriterTest {
             mockWriter
     );
 
-    verify(dataSetFileEntryWriter).write(mockWriter, "doc_0", PAGE_TEXT, DATA_SET_SEPARATOR);
+    verify(dataSetFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, PAGE_TEXT, DATA_SET_SEPARATOR);
   }
 
   @Test
@@ -139,7 +138,7 @@ class DocDataSetEntryWriterTest {
             mockWriter,
             mockWriter
     );
-    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
   }
 
   @Test
@@ -155,8 +154,8 @@ class DocDataSetEntryWriterTest {
             mockWriter,
             mockWriter
     );
-    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
-    verify(metadataFileEntryWriter).write(mockWriter, "doc_1", 0, 1, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 0, 1, DELIMITER);
   }
 
   @Test
@@ -175,7 +174,7 @@ class DocDataSetEntryWriterTest {
             mockWriter,
             mockWriter
     );
-    verify(metadataFileEntryWriter).write(mockWriter, "doc_0", 0, 0, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, FIRST_PAGE_KEY, 0, 0, DELIMITER);
 
     docDataSetEntryWriter.writeEntriesForDocFile(
             docFile,
@@ -183,7 +182,7 @@ class DocDataSetEntryWriterTest {
             mockWriter,
             mockWriter
     );
-    verify(metadataFileEntryWriter).write(mockWriter, "doc_1", 1, 0, DELIMITER);
+    verify(metadataFileEntryWriter).write(mockWriter, SECOND_PAGE_KEY, 1, 0, DELIMITER);
   }
 
 }

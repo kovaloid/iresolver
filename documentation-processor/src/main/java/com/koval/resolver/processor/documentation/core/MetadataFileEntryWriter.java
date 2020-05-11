@@ -31,5 +31,4 @@ public class MetadataFileEntryWriter {
     metadataBufferedWriter.write(String.valueOf(docMetadata.getPageNumber()));
     metadataBufferedWriter.newLine();
   }
-
 }
