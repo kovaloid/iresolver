@@ -7,7 +7,7 @@ import javax.swing.*;
 
 class LauncherUI extends JFrame {
 
-  LauncherUI(Launcher launcher) {
+  LauncherUI(final Launcher launcher) {
     super("IResolver Application");
     initLookAndFeel();
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

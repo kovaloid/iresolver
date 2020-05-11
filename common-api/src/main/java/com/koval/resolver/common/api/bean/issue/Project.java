@@ -11,7 +11,7 @@ public class Project {
   public Project() {
   }
 
-  public Project(String key, String name) {
+  public Project(final String key, final String name) {
     this.key = key;
     this.name = name;
   }
@@ -20,7 +20,7 @@ public class Project {
     return key;
   }
 
-  public void setKey(String key) {
+  public void setKey(final String key) {
     this.key = key;
   }
 
@@ -28,12 +28,12 @@ public class Project {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

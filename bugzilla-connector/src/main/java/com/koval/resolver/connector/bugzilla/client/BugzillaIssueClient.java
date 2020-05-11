@@ -26,19 +26,19 @@ public class BugzillaIssueClient implements IssueClient {
   private final BugzillaHttpSession session;
   private final IssueTransformer<b4j.core.Issue> issueTransformer;
 
-  BugzillaIssueClient(BugzillaHttpSession session) {
+  BugzillaIssueClient(final BugzillaHttpSession session) {
     this.session = session;
     this.issueTransformer = new BugzillaIssueTransformer();
     session.open();
   }
 
   @Override
-  public int getTotalIssues(String query) {
+  public int getTotalIssues(final String query) {
     return 1_000_000;
   }
 
   @Override
-  public List<Issue> search(String query, int maxResults, int startAt, List<String> fields) {
+  public List<Issue> search(final String query, final int maxResults, final int startAt, final List<String> fields) {
     LOGGER.debug("Send search request: Query = '{}' MaxResults = '{}' StartAt = '{}'.", query, maxResults, startAt);
     DefaultSearchData searchData = getSearchDataByQuery(query);
 
@@ -54,7 +54,7 @@ public class BugzillaIssueClient implements IssueClient {
     return issueTransformer.transform(rawIssueList);
   }
 
-  private DefaultSearchData getSearchDataByQuery(String query) {
+  private DefaultSearchData getSearchDataByQuery(final String query) {
     DefaultSearchData searchData = new DefaultSearchData();
 
     BugzillaQueryParser queryParser = new BugzillaQueryParser();
@@ -85,7 +85,7 @@ public class BugzillaIssueClient implements IssueClient {
   }
 
   @Override
-  public Issue getIssueByKey(String issueKey) {
+  public Issue getIssueByKey(final String issueKey) {
     return issueTransformer.transform(session.getIssue(issueKey));
   }
 
@@ -97,9 +97,7 @@ public class BugzillaIssueClient implements IssueClient {
     Iterator<b4j.core.Issue> issues = session.searchBugs(searchData, null).iterator();
     List<IssueField> issueFields = new ArrayList<>();
     if (issues.hasNext()) {
-      issues.next().getCustomFieldNames().forEach((fieldName) -> {
-        issueFields.add(new IssueField(fieldName));
-      });
+      issues.next().getCustomFieldNames().forEach((fieldName) -> issueFields.add(new IssueField(fieldName)));
     }
     return issueFields;
   }

@@ -28,8 +28,8 @@ public class WordToPdfFileConverter implements FileConverter {
 
   @Override
   public void convert(
-          String inputFilePath,
-          String outputFilePath
+          final String inputFilePath,
+          final String outputFilePath
   ) {
     try (InputStream doc = fileRepository.readFile(inputFilePath);
          OutputStream out = fileRepository.writeToFile(outputFilePath)) {

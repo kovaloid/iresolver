@@ -9,14 +9,13 @@ import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
-
 public class VectorModelSerializer {
 
-  public void serialize(VectorModel vectorModel, String file) {
+  public void serialize(final VectorModel vectorModel, final String file) {
     WordVectorSerializer.writeParagraphVectors(vectorModel.getParagraphVectors(), file);
   }
 
-  public VectorModel deserialize(File vectorModelFile, String language) throws IOException {
+  public VectorModel deserialize(final File vectorModelFile, final String language) throws IOException {
     ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(vectorModelFile);
     TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
     TokenPreProcess preProcessor = new StemmingPreprocessor().setLanguage(language);
@@ -24,4 +23,5 @@ public class VectorModelSerializer {
     paragraphVectors.setTokenizerFactory(tokenizerFactory);
     return new VectorModel(paragraphVectors);
   }
+
 }

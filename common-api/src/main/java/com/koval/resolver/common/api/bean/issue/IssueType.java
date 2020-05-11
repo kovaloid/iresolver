@@ -10,7 +10,7 @@ public class IssueType {
   public IssueType() {
   }
 
-  public IssueType(String name, boolean isSubTask) {
+  public IssueType(final String name, final boolean isSubTask) {
     this.name = name;
     this.isSubTask = isSubTask;
   }
@@ -19,7 +19,7 @@ public class IssueType {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -27,12 +27,12 @@ public class IssueType {
     return isSubTask;
   }
 
-  public void setSubTask(boolean subTask) {
+  public void setSubTask(final boolean subTask) {
     isSubTask = subTask;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

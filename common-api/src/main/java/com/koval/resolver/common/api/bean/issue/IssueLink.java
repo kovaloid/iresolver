@@ -13,7 +13,7 @@ public class IssueLink {
   public IssueLink() {
   }
 
-  public IssueLink(String targetIssueKey, String issueLinkType, URI targetIssueUri) {
+  public IssueLink(final String targetIssueKey, final String issueLinkType, final URI targetIssueUri) {
     this.targetIssueKey = targetIssueKey;
     this.issueLinkType = issueLinkType;
     this.targetIssueUri = targetIssueUri;
@@ -23,7 +23,7 @@ public class IssueLink {
     return targetIssueKey;
   }
 
-  public void setTargetIssueKey(String targetIssueKey) {
+  public void setTargetIssueKey(final String targetIssueKey) {
     this.targetIssueKey = targetIssueKey;
   }
 
@@ -31,7 +31,7 @@ public class IssueLink {
     return issueLinkType;
   }
 
-  public void setIssueLinkType(String issueLinkType) {
+  public void setIssueLinkType(final String issueLinkType) {
     this.issueLinkType = issueLinkType;
   }
 
@@ -39,12 +39,12 @@ public class IssueLink {
     return targetIssueUri;
   }
 
-  public void setTargetIssueUri(URI targetIssueUri) {
+  public void setTargetIssueUri(final URI targetIssueUri) {
     this.targetIssueUri = targetIssueUri;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

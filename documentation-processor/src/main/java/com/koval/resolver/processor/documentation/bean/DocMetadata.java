@@ -7,7 +7,7 @@ public class DocMetadata {
   private int fileIndex;
   private int pageNumber;
 
-  public DocMetadata(String key, int fileIndex, int pageNumber) {
+  public DocMetadata(final String key, final int fileIndex, final int pageNumber) {
     this.key = key;
     this.fileIndex = fileIndex;
     this.pageNumber = pageNumber;
@@ -17,7 +17,7 @@ public class DocMetadata {
     return key;
   }
 
-  public void setKey(String key) {
+  public void setKey(final String key) {
     this.key = key;
   }
 
@@ -25,7 +25,7 @@ public class DocMetadata {
     return fileIndex;
   }
 
-  public void setFileIndex(int fileIndex) {
+  public void setFileIndex(final int fileIndex) {
     this.fileIndex = fileIndex;
   }
 
@@ -33,7 +33,7 @@ public class DocMetadata {
     return pageNumber;
   }
 
-  public void setPageNumber(int pageNumber) {
+  public void setPageNumber(final int pageNumber) {
     this.pageNumber = pageNumber;
   }
 }

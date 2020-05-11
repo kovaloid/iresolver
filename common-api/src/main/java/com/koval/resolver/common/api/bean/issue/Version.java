@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import org.joda.time.DateTime;
 
-
 public class Version {
 
   private String name;
@@ -16,7 +15,9 @@ public class Version {
   public Version() {
   }
 
-  public Version(String name, String description, boolean isArchived, boolean isReleased, DateTime releaseDate) {
+  public Version(
+    final String name, final String description, final boolean isArchived, final boolean isReleased,
+    final DateTime releaseDate) {
     this.name = name;
     this.description = description;
     this.isArchived = isArchived;
@@ -28,7 +29,7 @@ public class Version {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -36,7 +37,7 @@ public class Version {
     return description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(final String description) {
     this.description = description;
   }
 
@@ -44,7 +45,7 @@ public class Version {
     return isArchived;
   }
 
-  public void setArchived(boolean archived) {
+  public void setArchived(final boolean archived) {
     isArchived = archived;
   }
 
@@ -52,7 +53,7 @@ public class Version {
     return isReleased;
   }
 
-  public void setReleased(boolean released) {
+  public void setReleased(final boolean released) {
     isReleased = released;
   }
 
@@ -60,12 +61,17 @@ public class Version {
     return releaseDate;
   }
 
-  public void setReleaseDate(DateTime releaseDate) {
+  public void setReleaseDate(final DateTime releaseDate) {
     this.releaseDate = releaseDate;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public int hashCode() {
+    return Objects.hash(name, description, isArchived, isReleased, releaseDate);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -74,14 +80,10 @@ public class Version {
     }
     Version version = (Version)o;
     return isArchived == version.isArchived
-        && isReleased == version.isReleased
-        && Objects.equals(name, version.name)
-        && Objects.equals(description, version.description)
-        && Objects.equals(releaseDate, version.releaseDate);
+           && isReleased == version.isReleased
+           && Objects.equals(name, version.name)
+           && Objects.equals(description, version.description)
+           && Objects.equals(releaseDate, version.releaseDate);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, description, isArchived, isReleased, releaseDate);
-  }
 }

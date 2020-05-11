@@ -11,7 +11,7 @@ public class ConfluenceProcessorConfiguration {
     return dataSetFile;
   }
 
-  public void setDataSetFile(String dataSetFile) {
+  public void setDataSetFile(final String dataSetFile) {
     this.dataSetFile = dataSetFile;
   }
 
@@ -19,7 +19,7 @@ public class ConfluenceProcessorConfiguration {
     return vectorModelFile;
   }
 
-  public void setVectorModelFile(String vectorModelFile) {
+  public void setVectorModelFile(final String vectorModelFile) {
     this.vectorModelFile = vectorModelFile;
   }
 
@@ -27,7 +27,7 @@ public class ConfluenceProcessorConfiguration {
     return confluenceMetadataFile;
   }
 
-  public void setConfluenceMetadataFile(String confluenceMetadataFile) {
+  public void setConfluenceMetadataFile(final String confluenceMetadataFile) {
     this.confluenceMetadataFile = confluenceMetadataFile;
   }
 

@@ -76,7 +76,7 @@ public class DocFileDataParserTest {
     docFileDataParser.parseDocumentationFilesList();
   }
 
-  private void initDocOutputFileParser(String testString) throws IOException {
+  private void initDocOutputFileParser(final String testString) throws IOException {
     InputStream inputStream = new ByteArrayInputStream(testString.getBytes());
     when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
@@ -86,12 +86,12 @@ public class DocFileDataParserTest {
     );
   }
 
-  private void assertDocFilesEqual(DocFile expectedDocFile, DocFile actualDocFile) {
+  private void assertDocFilesEqual(final DocFile expectedDocFile, final DocFile actualDocFile) {
     assertEquals(expectedDocFile.getFileIndex(), actualDocFile.getFileIndex());
     assertEquals(expectedDocFile.getFileName(), actualDocFile.getFileName());
   }
 
-  private static String constructTestString(DocFile docFile) {
+  private static String constructTestString(final DocFile docFile) {
     return docFile.getFileIndex() + DELIMITER + docFile.getFileName();
   }
 }

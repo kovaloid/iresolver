@@ -15,7 +15,7 @@ public class ConfluenceConnectorConfiguration {
     return url;
   }
 
-  public void setUrl(String url) {
+  public void setUrl(final String url) {
     this.url = url;
   }
 
@@ -23,7 +23,7 @@ public class ConfluenceConnectorConfiguration {
     return anonymous;
   }
 
-  public void setAnonymous(boolean anonymous) {
+  public void setAnonymous(final boolean anonymous) {
     this.anonymous = anonymous;
   }
 
@@ -31,7 +31,7 @@ public class ConfluenceConnectorConfiguration {
     return credentialsFolder;
   }
 
-  public void setCredentialsFolder(String credentialsFolder) {
+  public void setCredentialsFolder(final String credentialsFolder) {
     this.credentialsFolder = credentialsFolder;
   }
 
@@ -39,7 +39,7 @@ public class ConfluenceConnectorConfiguration {
     return spaceKeys;
   }
 
-  public void setSpaceKeys(List<String> spaceKeys) {
+  public void setSpaceKeys(final List<String> spaceKeys) {
     this.spaceKeys = spaceKeys;
   }
 
@@ -47,7 +47,7 @@ public class ConfluenceConnectorConfiguration {
     return limitPerRequest;
   }
 
-  public void setLimitPerRequest(int limitPerRequest) {
+  public void setLimitPerRequest(final int limitPerRequest) {
     this.limitPerRequest = limitPerRequest;
   }
 

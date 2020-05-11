@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import org.joda.time.DateTime;
 
-
 public class Comment {
 
   private User author;
@@ -16,7 +15,9 @@ public class Comment {
   public Comment() {
   }
 
-  public Comment(User author, User updateAuthor, DateTime creationDate, DateTime updateDate, String body) {
+  public Comment(
+    final User author, final User updateAuthor, final DateTime creationDate, final DateTime updateDate,
+    final String body) {
     this.author = author;
     this.updateAuthor = updateAuthor;
     this.creationDate = creationDate;
@@ -28,7 +29,7 @@ public class Comment {
     return author;
   }
 
-  public void setAuthor(User author) {
+  public void setAuthor(final User author) {
     this.author = author;
   }
 
@@ -36,7 +37,7 @@ public class Comment {
     return updateAuthor;
   }
 
-  public void setUpdateAuthor(User updateAuthor) {
+  public void setUpdateAuthor(final User updateAuthor) {
     this.updateAuthor = updateAuthor;
   }
 
@@ -44,7 +45,7 @@ public class Comment {
     return creationDate;
   }
 
-  public void setCreationDate(DateTime creationDate) {
+  public void setCreationDate(final DateTime creationDate) {
     this.creationDate = creationDate;
   }
 
@@ -52,7 +53,7 @@ public class Comment {
     return updateDate;
   }
 
-  public void setUpdateDate(DateTime updateDate) {
+  public void setUpdateDate(final DateTime updateDate) {
     this.updateDate = updateDate;
   }
 
@@ -60,12 +61,17 @@ public class Comment {
     return body;
   }
 
-  public void setBody(String body) {
+  public void setBody(final String body) {
     this.body = body;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public int hashCode() {
+    return Objects.hash(author, updateAuthor, creationDate, updateDate, body);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -74,14 +80,10 @@ public class Comment {
     }
     Comment comment = (Comment)o;
     return Objects.equals(author, comment.author)
-        && Objects.equals(updateAuthor, comment.updateAuthor)
-        && Objects.equals(creationDate, comment.creationDate)
-        && Objects.equals(updateDate, comment.updateDate)
-        && Objects.equals(body, comment.body);
+           && Objects.equals(updateAuthor, comment.updateAuthor)
+           && Objects.equals(creationDate, comment.creationDate)
+           && Objects.equals(updateDate, comment.updateDate)
+           && Objects.equals(body, comment.body);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(author, updateAuthor, creationDate, updateDate, body);
-  }
 }

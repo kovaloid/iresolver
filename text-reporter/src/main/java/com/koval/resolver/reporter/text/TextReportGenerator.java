@@ -24,12 +24,12 @@ public class TextReportGenerator implements ReportGenerator {
   private static final String DASH = " - ";
   private final String outputFile;
 
-  public TextReportGenerator(TextReporterConfiguration configuration) {
+  public TextReportGenerator(final TextReporterConfiguration configuration) {
     this.outputFile = configuration.getOutputFile();
   }
 
   @Override
-  public void generate(List<IssueAnalysingResult> results) {
+  public void generate(final List<IssueAnalysingResult> results) {
     StringBuilder content = new StringBuilder(100);
     for (IssueAnalysingResult result: results) {
       content.append(result.getOriginalIssue().getKey())
@@ -56,7 +56,7 @@ public class TextReportGenerator implements ReportGenerator {
     }
   }
 
-  private void fillIssuesProcessorResults(StringBuilder content, IssueAnalysingResult result) {
+  private void fillIssuesProcessorResults(final StringBuilder content, final IssueAnalysingResult result) {
     content.append("\n\nsimilar issues: \n");
     for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
       content.append(similarIssue.getEntity().getKey())

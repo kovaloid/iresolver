@@ -23,8 +23,8 @@ public class FileParser {
   }
 
   public <T> List<T> parseFile(
-          String fileName,
-          LineParser<T> lineParser
+          final String fileName,
+          final LineParser<T> lineParser
   ) {
     List<T> parsedClasses = new ArrayList<>();
 
