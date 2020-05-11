@@ -22,7 +22,8 @@ import com.koval.resolver.processor.documentation.split.PageSplitter;
 @ExtendWith(MockitoExtension.class)
 class DocDataSetEntryWriterTest {
 
-  private static final String FILE_NAME = "filename";
+  private static final String FILE_NAME_1 = "filename1";
+  private static final String FILE_NAME_2 = "filename2";
 
   private static final String DELIMITER = " ";
 
@@ -34,7 +35,7 @@ class DocDataSetEntryWriterTest {
           3, "cheburek"
   );
 
-  private static final Map<Integer, String> METADATA_MAPPING = Map.of(
+  private static final Map<Integer, String> ONE_PAGE_MAPPING = Map.of(
           0, "lol"
   );
 
@@ -74,12 +75,47 @@ class DocDataSetEntryWriterTest {
 
   @Test
   void testWriteEntriesForDocFile() throws IOException {
+    doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+    when(docFile.getName()).thenReturn(FILE_NAME_1);
 
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
+  }
+
+  @Test
+  void testChangingFileIndexForDocFileEntry() throws IOException {
+    doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+    when(docFile.getName()).thenReturn(FILE_NAME_1);
+
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    verify(docListFileEntryWriter).write(mockWriter, 0, FILE_NAME_1, DELIMITER);
+
+    when(docFile.getName()).thenReturn(FILE_NAME_2);
+    docDataSetEntryWriter.writeEntriesForDocFile(
+            docFile,
+            mockWriter,
+            mockWriter,
+            mockWriter
+    );
+
+    verify(docListFileEntryWriter).write(mockWriter, 1, FILE_NAME_2, DELIMITER);
   }
 
   @Test
   void testWritingMetadataEntry() throws IOException {
-    doReturn(METADATA_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
+    doReturn(ONE_PAGE_MAPPING).when(pageSplitter).getMapping(any(InputStream.class));
     docDataSetEntryWriter.writeEntriesForDocFile(
             docFile,
             mockWriter,
@@ -90,7 +126,7 @@ class DocDataSetEntryWriterTest {
   }
 
   @Test
-  void testWritingMetadataTwoEntries() throws  IOException {
+  void testWritingMetadataTwoEntries() throws IOException {
     HashMap<Integer, String> map = new HashMap<>();
     map.put(0, "lol");
     map.put(1, "kek");

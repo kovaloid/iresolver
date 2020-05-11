@@ -6,7 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 
 public class DocDataSetEntryWriter {
@@ -62,8 +61,7 @@ public class DocDataSetEntryWriter {
               metadataBufferedWriter
       );
 
-      DocFile docFileData = new DocFile(currentDocumentIndex, docFile.getName());
-      docListFileEntryWriter.write(docListBufferedWriter, docFileData, DELIMITER);
+      docListFileEntryWriter.write(docListBufferedWriter, currentDocumentIndex, docFile.getName(), DELIMITER);
 
       currentDocumentIndex++;
     } catch (FileNotFoundException e) {

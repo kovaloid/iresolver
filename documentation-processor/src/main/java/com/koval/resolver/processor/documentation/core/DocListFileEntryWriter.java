@@ -9,6 +9,16 @@ public class DocListFileEntryWriter {
 
   void write(
           BufferedWriter docListBufferedWriter,
+          int fileIndex,
+          String fileName,
+          String delimiter
+  ) throws IOException {
+    DocFile docFile = new DocFile(fileIndex, fileName);
+    writeDocFileEntry(docListBufferedWriter, docFile, delimiter);
+  }
+
+  private void writeDocFileEntry(
+          BufferedWriter docListBufferedWriter,
           DocFile docFileData,
           String delimiter
   ) throws IOException {
