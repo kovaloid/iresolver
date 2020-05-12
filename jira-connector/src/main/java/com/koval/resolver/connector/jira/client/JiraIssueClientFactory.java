@@ -44,7 +44,7 @@ public class JiraIssueClientFactory implements IssueClientFactory {
 
   private IssueClient getAnonymousClient() throws JiraConnectorException {
     LOGGER.info("Creating Jira client with Anonymous authentication...");
-    JiraRestClient restClient = new AsynchronousJiraRestClientFactory().create(getURI(host),
+    final JiraRestClient restClient = new AsynchronousJiraRestClientFactory().create(getURI(host),
             new AnonymousAuthenticationHandler());
     return new JiraIssueClient(restClient, host + BROWSE_SUFFIX);
   }
@@ -55,7 +55,7 @@ public class JiraIssueClientFactory implements IssueClientFactory {
     }
 
     LOGGER.info("Creating Jira client with Basic authentication...");
-    JiraRestClient restClient = new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(getURI(host),
+    final JiraRestClient restClient = new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(getURI(host),
             credentials.getUsername(), credentials.getPassword());
     return new JiraIssueClient(restClient, host + BROWSE_SUFFIX);
   }

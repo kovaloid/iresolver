@@ -37,8 +37,8 @@ class MetadataFileEntryWriterTest {
 
   @Test
   void testWriteMetadata() throws IOException {
-    StringWriter stringWriter = new StringWriter();
-    BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
+    final StringWriter stringWriter = new StringWriter();
+    final BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
 
     metadataFileEntryWriter.write(
             bufferedWriter,
@@ -51,7 +51,7 @@ class MetadataFileEntryWriterTest {
 
     bufferedWriter.flush();
 
-    String actualResult = stringWriter.toString();
+    final String actualResult = stringWriter.toString();
 
     assertEquals(EXPECTED_RESULT, actualResult);
   }

@@ -14,7 +14,7 @@ public class MetadataFileEntryWriter {
           int docPageNumber,
           String delimiter
   ) throws IOException {
-    DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
+    final DocMetadata docMetadata = new DocMetadata(docPageKey, currentDocumentIndex, docPageNumber);
 
     writeMetadata(metadataBufferedWriter, docMetadata, delimiter);
   }

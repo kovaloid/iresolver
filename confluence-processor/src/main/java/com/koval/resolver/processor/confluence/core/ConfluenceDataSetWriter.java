@@ -24,8 +24,8 @@ public class ConfluenceDataSetWriter implements DataSetWriter<ConfluencePage> {
   private final PrintWriter metadataFileOutput;
 
   public ConfluenceDataSetWriter(final ConfluenceProcessorConfiguration properties) throws IOException {
-    File dataSetFile = new File(properties.getDataSetFile());
-    File metadataFile = new File(properties.getConfluenceMetadataFile());
+    final File dataSetFile = new File(properties.getDataSetFile());
+    final File metadataFile = new File(properties.getConfluenceMetadataFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     FileUtils.forceMkdir(metadataFile.getParentFile());

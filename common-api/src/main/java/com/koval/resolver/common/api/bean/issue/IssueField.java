@@ -64,7 +64,7 @@ public class IssueField {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    IssueField that = (IssueField)o;
+    final IssueField that = (IssueField)o;
     return Objects.equals(id, that.id)
         && Objects.equals(name, that.name)
         && Objects.equals(type, that.type)

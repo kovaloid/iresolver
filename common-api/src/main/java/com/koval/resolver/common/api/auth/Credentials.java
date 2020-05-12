@@ -22,14 +22,14 @@ public class Credentials {
   }
 
   public static Credentials getCredentials(final String credentialsFolder) {
-    CredentialsProtector protector = new CredentialsProtector();
-    CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
+    final CredentialsProtector protector = new CredentialsProtector();
+    final CredentialsKeeper keeper = new CredentialsKeeper(protector, credentialsFolder);
     Credentials credentials;
     if (keeper.isStored()) {
       credentials = keeper.load();
     } else {
-      String username = CommandLineUtil.getUsername();
-      String password = CommandLineUtil.getPassword();
+      final String username = CommandLineUtil.getUsername();
+      final String password = CommandLineUtil.getPassword();
       credentials = new Credentials(username, password);
       keeper.store(credentials);
     }

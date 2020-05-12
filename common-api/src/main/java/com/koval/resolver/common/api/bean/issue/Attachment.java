@@ -89,7 +89,7 @@ public class Attachment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Attachment that = (Attachment)o;
+    final Attachment that = (Attachment)o;
     return size == that.size
            && Objects.equals(fileName, that.fileName)
            && Objects.equals(author, that.author)

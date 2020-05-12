@@ -48,12 +48,12 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   private void fillTemplate(final List<IssueAnalysingResult> results) throws IOException {
-    VelocityEngine velocityEngine = new VelocityEngine();
+    final VelocityEngine velocityEngine = new VelocityEngine();
     velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
     velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
     velocityEngine.init();
-    Template template = velocityEngine.getTemplate(configuration.getHtmlTemplateFileName());
-    VelocityContext context = new VelocityContext();
+    final Template template = velocityEngine.getTemplate(configuration.getHtmlTemplateFileName());
+    final VelocityContext context = new VelocityContext();
     context.put("results", results);
     context.put("numberTool", new NumberTool());
     context.put("isIssuesProcessorEnabled", enabledProcessors.contains(ProcessorConstants.ISSUES.getContent()));
@@ -73,7 +73,7 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   private void openReport() throws IOException {
-    File file = new File(configuration.getOutputFile());
+    final File file = new File(configuration.getOutputFile());
     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
       Desktop.getDesktop().browse(getUriFromFile(file));
       LOGGER.warn("Opening the default browser with report...");
@@ -84,8 +84,8 @@ public class HtmlReportGenerator implements ReportGenerator {
   }
 
   private URI getUriFromFile(final File file) throws IOException {
-    String prefix = "file:///";
-    String path = file.getCanonicalPath().replace('\\', '/');
+    final String prefix = "file:///";
+    final String path = file.getCanonicalPath().replace('\\', '/');
     return URI.create(prefix + path);
   }
 

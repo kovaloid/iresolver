@@ -32,13 +32,13 @@ class DocTypeDetectorTest {
   @ParameterizedTest
   @MethodSource("createFileExtensionsAndExpectedMediaTypes")
   void testDetectingFileExtension(final String fileExtension, final MediaType expectedMediaType) {
-    MediaType detectedType = detectType(fileExtension);
+    final MediaType detectedType = detectType(fileExtension);
 
     assertEquals(expectedMediaType, detectedType);
   }
 
   private MediaType detectType(final String fileExtension) {
-    String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
+    final String fileName = FILE_NAME + EXTENSION_DELIMITER + fileExtension;
 
     return docTypeDetector.detectType(fileName);
   }

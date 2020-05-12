@@ -12,10 +12,10 @@ public class DocDataLineParser implements LineParser<DocFile> {
 
   @Override
   public DocFile parseLine(final String line) {
-    String[] split = line.split(delimiter);
+    final String[] split = line.split(delimiter);
 
-    int fileIndex = Integer.parseInt(split[0]);
-    String fileName = split[1];
+    final int fileIndex = Integer.parseInt(split[0]);
+    final String fileName = split[1];
 
     return new DocFile(fileIndex, fileName);
   }

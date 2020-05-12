@@ -37,14 +37,14 @@ public class BugzillaIssueReceiver implements IssueReceiver {
   }
 
   private int getTotalIssues() {
-    int total = client.getTotalIssues(query);
+    final int total = client.getTotalIssues(query);
     LOGGER.info("Total number of issues: {}", total);
     return total;
   }
 
   @Override
   public boolean hasNextIssues() {
-    boolean result = currentIndex < finishIndex;
+    final boolean result = currentIndex < finishIndex;
     if (!result) {
       progressMonitor.endMeasuringTotalTime();
       LOGGER.info("Time spent: {}", progressMonitor.getFormattedSpentTime());
@@ -54,7 +54,7 @@ public class BugzillaIssueReceiver implements IssueReceiver {
 
   @Override
   public List<Issue> getNextIssues() {
-    List<Issue> searchResult = client.search(query, batchSize, currentIndex, Collections.emptyList());
+    final List<Issue> searchResult = client.search(query, batchSize, currentIndex, Collections.emptyList());
     searchResult.forEach(issue ->
         LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments", issue.getKey(),
             countWords(issue.getSummary()), countWords(issue.getDescription()), issue.getComments().size(),
@@ -74,7 +74,7 @@ public class BugzillaIssueReceiver implements IssueReceiver {
     if (text == null) {
       return 0;
     }
-    String blankText = text.trim();
+    final String blankText = text.trim();
     if (blankText.isEmpty()) {
       return 0;
     }

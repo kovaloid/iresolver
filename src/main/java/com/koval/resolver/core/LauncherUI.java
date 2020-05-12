@@ -13,14 +13,14 @@ class LauncherUI extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new GridLayout(4, 2, 5, 12));
 
-    JButton createIssuesDataSetBtn = new JButton("Create issues data set");
-    JButton createIssuesVectorModelBtn = new JButton("Create issues vector model");
-    JButton createDocumentationDataSetBtn = new JButton("Create documentation data set");
-    JButton createDocumentationVectorModelBtn = new JButton("Create documentation vector model");
-    JButton createConfluenceDataSetBtn = new JButton("Create confluence data set");
-    JButton createConfluenceVectorModelBtn = new JButton("Create confluence vector model");
-    JButton runBtn = new JButton("Run");
-    JButton printFieldsBtn = new JButton("Print fields");
+    final JButton createIssuesDataSetBtn = new JButton("Create issues data set");
+    final JButton createIssuesVectorModelBtn = new JButton("Create issues vector model");
+    final JButton createDocumentationDataSetBtn = new JButton("Create documentation data set");
+    final JButton createDocumentationVectorModelBtn = new JButton("Create documentation vector model");
+    final JButton createConfluenceDataSetBtn = new JButton("Create confluence data set");
+    final JButton createConfluenceVectorModelBtn = new JButton("Create confluence vector model");
+    final JButton runBtn = new JButton("Run");
+    final JButton printFieldsBtn = new JButton("Print fields");
 
     createIssuesDataSetBtn.addActionListener(e -> launcher.createIssuesDataSet());
     createIssuesVectorModelBtn.addActionListener(e -> launcher.createIssuesVectorModel());

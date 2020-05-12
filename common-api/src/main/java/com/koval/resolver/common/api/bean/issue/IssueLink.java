@@ -51,7 +51,7 @@ public class IssueLink {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    IssueLink issueLink = (IssueLink)o;
+    final IssueLink issueLink = (IssueLink)o;
     return Objects.equals(targetIssueKey, issueLink.targetIssueKey)
         && Objects.equals(issueLinkType, issueLink.issueLinkType)
         && Objects.equals(targetIssueUri, issueLink.targetIssueUri);

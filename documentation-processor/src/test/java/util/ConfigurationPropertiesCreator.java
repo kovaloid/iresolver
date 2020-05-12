@@ -23,7 +23,7 @@ public final class ConfigurationPropertiesCreator {
           final File docListFile
   ) throws IOException {
     final File tempFile = writeStringsToFile(metadataStrings, docFile);
-    DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
+    final DocumentationProcessorConfiguration properties = new DocumentationProcessorConfiguration();
     properties.setDocsFolder(tempFile.getParent());
 
     properties.setDataSetFile(datasetFile.getPath());
@@ -37,7 +37,7 @@ public final class ConfigurationPropertiesCreator {
           final List<String> metadataStrings,
           final File file
   ) throws IOException {
-    for (String metadataString : metadataStrings) {
+    for (final String metadataString : metadataStrings) {
       FileUtils.writeStringToFile(file, metadataString, Charset.defaultCharset(), true);
     }
 

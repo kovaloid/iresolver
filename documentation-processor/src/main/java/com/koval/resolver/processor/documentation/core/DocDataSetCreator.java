@@ -43,23 +43,23 @@ public class DocDataSetCreator {
 
   //TODO: Refactor this method so we can test it safely
   public void create() throws IOException {
-    File docsFolder = new File(docsFolderPath);
-    File[] docFiles = docsFolder.listFiles();
+    final File docsFolder = new File(docsFolderPath);
+    final File[] docFiles = docsFolder.listFiles();
 
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
     }
 
-    File dataSetFile = new File(properties.getDataSetFile());
+    final File dataSetFile = new File(properties.getDataSetFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
 
     docDataSetEntryWriter.resetIndices();
 
-    File docMetadataFile = new File(properties.getDocsMetadataFile());
-    File docListFile = new File(properties.getDocsListFile());
+    final File docMetadataFile = new File(properties.getDocsMetadataFile());
+    final File docListFile = new File(properties.getDocsListFile());
 
     try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
          PrintWriter metadataOutput = new PrintWriter(docMetadataFile, StandardCharsets.UTF_8.name());
@@ -70,7 +70,7 @@ public class DocDataSetCreator {
 
       for (final File docFile : docFiles) {
         if (docFile.isFile()) {
-          MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+          final MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
           if (mediaType.equals(MediaType.PDF)) {
             docDataSetEntryWriter.writeEntriesForDocFile(
@@ -93,8 +93,8 @@ public class DocDataSetCreator {
 
 
   public void convertWordFilesToPdf() {
-    File docsFolder = new File(docsFolderPath);
-    File[] docFiles = docsFolder.listFiles();
+    final File docsFolder = new File(docsFolderPath);
+    final File[] docFiles = docsFolder.listFiles();
 
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
@@ -103,10 +103,10 @@ public class DocDataSetCreator {
 
     for (final File docFile : docFiles) {
       if (docFile.isFile()) {
-        MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+        final MediaType mediaType = docTypeDetector.detectType(docFile.getName());
         if (mediaType.equals(MediaType.WORD)) {
-          String wordFilePath = docFile.getName();
-          String pdfFilePath = createPdfFilePath(wordFilePath);
+          final String wordFilePath = docFile.getName();
+          final String pdfFilePath = createPdfFilePath(wordFilePath);
           fileConverter.convert(wordFilePath, pdfFilePath);
         }
       }
@@ -114,7 +114,7 @@ public class DocDataSetCreator {
   }
 
   private String createPdfFilePath(String wordFilePath) {
-    File pdfOutputFile = new File(DOC_FILES_LOCATION, replaceExtensionWithPdf(wordFilePath));
+    final File pdfOutputFile = new File(DOC_FILES_LOCATION, replaceExtensionWithPdf(wordFilePath));
 
     return pdfOutputFile.getName();
   }

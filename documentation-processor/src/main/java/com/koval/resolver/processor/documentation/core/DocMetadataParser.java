@@ -20,8 +20,8 @@ public class DocMetadataParser {
   }
 
   public List<DocMetadata> parseDocumentationMetadata() {
-    FileParser fileParser = new FileParser(fileRepository);
-    MetadataLineParser metadataLineParser = new MetadataLineParser(DELIMITER);
+    final FileParser fileParser = new FileParser(fileRepository);
+    final MetadataLineParser metadataLineParser = new MetadataLineParser(DELIMITER);
 
     return fileParser.parseFile(docMetadataFileName, metadataLineParser);
   }

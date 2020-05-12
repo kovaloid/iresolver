@@ -35,7 +35,7 @@ public class ConfluenceClient implements Closeable {
   private final AuthenticatedWebResourceProvider provider;
 
   public ConfluenceClient(final ConfluenceConnectorConfiguration connectorProperties) {
-    Client client = RestClientFactory.newClient();
+    final Client client = RestClientFactory.newClient();
     executor = MoreExecutors.newDirectExecutorService();
     provider = new AuthenticatedWebResourceProvider(client, connectorProperties.getUrl(), "");
     if (!connectorProperties.isAnonymous()) {
@@ -46,8 +46,8 @@ public class ConfluenceClient implements Closeable {
   }
 
   public List<Space> getSpacesByKeys(final List<String> spaceKeys) {
-    RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
-    PageRequest pageRequest = new SimplePageRequest(0, 1000);
+    final RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
+    final PageRequest pageRequest = new SimplePageRequest(0, 1000);
     LOGGER.info("Get spaces by keys: {} with page request: {}", spaceKeys, pageRequest);
     return spaceService
         .find()
@@ -58,8 +58,8 @@ public class ConfluenceClient implements Closeable {
   }
 
   public PageResponse<Content> getPagesBySpaceKeys(final List<Space> spaces, final int startIndex, final int limit) {
-    RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
-    PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
+    final RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
+    final PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
     LOGGER.info("Get pages by spaces: {} with page request: {}",
         spaces.stream().map(Space::getKey).collect(Collectors.toList()), pageRequest);
     return contentService

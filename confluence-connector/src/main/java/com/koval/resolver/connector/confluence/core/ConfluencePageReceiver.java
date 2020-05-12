@@ -28,12 +28,12 @@ public class ConfluencePageReceiver {
   }
 
   public void start(final DataSetWriter<ConfluencePage> dataSetWriter) {
-    ConfluenceTransformer transformer = new ConfluenceTransformer();
-    List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
+    final ConfluenceTransformer transformer = new ConfluenceTransformer();
+    final List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
     int startIndex = 0;
-    int limit = properties.getLimitPerRequest();
+    final int limit = properties.getLimitPerRequest();
     while (true) {
-      PageResponse<Content> contentResponse = client.getPagesBySpaceKeys(spaces, startIndex, limit);
+      final PageResponse<Content> contentResponse = client.getPagesBySpaceKeys(spaces, startIndex, limit);
       LOGGER.info("Fetched confluence pages: {}", contentResponse.size());
       dataSetWriter.write(transformer.transform(contentResponse.getResults()));
 

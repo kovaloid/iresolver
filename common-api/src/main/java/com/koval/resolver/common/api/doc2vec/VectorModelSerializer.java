@@ -16,9 +16,9 @@ public class VectorModelSerializer {
   }
 
   public VectorModel deserialize(final File vectorModelFile, final String language) throws IOException {
-    ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(vectorModelFile);
-    TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
-    TokenPreProcess preProcessor = new StemmingPreprocessor().setLanguage(language);
+    final ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(vectorModelFile);
+    final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+    final TokenPreProcess preProcessor = new StemmingPreprocessor().setLanguage(language);
     tokenizerFactory.setTokenPreProcessor(preProcessor);
     paragraphVectors.setTokenizerFactory(tokenizerFactory);
     return new VectorModel(paragraphVectors);

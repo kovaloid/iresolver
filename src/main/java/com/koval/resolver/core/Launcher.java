@@ -64,9 +64,10 @@ public final class Launcher {
 
   public void createIssuesDataSet() {
     try (IssueClient issueClient = getIssueClient()) {
-      Connector connector = getConnector(issueClient);
-      IssueReceiver receiver = connector.getResolvedIssuesReceiver();
-      IssuesDataSetCreator dataSetCreator = new IssuesDataSetCreator(receiver, configuration.getProcessors().getIssues());
+      final Connector connector = getConnector(issueClient);
+      final IssueReceiver receiver = connector.getResolvedIssuesReceiver();
+      final IssuesDataSetCreator dataSetCreator = new IssuesDataSetCreator(receiver,
+                                                                           configuration.getProcessors().getIssues());
       dataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create data set file.", e);
@@ -74,16 +75,19 @@ public final class Launcher {
   }
 
   public void createIssuesVectorModel() {
-    String dataSetFile = configuration.getProcessors().getIssues().getDataSetFile();
-    String vectorModelFile = configuration.getProcessors().getIssues().getVectorModelFile();
+    final String dataSetFile = configuration.getProcessors().getIssues().getDataSetFile();
+    final String vectorModelFile = configuration.getProcessors().getIssues().getVectorModelFile();
     createVectorModel(dataSetFile, vectorModelFile, "Could not create issues vector model file.");
   }
 
   public void createGranularIssuesDataSets() {
     try (IssueClient issueClient = getIssueClient()) {
-      Connector connector = getConnector(issueClient);
-      IssueReceiver receiver = connector.getResolvedIssuesReceiver();
-      GranularIssuesDataSetsCreator dataSetCreator = new GranularIssuesDataSetsCreator(receiver, configuration.getProcessors().getGranularIssues());
+      final Connector connector = getConnector(issueClient);
+      final IssueReceiver receiver = connector.getResolvedIssuesReceiver();
+      final GranularIssuesDataSetsCreator dataSetCreator = new GranularIssuesDataSetsCreator(receiver,
+                                                                                             configuration
+                                                                                               .getProcessors()
+                                                                                               .getGranularIssues());
       dataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create data set files.", e);
@@ -91,54 +95,60 @@ public final class Launcher {
   }
 
   public void createGranularIssuesVectorModels() {
-    List<String> affectedIssueParts = configuration.getProcessors().getGranularIssues().getAffectedIssueParts();
+    final List<String> affectedIssueParts = configuration.getProcessors().getGranularIssues().getAffectedIssueParts();
     if (affectedIssueParts.contains(IssueParts.SUMMARY.getContent())) {
-      String dataSetFile = configuration.getProcessors().getGranularIssues().getSummaryDataSetFile();
-      String vectorModelFile = configuration.getProcessors().getGranularIssues().getSummaryVectorModelFile();
-      createVectorModel(dataSetFile, vectorModelFile, "Could not create summary granular issues vector model file.");
+      final String dataSetFile = configuration.getProcessors().getGranularIssues().getSummaryDataSetFile();
+      final String vectorModelFile = configuration.getProcessors().getGranularIssues().getSummaryVectorModelFile();
+      createVectorModel(dataSetFile,
+                        vectorModelFile,
+                        "Could not create summary granular issues vector model file.");
     }
     if (affectedIssueParts.contains(IssueParts.DESCRIPTION.getContent())) {
-      String dataSetFile = configuration.getProcessors().getGranularIssues().getDescriptionDataSetFile();
-      String vectorModelFile = configuration.getProcessors().getGranularIssues().getDescriptionVectorModelFile();
-      createVectorModel(dataSetFile, vectorModelFile, "Could not create description granular issues vector model file.");
+      final String dataSetFile = configuration.getProcessors().getGranularIssues().getDescriptionDataSetFile();
+      final String vectorModelFile = configuration.getProcessors().getGranularIssues().getDescriptionVectorModelFile();
+      createVectorModel(dataSetFile, vectorModelFile,
+                        "Could not create description granular issues vector model file.");
     }
     if (affectedIssueParts.contains(IssueParts.COMMENTS.getContent())) {
-      String dataSetFile = configuration.getProcessors().getGranularIssues().getCommentsDataSetFile();
-      String vectorModelFile = configuration.getProcessors().getGranularIssues().getCommentsVectorModelFile();
-      createVectorModel(dataSetFile, vectorModelFile, "Could not create comments granular issues vector model file.");
+      final String dataSetFile = configuration.getProcessors().getGranularIssues().getCommentsDataSetFile();
+      final String vectorModelFile = configuration.getProcessors().getGranularIssues().getCommentsVectorModelFile();
+      createVectorModel(dataSetFile,
+                        vectorModelFile,
+                        "Could not create comments granular issues vector model file.");
     }
   }
 
   public void createDocumentationDataSet() {
-    DocumentationProcessorConfiguration documentationConfiguration = configuration.getProcessors().getDocumentation();
-    DocTypeDetector docTypeDetector = new DocTypeDetector();
+    final DocumentationProcessorConfiguration documentationConfiguration =
+      configuration.getProcessors().getDocumentation();
+    final DocTypeDetector docTypeDetector = new DocTypeDetector();
 
-    FileRepository fileRepository = new FileRepository();
-    XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
+    final FileRepository fileRepository = new FileRepository();
+    final XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
 
-    WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
-            fileRepository,
-            pdfConverter
+    final WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
+      fileRepository,
+      pdfConverter
     );
 
-    PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
-    MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
-    DocListFileEntryWriter docListFileEntryWriter = new DocListFileEntryWriter();
-    DataSetFileEntryWriter dataSetFileEntryWriter = new DataSetFileEntryWriter();
+    final PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
+    final MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
+    final DocListFileEntryWriter docListFileEntryWriter = new DocListFileEntryWriter();
+    final DataSetFileEntryWriter dataSetFileEntryWriter = new DataSetFileEntryWriter();
 
-    DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
-            fileRepository,
-            pdfPageSplitter,
-            metadataFileEntryWriter,
-            docListFileEntryWriter,
-            dataSetFileEntryWriter
+    final DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
+      fileRepository,
+      pdfPageSplitter,
+      metadataFileEntryWriter,
+      docListFileEntryWriter,
+      dataSetFileEntryWriter
     );
 
-    DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
-            documentationConfiguration,
-            docDataSetEntryWriter,
-            docTypeDetector,
-            wordToPdfFileConverter
+    final DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
+      documentationConfiguration,
+      docDataSetEntryWriter,
+      docTypeDetector,
+      wordToPdfFileConverter
     );
 
     docDataSetCreator.convertWordFilesToPdf();
@@ -150,14 +160,16 @@ public final class Launcher {
   }
 
   public void createDocumentationVectorModel() {
-    String dataSetFile = configuration.getProcessors().getDocumentation().getDataSetFile();
-    String vectorModelFile = configuration.getProcessors().getDocumentation().getVectorModelFile();
+    final String dataSetFile = configuration.getProcessors().getDocumentation().getDataSetFile();
+    final String vectorModelFile = configuration.getProcessors().getDocumentation().getVectorModelFile();
     createVectorModel(dataSetFile, vectorModelFile, "Could not create documentation vector model file.");
   }
 
   public void createConfluenceDataSet() {
-    ConfluenceConnector confluenceConnector = new ConfluenceConnector(configuration.getConnectors().getConfluence());
-    try (DataSetWriter<ConfluencePage> confluenceDataSetWriter = new ConfluenceDataSetWriter(configuration.getProcessors().getConfluence())) {
+    final ConfluenceConnector confluenceConnector = new ConfluenceConnector(
+      configuration.getConnectors().getConfluence());
+    try (DataSetWriter<ConfluencePage> confluenceDataSetWriter = new ConfluenceDataSetWriter(
+      configuration.getProcessors().getConfluence())) {
       confluenceConnector.createDataSet(confluenceDataSetWriter);
     } catch (IOException e) {
       LOGGER.error("Could not create confluence data set file.", e);
@@ -165,29 +177,18 @@ public final class Launcher {
   }
 
   public void createConfluenceVectorModel() {
-    String dataSetFile = configuration.getProcessors().getConfluence().getDataSetFile();
-    String vectorModelFile = configuration.getProcessors().getConfluence().getVectorModelFile();
+    final String dataSetFile = configuration.getProcessors().getConfluence().getDataSetFile();
+    final String vectorModelFile = configuration.getProcessors().getConfluence().getVectorModelFile();
     createVectorModel(dataSetFile, vectorModelFile, "Could not create confluence vector model file.");
   }
 
-  private void createVectorModel(final String dataSetFile, final String vectorModelFile, final String errorMessage) {
-    VectorModelCreator vectorModelCreator = new VectorModelCreator(configuration.getParagraphVectors());
-    try {
-      VectorModel vectorModel = vectorModelCreator.createFromFile(new File(dataSetFile));
-      VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-      vectorModelSerializer.serialize(vectorModel, vectorModelFile);
-    } catch (IOException e) {
-      LOGGER.error(errorMessage, e);
-    }
-  }
-
   public void run() {
-    List<IssueAnalysingResult> results = new ArrayList<>();
+    final List<IssueAnalysingResult> results = new ArrayList<>();
     try (IssueClient issueClient = getIssueClient()) {
-      Connector connector = getConnector(issueClient);
-      IssueReceiver receiver = connector.getUnresolvedIssuesReceiver();
-      ProcessExecutor executor = new ProcessExecutor();
-      for (IssueProcessor issueProcessor : getIssueProcessors(issueClient)) {
+      final Connector connector = getConnector(issueClient);
+      final IssueReceiver receiver = connector.getUnresolvedIssuesReceiver();
+      final ProcessExecutor executor = new ProcessExecutor();
+      for (final IssueProcessor issueProcessor : getIssueProcessors(issueClient)) {
         executor.add(issueProcessor);
       }
       if (configuration.getAdministration().isParallelExecution()) {
@@ -203,7 +204,7 @@ public final class Launcher {
       LOGGER.error("Could not run issues processing.", e);
     }
     try {
-      for (ReportGenerator reportGenerator : getReportGenerators()) {
+      for (final ReportGenerator reportGenerator : getReportGenerators()) {
         reportGenerator.generate(results);
       }
     } catch (IOException e) {
@@ -211,69 +212,9 @@ public final class Launcher {
     }
   }
 
-  private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
-    List<String> processorNames = configuration.getAdministration().getProcessors();
-    List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
-      issueProcessors.add(new IssuesProcessor(issueClient, configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
-      issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
-      issueProcessors.add(createDocumentationProcessor());
-    }
-    if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
-      issueProcessors.add(new ConfluenceProcessor(configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
-      issueProcessors.add(new RuleEngineProcessor(configuration));
-    }
-    if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
-    }
-    return issueProcessors;
-  }
-
-  private DocumentationProcessor createDocumentationProcessor() throws IOException {
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
-    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, configuration.getParagraphVectors().getLanguage());
-
-    FileRepository fileRepository = new FileRepository();
-    DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
-            configuration.getProcessors().getDocumentation(),
-            fileRepository
-    );
-
-    TextDataExtractor textDataExtractor = new TextDataExtractor();
-
-    return new DocumentationProcessor(
-            configuration.getProcessors().getDocumentation(),
-            docOutputFilesParser,
-            vectorModel,
-            textDataExtractor
-    );
-  }
-
-  private List<ReportGenerator> getReportGenerators() throws IOException {
-    List<String> reporterNames = configuration.getAdministration().getReporters();
-    List<ReportGenerator> reportGenerators = new ArrayList<>();
-    if (reporterNames.contains(ReporterConstants.HTML.getContent())) {
-      reportGenerators.add(new HtmlReportGenerator(configuration.getReporters().getHtml(), configuration.getAdministration().getProcessors()));
-    }
-    if (reporterNames.contains(ReporterConstants.TEXT.getContent())) {
-      reportGenerators.add(new TextReportGenerator(configuration.getReporters().getText()));
-    }
-    if (reportGenerators.isEmpty()) {
-      LOGGER.warn("Could not find any appropriate report generator in the list: {}", reporterNames);
-    }
-    return reportGenerators;
-  }
-
   public void printIssueFields() {
     try (IssueClient issueClient = getIssueClient()) {
-      List<IssueField> fields = issueClient.getIssueFields();
+      final List<IssueField> fields = issueClient.getIssueFields();
       if (fields.isEmpty()) {
         LOGGER.info("Not exists available fields.");
       } else {
@@ -297,8 +238,82 @@ public final class Launcher {
     }
   }
 
+  private void createVectorModel(final String dataSetFile, final String vectorModelFile, final String errorMessage) {
+    final VectorModelCreator vectorModelCreator = new VectorModelCreator(configuration.getParagraphVectors());
+    try {
+      final VectorModel vectorModel = vectorModelCreator.createFromFile(new File(dataSetFile));
+      final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+      vectorModelSerializer.serialize(vectorModel, vectorModelFile);
+    } catch (IOException e) {
+      LOGGER.error(errorMessage, e);
+    }
+  }
+
+  private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
+    final List<String> processorNames = configuration.getAdministration().getProcessors();
+    final List<IssueProcessor> issueProcessors = new ArrayList<>();
+    if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
+      issueProcessors.add(new IssuesProcessor(issueClient, configuration));
+    }
+    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
+      issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
+    }
+    if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
+      issueProcessors.add(createDocumentationProcessor());
+    }
+    if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
+      issueProcessors.add(new ConfluenceProcessor(configuration));
+    }
+    if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
+      issueProcessors.add(new RuleEngineProcessor(configuration));
+    }
+    if (issueProcessors.isEmpty()) {
+      LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
+    }
+    return issueProcessors;
+  }
+
+  private DocumentationProcessor createDocumentationProcessor() throws IOException {
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
+    final VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
+                                                                      configuration.getParagraphVectors()
+                                                                                   .getLanguage());
+
+    final FileRepository fileRepository = new FileRepository();
+    final DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
+      configuration.getProcessors().getDocumentation(),
+      fileRepository
+    );
+
+    final TextDataExtractor textDataExtractor = new TextDataExtractor();
+
+    return new DocumentationProcessor(
+      configuration.getProcessors().getDocumentation(),
+      docOutputFilesParser,
+      vectorModel,
+      textDataExtractor
+    );
+  }
+
+  private List<ReportGenerator> getReportGenerators() throws IOException {
+    final List<String> reporterNames = configuration.getAdministration().getReporters();
+    final List<ReportGenerator> reportGenerators = new ArrayList<>();
+    if (reporterNames.contains(ReporterConstants.HTML.getContent())) {
+      reportGenerators.add(new HtmlReportGenerator(configuration.getReporters().getHtml(),
+                                                   configuration.getAdministration().getProcessors()));
+    }
+    if (reporterNames.contains(ReporterConstants.TEXT.getContent())) {
+      reportGenerators.add(new TextReportGenerator(configuration.getReporters().getText()));
+    }
+    if (reportGenerators.isEmpty()) {
+      LOGGER.warn("Could not find any appropriate report generator in the list: {}", reporterNames);
+    }
+    return reportGenerators;
+  }
+
   private Connector getConnector(final IssueClient issueClient) {
-    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    final ConnectorType connectorType = configuration.getAdministration().getConnectorType();
     switch (connectorType) {
       case JIRA:
         return new JiraConnector(issueClient, configuration.getConnectors().getJira());
@@ -310,7 +325,7 @@ public final class Launcher {
   }
 
   private IssueClient getIssueClient() {
-    ConnectorType connectorType = configuration.getAdministration().getConnectorType();
+    final ConnectorType connectorType = configuration.getAdministration().getConnectorType();
     IssueClientFactory clientFactory;
     switch (connectorType) {
       case JIRA:
@@ -329,4 +344,5 @@ public final class Launcher {
       throw new IResolverException("Could not initialize client.", e);
     }
   }
+
 }

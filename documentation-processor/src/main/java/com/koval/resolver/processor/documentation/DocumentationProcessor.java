@@ -48,17 +48,17 @@ public class DocumentationProcessor implements IssueProcessor {
   public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
 
-    String extractedIssueText = textDataExtractor.extract(issue);
-    Collection<String> similarDocKeys = vectorModel.getNearestLabels(
+    final String extractedIssueText = textDataExtractor.extract(issue);
+    final Collection<String> similarDocKeys = vectorModel.getNearestLabels(
             extractedIssueText,
             NUMBER_OF_NEAREST_LABELS
     );
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
 
-    List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
-    List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
+    final List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();
+    final List<DocFile> docFiles = docOutputFilesParser.parseDocumentationFilesList();
 
-    List<DocumentationResult> similarDocs = similarDocKeys
+    final List<DocumentationResult> similarDocs = similarDocKeys
             .stream()
             .map((String similarDocKey) -> getResultForKey(extractedIssueText, docMetadata, docFiles, similarDocKey))
             .filter(Optional::isPresent)
@@ -86,12 +86,12 @@ public class DocumentationProcessor implements IssueProcessor {
     final String similarDocKey,
     final DocMetadata metadata
   ) {
-    DocFile docFile = docFiles.stream()
+    final DocFile docFile = docFiles.stream()
             .filter((DocFile d) -> d.getFileIndex() == metadata.getFileIndex())
             .findFirst()
             .orElse(new DocFile(0, "no_such_file"));
 
-    double similarity = vectorModel.similarityToLabel(extractedIssueText, similarDocKey);
+    final double similarity = vectorModel.similarityToLabel(extractedIssueText, similarDocKey);
 
     return new DocumentationResult(
             docFile.getFileName(),

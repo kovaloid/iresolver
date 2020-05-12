@@ -55,7 +55,7 @@ public class DocumentationProcessorTest {
 
   @BeforeEach
   void onSetup() {
-    DocumentationProcessorConfiguration configuration = new DocumentationProcessorConfiguration();
+    final DocumentationProcessorConfiguration configuration = new DocumentationProcessorConfiguration();
     configuration.setDocsFolder(DOCS_PATH);
 
     documentationProcessor = new DocumentationProcessor(
@@ -77,17 +77,17 @@ public class DocumentationProcessorTest {
 
   @Test
   void testGeneratingCorrectDocumentationResult() {
-    Issue issue = new Issue();
-    IssueAnalysingResult result = new IssueAnalysingResult();
+    final Issue issue = new Issue();
+    final IssueAnalysingResult result = new IssueAnalysingResult();
 
     documentationProcessor.run(
             issue,
             result
     );
 
-    List<DocumentationResult> documentationResults = result.getDocumentationResults();
+    final List<DocumentationResult> documentationResults = result.getDocumentationResults();
 
-    DocumentationResult documentationResult = documentationResults.get(0);
+    final DocumentationResult documentationResult = documentationResults.get(0);
 
     assertEquals(DOC_FILES.get(0).getFileName(), documentationResult.getFileName());
     assertEquals(DOC_METADATA.get(0).getPageNumber(), documentationResult.getPageNumber());

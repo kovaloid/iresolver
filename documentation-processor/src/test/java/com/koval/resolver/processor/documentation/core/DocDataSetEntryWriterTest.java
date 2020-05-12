@@ -46,7 +46,7 @@ class DocDataSetEntryWriterTest {
   private static final Map<Integer, String> TWO_PAGE_MAPPING = createTwoPageMapping();
 
   private static Map<Integer, String> createOnePageMapping() {
-    Map<Integer, String> map = new HashMap<>();
+    final Map<Integer, String> map = new HashMap<>();
 
     map.put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
 
@@ -54,7 +54,7 @@ class DocDataSetEntryWriterTest {
   }
 
   private static Map<Integer, String> createTwoPageMapping() {
-    Map<Integer, String> map = new HashMap<>();
+    final Map<Integer, String> map = new HashMap<>();
 
     map.put(FIRST_PAGE_NUMBER, FIRST_PAGE_TEXT);
     map.put(SECOND_PAGE_NUMBER, SECOND_PAGE_TEXT);
@@ -161,10 +161,10 @@ class DocDataSetEntryWriterTest {
 
   @Test
   void testWritingMetadataChangingDocumentIndex() throws IOException {
-    HashMap<Integer, String> map = new HashMap<>();
+    final HashMap<Integer, String> map = new HashMap<>();
     map.put(0, "lol");
 
-    HashMap<Integer, String> map2 = new HashMap<>();
+    final HashMap<Integer, String> map2 = new HashMap<>();
     map2.put(0, "kek");
 
     when(pageSplitter.getMapping(any(InputStream.class))).thenReturn(map).thenReturn(map2);
@@ -214,7 +214,7 @@ class DocDataSetEntryWriterTest {
   }
 
   private void verifyLastMetadataEntryCall() throws IOException {
-    ArgumentCaptor<String> pageKeyCaptor = ArgumentCaptor.forClass(String.class);
+    final ArgumentCaptor<String> pageKeyCaptor = ArgumentCaptor.forClass(String.class);
 
     verify(metadataFileEntryWriter, atLeastOnce()).write(
             eq(mockWriter),

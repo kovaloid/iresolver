@@ -32,16 +32,16 @@ public class IssuesDataSetCreator {
   }
 
   public void create() throws IOException {
-    File dataSetFile = new File(properties.getDataSetFile());
+    final File dataSetFile = new File(properties.getDataSetFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
     try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
          BufferedWriter writer = new BufferedWriter(output)) {
       while (receiver.hasNextIssues()) {
-        Collection<Issue> issues = receiver.getNextIssues();
-        for (Issue issue : issues) {
-          String textData = textDataExtractor.extract(issue);
+        final Collection<Issue> issues = receiver.getNextIssues();
+        for (final Issue issue : issues) {
+          final String textData = textDataExtractor.extract(issue);
           if (textData.isEmpty()) {
             LOGGER.info("Issue with key {} was ignored due to empty body", issue.getKey());
           } else {

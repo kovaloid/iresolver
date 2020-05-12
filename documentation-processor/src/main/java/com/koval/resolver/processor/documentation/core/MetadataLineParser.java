@@ -12,11 +12,11 @@ public class MetadataLineParser implements LineParser<DocMetadata> {
 
   @Override
   public DocMetadata parseLine(final String line) {
-    String[] split = line.split(delimiter);
+    final String[] split = line.split(delimiter);
 
-    String key = split[0];
-    int fileIndex = Integer.parseInt(split[1]);
-    int pageNumber = Integer.parseInt(split[2]);
+    final String key = split[0];
+    final int fileIndex = Integer.parseInt(split[1]);
+    final int pageNumber = Integer.parseInt(split[2]);
 
     return new DocMetadata(key, fileIndex, pageNumber);
   }

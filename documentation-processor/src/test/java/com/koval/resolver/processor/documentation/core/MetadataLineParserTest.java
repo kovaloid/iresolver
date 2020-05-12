@@ -30,7 +30,7 @@ public class MetadataLineParserTest {
 
   @Test
   void testParseValidString() {
-    DocMetadata actualMetaData = metadataLineParser.parseLine(METADATA_STRING);
+    final DocMetadata actualMetaData = metadataLineParser.parseLine(METADATA_STRING);
 
     assertMetadataEqual(EXPECTED_METADATA, actualMetaData);
   }

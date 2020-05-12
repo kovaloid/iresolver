@@ -76,7 +76,7 @@ public class SubTask {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SubTask subTask = (SubTask)o;
+    final SubTask subTask = (SubTask)o;
     return Objects.equals(issueKey, subTask.issueKey)
            && Objects.equals(issueUri, subTask.issueUri)
            && Objects.equals(summary, subTask.summary)

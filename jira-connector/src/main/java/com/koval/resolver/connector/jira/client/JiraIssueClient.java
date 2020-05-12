@@ -38,7 +38,7 @@ public class JiraIssueClient implements IssueClient {
   @Override
   public int getTotalIssues(final String query) {
     LOGGER.debug("Send total issues request: Query = '{}'.", query);
-    SearchResult searchResult = checkRestExceptions(
+    final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
         "Could not get total issues.");
     return searchResult.getTotal();
@@ -54,7 +54,7 @@ public class JiraIssueClient implements IssueClient {
       fields.addAll(getRequiredFields());
     }
     final Set<String> uniqueFields = new HashSet<>(fields);
-    SearchResult searchResult = checkRestExceptions(
+    final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, maxResults, startAt, uniqueFields).claim(),
         "Could not search by JQL.");
     return issueTransformer.transform(CollectionsUtil.convert(searchResult.getIssues()));
@@ -67,7 +67,7 @@ public class JiraIssueClient implements IssueClient {
   @Override
   public Issue getIssueByKey(final String issueKey) {
     LOGGER.debug("Send issue request: IssueKey = '{}'.", issueKey);
-    com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
+    final com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
         () -> restClient.getIssueClient().getIssue(issueKey).claim(),
         "Could not get issue by key: " + issueKey);
     return issueTransformer.transform(issue);
@@ -75,12 +75,12 @@ public class JiraIssueClient implements IssueClient {
 
   @Override
   public List<IssueField> getIssueFields() {
-    Iterable<Field> fields = checkRestExceptions(
+    final Iterable<Field> fields = checkRestExceptions(
         () -> restClient.getMetadataClient().getFields().claim(),
         "Could not get fields.");
-    List<IssueField> issueFields = new ArrayList<>();
+    final List<IssueField> issueFields = new ArrayList<>();
     fields.forEach(field -> {
-      IssueField issueField = new IssueField();
+      final IssueField issueField = new IssueField();
       issueField.setId(field.getId());
       issueField.setName(field.getName());
       issueField.setType(field.getFieldType().name());

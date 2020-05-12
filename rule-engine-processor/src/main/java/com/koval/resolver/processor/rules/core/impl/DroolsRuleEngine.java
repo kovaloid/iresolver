@@ -49,8 +49,8 @@ public class DroolsRuleEngine implements RuleEngine {
   }
 
   private static Resource[] getResources(final String location) throws IOException {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
+    final ClassLoader classLoader = Thread.currentThread().getContextClassLoader().getClass().getClassLoader();
+    final ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(classLoader);
     return resolver.getResources(location);
   }
 
@@ -61,7 +61,7 @@ public class DroolsRuleEngine implements RuleEngine {
 
   @Override
   public List<String> execute(final Issue actualIssue) {
-    List<String> results = new ArrayList<>();
+    final List<String> results = new ArrayList<>();
     kieSession.setGlobal("results", results);
     // insert facts into the session
     kieSession.insert(actualIssue);
@@ -80,11 +80,11 @@ public class DroolsRuleEngine implements RuleEngine {
     if (resources.length == 0) {
       throw new RuntimeException("Could not find any *.drl files.");
     }
-    List<String> rules = new LinkedList<>();
-    for (Resource resource : resources) {
+    final List<String> rules = new LinkedList<>();
+    for (final Resource resource : resources) {
       if (!rules.contains(resource.getFilename())) {
         if (resource instanceof FileSystemResource) {
-          String filePath = resource.getFile().getCanonicalPath();
+          final String filePath = resource.getFile().getCanonicalPath();
           LOGGER.info("Add file to rule engine builder: {}", filePath);
           knowledgeBuilder.add(ResourceFactory.newFileResource(filePath), ResourceType.DRL);
         } else if (resource instanceof InputStreamResource) {

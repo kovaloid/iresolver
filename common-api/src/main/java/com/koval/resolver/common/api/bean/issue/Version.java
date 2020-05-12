@@ -78,7 +78,7 @@ public class Version {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Version version = (Version)o;
+    final Version version = (Version)o;
     return isArchived == version.isArchived
            && isReleased == version.isReleased
            && Objects.equals(name, version.name)

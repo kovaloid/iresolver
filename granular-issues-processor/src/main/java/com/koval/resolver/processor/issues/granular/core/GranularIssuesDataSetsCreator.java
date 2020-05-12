@@ -37,7 +37,7 @@ public class GranularIssuesDataSetsCreator {
     PrintWriter summaryWriter = null;
     PrintWriter descriptionWriter = null;
     PrintWriter commentsWriter = null;
-    List<String> affectedIssueParts = properties.getAffectedIssueParts();
+    final List<String> affectedIssueParts = properties.getAffectedIssueParts();
     try {
       if (affectedIssueParts.contains(IssueParts.SUMMARY.getContent())) {
         summaryWriter = getDataSetWriter(properties.getSummaryDataSetFile());
@@ -50,8 +50,8 @@ public class GranularIssuesDataSetsCreator {
       }
 
       while (receiver.hasNextIssues()) {
-        Collection<Issue> issues = receiver.getNextIssues();
-        for (Issue issue : issues) {
+        final Collection<Issue> issues = receiver.getNextIssues();
+        for (final Issue issue : issues) {
           if (summaryWriter != null) {
             summaryWriter.print(issue.getKey());
             summaryWriter.print(SEPARATOR);
@@ -65,7 +65,7 @@ public class GranularIssuesDataSetsCreator {
           if (commentsWriter != null && !issue.getComments().isEmpty()) {
             commentsWriter.print(issue.getKey());
             commentsWriter.print(SEPARATOR);
-            StringBuilder comments = new StringBuilder();
+            final StringBuilder comments = new StringBuilder();
             issue.getComments().forEach(comment -> comments.append(comment.getBody()));
             commentsWriter.println(TextUtil.simplify(comments.toString()));
           }
@@ -98,7 +98,7 @@ public class GranularIssuesDataSetsCreator {
   }
 
   private PrintWriter getDataSetWriter(final String dataSetPath) throws IOException {
-    File dataSetFile = new File(dataSetPath);
+    final File dataSetFile = new File(dataSetPath);
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
