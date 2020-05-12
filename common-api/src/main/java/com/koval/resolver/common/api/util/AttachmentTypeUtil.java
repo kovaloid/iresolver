@@ -36,14 +36,14 @@ public final class AttachmentTypeUtil {
   }
 
   public static String getExtension(final Attachment attachment) {
-    String fileName = attachment.getFileName();
-    int dotIndex = fileName.lastIndexOf('.');
+    final String fileName = attachment.getFileName();
+    final int dotIndex = fileName.lastIndexOf('.');
     return dotIndex > 0 ? fileName.substring(dotIndex) : "";
   }
 
   public static List<String> getExtensions(final List<Attachment> attachments) {
-    Set<String> types = new HashSet<>();
-    for (Attachment attachment: attachments) {
+    final Set<String> types = new HashSet<>();
+    for (final Attachment attachment: attachments) {
       types.add(getExtension(attachment));
     }
     return new ArrayList<>(types);

@@ -33,12 +33,12 @@ public class VectorModel {
     if (paragraphVectors.getTokenizerFactory() == null) {
       throw new IllegalStateException("TokenizerFactory should be defined, prior to predict() call");
     }
-    VocabCache<VocabWord> vocabCache = paragraphVectors.getVocab();
-    List<String> tokens = paragraphVectors.getTokenizerFactory()
+    final VocabCache<VocabWord> vocabCache = paragraphVectors.getVocab();
+    final List<String> tokens = paragraphVectors.getTokenizerFactory()
         .create(rawText)
         .getTokens();
-    List<VocabWord> document = new ArrayList<>();
-    for (String token : tokens) {
+    final List<VocabWord> document = new ArrayList<>();
+    for (final String token : tokens) {
       if (vocabCache.containsWord(token)) {
         document.add(vocabCache.wordFor(token));
       }

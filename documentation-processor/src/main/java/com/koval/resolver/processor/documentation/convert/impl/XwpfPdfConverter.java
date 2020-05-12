@@ -11,9 +11,9 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 public class XwpfPdfConverter {
 
   public void convert(InputStream in, OutputStream out) throws IOException {
-    XWPFDocument document = new XWPFDocument(in);
+    final XWPFDocument document = new XWPFDocument(in);
 
-    PdfOptions options = PdfOptions.create();
+    final PdfOptions options = PdfOptions.create();
 
     PdfConverter.getInstance().convert(document, out, options);
   }

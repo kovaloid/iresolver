@@ -53,7 +53,7 @@ public class DocDataSetEntryWriter {
           BufferedWriter docListBufferedWriter
   ) throws IOException {
     try (InputStream inputFileStream = new BufferedInputStream(fileRepository.readFile(docFile.getCanonicalPath()))) {
-      Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
+      final Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
 
       writeEntriesForDocPages(
               docPages,
@@ -74,13 +74,13 @@ public class DocDataSetEntryWriter {
           BufferedWriter dataSetBufferedWriter,
           BufferedWriter metadataBufferedWriter
   ) throws IOException {
-    for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
-      String docPageKey = KEY_PREFIX + currentPageIndex;
+    for (final Map.Entry<Integer, String> docPage : docPages.entrySet()) {
+      final String docPageKey = KEY_PREFIX + currentPageIndex;
       currentPageIndex++;
 
       dataSetFileEntryWriter.write(dataSetBufferedWriter, docPageKey, docPage.getValue(), DATA_SET_SEPARATOR);
 
-      int docPageNumber = docPage.getKey();
+      final int docPageNumber = docPage.getKey();
 
       metadataFileEntryWriter.write(metadataBufferedWriter, docPageKey, currentDocumentIndex, docPageNumber, DELIMITER);
     }

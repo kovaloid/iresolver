@@ -43,8 +43,8 @@ public final class IResolverApplication {
   }
 
   public static void main(String[] args) {
-    Configuration configuration = ConfigurationManager.getConfiguration();
-    Launcher launcher = new Launcher(configuration);
+    final Configuration configuration = ConfigurationManager.getConfiguration();
+    final Launcher launcher = new Launcher(configuration);
 
     if (args.length == 0) {
       LOGGER.info("Start processing issues.");

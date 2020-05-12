@@ -13,7 +13,7 @@ public class DocListFileEntryWriter {
           String fileName,
           String delimiter
   ) throws IOException {
-    DocFile docFile = new DocFile(fileIndex, fileName);
+    final DocFile docFile = new DocFile(fileIndex, fileName);
     writeDocFileEntry(docListBufferedWriter, docFile, delimiter);
   }
 

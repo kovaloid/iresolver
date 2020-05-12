@@ -16,7 +16,7 @@ public final class ConfigurationManager {
   }
 
   public static Configuration getConfiguration() {
-    Yaml yaml = new Yaml(new Constructor(Configuration.class));
+    final Yaml yaml = new Yaml(new Constructor(Configuration.class));
     try (InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(CONFIGURATION_FILE)) {
       return yaml.load(inputStream);
     } catch (Exception e) {

@@ -38,7 +38,7 @@ class DocMetadataParserTest {
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
-    InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
+    final InputStream inputStream = new ByteArrayInputStream(METADATA_STRINGS.getBytes());
     when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     docMetadataParser = new DocMetadataParser(
@@ -49,14 +49,14 @@ class DocMetadataParserTest {
 
   @Test
   void testParsingOneLineDocMeta() {
-    DocMetadata actualMetaData = docMetadataParser.parseDocumentationMetadata().get(0);
+    final DocMetadata actualMetaData = docMetadataParser.parseDocumentationMetadata().get(0);
 
     assertMetadataEqual(DOC_METADATA_1, actualMetaData);
   }
 
   @Test
   void testParsingMultipleDocMeta() {
-    List<DocMetadata> metadataList = docMetadataParser.parseDocumentationMetadata();
+    final List<DocMetadata> metadataList = docMetadataParser.parseDocumentationMetadata();
 
     assertMetadataEqual(DOC_METADATA_1, metadataList.get(0));
     assertMetadataEqual(DOC_METADATA_2, metadataList.get(1));

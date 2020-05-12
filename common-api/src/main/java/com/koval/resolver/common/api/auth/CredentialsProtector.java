@@ -23,12 +23,12 @@ public class CredentialsProtector {
   private SecretKey key;
 
   public CredentialsProtector() throws CredentialException {
-    String encryptionKey = "6veuxBtJA9IodvM9pLlWl0bffmWB8PWDBXGZaUAizkebHWvjSdv9sZBM1d3YweOj";
-    String encryptionSchema = "DESede";
-    byte[] arrayBytes = encryptionKey.getBytes(CHARSET);
+    final String encryptionKey = "6veuxBtJA9IodvM9pLlWl0bffmWB8PWDBXGZaUAizkebHWvjSdv9sZBM1d3YweOj";
+    final String encryptionSchema = "DESede";
+    final byte[] arrayBytes = encryptionKey.getBytes(CHARSET);
     try {
-      KeySpec keySpec = new DESedeKeySpec(arrayBytes);
-      SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(encryptionSchema);
+      final KeySpec keySpec = new DESedeKeySpec(arrayBytes);
+      final SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(encryptionSchema);
       cipher = Cipher.getInstance(encryptionSchema);
       key = secretKeyFactory.generateSecret(keySpec);
     } catch (GeneralSecurityException e) {
@@ -40,8 +40,8 @@ public class CredentialsProtector {
     String encryptedString;
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
-      byte[] plainText = decryptedText.getBytes(CHARSET);
-      byte[] encryptedText = cipher.doFinal(plainText);
+      final byte[] plainText = decryptedText.getBytes(CHARSET);
+      final byte[] encryptedText = cipher.doFinal(plainText);
       encryptedString = new String(Base64.encodeBase64(encryptedText), CHARSET);
     } catch (GeneralSecurityException e) {
       throw new CredentialException("Could not encrypt data: " + decryptedText, e);
@@ -54,8 +54,8 @@ public class CredentialsProtector {
     String decryptedText;
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);
-      byte[] encryptedText = Base64.decodeBase64(encryptedString);
-      byte[] plainText = cipher.doFinal(encryptedText);
+      final byte[] encryptedText = Base64.decodeBase64(encryptedString);
+      final byte[] plainText = cipher.doFinal(encryptedText);
       decryptedText = new String(plainText, CHARSET);
     } catch (GeneralSecurityException e) {
       throw new CredentialException("Could not decrypt data: " + encryptedString, e);

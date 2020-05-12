@@ -15,7 +15,7 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
 
   @Override
   public Issue transform(final b4j.core.Issue originalIssue) {
-    Issue transformedIssue = new Issue();
+    final Issue transformedIssue = new Issue();
 
     transformedIssue.setLink(URI.create(originalIssue.getUri()));
     transformedIssue.setKey(originalIssue.getId());
@@ -66,18 +66,19 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
 
   @Override
   public List<Issue> transform(final Collection<b4j.core.Issue> originalIssues) {
-    List<Issue> transformedIssues = new ArrayList<>();
-    for (b4j.core.Issue originalIssue : originalIssues) {
+    final List<Issue> transformedIssues = new ArrayList<>();
+    for (final b4j.core.Issue originalIssue : originalIssues) {
       transformedIssues.add(transform(originalIssue));
     }
     return transformedIssues;
   }
 
   private List<Component> transformComponents(final b4j.core.Issue originalIssue) {
-    List<Component> transformedComponents = new ArrayList<>();
+    final List<Component> transformedComponents = new ArrayList<>();
     if (originalIssue.getComponents() != null) {
       originalIssue.getComponents().forEach(originalComponent -> {
-        Component transformedComponent = new Component(originalComponent.getName(), originalComponent.getDescription());
+        final Component transformedComponent = new Component(originalComponent.getName(),
+                                                             originalComponent.getDescription());
         transformedComponents.add(transformedComponent);
       });
     }
@@ -85,7 +86,7 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<Version> transformFixVersions(final b4j.core.Issue originalIssue) {
-    List<Version> transformedFixVersions = new ArrayList<>();
+    final List<Version> transformedFixVersions = new ArrayList<>();
     if (originalIssue.getFixVersions() != null) {
       originalIssue.getFixVersions().forEach(
         originalFixVersion -> transformedFixVersions.add(transformVersion(originalFixVersion)));
@@ -94,7 +95,7 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<Version> transformAffectedVersions(final b4j.core.Issue originalIssue) {
-    List<Version> transformedAffectedVersions = new ArrayList<>();
+    final List<Version> transformedAffectedVersions = new ArrayList<>();
     if (originalIssue.getAffectedVersions() != null) {
       originalIssue.getAffectedVersions().forEach(
         originalAffectedVersion -> transformedAffectedVersions.add(transformVersion(originalAffectedVersion)));
@@ -103,14 +104,14 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<Comment> transformComments(final b4j.core.Issue originalIssue) {
-    List<Comment> transformedComments = new ArrayList<>();
+    final List<Comment> transformedComments = new ArrayList<>();
     if (originalIssue.getComments() != null) {
       originalIssue.getComments().forEach(originalComment -> {
-        Comment transformedComment = new Comment(transformUser(originalComment.getAuthor()),
-                                                 transformUser(originalComment.getUpdateAuthor()),
-                                                 new DateTime(originalComment.getCreationTimestamp()),
-                                                 new DateTime(originalComment.getUpdateTimestamp()),
-                                                 originalComment.getTheText());
+        final Comment transformedComment = new Comment(transformUser(originalComment.getAuthor()),
+                                                       transformUser(originalComment.getUpdateAuthor()),
+                                                       new DateTime(originalComment.getCreationTimestamp()),
+                                                       new DateTime(originalComment.getUpdateTimestamp()),
+                                                       originalComment.getTheText());
         transformedComments.add(transformedComment);
       });
     }
@@ -118,11 +119,11 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<IssueLink> transformIssueLinks(final b4j.core.Issue originalIssue) {
-    List<IssueLink> transformedIssueLinks = new ArrayList<>();
+    final List<IssueLink> transformedIssueLinks = new ArrayList<>();
     if (originalIssue.getLinks() != null) {
       originalIssue.getLinks().forEach(originalIssueLink -> {
-        IssueLink transformedIssueLink = new IssueLink(originalIssueLink.getIssueId(),
-                                                       originalIssueLink.getLinkTypeName(), null);
+        final IssueLink transformedIssueLink = new IssueLink(originalIssueLink.getIssueId(),
+                                                             originalIssueLink.getLinkTypeName(), null);
         transformedIssueLinks.add(transformedIssueLink);
       });
     }
@@ -130,12 +131,12 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<Attachment> transformAttachments(final b4j.core.Issue originalIssue) {
-    List<Attachment> transformedAttachments = new ArrayList<>();
+    final List<Attachment> transformedAttachments = new ArrayList<>();
     if (originalIssue.getAttachments() != null) {
       originalIssue.getAttachments().forEach(originalAttachment -> {
-        Attachment transformedAttachment = new Attachment(originalAttachment.getFilename(), null, null, 0,
-                                                          originalAttachment.getDescription(),
-                                                          originalAttachment.getUri());
+        final Attachment transformedAttachment = new Attachment(originalAttachment.getFilename(), null, null, 0,
+                                                                originalAttachment.getDescription(),
+                                                                originalAttachment.getUri());
         transformedAttachments.add(transformedAttachment);
       });
     }
@@ -143,14 +144,14 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private List<SubTask> transformSubTasks(final b4j.core.Issue originalIssue) {
-    List<SubTask> transformedSubTasks = new ArrayList<>();
+    final List<SubTask> transformedSubTasks = new ArrayList<>();
     if (originalIssue.getChildren() != null) {
       originalIssue.getChildren().forEach(originalSubTask -> {
-        IssueType subTaskIssueType = new IssueType(originalSubTask.getType().getName(),
-                                                   true);
-        SubTask transformedSubTask = new SubTask(originalSubTask.getId(), URI.create(originalSubTask.getUri()),
-                                                 originalSubTask.getSummary(), subTaskIssueType,
-                                                 originalSubTask.getStatus().getName());
+        final IssueType subTaskIssueType = new IssueType(originalSubTask.getType().getName(),
+                                                         true);
+        final SubTask transformedSubTask = new SubTask(originalSubTask.getId(), URI.create(originalSubTask.getUri()),
+                                                       originalSubTask.getSummary(), subTaskIssueType,
+                                                       originalSubTask.getStatus().getName());
         transformedSubTasks.add(transformedSubTask);
       });
     }
@@ -164,7 +165,7 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
     if (USER_CACHE.containsKey(originalUser.getName())) {
       return USER_CACHE.get(originalUser.getName());
     }
-    User transformedUser = new User(
+    final User transformedUser = new User(
       originalUser.getName(),
       originalUser.getRealName(),
       UNKNOWN,
@@ -182,7 +183,7 @@ public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue
   }
 
   private Version transformVersion(final b4j.core.Version originalVersion) {
-    Date releaseDate = originalVersion.getReleaseDate();
+    final Date releaseDate = originalVersion.getReleaseDate();
     if (releaseDate == null) {
       return new Version(originalVersion.getName(), "", false, false, null);
     }

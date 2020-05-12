@@ -46,7 +46,7 @@ public class BugzillaIssueClientFactory implements IssueClientFactory {
 
   private IssueClient getAnonymousClient() throws BugzillaConnectorException {
     LOGGER.info("Creating BugZilla client with Anonymous authentication...");
-    BugzillaHttpSession session = new BugzillaHttpSession();
+    final BugzillaHttpSession session = new BugzillaHttpSession();
     session.setBaseUrl(getURL(host));
     session.setBugzillaBugClass(DefaultIssue.class);
     return new BugzillaIssueClient(session);
@@ -58,12 +58,12 @@ public class BugzillaIssueClientFactory implements IssueClientFactory {
     }
 
     LOGGER.info("Creating BugZilla client with Basic authentication...");
-    BugzillaHttpSession session = new BugzillaHttpSession();
+    final BugzillaHttpSession session = new BugzillaHttpSession();
     session.setBaseUrl(getURL(host));
     session.setBugzillaBugClass(DefaultIssue.class);
 
-    AuthorizationCallback authCallback = new SimpleAuthorizationCallback(credentials.getUsername(), credentials.getPassword());
-    HttpSessionParams httpSessionParams = new HttpSessionParams();
+    final AuthorizationCallback authCallback = new SimpleAuthorizationCallback(credentials.getUsername(), credentials.getPassword());
+    final HttpSessionParams httpSessionParams = new HttpSessionParams();
     httpSessionParams.setBasicAuthentication(true);
     httpSessionParams.setAuthorizationCallback(authCallback);
     session.setHttpSessionParams(httpSessionParams);

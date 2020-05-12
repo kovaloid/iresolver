@@ -31,8 +31,8 @@ public class IssuesProcessor implements IssueProcessor {
 
   public IssuesProcessor(final IssueClient issueClient, final Configuration properties) throws IOException {
     this.issueClient = issueClient;
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
                                                          properties.getParagraphVectors().getLanguage());
   }
@@ -40,18 +40,18 @@ public class IssuesProcessor implements IssueProcessor {
   @Override
   public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
-    Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
+    final Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
                                                                        NUMBER_OF_NEAREST_LABELS);
-    List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
-    Map<String, Integer> probableLabelsMap = new HashMap<>();
-    Map<User, Integer> qualifiedUsersMap = new HashMap<>();
-    Map<String, Integer> probableAttachmentExtensionsMap = new HashMap<>();
+    final List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
+    final Map<String, Integer> probableLabelsMap = new HashMap<>();
+    final Map<User, Integer> qualifiedUsersMap = new HashMap<>();
+    final Map<String, Integer> probableAttachmentExtensionsMap = new HashMap<>();
 
     LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), similarIssueKeys);
     similarIssueKeys.forEach((similarIssueKey) -> {
-      Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
+      final Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
 
-      double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
+      final double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, Math.abs(similarity * 100)));
 
       similarIssue.getLabels().forEach(label -> addEntityOrUpdateMetric(probableLabelsMap, label));
@@ -72,7 +72,7 @@ public class IssuesProcessor implements IssueProcessor {
 
   private <E> void addEntityOrUpdateMetric(final Map<E, Integer> map, final E entity) {
     if (map.containsKey(entity)) {
-      Integer oldMetricNumber = map.get(entity);
+      final Integer oldMetricNumber = map.get(entity);
       map.replace(entity, oldMetricNumber + 1);
     } else {
       map.put(entity, 1);
@@ -80,16 +80,16 @@ public class IssuesProcessor implements IssueProcessor {
   }
 
   private <E> List<Pair<E, Integer>> convertMapToPairList(final Map<E, Integer> map) {
-    List<Pair<E, Integer>> pairList = new ArrayList<>();
+    final List<Pair<E, Integer>> pairList = new ArrayList<>();
     map.forEach((key, value) -> pairList.add(new Pair<>(key, value)));
     return pairList;
   }
 
   private List<AttachmentResult> getAttachmentMetrics(
     final Issue issue, final List<Pair<String, Integer>> probableAttachmentExtensions) {
-    List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
-    List<AttachmentResult> attachmentResults = new ArrayList<>();
-    for (Pair<String, Integer> probableAttachmentExtension : probableAttachmentExtensions) {
+    final List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
+    final List<AttachmentResult> attachmentResults = new ArrayList<>();
+    for (final Pair<String, Integer> probableAttachmentExtension : probableAttachmentExtensions) {
       attachmentResults.add(
         new AttachmentResult(
           probableAttachmentExtension.getEntity(),

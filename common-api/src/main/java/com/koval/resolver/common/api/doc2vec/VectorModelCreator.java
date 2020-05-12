@@ -54,17 +54,17 @@ public class VectorModelCreator {
   }
 
   public VectorModel createFromInputStream(final InputStream inputStream) throws IOException {
-    LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
+    final LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
     return createVectorModelWithIterator(iterator);
   }
 
   private VectorModel createVectorModelWithIterator(final LabelAwareSentenceIterator iterator) {
-    AbstractCache<VocabWord> cache = new AbstractCache<>();
+    final AbstractCache<VocabWord> cache = new AbstractCache<>();
 
-    TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+    final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
     tokenizerFactory.setTokenPreProcessor(tokenPreprocessor);
 
-    ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
+    final ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
         .sequenceLearningAlgorithm(new DBOW<>())
         // .setVectorsListeners(Collections.singletonList(
         //     new SimilarityListener<>(ListenerEvent.EPOCH, 1, "AMQ-6134 ", "AMQ-5100 "))

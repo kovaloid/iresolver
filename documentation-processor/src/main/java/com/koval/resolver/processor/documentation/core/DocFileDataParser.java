@@ -20,8 +20,8 @@ public class DocFileDataParser {
   }
 
   public List<DocFile> parseDocumentationFilesList() {
-    FileParser fileParser = new FileParser(fileRepository);
-    DocDataLineParser docDataLineParser = new DocDataLineParser(DELIMITER);
+    final FileParser fileParser = new FileParser(fileRepository);
+    final DocDataLineParser docDataLineParser = new DocDataLineParser(DELIMITER);
 
     return fileParser.parseFile(docFileDataFileName, docDataLineParser);
   }

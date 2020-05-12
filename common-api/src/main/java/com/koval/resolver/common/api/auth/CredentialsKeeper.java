@@ -63,8 +63,8 @@ public class CredentialsKeeper {
     try (InputStream inputStream = new FileInputStream(credentialsFile);
          InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
          BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-      String username = protector.decrypt(bufferedReader.readLine());
-      String password = protector.decrypt(bufferedReader.readLine());
+      final String username = protector.decrypt(bufferedReader.readLine());
+      final String password = protector.decrypt(bufferedReader.readLine());
       return new Credentials(username, password);
     } catch (FileNotFoundException e) {
       throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);

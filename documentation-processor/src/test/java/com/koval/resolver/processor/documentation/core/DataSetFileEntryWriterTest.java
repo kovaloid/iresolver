@@ -33,8 +33,8 @@ class DataSetFileEntryWriterTest {
 
   @Test
   void testWriteDataSetFileEntry() throws IOException {
-    StringWriter stringWriter = new StringWriter();
-    BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
+    final StringWriter stringWriter = new StringWriter();
+    final BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
 
     dataSetFileEntryWriter.write(
             bufferedWriter,
@@ -45,7 +45,7 @@ class DataSetFileEntryWriterTest {
 
     bufferedWriter.flush();
 
-    String actualResult = stringWriter.toString();
+    final String actualResult = stringWriter.toString();
 
     assertEquals(EXPECTED_RESULT, actualResult);
   }

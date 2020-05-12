@@ -13,12 +13,12 @@ import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
 public class ConfluenceTransformer {
 
   public ConfluencePage transform(final Content content) {
-    ConfluencePage page = new ConfluencePage();
+    final ConfluencePage page = new ConfluencePage();
     page.setId(content.getId().asLong());
     page.setTitle(content.getTitle());
-    ContentBody contentBody = content.getBody()
+    final ContentBody contentBody = content.getBody()
         .get(ContentRepresentation.STORAGE);
-    String bodyWithoutTags = contentBody.getValue()
+    final String bodyWithoutTags = contentBody.getValue()
         .replaceAll("nbsp", "")
         .replaceAll("<.*?>", "");
     page.setBody(bodyWithoutTags);
@@ -26,8 +26,8 @@ public class ConfluenceTransformer {
   }
 
   public List<ConfluencePage> transform(final Collection<Content> contents) {
-    List<ConfluencePage> pages = new ArrayList<>();
-    for (Content content : contents) {
+    final List<ConfluencePage> pages = new ArrayList<>();
+    for (final Content content : contents) {
       pages.add(transform(content));
     }
     return pages;

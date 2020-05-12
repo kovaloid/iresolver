@@ -28,7 +28,7 @@ public class DocDataLineParserTest {
 
   @Test
   void testParseValidString() {
-    DocFile parsedDocFile = docDataLineParser.parseLine(DOC_FILE_STRING);
+    final DocFile parsedDocFile = docDataLineParser.parseLine(DOC_FILE_STRING);
 
     assertDocFilesEqual(EXPECTED_DOC_FILE, parsedDocFile);
   }

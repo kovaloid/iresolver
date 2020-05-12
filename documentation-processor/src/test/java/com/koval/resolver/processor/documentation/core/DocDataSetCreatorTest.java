@@ -54,7 +54,7 @@ public class DocDataSetCreatorTest {
 
   @BeforeEach
   void onSetup() throws IOException {
-    DocumentationProcessorConfiguration properties = createConfigurationProperties();
+    final DocumentationProcessorConfiguration properties = createConfigurationProperties();
     docDataSetCreator = new DocDataSetCreator(
             properties,
             docDataSetEntryWriter,
@@ -126,9 +126,9 @@ public class DocDataSetCreatorTest {
     }
 
     docFile = new File(tempDirectory, FILE_NAME);
-    File dataSetFile = new File(tempDirectory, DATA_SET_FILE_NAME);
-    File metadataFile = new File(tempDirectory, METADATA_FILE_NAME);
-    File docListFile = new File(tempDirectory, DOC_LIST_FILE_NAME);
+    final File dataSetFile = new File(tempDirectory, DATA_SET_FILE_NAME);
+    final File metadataFile = new File(tempDirectory, METADATA_FILE_NAME);
+    final File docListFile = new File(tempDirectory, DOC_LIST_FILE_NAME);
 
     return createProperties(DOC_FILE_STRINGS, docFile, dataSetFile, metadataFile, docListFile);
   }

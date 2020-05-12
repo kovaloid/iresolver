@@ -34,8 +34,8 @@ class DocListFileEntryWriterTest {
 
   @Test
   void testWriteDocListEntry() throws IOException {
-    StringWriter stringWriter = new StringWriter();
-    BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
+    final StringWriter stringWriter = new StringWriter();
+    final BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
 
     docListFileEntryWriter.write(
             bufferedWriter,
@@ -46,7 +46,7 @@ class DocListFileEntryWriterTest {
 
     bufferedWriter.flush();
 
-    String actualResult = stringWriter.toString();
+    final String actualResult = stringWriter.toString();
 
     assertEquals(EXPECTED_RESULT, actualResult);
   }

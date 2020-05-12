@@ -40,7 +40,7 @@ public class Project {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Project project = (Project)o;
+    final Project project = (Project)o;
     return Objects.equals(key, project.key)
         && Objects.equals(name, project.name);
   }

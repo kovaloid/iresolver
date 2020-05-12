@@ -37,7 +37,7 @@ public class FileParserTest {
 
   @BeforeEach
   void onSetup() throws FileNotFoundException {
-    InputStream inputStream = new ByteArrayInputStream(FILE_STRINGS.getBytes());
+    final InputStream inputStream = new ByteArrayInputStream(FILE_STRINGS.getBytes());
     when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     when(stringLineParser.parseLine(FILE_STRING_1)).thenReturn(PARSED_STRING_1);
@@ -57,7 +57,7 @@ public class FileParserTest {
 
   @Test
   void testReturningParsedLines() {
-    List<String> parsedStrings = fileParser.parseFile(FILE_NAME, stringLineParser);
+    final List<String> parsedStrings = fileParser.parseFile(FILE_NAME, stringLineParser);
 
     assertEquals(PARSED_STRING_1, parsedStrings.get(0));
     assertEquals(PARSED_STRING_2, parsedStrings.get(1));

@@ -41,10 +41,10 @@ class WordToPdfFileConverterTest {
 
   @Test
   void testConvertingDocToPdf() throws IOException {
-    InputStream docInputStream = new ByteArrayInputStream(DOC_TEXT.getBytes());
+    final InputStream docInputStream = new ByteArrayInputStream(DOC_TEXT.getBytes());
     when(fileRepository.readFile(DOC_FILE_PATH)).thenReturn(docInputStream);
 
-    OutputStream outputPdfStream = new ByteArrayOutputStream();
+    final OutputStream outputPdfStream = new ByteArrayOutputStream();
     when(fileRepository.writeToFile(PDF_FILE_PATH)).thenReturn(outputPdfStream);
 
     wordToPdfFileConverter.convert(DOC_FILE_PATH, PDF_FILE_PATH);

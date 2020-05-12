@@ -19,7 +19,7 @@ public final class CommandLineUtil {
   }
 
   private static String getStringFromConsole(final String question) {
-    Console console = System.console();
+    final Console console = System.console();
     if (console == null) {
       throw new CommandLineException("Could not get console instance.");
     }

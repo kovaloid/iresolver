@@ -40,7 +40,7 @@ public class Component {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Component component = (Component)o;
+    final Component component = (Component)o;
     return Objects.equals(name, component.name)
         && Objects.equals(description, component.description);
   }

@@ -39,7 +39,7 @@ public class JiraIssueReceiver implements IssueReceiver {
 
   @Override
   public boolean hasNextIssues() {
-    boolean result = currentIndex < finishIndex;
+    final boolean result = currentIndex < finishIndex;
     if (!result) {
       progressMonitor.endMeasuringTotalTime();
       LOGGER.info("Time spent: {}", progressMonitor.getFormattedSpentTime());
@@ -49,7 +49,7 @@ public class JiraIssueReceiver implements IssueReceiver {
 
   @Override
   public List<Issue> getNextIssues() {
-    List<Issue> searchResult = client.search(query, batchSize, currentIndex, fields);
+    final List<Issue> searchResult = client.search(query, batchSize, currentIndex, fields);
     searchResult.forEach(issue ->
                            LOGGER.info("{}: {} summary words, {} description words, {} comments, {} attachments",
                                        issue.getKey(),
@@ -69,7 +69,7 @@ public class JiraIssueReceiver implements IssueReceiver {
   }
 
   private int getTotalIssues() {
-    int total = client.getTotalIssues(query);
+    final int total = client.getTotalIssues(query);
     LOGGER.info("Total number of issues: {}", total);
     return total;
   }
@@ -78,7 +78,7 @@ public class JiraIssueReceiver implements IssueReceiver {
     if (text == null) {
       return 0;
     }
-    String trimmedText = text.trim();
+    final String trimmedText = text.trim();
     if (trimmedText.isEmpty()) {
       return 0;
     }

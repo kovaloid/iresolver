@@ -46,14 +46,14 @@ public class DocFileDataParserTest {
 
   @Test
   void testParsingOneLineDocMeta() {
-    DocFile actualDocFile = docFileDataParser.parseDocumentationFilesList().get(0);
+    final DocFile actualDocFile = docFileDataParser.parseDocumentationFilesList().get(0);
 
     assertDocFilesEqual(DOC_FILE_1, actualDocFile);
   }
 
   @Test
   void testParsingMultipleDocMeta() {
-    List<DocFile> docFiles = docFileDataParser.parseDocumentationFilesList();
+    final List<DocFile> docFiles = docFileDataParser.parseDocumentationFilesList();
 
     assertDocFilesEqual(DOC_FILE_1, docFiles.get(0));
     assertDocFilesEqual(DOC_FILE_2, docFiles.get(1));
@@ -77,7 +77,7 @@ public class DocFileDataParserTest {
   }
 
   private void initDocOutputFileParser(final String testString) throws IOException {
-    InputStream inputStream = new ByteArrayInputStream(testString.getBytes());
+    final InputStream inputStream = new ByteArrayInputStream(testString.getBytes());
     when(fileRepository.readFile(FILE_NAME)).thenReturn(inputStream);
 
     docFileDataParser = new DocFileDataParser(

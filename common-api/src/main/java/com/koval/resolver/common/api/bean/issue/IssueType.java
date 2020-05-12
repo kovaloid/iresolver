@@ -39,7 +39,7 @@ public class IssueType {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    IssueType issueType = (IssueType)o;
+    final IssueType issueType = (IssueType)o;
     return isSubTask == issueType.isSubTask
         && Objects.equals(name, issueType.name);
   }

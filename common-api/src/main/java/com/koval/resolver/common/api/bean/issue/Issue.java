@@ -226,7 +226,7 @@ public class Issue {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Issue issue = (Issue)o;
+    final Issue issue = (Issue)o;
     return Objects.equals(link, issue.link)
         && Objects.equals(key, issue.key)
         && Objects.equals(summary, issue.summary)

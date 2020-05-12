@@ -78,7 +78,7 @@ public class Comment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Comment comment = (Comment)o;
+    final Comment comment = (Comment)o;
     return Objects.equals(author, comment.author)
            && Objects.equals(updateAuthor, comment.updateAuthor)
            && Objects.equals(creationDate, comment.creationDate)

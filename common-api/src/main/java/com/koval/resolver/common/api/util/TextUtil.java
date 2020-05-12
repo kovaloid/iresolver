@@ -20,7 +20,7 @@ public final class TextUtil {
   }
 
   public static boolean hasQuestion(final String text) {
-    long numberOfQuestionWords = QUESTION_WORDS.stream()
+    final long numberOfQuestionWords = QUESTION_WORDS.stream()
         .filter(text::contains)
         .count();
     return numberOfQuestionWords > 0 && text.contains("?");
