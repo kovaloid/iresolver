@@ -65,7 +65,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        #foreach ($qualifiedUser in $result.getQualifiedUsers())
+                        #foreach ($qualifiedUser in $result.sortQualifiedUsersByRank($result.getQualifiedUsers()))
                         <tr>
                             <td>$qualifiedUser.getEntity().getName()</td>
                             <td>$qualifiedUser.getEntity().getDisplayName()</td>
