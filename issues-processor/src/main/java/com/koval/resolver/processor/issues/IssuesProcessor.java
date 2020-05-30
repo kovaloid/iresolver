@@ -106,7 +106,7 @@ public class IssuesProcessor implements IssueProcessor {
         listQualifiedUsers.sort((u1, u2) -> {
             if (u1.getMetric().equals(u2.getMetric())) {
                 return 0;
-            } else if (u1.getMetric() > u2.getMetric()) {
+            } else if (u1.getMetric() < u2.getMetric()) {
                 return 1;
             } else {
                 return -1;
