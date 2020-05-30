@@ -102,4 +102,17 @@ public class IssuesProcessor implements IssueProcessor {
     return attachmentResults;
   }
 
+   public List<Pair<User, Integer>> sortUsersByRank(List<Pair<User, Integer>> listQualifiedUsers) {
+        listQualifiedUsers.sort((u1, u2) -> {
+            if (u1.getMetric().equals(u2.getMetric())) {
+                return 0;
+            } else if (u1.getMetric() > u2.getMetric()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        return listQualifiedUsers;
+    }
+
 }
