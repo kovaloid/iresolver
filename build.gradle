@@ -1,4 +1,3 @@
-
 plugins {
   id 'com.github.spotbugs' version '2.0.1'
 }
@@ -220,13 +219,6 @@ allprojects {
     ignoreFailures = true
   }
 
-  tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    reports {
-      xml.enabled = false
-      html.enabled = true
-    }
-  }
-
   apply from: rootProject.file('jdepend.gradle')
   apply from: rootProject.file('coverage.gradle')
 
@@ -235,4 +227,37 @@ allprojects {
     delete "${projectDir}/out"
   }
   tasks.clean.dependsOn(cleanOut)
+}
+
+subprojects {
+  apply plugin: "com.github.spotbugs"
+
+  repositories {
+    maven { url "https://plugins.gradle.org/m2/" }
+  }
+
+  def suffix = project.path.replaceAll(':', '-').replaceFirst('-', '')
+  def prefix = rootProject.buildDir.absolutePath
+  def path = "$prefix/reports/spotbugs/$suffix"
+
+  spotbugs {
+    toolVersion = '3.1.12'
+    reportLevel = 'low'
+    effort = 'max'
+    reportsDir = file("$path")
+    ignoreFailures = true
+  }
+
+  tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+      html {
+        enabled = true
+        impliesSubProjects = true
+        destination file("$path"+".html")
+      }
+      xml {
+        enabled = false
+      }
+    }
+  }
 }
