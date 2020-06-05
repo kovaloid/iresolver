@@ -221,7 +221,7 @@ public final class Launcher {
         LOGGER.info("Not exists available fields.");
       } else {
         LOGGER.info("Available fields:");
-        if (configuration.getConnectors().getJira().getPrintFields().isEmpty()) {
+        if (configuration.getConnectors().getJira().getPrintFields() == null || configuration.getConnectors().getJira().getPrintFields().isEmpty()) {
           fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
         } else {
           printIssueFieldsInCsv(fields, configuration.getConnectors().getJira().getPrintFields());
@@ -236,13 +236,13 @@ public final class Launcher {
     StringBuilder fieldsToWrite = new StringBuilder().append("Field" + ',' + "Id" + '\n');
     for (IssueField field : fields) {
       fieldsToWrite.append(field.getName().replaceAll(",", " "))
-                   .append(',')
-                   .append(field.getId().replaceAll(",", " "))
-                   .append('\n');
+              .append(',')
+              .append(field.getId().replaceAll(",", " "))
+              .append('\n');
       LOGGER.info("Field '{}' with id {}", field.getName(), field.getId());
     }
     Path path = Paths.get(filePath);
-    Files.createDirectories(path.getParent());
+    Files.createDirectories(path.getParent()); //NPE if path is wrong
     Files.deleteIfExists(path);
     Files.createFile(path);
     try (FileWriter writeIntoCsv = new FileWriter(path.toAbsolutePath().toString())) {
