@@ -221,10 +221,10 @@ public final class Launcher {
         LOGGER.info("Not exists available fields.");
       } else {
         LOGGER.info("Available fields:");
-        if (configuration.getConnectors().getJira().getPrintFields() == null || configuration.getConnectors().getJira().getPrintFields().isEmpty()) {
+        if (configuration.getConnectors().getJira().getIssueFieldsCsvFile() == null || configuration.getConnectors().getJira().getIssueFieldsCsvFile().isEmpty()) {
           fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
         } else {
-          printIssueFieldsInCsv(fields, configuration.getConnectors().getJira().getPrintFields());
+          printIssueFieldsInCsv(fields, configuration.getConnectors().getJira().getIssueFieldsCsvFile());
         }
       }
     } catch (IOException e) {
@@ -242,7 +242,9 @@ public final class Launcher {
       LOGGER.info("Field '{}' with id {}", field.getName(), field.getId());
     }
     Path path = Paths.get(filePath);
-    Files.createDirectories(path.getParent()); //NPE if path is wrong
+    if (!Files.exists(path.getParent())) {
+      Files.createDirectories(path.getParent()); //NPE if path is wrong
+    }
     Files.deleteIfExists(path);
     Files.createFile(path);
     try (FileWriter writeIntoCsv = new FileWriter(path.toAbsolutePath().toString())) {

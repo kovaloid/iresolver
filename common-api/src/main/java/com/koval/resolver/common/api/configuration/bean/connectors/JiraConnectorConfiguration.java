@@ -12,7 +12,7 @@ public class JiraConnectorConfiguration {
   private String unresolvedQuery;
   private int batchSize;
   private int batchDelay;
-  private String printFields;
+  private String issueFieldsCsvFile;
   private List<String> resolvedIssueFields;
   private List<String> unresolvedIssueFields;
 
@@ -88,12 +88,12 @@ public class JiraConnectorConfiguration {
     this.unresolvedIssueFields = unresolvedIssueFields;
   }
 
-  public String getPrintFields() {
-    return printFields;
+  public String getIssueFieldsCsvFile() {
+    return issueFieldsCsvFile;
   }
 
-  public void setPrintFields(String printFields) {
-    this.printFields = printFields;
+  public void setIssueFieldsCsvFile(String issueFieldsCsvFile) {
+    this.issueFieldsCsvFile = issueFieldsCsvFile;
   }
 
   @Override
@@ -108,7 +108,7 @@ public class JiraConnectorConfiguration {
             + ", batchDelay=" + batchDelay
             + ", resolvedIssueFields=" + resolvedIssueFields
             + ", unresolvedIssueFields=" + unresolvedIssueFields
-            + ", printFields='" + printFields + '\''
+            + ", issueFieldsCsvFile='" + issueFieldsCsvFile + '\''
             + '}';
   }
 }
