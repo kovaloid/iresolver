@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koval.resolver.common.api.exception.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +29,7 @@ import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.exception.ConfigurationException;
 import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
@@ -253,7 +253,7 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
     final List<String> processorNames = configuration.getAdministration().getProcessors();
     final List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if(processorNames != null) {
+    if (processorNames != null) {
       if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
         issueProcessors.add(new IssuesProcessor(issueClient, configuration));
       }
