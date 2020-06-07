@@ -19,6 +19,8 @@ import com.koval.resolver.common.api.configuration.bean.processors.Documentation
 import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.HtmlToPdfFileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.PptPptxToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.split.PageSplitter;
 import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
@@ -30,6 +32,7 @@ public class DocDataSetCreator {
   private static final String KEY_PREFIX = "doc_";
   private static final String SPACE = " ";
   private static final String SEPARATOR = "|";
+  private static final String NO_DOCUMENTATION_FILE = "There are no documentation files";
 
   private final DocTypeDetector docTypeDetector = new DocTypeDetector();
   private final PageSplitter pageSplitter = new PdfPageSplitter();
@@ -43,7 +46,7 @@ public class DocDataSetCreator {
     File docsFolder = new File(properties.getDocsFolder());
     File[] docFiles = docsFolder.listFiles();
     if (docFiles == null) {
-      LOGGER.warn("There are no documentation files");
+      LOGGER.warn(NO_DOCUMENTATION_FILE);
       return;
     }
 
@@ -103,10 +106,11 @@ public class DocDataSetCreator {
   }
 
   public void convertWordFilesToPdf() {
+
     File docsFolder = new File(properties.getDocsFolder());
     File[] docFiles = docsFolder.listFiles();
     if (docFiles == null) {
-      LOGGER.warn("There are no documentation files");
+      LOGGER.warn(NO_DOCUMENTATION_FILE);
       return;
     }
     FileConverter fileConverter = new WordToPdfFileConverter();
@@ -114,6 +118,46 @@ public class DocDataSetCreator {
       if (docFile.isFile()) {
         MediaType mediaType = docTypeDetector.detectType(docFile.getName());
         if (mediaType.equals(MediaType.WORD)) {
+          fileConverter.convert(docFile);
+        }
+      }
+    }
+  }
+
+  public void convertPptPptxFilesToPdf() {
+    File docsFolder = new File(properties.getDocsFolder());
+    File[] docFiles = docsFolder.listFiles();
+    if (docFiles == null) {
+      LOGGER.warn(NO_DOCUMENTATION_FILE);
+      return;
+    }
+
+    FileConverter fileConverter = new PptPptxToPdfFileConverter();
+
+    for (final File docFile : docFiles) {
+      if (docFile.isFile()) {
+        MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+        if (mediaType.equals(MediaType.POWERPOINT)) {
+          fileConverter.convert(docFile);
+        }
+      }
+    }
+  }
+
+  public void convertHtmlToPdf() {
+    File docsFolder = new File(properties.getDocsFolder());
+    File[] docFiles = docsFolder.listFiles();
+    if (docFiles == null) {
+      LOGGER.warn(NO_DOCUMENTATION_FILE);
+      return;
+    }
+
+    FileConverter fileConverter = new HtmlToPdfFileConverter();
+
+    for (final File docFile : docFiles) {
+      if (docFile.isFile()) {
+        MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+        if (mediaType.equals(MediaType.HTML)) {
           fileConverter.convert(docFile);
         }
       }

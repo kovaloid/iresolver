@@ -114,6 +114,8 @@ public final class Launcher {
   public void createDocumentationDataSet() {
     DocDataSetCreator docDataSetCreator = new DocDataSetCreator(configuration.getProcessors().getDocumentation());
     docDataSetCreator.convertWordFilesToPdf();
+    docDataSetCreator.convertPptPptxFilesToPdf();
+    docDataSetCreator.convertHtmlToPdf();
     try {
       docDataSetCreator.create();
     } catch (IOException e) {
