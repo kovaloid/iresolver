@@ -5,7 +5,7 @@ import com.koval.resolver.common.api.exception.ConnectorException;
 
 public class BugzillaConnectorException extends ConnectorException {
 
-  public BugzillaConnectorException(String message, Throwable cause) {
+  public BugzillaConnectorException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

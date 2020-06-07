@@ -15,7 +15,7 @@ public class BugzillaConnectorConfiguration {
     return url;
   }
 
-  public void setUrl(String url) {
+  public void setUrl(final String url) {
     this.url = url;
   }
 
@@ -23,7 +23,7 @@ public class BugzillaConnectorConfiguration {
     return anonymous;
   }
 
-  public void setAnonymous(boolean anonymous) {
+  public void setAnonymous(final boolean anonymous) {
     this.anonymous = anonymous;
   }
 
@@ -31,7 +31,7 @@ public class BugzillaConnectorConfiguration {
     return credentialsFolder;
   }
 
-  public void setCredentialsFolder(String credentialsFolder) {
+  public void setCredentialsFolder(final String credentialsFolder) {
     this.credentialsFolder = credentialsFolder;
   }
 
@@ -39,7 +39,7 @@ public class BugzillaConnectorConfiguration {
     return resolvedQuery;
   }
 
-  public void setResolvedQuery(String resolvedQuery) {
+  public void setResolvedQuery(final String resolvedQuery) {
     this.resolvedQuery = resolvedQuery;
   }
 
@@ -47,7 +47,7 @@ public class BugzillaConnectorConfiguration {
     return unresolvedQuery;
   }
 
-  public void setUnresolvedQuery(String unresolvedQuery) {
+  public void setUnresolvedQuery(final String unresolvedQuery) {
     this.unresolvedQuery = unresolvedQuery;
   }
 
@@ -55,7 +55,7 @@ public class BugzillaConnectorConfiguration {
     return batchSize;
   }
 
-  public void setBatchSize(int batchSize) {
+  public void setBatchSize(final int batchSize) {
     this.batchSize = batchSize;
   }
 
@@ -63,7 +63,7 @@ public class BugzillaConnectorConfiguration {
     return batchDelay;
   }
 
-  public void setBatchDelay(int batchDelay) {
+  public void setBatchDelay(final int batchDelay) {
     this.batchDelay = batchDelay;
   }
 

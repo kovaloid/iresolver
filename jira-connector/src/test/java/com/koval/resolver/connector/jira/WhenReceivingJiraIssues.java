@@ -20,8 +20,8 @@ public class WhenReceivingJiraIssues {
 
   @Before
   public void init() {
-    IssueClient client = mock(IssueClient.class);
-    JiraConnectorConfiguration connectorProperties = mock(JiraConnectorConfiguration.class);
+    final IssueClient client = mock(IssueClient.class);
+    final JiraConnectorConfiguration connectorProperties = mock(JiraConnectorConfiguration.class);
     when(connectorProperties.getResolvedQuery()).thenReturn("resolvedQuery");
     when(client.getTotalIssues(anyString())).thenReturn(10);
     receiver = new JiraIssueReceiver(client, connectorProperties, true);
@@ -29,6 +29,6 @@ public class WhenReceivingJiraIssues {
 
   @Test
   public void shouldGetResolvedIssues() {
-    assertTrue(receiver.hasNextIssues());
+    assertTrue("Receiver has next Issue", receiver.hasNextIssues());
   }
 }

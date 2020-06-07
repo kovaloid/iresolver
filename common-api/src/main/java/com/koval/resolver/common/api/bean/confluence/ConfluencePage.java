@@ -11,7 +11,7 @@ public class ConfluencePage {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(final long id) {
     this.id = id;
   }
 
@@ -19,7 +19,7 @@ public class ConfluencePage {
     return title;
   }
 
-  public void setTitle(String title) {
+  public void setTitle(final String title) {
     this.title = title;
   }
 
@@ -27,7 +27,7 @@ public class ConfluencePage {
     return body;
   }
 
-  public void setBody(String body) {
+  public void setBody(final String body) {
     this.body = body;
   }
 }

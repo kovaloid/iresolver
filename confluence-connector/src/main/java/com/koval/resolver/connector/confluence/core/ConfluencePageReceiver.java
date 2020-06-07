@@ -22,18 +22,18 @@ public class ConfluencePageReceiver {
   private final ConfluenceClient client;
   private final ConfluenceConnectorConfiguration properties;
 
-  public ConfluencePageReceiver(ConfluenceClient client, ConfluenceConnectorConfiguration properties) {
+  public ConfluencePageReceiver(final ConfluenceClient client, final ConfluenceConnectorConfiguration properties) {
     this.client = client;
     this.properties = properties;
   }
 
-  public void start(DataSetWriter<ConfluencePage> dataSetWriter) {
-    ConfluenceTransformer transformer = new ConfluenceTransformer();
-    List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
+  public void start(final DataSetWriter<ConfluencePage> dataSetWriter) {
+    final ConfluenceTransformer transformer = new ConfluenceTransformer();
+    final List<Space> spaces = client.getSpacesByKeys(properties.getSpaceKeys());
     int startIndex = 0;
-    int limit = properties.getLimitPerRequest();
+    final int limit = properties.getLimitPerRequest();
     while (true) {
-      PageResponse<Content> contentResponse = client.getPagesBySpaceKeys(spaces, startIndex, limit);
+      final PageResponse<Content> contentResponse = client.getPagesBySpaceKeys(spaces, startIndex, limit);
       LOGGER.info("Fetched confluence pages: {}", contentResponse.size());
       dataSetWriter.write(transformer.transform(contentResponse.getResults()));
 

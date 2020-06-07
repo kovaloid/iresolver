@@ -12,7 +12,7 @@ public class JiraConnector implements Connector {
   private final IssueClient issueClient;
   private final JiraConnectorConfiguration connectorProperties;
 
-  public JiraConnector(IssueClient issueClient, JiraConnectorConfiguration connectorProperties) {
+  public JiraConnector(final IssueClient issueClient, final JiraConnectorConfiguration connectorProperties) {
     this.issueClient = issueClient;
     this.connectorProperties = connectorProperties;
   }

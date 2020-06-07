@@ -28,16 +28,16 @@ public class StemmingPreprocessor extends CommonPreprocessor {
 
   private String language = "English";
 
-  public StemmingPreprocessor setLanguage(String lang) {
+  public StemmingPreprocessor setLanguage(final String lang) {
     this.language = lang;
     return this;
   }
 
   @Override
-  public String preProcess(String token) {
+  public String preProcess(final String token) {
     LOGGER.debug("Stemming of token: {}", token);
-    String preparedToken = super.preProcess(token);
-    SnowballProgram stemmer = getAppropriateStemmerInstance();
+    final String preparedToken = super.preProcess(token);
+    final SnowballProgram stemmer = getAppropriateStemmerInstance();
     stemmer.setCurrent(preparedToken);
     stemmer.stem();
     return stemmer.getCurrent();

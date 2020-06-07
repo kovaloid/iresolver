@@ -10,7 +10,7 @@ public final class CollectionsUtil {
   }
 
   public static <T> List<T> convert(final Iterable<T> iterable) {
-    List<T> result = new ArrayList<>();
+    final List<T> result = new ArrayList<>();
     if (iterable == null) {
       return result;
     }

@@ -6,8 +6,8 @@ import com.koval.resolver.common.api.util.TextUtil;
 
 public class TextDataExtractor {
 
-  public String extract(Issue issue) {
-    StringBuilder textData = new StringBuilder(100);
+  public String extract(final Issue issue) {
+    final StringBuilder textData = new StringBuilder(100);
     if (issue.getSummary() != null && !issue.getSummary().isEmpty()) {
       textData
           .append(TextUtil.simplify(issue.getSummary()))

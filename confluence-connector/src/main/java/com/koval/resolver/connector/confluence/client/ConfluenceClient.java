@@ -34,8 +34,8 @@ public class ConfluenceClient implements Closeable {
   private final ListeningExecutorService executor;
   private final AuthenticatedWebResourceProvider provider;
 
-  public ConfluenceClient(ConfluenceConnectorConfiguration connectorProperties) {
-    Client client = RestClientFactory.newClient();
+  public ConfluenceClient(final ConfluenceConnectorConfiguration connectorProperties) {
+    final Client client = RestClientFactory.newClient();
     executor = MoreExecutors.newDirectExecutorService();
     provider = new AuthenticatedWebResourceProvider(client, connectorProperties.getUrl(), "");
     if (!connectorProperties.isAnonymous()) {
@@ -45,9 +45,9 @@ public class ConfluenceClient implements Closeable {
     LOGGER.info("Confluence client created for {}", connectorProperties.getUrl());
   }
 
-  public List<Space> getSpacesByKeys(List<String> spaceKeys) {
-    RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
-    PageRequest pageRequest = new SimplePageRequest(0, 1000);
+  public List<Space> getSpacesByKeys(final List<String> spaceKeys) {
+    final RemoteSpaceService spaceService = new RemoteSpaceServiceImpl(provider, executor);
+    final PageRequest pageRequest = new SimplePageRequest(0, 1000);
     LOGGER.info("Get spaces by keys: {} with page request: {}", spaceKeys, pageRequest);
     return spaceService
         .find()
@@ -57,9 +57,9 @@ public class ConfluenceClient implements Closeable {
         .getResults();
   }
 
-  public PageResponse<Content> getPagesBySpaceKeys(List<Space> spaces, int startIndex, int limit) {
-    RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
-    PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
+  public PageResponse<Content> getPagesBySpaceKeys(final List<Space> spaces, final int startIndex, final int limit) {
+    final RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
+    final PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
     LOGGER.info("Get pages by spaces: {} with page request: {}",
         spaces.stream().map(Space::getKey).collect(Collectors.toList()), pageRequest);
     return contentService

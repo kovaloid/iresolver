@@ -15,29 +15,31 @@ import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcess
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 
-
 public class TestSimilarityProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestSimilarityProcessor.class);
 
   public void test() throws IOException {
-    IssuesProcessorConfiguration properties = ConfigurationManager.getConfiguration().getProcessors().getIssues();
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final IssuesProcessorConfiguration properties = ConfigurationManager.getConfiguration().getProcessors().getIssues();
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
 
-    File vectorModelFile = new File(properties.getVectorModelFile());
-    VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, "English");
+    final File vectorModelFile = new File(properties.getVectorModelFile());
+    final VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, "English");
 
     int errorCounter = 0;
     int totalCounter = 0;
     double errorRate;
 
     try (InputStream inputStream = FileUtils.openInputStream(new File(properties.getDataSetFile()))) {
-      LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream, "|", 0, 1);
+      final LabelAwareSentenceIterator iterator = new LabelAwareListSentenceIterator(inputStream,
+                                                                                     "|",
+                                                                                     0,
+                                                                                     1);
       while (iterator.hasNext()) {
-        String currentSentence = iterator.nextSentence();
-        String currentLabel = iterator.currentLabel();
+        final String currentSentence = iterator.nextSentence();
+        final String currentLabel = iterator.currentLabel();
 
-        String nearestLabel = vectorModel.getNearestLabels(currentSentence, 1).iterator().next();
+        final String nearestLabel = vectorModel.getNearestLabels(currentSentence, 1).iterator().next();
         if (!nearestLabel.equalsIgnoreCase(currentLabel)) {
           LOGGER.info("{} : Impossible to find a correct label for the corresponding text!", currentLabel);
           errorCounter++;
@@ -57,4 +59,5 @@ public class TestSimilarityProcessor {
       }
     }
   }
+
 }

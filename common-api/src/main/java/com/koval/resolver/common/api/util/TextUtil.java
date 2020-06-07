@@ -12,15 +12,15 @@ public final class TextUtil {
   private TextUtil() {
   }
 
-  public static String simplify(String text) {
+  public static String simplify(final String text) {
     return text
         .trim()
         .replaceAll("[^A-Za-z0-9]", " ")
         .replaceAll(" +", " ");
   }
 
-  public static boolean hasQuestion(String text) {
-    long numberOfQuestionWords = QUESTION_WORDS.stream()
+  public static boolean hasQuestion(final String text) {
+    final long numberOfQuestionWords = QUESTION_WORDS.stream()
         .filter(text::contains)
         .count();
     return numberOfQuestionWords > 0 && text.contains("?");

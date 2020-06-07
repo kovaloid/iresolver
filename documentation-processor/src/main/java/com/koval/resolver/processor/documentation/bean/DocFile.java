@@ -6,7 +6,7 @@ public class DocFile {
   private int fileIndex;
   private String fileName;
 
-  public DocFile(int fileIndex, String fileName) {
+  public DocFile(final int fileIndex, final String fileName) {
     this.fileIndex = fileIndex;
     this.fileName = fileName;
   }
@@ -15,7 +15,7 @@ public class DocFile {
     return fileIndex;
   }
 
-  public void setFileIndex(int fileIndex) {
+  public void setFileIndex(final int fileIndex) {
     this.fileIndex = fileIndex;
   }
 
@@ -23,7 +23,7 @@ public class DocFile {
     return fileName;
   }
 
-  public void setFileName(String fileName) {
+  public void setFileName(final String fileName) {
     this.fileName = fileName;
   }
 }

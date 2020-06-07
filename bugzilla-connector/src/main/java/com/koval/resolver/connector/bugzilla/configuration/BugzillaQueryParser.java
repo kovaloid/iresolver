@@ -4,13 +4,13 @@ package com.koval.resolver.connector.bugzilla.configuration;
 public class BugzillaQueryParser {
 
   @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity"})
-  public BugzillaQuery parse(String rawQuery) {
-    BugzillaQuery query = new BugzillaQuery();
-    String[] expressions = rawQuery.split(",");
-    for (String expression: expressions) {
-      String[] parts = expression.split("=");
-      String name = parts[0].trim();
-      String value = parts[1].trim();
+  public BugzillaQuery parse(final String rawQuery) {
+    final BugzillaQuery query = new BugzillaQuery();
+    final String[] expressions = rawQuery.split(",");
+    for (final String expression: expressions) {
+      final String[] parts = expression.split("=");
+      final String name = parts[0].trim();
+      final String value = parts[1].trim();
       if ("product".equalsIgnoreCase(name)) {
         query.setProduct(value);
       } else if ("status".equalsIgnoreCase(name)) {

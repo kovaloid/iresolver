@@ -1,99 +1,88 @@
 package com.koval.resolver.processor.documentation.core;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
-import com.koval.resolver.common.api.util.TextUtil;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
-import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
-import com.koval.resolver.processor.documentation.split.PageSplitter;
-import com.koval.resolver.processor.documentation.split.impl.PdfPageSplitter;
-
 
 public class DocDataSetCreator {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
-  private static final String KEY_PREFIX = "doc_";
-  private static final String SPACE = " ";
-  private static final String SEPARATOR = "|";
 
-  private final DocTypeDetector docTypeDetector = new DocTypeDetector();
-  private final PageSplitter pageSplitter = new PdfPageSplitter();
+  private static final String EXTENSION_PDF = ".pdf";
+  private static final String DOC_FILES_LOCATION = "../docs";
+
+  private final DocDataSetEntryWriter docDataSetEntryWriter;
+
+  private final DocTypeDetector docTypeDetector;
+
+  private final FileConverter fileConverter;
+
+  private final String docsFolderPath;
+
   private final DocumentationProcessorConfiguration properties;
 
-  public DocDataSetCreator(DocumentationProcessorConfiguration properties) {
+  public DocDataSetCreator(
+          final DocumentationProcessorConfiguration properties,
+          final DocDataSetEntryWriter docDataSetEntryWriter,
+          final DocTypeDetector docTypeDetector,
+          final FileConverter fileConverter
+  ) {
     this.properties = properties;
+    this.docDataSetEntryWriter = docDataSetEntryWriter;
+    this.docTypeDetector = docTypeDetector;
+    this.fileConverter = fileConverter;
+
+    docsFolderPath = properties.getDocsFolder();
   }
 
+  //TODO: Refactor this method so we can test it safely
   public void create() throws IOException {
-    File docsFolder = new File(properties.getDocsFolder());
-    File[] docFiles = docsFolder.listFiles();
+    final File docsFolder = new File(docsFolderPath);
+    final File[] docFiles = docsFolder.listFiles();
+
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
     }
 
-    File dataSetFile = new File(properties.getDataSetFile());
+    final File dataSetFile = new File(properties.getDataSetFile());
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
 
-    int pageIndex = 0;
-    int documentIndex = 0;
+    docDataSetEntryWriter.resetIndices();
 
-    File docMetadataFile = new File(properties.getDocsMetadataFile());
-    File docListFile = new File(properties.getDocsListFile());
+    final File docMetadataFile = new File(properties.getDocsMetadataFile());
+    final File docListFile = new File(properties.getDocsListFile());
 
     try (PrintWriter dataSetOutput = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
          PrintWriter metadataOutput = new PrintWriter(docMetadataFile, StandardCharsets.UTF_8.name());
-         PrintWriter docListOutput = new PrintWriter(docListFile, StandardCharsets.UTF_8.name())) {
+         PrintWriter docListOutput = new PrintWriter(docListFile, StandardCharsets.UTF_8.name());
+         BufferedWriter dataSetBufferedWriter = new BufferedWriter(dataSetOutput);
+         BufferedWriter metadataBufferedWriter = new BufferedWriter(metadataOutput);
+         BufferedWriter docListBufferedWriter = new BufferedWriter(docListOutput)) {
 
       for (final File docFile : docFiles) {
         if (docFile.isFile()) {
-          try (InputStream inputFileStream = new BufferedInputStream(new FileInputStream(docFile))) {
-            MediaType mediaType = docTypeDetector.detectType(docFile.getName());
-            if (mediaType.equals(MediaType.PDF)) {
-              Map<Integer, String> docPages = pageSplitter.getMapping(inputFileStream);
+          final MediaType mediaType = docTypeDetector.detectType(docFile.getName());
 
-              for (Map.Entry<Integer, String> docPage : docPages.entrySet()) {
-                String docPageKey = KEY_PREFIX + pageIndex;
-                pageIndex++;
-
-                dataSetOutput.print(docPageKey);
-                dataSetOutput.print(SEPARATOR);
-                dataSetOutput.println(TextUtil.simplify(docPage.getValue()));
-
-                metadataOutput.print(docPageKey);
-                metadataOutput.print(SPACE);
-                metadataOutput.print(documentIndex);
-                metadataOutput.print(SPACE);
-                metadataOutput.println(docPage.getKey());
-              }
-
-              docListOutput.print(documentIndex);
-              docListOutput.print(SPACE);
-              docListOutput.println(docFile.getName());
-              documentIndex++;
-            }
-          } catch (FileNotFoundException e) {
-            LOGGER.error("Could not find documentation file: " + docFile.getAbsolutePath(), e);
+          if (mediaType.equals(MediaType.PDF)) {
+            docDataSetEntryWriter.writeEntriesForDocFile(
+                    docFile,
+                    dataSetBufferedWriter,
+                    metadataBufferedWriter,
+                    docListBufferedWriter
+            );
           }
         }
       }
+
       LOGGER.info("Data set file was created: {}", dataSetFile.getCanonicalPath());
       LOGGER.info("Doc metadata file was created: {}", docMetadataFile.getCanonicalPath());
       LOGGER.info("Doc list file was created: {}", docListFile.getCanonicalPath());
@@ -102,21 +91,35 @@ public class DocDataSetCreator {
     }
   }
 
+
   public void convertWordFilesToPdf() {
-    File docsFolder = new File(properties.getDocsFolder());
-    File[] docFiles = docsFolder.listFiles();
+    final File docsFolder = new File(docsFolderPath);
+    final File[] docFiles = docsFolder.listFiles();
+
     if (docFiles == null) {
       LOGGER.warn("There are no documentation files");
       return;
     }
-    FileConverter fileConverter = new WordToPdfFileConverter();
+
     for (final File docFile : docFiles) {
       if (docFile.isFile()) {
-        MediaType mediaType = docTypeDetector.detectType(docFile.getName());
+        final MediaType mediaType = docTypeDetector.detectType(docFile.getName());
         if (mediaType.equals(MediaType.WORD)) {
-          fileConverter.convert(docFile);
+          final String wordFilePath = docFile.getName();
+          final String pdfFilePath = createPdfFilePath(wordFilePath);
+          fileConverter.convert(wordFilePath, pdfFilePath);
         }
       }
     }
+  }
+
+  private String createPdfFilePath(String wordFilePath) {
+    final File pdfOutputFile = new File(DOC_FILES_LOCATION, replaceExtensionWithPdf(wordFilePath));
+
+    return pdfOutputFile.getName();
+  }
+
+  private String replaceExtensionWithPdf(String wordFileName) {
+    return wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(EXTENSION_PDF);
   }
 }

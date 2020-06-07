@@ -1,6 +1,6 @@
 
 administration:
-  connector: jira # bugzilla
+  connectorType: JIRA # BUGZILLA
   processors:
     - issues
     #- granular-issues
@@ -18,10 +18,11 @@ connectors:
     url: https://issues.apache.org/jira
     anonymous: true
     credentialsFolder: ../data/
-    resolvedQuery: project = KAFKA AND resolution = Resolved ORDER BY priority DESC, updated DESC
-    unresolvedQuery: project = KAFKA AND priority = Blocker AND resolution = Unresolved AND fixVersion = 2.5.0 ORDER BY priority DESC, updated DESC
-    batchSize: 10
-    batchDelay: 3000
+    resolvedQuery: project = Kafka AND resolution != Unresolved
+    unresolvedQuery: project = Kafka AND resolution = Unresolved AND type = Bug AND affectedVersion = 2.5.0
+    batchSize: 100
+    batchDelay: 0
+    issueFieldsCsvFile : ../output/field.csv
     resolvedIssueFields:
       - summary
       - description
@@ -49,7 +50,7 @@ connectors:
 paragraphVectors:
   minWordFrequency: 1
   iterations: 5
-  epochs: 1
+  epochs: 3
   layerSize: 100
   learningRate: 0.025
   windowSize: 5

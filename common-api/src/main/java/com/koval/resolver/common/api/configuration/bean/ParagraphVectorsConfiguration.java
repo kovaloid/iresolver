@@ -17,7 +17,7 @@ public class ParagraphVectorsConfiguration {
     return minWordFrequency;
   }
 
-  public void setMinWordFrequency(int minWordFrequency) {
+  public void setMinWordFrequency(final int minWordFrequency) {
     this.minWordFrequency = minWordFrequency;
   }
 
@@ -25,7 +25,7 @@ public class ParagraphVectorsConfiguration {
     return iterations;
   }
 
-  public void setIterations(int iterations) {
+  public void setIterations(final int iterations) {
     this.iterations = iterations;
   }
 
@@ -33,7 +33,7 @@ public class ParagraphVectorsConfiguration {
     return epochs;
   }
 
-  public void setEpochs(int epochs) {
+  public void setEpochs(final int epochs) {
     this.epochs = epochs;
   }
 
@@ -41,7 +41,7 @@ public class ParagraphVectorsConfiguration {
     return layerSize;
   }
 
-  public void setLayerSize(int layerSize) {
+  public void setLayerSize(final int layerSize) {
     this.layerSize = layerSize;
   }
 
@@ -49,7 +49,7 @@ public class ParagraphVectorsConfiguration {
     return learningRate;
   }
 
-  public void setLearningRate(double learningRate) {
+  public void setLearningRate(final double learningRate) {
     this.learningRate = learningRate;
   }
 
@@ -57,7 +57,7 @@ public class ParagraphVectorsConfiguration {
     return windowSize;
   }
 
-  public void setWindowSize(int windowSize) {
+  public void setWindowSize(final int windowSize) {
     this.windowSize = windowSize;
   }
 
@@ -65,7 +65,7 @@ public class ParagraphVectorsConfiguration {
     return trainWordVectors;
   }
 
-  public void setTrainWordVectors(boolean trainWordVectors) {
+  public void setTrainWordVectors(final boolean trainWordVectors) {
     this.trainWordVectors = trainWordVectors;
   }
 
@@ -73,7 +73,7 @@ public class ParagraphVectorsConfiguration {
     return sampling;
   }
 
-  public void setSampling(int sampling) {
+  public void setSampling(final int sampling) {
     this.sampling = sampling;
   }
 
@@ -81,7 +81,7 @@ public class ParagraphVectorsConfiguration {
     return language;
   }
 
-  public void setLanguage(String language) {
+  public void setLanguage(final String language) {
     this.language = language;
   }
 
