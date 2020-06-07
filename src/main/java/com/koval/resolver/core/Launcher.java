@@ -31,6 +31,7 @@ import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.exception.ConfigurationException;
 import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
@@ -281,23 +282,26 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
     final List<String> processorNames = configuration.getAdministration().getProcessors();
     final List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
-      issueProcessors.add(new IssuesProcessor(issueClient, configuration));
+    if (processorNames != null) {
+      if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
+        issueProcessors.add(new IssuesProcessor(issueClient, configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
+        issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
+        issueProcessors.add(createDocumentationProcessor());
+      }
+      if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
+        issueProcessors.add(new ConfluenceProcessor(configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
+        issueProcessors.add(new RuleEngineProcessor(configuration));
+      }
     }
-    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
-      issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
-      issueProcessors.add(createDocumentationProcessor());
-    }
-    if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
-      issueProcessors.add(new ConfluenceProcessor(configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
-      issueProcessors.add(new RuleEngineProcessor(configuration));
-    }
-    if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
+    if (processorNames == null || issueProcessors.isEmpty()) {
+      LOGGER.error("Could not find any appropriate issue processor in the list: {}", processorNames);
+      throw new ConfigurationException("No processor is enabled.", null);
     }
     return issueProcessors;
   }
