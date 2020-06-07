@@ -22,6 +22,7 @@ connectors:
     unresolvedQuery: project = Kafka AND resolution = Unresolved AND type = Bug AND affectedVersion = 2.5.0
     batchSize: 100
     batchDelay: 0
+    issueFieldsCsvFile : ../output/field.csv
     resolvedIssueFields:
       - summary
       - description

@@ -1,7 +1,9 @@
 package com.koval.resolver.core;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,10 +221,37 @@ public final class Launcher {
         LOGGER.info("Not exists available fields.");
       } else {
         LOGGER.info("Available fields:");
-        fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
+        if (configuration.getConnectors().getJira().getIssueFieldsCsvFile() == null || configuration.getConnectors().getJira().getIssueFieldsCsvFile().isEmpty()) {
+          fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
+        } else {
+          printIssueFieldsInCsv(fields, configuration.getConnectors().getJira().getIssueFieldsCsvFile());
+        }
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
+    }
+  }
+
+  private void printIssueFieldsInCsv(List<IssueField> fields, String filePath) throws IOException {
+    StringBuilder fieldsToWrite = new StringBuilder().append("Field" + ',' + "Id" + '\n');
+    for (IssueField field : fields) {
+      fieldsToWrite.append(field.getName().replaceAll(",", " "))
+              .append(',')
+              .append(field.getId().replaceAll(",", " "))
+              .append('\n');
+      LOGGER.info("Field '{}' with id {}", field.getName(), field.getId());
+    }
+    Path path = Paths.get(filePath);
+    if (!Files.exists(path.getParent())) {
+      Files.createDirectories(path.getParent()); //NPE if path is wrong
+    }
+    Files.deleteIfExists(path);
+    Files.createFile(path);
+    try (FileWriter writeIntoCsv = new FileWriter(path.toAbsolutePath().toString())) {
+      writeIntoCsv.write(fieldsToWrite.toString());
+      LOGGER.info("The file is recorded and located on the path: " + Paths.get(filePath).toAbsolutePath().toString());
+    } catch (IOException e) {
+      LOGGER.error("Failed to write file ", e);
     }
   }
 
