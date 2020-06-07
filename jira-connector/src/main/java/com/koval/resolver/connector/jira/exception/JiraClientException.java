@@ -5,11 +5,11 @@ import com.koval.resolver.common.api.exception.ClientException;
 
 public class JiraClientException extends ClientException {
 
-  public JiraClientException(String message) {
+  public JiraClientException(final String message) {
     super(message);
   }
 
-  public JiraClientException(String message, Throwable cause) {
+  public JiraClientException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

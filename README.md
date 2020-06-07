@@ -44,6 +44,17 @@ The tool consists of modules. There are three types of modules:
 * Processors, which task is to handle each unresolved issue and generate issue analyzing result
 * Reporters, which task is to get processors results and create reports for user in specific format (html, txt)
 
+## Standalone Docker Image
+1. Build app with Gradle
+2. Run:
+```
+docker build . -t iresolver
+```
+3. Use:
+```
+docker run -v {$custom_dir}:/usr/src/iresolver/iresolver/data iresolver <command>
+```
+
 ## Planned To Do
 
 * Add connectors for YouTrack, Wrike, Slack, GitHub, etc.

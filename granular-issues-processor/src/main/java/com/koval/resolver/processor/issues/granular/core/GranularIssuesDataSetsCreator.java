@@ -26,7 +26,7 @@ public class GranularIssuesDataSetsCreator {
   private final IssueReceiver receiver;
   private final GranularIssuesProcessorConfiguration properties;
 
-  public GranularIssuesDataSetsCreator(IssueReceiver receiver, GranularIssuesProcessorConfiguration properties) {
+  public GranularIssuesDataSetsCreator(final IssueReceiver receiver, final GranularIssuesProcessorConfiguration properties) {
     this.receiver = receiver;
     this.properties = properties;
   }
@@ -37,21 +37,21 @@ public class GranularIssuesDataSetsCreator {
     PrintWriter summaryWriter = null;
     PrintWriter descriptionWriter = null;
     PrintWriter commentsWriter = null;
-    List<String> affectedIssueParts = properties.getAffectedIssueParts();
+    final List<String> affectedIssueParts = properties.getAffectedIssueParts();
     try {
-      if (affectedIssueParts.contains(IssueParts.SUMMARY)) {
+      if (affectedIssueParts.contains(IssueParts.SUMMARY.getContent())) {
         summaryWriter = getDataSetWriter(properties.getSummaryDataSetFile());
       }
-      if (affectedIssueParts.contains(IssueParts.DESCRIPTION)) {
+      if (affectedIssueParts.contains(IssueParts.DESCRIPTION.getContent())) {
         descriptionWriter = getDataSetWriter(properties.getDescriptionDataSetFile());
       }
-      if (affectedIssueParts.contains(IssueParts.COMMENTS)) {
+      if (affectedIssueParts.contains(IssueParts.COMMENTS.getContent())) {
         commentsWriter = getDataSetWriter(properties.getCommentsDataSetFile());
       }
 
       while (receiver.hasNextIssues()) {
-        Collection<Issue> issues = receiver.getNextIssues();
-        for (Issue issue : issues) {
+        final Collection<Issue> issues = receiver.getNextIssues();
+        for (final Issue issue : issues) {
           if (summaryWriter != null) {
             summaryWriter.print(issue.getKey());
             summaryWriter.print(SEPARATOR);
@@ -65,7 +65,7 @@ public class GranularIssuesDataSetsCreator {
           if (commentsWriter != null && !issue.getComments().isEmpty()) {
             commentsWriter.print(issue.getKey());
             commentsWriter.print(SEPARATOR);
-            StringBuilder comments = new StringBuilder();
+            final StringBuilder comments = new StringBuilder();
             issue.getComments().forEach(comment -> comments.append(comment.getBody()));
             commentsWriter.println(TextUtil.simplify(comments.toString()));
           }
@@ -97,8 +97,8 @@ public class GranularIssuesDataSetsCreator {
     }
   }
 
-  private PrintWriter getDataSetWriter(String dataSetPath) throws IOException {
-    File dataSetFile = new File(dataSetPath);
+  private PrintWriter getDataSetWriter(final String dataSetPath) throws IOException {
+    final File dataSetFile = new File(dataSetPath);
     FileUtils.forceMkdir(dataSetFile.getParentFile());
     LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     LOGGER.info("Start creating data set file: {}", dataSetFile.getName());

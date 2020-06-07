@@ -13,7 +13,7 @@ public class ProgressMonitor {
   private long totalEnd;
   private long batchEnd;
 
-  public ProgressMonitor(int batchSize, int finishIndex) {
+  public ProgressMonitor(final int batchSize, final int finishIndex) {
     this.batchSize = batchSize;
     this.finishIndex = finishIndex;
   }
@@ -30,25 +30,25 @@ public class ProgressMonitor {
     batchEnd = new DateTime().getMillis();
   }
 
-  public String getFormattedRemainingTime(int currentIndex) {
-    DateTime dateTime = getRemainingTime(currentIndex);
+  public String getFormattedRemainingTime(final int currentIndex) {
+    final DateTime dateTime = getRemainingTime(currentIndex);
     return dateTime.toString("HH:mm:ss");
   }
 
-  private DateTime getRemainingTime(int currentIndex) {
+  private DateTime getRemainingTime(final int currentIndex) {
     if (batchSize == 0) {
       return new DateTime(0).withZone(DateTimeZone.UTC);
     }
-    int iterations = currentIndex / batchSize;
+    final int iterations = currentIndex / batchSize;
     if (iterations == 0) {
       return new DateTime(0).withZone(DateTimeZone.UTC);
     }
-    long averageBatchTime = (batchEnd - totalStart) / iterations;
+    final long averageBatchTime = (batchEnd - totalStart) / iterations;
     return new DateTime(averageBatchTime * (finishIndex - currentIndex) / batchSize).withZone(DateTimeZone.UTC);
   }
 
   public String getFormattedSpentTime() {
-    DateTime dateTime = getSpentTime();
+    final DateTime dateTime = getSpentTime();
     return dateTime.toString("HH:mm:ss");
   }
 

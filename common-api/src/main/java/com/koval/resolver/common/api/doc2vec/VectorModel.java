@@ -13,7 +13,7 @@ public class VectorModel {
 
   private final ParagraphVectors paragraphVectors;
 
-  public VectorModel(ParagraphVectors paragraphVectors) {
+  public VectorModel(final ParagraphVectors paragraphVectors) {
     this.paragraphVectors = paragraphVectors;
   }
 
@@ -21,24 +21,24 @@ public class VectorModel {
     return paragraphVectors;
   }
 
-  public double getSimilarity(String label1, String label2) {
+  public double getSimilarity(final String label1, final String label2) {
     return paragraphVectors.similarity(label1, label2);
   }
 
-  public Collection<String> getNearestLabels(String rawText, int topN) {
+  public Collection<String> getNearestLabels(final String rawText, final int topN) {
     return paragraphVectors.nearestLabels(rawText, topN);
   }
 
-  public double similarityToLabel(String rawText, String label) {
+  public double similarityToLabel(final String rawText, final String label) {
     if (paragraphVectors.getTokenizerFactory() == null) {
       throw new IllegalStateException("TokenizerFactory should be defined, prior to predict() call");
     }
-    VocabCache<VocabWord> vocabCache = paragraphVectors.getVocab();
-    List<String> tokens = paragraphVectors.getTokenizerFactory()
+    final VocabCache<VocabWord> vocabCache = paragraphVectors.getVocab();
+    final List<String> tokens = paragraphVectors.getTokenizerFactory()
         .create(rawText)
         .getTokens();
-    List<VocabWord> document = new ArrayList<>();
-    for (String token : tokens) {
+    final List<VocabWord> document = new ArrayList<>();
+    for (final String token : tokens) {
       if (vocabCache.containsWord(token)) {
         document.add(vocabCache.wordFor(token));
       }

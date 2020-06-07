@@ -24,14 +24,14 @@ public class TextReportGenerator implements ReportGenerator {
   private static final String DASH = " - ";
   private final String outputFile;
 
-  public TextReportGenerator(TextReporterConfiguration configuration) {
+  public TextReportGenerator(final TextReporterConfiguration configuration) {
     this.outputFile = configuration.getOutputFile();
   }
 
   @Override
-  public void generate(List<IssueAnalysingResult> results) {
-    StringBuilder content = new StringBuilder(100);
-    for (IssueAnalysingResult result: results) {
+  public void generate(final List<IssueAnalysingResult> results) {
+    final StringBuilder content = new StringBuilder(100);
+    for (final IssueAnalysingResult result: results) {
       content.append(result.getOriginalIssue().getKey())
           .append(" : ")
           .append(result.getOriginalIssue().getSummary());
@@ -41,7 +41,7 @@ public class TextReportGenerator implements ReportGenerator {
       }
       if (result.getProposals() != null) {
         content.append("\nproposals: \n");
-        for (String proposal: result.getProposals()) {
+        for (final String proposal: result.getProposals()) {
           content.append(proposal)
               .append('\n');
         }
@@ -56,16 +56,16 @@ public class TextReportGenerator implements ReportGenerator {
     }
   }
 
-  private void fillIssuesProcessorResults(StringBuilder content, IssueAnalysingResult result) {
+  private void fillIssuesProcessorResults(final StringBuilder content, final IssueAnalysingResult result) {
     content.append("\n\nsimilar issues: \n");
-    for (Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
+    for (final Pair<Issue, Double> similarIssue: result.getSimilarIssues()) {
       content.append(similarIssue.getEntity().getKey())
           .append(DASH)
           .append(similarIssue.getMetric())
           .append('\n');
     }
     content.append("\nusers: \n");
-    for (Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
+    for (final Pair<User, Integer> qualifiedUser: result.getQualifiedUsers()) {
       content.append(qualifiedUser.getEntity().getDisplayName())
           .append(DASH)
           .append(qualifiedUser.getEntity().getEmailAddress())
@@ -74,14 +74,14 @@ public class TextReportGenerator implements ReportGenerator {
           .append('\n');
     }
     content.append("\nlabels: \n");
-    for (Pair<String, Integer> probableLabel: result.getProbableLabels()) {
+    for (final Pair<String, Integer> probableLabel: result.getProbableLabels()) {
       content.append(probableLabel.getEntity())
           .append(DASH)
           .append(probableLabel.getMetric())
           .append('\n');
     }
     content.append("\nattachments: \n");
-    for (AttachmentResult probableAttachment: result.getProbableAttachmentTypes()) {
+    for (final AttachmentResult probableAttachment: result.getProbableAttachmentTypes()) {
       content.append(probableAttachment.getExtension())
           .append(DASH)
           .append(probableAttachment.getRank())

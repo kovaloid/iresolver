@@ -12,6 +12,7 @@ public class JiraConnectorConfiguration {
   private String unresolvedQuery;
   private int batchSize;
   private int batchDelay;
+  private String issueFieldsCsvFile;
   private List<String> resolvedIssueFields;
   private List<String> unresolvedIssueFields;
 
@@ -19,7 +20,7 @@ public class JiraConnectorConfiguration {
     return url;
   }
 
-  public void setUrl(String url) {
+  public void setUrl(final String url) {
     this.url = url;
   }
 
@@ -27,7 +28,7 @@ public class JiraConnectorConfiguration {
     return anonymous;
   }
 
-  public void setAnonymous(boolean anonymous) {
+  public void setAnonymous(final boolean anonymous) {
     this.anonymous = anonymous;
   }
 
@@ -35,7 +36,7 @@ public class JiraConnectorConfiguration {
     return credentialsFolder;
   }
 
-  public void setCredentialsFolder(String credentialsFolder) {
+  public void setCredentialsFolder(final String credentialsFolder) {
     this.credentialsFolder = credentialsFolder;
   }
 
@@ -43,7 +44,7 @@ public class JiraConnectorConfiguration {
     return resolvedQuery;
   }
 
-  public void setResolvedQuery(String resolvedQuery) {
+  public void setResolvedQuery(final String resolvedQuery) {
     this.resolvedQuery = resolvedQuery;
   }
 
@@ -51,7 +52,7 @@ public class JiraConnectorConfiguration {
     return unresolvedQuery;
   }
 
-  public void setUnresolvedQuery(String unresolvedQuery) {
+  public void setUnresolvedQuery(final String unresolvedQuery) {
     this.unresolvedQuery = unresolvedQuery;
   }
 
@@ -59,7 +60,7 @@ public class JiraConnectorConfiguration {
     return batchSize;
   }
 
-  public void setBatchSize(int batchSize) {
+  public void setBatchSize(final int batchSize) {
     this.batchSize = batchSize;
   }
 
@@ -67,7 +68,7 @@ public class JiraConnectorConfiguration {
     return batchDelay;
   }
 
-  public void setBatchDelay(int batchDelay) {
+  public void setBatchDelay(final int batchDelay) {
     this.batchDelay = batchDelay;
   }
 
@@ -75,7 +76,7 @@ public class JiraConnectorConfiguration {
     return resolvedIssueFields;
   }
 
-  public void setResolvedIssueFields(List<String> resolvedIssueFields) {
+  public void setResolvedIssueFields(final List<String> resolvedIssueFields) {
     this.resolvedIssueFields = resolvedIssueFields;
   }
 
@@ -83,22 +84,31 @@ public class JiraConnectorConfiguration {
     return unresolvedIssueFields;
   }
 
-  public void setUnresolvedIssueFields(List<String> unresolvedIssueFields) {
+  public void setUnresolvedIssueFields(final List<String> unresolvedIssueFields) {
     this.unresolvedIssueFields = unresolvedIssueFields;
+  }
+
+  public String getIssueFieldsCsvFile() {
+    return issueFieldsCsvFile;
+  }
+
+  public void setIssueFieldsCsvFile(String issueFieldsCsvFile) {
+    this.issueFieldsCsvFile = issueFieldsCsvFile;
   }
 
   @Override
   public String toString() {
     return "JiraConnectorConfiguration{"
-        + "url='" + url + '\''
-        + ", anonymous=" + anonymous
-        + ", credentialsFolder='" + credentialsFolder + '\''
-        + ", resolvedQuery='" + resolvedQuery + '\''
-        + ", unresolvedQuery='" + unresolvedQuery + '\''
-        + ", batchSize=" + batchSize
-        + ", batchDelay=" + batchDelay
-        + ", resolvedIssueFields=" + resolvedIssueFields
-        + ", unresolvedIssueFields=" + unresolvedIssueFields
-        + '}';
+            + "url='" + url + '\''
+            + ", anonymous=" + anonymous
+            + ", credentialsFolder='" + credentialsFolder + '\''
+            + ", resolvedQuery='" + resolvedQuery + '\''
+            + ", unresolvedQuery='" + unresolvedQuery + '\''
+            + ", batchSize=" + batchSize
+            + ", batchDelay=" + batchDelay
+            + ", resolvedIssueFields=" + resolvedIssueFields
+            + ", unresolvedIssueFields=" + unresolvedIssueFields
+            + ", issueFieldsCsvFile='" + issueFieldsCsvFile + '\''
+            + '}';
   }
 }

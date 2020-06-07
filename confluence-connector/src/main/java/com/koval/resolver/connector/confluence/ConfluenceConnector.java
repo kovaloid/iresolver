@@ -18,13 +18,13 @@ public final class ConfluenceConnector {
 
   private final ConfluenceConnectorConfiguration connectorProperties;
 
-  public ConfluenceConnector(ConfluenceConnectorConfiguration connectorProperties) {
+  public ConfluenceConnector(final ConfluenceConnectorConfiguration connectorProperties) {
     this.connectorProperties = connectorProperties;
   }
 
-  public void createDataSet(DataSetWriter<ConfluencePage> confluenceDataSetWriter) {
+  public void createDataSet(final DataSetWriter<ConfluencePage> confluenceDataSetWriter) {
     try (ConfluenceClient confluenceClient = new ConfluenceClient(connectorProperties)) {
-      ConfluencePageReceiver receiver = new ConfluencePageReceiver(confluenceClient, connectorProperties);
+      final ConfluencePageReceiver receiver = new ConfluencePageReceiver(confluenceClient, connectorProperties);
       receiver.start(confluenceDataSetWriter);
     } catch (IOException e) {
       LOGGER.error("Could not create confluence data set", e);

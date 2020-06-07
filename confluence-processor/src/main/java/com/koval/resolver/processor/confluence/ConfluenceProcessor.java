@@ -18,7 +18,6 @@ import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
 
-
 public class ConfluenceProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceProcessor.class);
@@ -29,29 +28,31 @@ public class ConfluenceProcessor implements IssueProcessor {
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final String confluenceUrl;
 
-  public ConfluenceProcessor(Configuration properties) throws IOException {
+  public ConfluenceProcessor(final Configuration properties) throws IOException {
     this.confluenceUrl = properties.getConnectors().getConfluence().getUrl();
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
-    File vectorModelFile = new File(properties.getProcessors().getConfluence().getVectorModelFile());
-    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile, properties.getParagraphVectors().getLanguage());
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final File vectorModelFile = new File(properties.getProcessors().getConfluence().getVectorModelFile());
+    this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
+                                                         properties.getParagraphVectors().getLanguage());
   }
 
   @Override
-  public void run(Issue issue, IssueAnalysingResult result) {
+  public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
-    Collection<String> similarPageKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-        NUMBER_OF_NEAREST_LABELS);
+    final Collection<String> similarPageKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
+                                                                            NUMBER_OF_NEAREST_LABELS);
     LOGGER.info("Nearest confluence keys for {}: {}", issue.getKey(), similarPageKeys);
 
-    List<ConfluenceResult> confluenceResults = new ArrayList<>();
+    final List<ConfluenceResult> confluenceResults = new ArrayList<>();
     similarPageKeys.forEach(key -> {
-      ConfluenceResult confluenceResult = new ConfluenceResult(Integer.parseInt(key), "", getBrowseUrl(key));
+      final ConfluenceResult confluenceResult = new ConfluenceResult(Integer.parseInt(key), "", getBrowseUrl(key));
       confluenceResults.add(confluenceResult);
     });
     result.setConfluenceResults(confluenceResults);
   }
 
-  private String getBrowseUrl(String pageId) {
+  private String getBrowseUrl(final String pageId) {
     return confluenceUrl + BROWSE_SUFFIX + pageId;
   }
+
 }

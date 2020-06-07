@@ -26,39 +26,39 @@ public class BugzillaIssueClient implements IssueClient {
   private final BugzillaHttpSession session;
   private final IssueTransformer<b4j.core.Issue> issueTransformer;
 
-  BugzillaIssueClient(BugzillaHttpSession session) {
+  BugzillaIssueClient(final BugzillaHttpSession session) {
     this.session = session;
     this.issueTransformer = new BugzillaIssueTransformer();
     session.open();
   }
 
   @Override
-  public int getTotalIssues(String query) {
-    return 1000000;
+  public int getTotalIssues(final String query) {
+    return 1_000_000;
   }
 
   @Override
-  public List<Issue> search(String query, int maxResults, int startAt, List<String> fields) {
+  public List<Issue> search(final String query, final int maxResults, final int startAt, final List<String> fields) {
     LOGGER.debug("Send search request: Query = '{}' MaxResults = '{}' StartAt = '{}'.", query, maxResults, startAt);
-    DefaultSearchData searchData = getSearchDataByQuery(query);
+    final DefaultSearchData searchData = getSearchDataByQuery(query);
 
     searchData.add("offset", String.valueOf(startAt));
     searchData.add("limit", String.valueOf(maxResults));
 
-    Iterable<b4j.core.Issue> issues = session.searchBugs(searchData, null);
-    List<b4j.core.Issue> rawIssueList = new ArrayList<>();
-    for (b4j.core.Issue issue : issues) {
+    final Iterable<b4j.core.Issue> issues = session.searchBugs(searchData, null);
+    final List<b4j.core.Issue> rawIssueList = new ArrayList<>();
+    for (final b4j.core.Issue issue : issues) {
       LOGGER.info("Bug found: " + issue.getId() + " - " + issue.getSummary());
       rawIssueList.add(issue);
     }
     return issueTransformer.transform(rawIssueList);
   }
 
-  private DefaultSearchData getSearchDataByQuery(String query) {
-    DefaultSearchData searchData = new DefaultSearchData();
+  private DefaultSearchData getSearchDataByQuery(final String query) {
+    final DefaultSearchData searchData = new DefaultSearchData();
 
-    BugzillaQueryParser queryParser = new BugzillaQueryParser();
-    BugzillaQuery parsedQuery = queryParser.parse(query);
+    final BugzillaQueryParser queryParser = new BugzillaQueryParser();
+    final BugzillaQuery parsedQuery = queryParser.parse(query);
     if (parsedQuery.getAssignee() != null) {
       searchData.add("assignee", parsedQuery.getAssignee());
     }
@@ -85,21 +85,19 @@ public class BugzillaIssueClient implements IssueClient {
   }
 
   @Override
-  public Issue getIssueByKey(String issueKey) {
+  public Issue getIssueByKey(final String issueKey) {
     return issueTransformer.transform(session.getIssue(issueKey));
   }
 
   @Override
   public List<IssueField> getIssueFields() {
-    DefaultSearchData searchData = new DefaultSearchData();
+    final DefaultSearchData searchData = new DefaultSearchData();
     searchData.add("offset", "0");
     searchData.add("limit", "1");
-    Iterator<b4j.core.Issue> issues = session.searchBugs(searchData, null).iterator();
-    List<IssueField> issueFields = new ArrayList<>();
+    final Iterator<b4j.core.Issue> issues = session.searchBugs(searchData, null).iterator();
+    final List<IssueField> issueFields = new ArrayList<>();
     if (issues.hasNext()) {
-      issues.next().getCustomFieldNames().forEach((fieldName) -> {
-        issueFields.add(new IssueField(fieldName));
-      });
+      issues.next().getCustomFieldNames().forEach((fieldName) -> issueFields.add(new IssueField(fieldName)));
     }
     return issueFields;
   }

@@ -38,7 +38,7 @@ public class Issue {
     return link;
   }
 
-  public void setLink(URI link) {
+  public void setLink(final URI link) {
     this.link = link;
   }
 
@@ -46,7 +46,7 @@ public class Issue {
     return key;
   }
 
-  public void setKey(String key) {
+  public void setKey(final String key) {
     this.key = key;
   }
 
@@ -54,7 +54,7 @@ public class Issue {
     return summary;
   }
 
-  public void setSummary(String summary) {
+  public void setSummary(final String summary) {
     this.summary = summary;
   }
 
@@ -62,7 +62,7 @@ public class Issue {
     return description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(final String description) {
     this.description = description;
   }
 
@@ -70,7 +70,7 @@ public class Issue {
     return resolution;
   }
 
-  public void setResolution(String resolution) {
+  public void setResolution(final String resolution) {
     this.resolution = resolution;
   }
 
@@ -78,7 +78,7 @@ public class Issue {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(final String status) {
     this.status = status;
   }
 
@@ -86,7 +86,7 @@ public class Issue {
     return priority;
   }
 
-  public void setPriority(String priority) {
+  public void setPriority(final String priority) {
     this.priority = priority;
   }
 
@@ -94,7 +94,7 @@ public class Issue {
     return reporter;
   }
 
-  public void setReporter(User reporter) {
+  public void setReporter(final User reporter) {
     this.reporter = reporter;
   }
 
@@ -102,7 +102,7 @@ public class Issue {
     return assignee;
   }
 
-  public void setAssignee(User assignee) {
+  public void setAssignee(final User assignee) {
     this.assignee = assignee;
   }
 
@@ -110,7 +110,7 @@ public class Issue {
     return issueType;
   }
 
-  public void setIssueType(IssueType issueType) {
+  public void setIssueType(final IssueType issueType) {
     this.issueType = issueType;
   }
 
@@ -118,7 +118,7 @@ public class Issue {
     return project;
   }
 
-  public void setProject(Project project) {
+  public void setProject(final Project project) {
     this.project = project;
   }
 
@@ -126,7 +126,7 @@ public class Issue {
     return creationDate;
   }
 
-  public void setCreationDate(DateTime creationDate) {
+  public void setCreationDate(final DateTime creationDate) {
     this.creationDate = creationDate;
   }
 
@@ -134,7 +134,7 @@ public class Issue {
     return updateDate;
   }
 
-  public void setUpdateDate(DateTime updateDate) {
+  public void setUpdateDate(final DateTime updateDate) {
     this.updateDate = updateDate;
   }
 
@@ -142,7 +142,7 @@ public class Issue {
     return dueDate;
   }
 
-  public void setDueDate(DateTime dueDate) {
+  public void setDueDate(final DateTime dueDate) {
     this.dueDate = dueDate;
   }
 
@@ -150,7 +150,7 @@ public class Issue {
     return labels;
   }
 
-  public void setLabels(List<String> labels) {
+  public void setLabels(final List<String> labels) {
     this.labels = labels;
   }
 
@@ -158,7 +158,7 @@ public class Issue {
     return components;
   }
 
-  public void setComponents(List<Component> components) {
+  public void setComponents(final List<Component> components) {
     this.components = components;
   }
 
@@ -166,7 +166,7 @@ public class Issue {
     return fixVersions;
   }
 
-  public void setFixVersions(List<Version> fixVersions) {
+  public void setFixVersions(final List<Version> fixVersions) {
     this.fixVersions = fixVersions;
   }
 
@@ -174,7 +174,7 @@ public class Issue {
     return affectedVersions;
   }
 
-  public void setAffectedVersions(List<Version> affectedVersions) {
+  public void setAffectedVersions(final List<Version> affectedVersions) {
     this.affectedVersions = affectedVersions;
   }
 
@@ -182,7 +182,7 @@ public class Issue {
     return comments;
   }
 
-  public void setComments(List<Comment> comments) {
+  public void setComments(final List<Comment> comments) {
     this.comments = comments;
   }
 
@@ -190,7 +190,7 @@ public class Issue {
     return issueLinks;
   }
 
-  public void setIssueLinks(List<IssueLink> issueLinks) {
+  public void setIssueLinks(final List<IssueLink> issueLinks) {
     this.issueLinks = issueLinks;
   }
 
@@ -198,7 +198,7 @@ public class Issue {
     return attachments;
   }
 
-  public void setAttachments(List<Attachment> attachments) {
+  public void setAttachments(final List<Attachment> attachments) {
     this.attachments = attachments;
   }
 
@@ -206,7 +206,7 @@ public class Issue {
     return subTasks;
   }
 
-  public void setSubTasks(List<SubTask> subTasks) {
+  public void setSubTasks(final List<SubTask> subTasks) {
     this.subTasks = subTasks;
   }
 
@@ -214,19 +214,19 @@ public class Issue {
     return issueFields;
   }
 
-  public void setIssueFields(List<IssueField> issueFields) {
+  public void setIssueFields(final List<IssueField> issueFields) {
     this.issueFields = issueFields;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Issue issue = (Issue)o;
+    final Issue issue = (Issue)o;
     return Objects.equals(link, issue.link)
         && Objects.equals(key, issue.key)
         && Objects.equals(summary, issue.summary)

@@ -21,9 +21,9 @@ public class WhenCreatingJiraConnector {
 
   @Before
   public void init() {
-    IssueClient client = mock(IssueClient.class);
-    JiraConnectorConfiguration properties = mock(JiraConnectorConfiguration.class);
-    List searchResult = mock(List.class);
+    final IssueClient client = mock(IssueClient.class);
+    final JiraConnectorConfiguration properties = mock(JiraConnectorConfiguration.class);
+    final List searchResult = mock(List.class);
     when(properties.getResolvedQuery()).thenReturn("resolvedQuery");
     when(properties.getUnresolvedQuery()).thenReturn("unresolvedQuery");
     when(client.search(anyString(), anyInt(), anyInt(), anyList())).thenReturn(searchResult);
@@ -32,13 +32,13 @@ public class WhenCreatingJiraConnector {
 
   @Test
   public void shouldBeAbleToGetResolvedIssuesReceiver() {
-    IssueReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
+    final IssueReceiver receiver = jiraConnector.getResolvedIssuesReceiver();
     assertFalse("Check next issues", receiver.hasNextIssues());
   }
 
   @Test
   public void shouldBeAbleToGetUnresolvedIssuesReceiver() {
-    IssueReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
+    final IssueReceiver receiver = jiraConnector.getUnresolvedIssuesReceiver();
     assertFalse("Check next issues", receiver.hasNextIssues());
   }
 }

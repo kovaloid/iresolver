@@ -1,6 +1,7 @@
 package com.koval.resolver.common.api.auth;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,7 +26,7 @@ public class CredentialsKeeper {
   private final File credentialsFile;
   private final Charset charset = StandardCharsets.UTF_8;
 
-  public CredentialsKeeper(CredentialsProtector protector, String credentialsPath) {
+  public CredentialsKeeper(final CredentialsProtector protector, final String credentialsPath) {
     this.protector = protector;
     this.credentialsFile = new File(credentialsPath, CREDENTIALS_FILE_NAME);
   }
@@ -34,7 +35,7 @@ public class CredentialsKeeper {
     return credentialsFile.exists();
   }
 
-  public void store(Credentials credentials) {
+  public void store(final Credentials credentials) {
     if (!isStored()) {
       try {
         FileUtils.forceMkdir(credentialsFile.getParentFile());
@@ -43,13 +44,18 @@ public class CredentialsKeeper {
         throw new CredentialException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
       }
     }
-    try (PrintWriter fileWriter = new PrintWriter(credentialsFile, charset.name())) {
-      fileWriter.println(protector.encrypt(credentials.getUsername()));
-      fileWriter.println(protector.encrypt(credentials.getPassword()));
+    try (PrintWriter printWriter = new PrintWriter(credentialsFile, charset.name());
+         BufferedWriter fileWriter = new BufferedWriter(printWriter)) {
+      fileWriter.write(protector.encrypt(credentials.getUsername()));
+      fileWriter.newLine();
+      fileWriter.write(protector.encrypt(credentials.getPassword()));
+      fileWriter.newLine();
     } catch (FileNotFoundException e) {
       throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);
     } catch (UnsupportedEncodingException e) {
       throw new CredentialException("Charset " + charset.name() + " does not supported.", e);
+    } catch (IOException e) {
+      throw new CredentialException("Could not write credentials to file " + credentialsFile.getAbsolutePath(), e);
     }
   }
 
@@ -57,8 +63,8 @@ public class CredentialsKeeper {
     try (InputStream inputStream = new FileInputStream(credentialsFile);
          InputStreamReader inputStreamReader = new InputStreamReader(inputStream, charset);
          BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-      String username = protector.decrypt(bufferedReader.readLine());
-      String password = protector.decrypt(bufferedReader.readLine());
+      final String username = protector.decrypt(bufferedReader.readLine());
+      final String password = protector.decrypt(bufferedReader.readLine());
       return new Credentials(username, password);
     } catch (FileNotFoundException e) {
       throw new CredentialException("Could not find credentials file: " + credentialsFile.getAbsolutePath(), e);

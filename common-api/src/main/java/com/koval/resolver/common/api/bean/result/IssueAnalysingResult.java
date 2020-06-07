@@ -21,7 +21,7 @@ public class IssueAnalysingResult {
     return originalIssue;
   }
 
-  public void setOriginalIssue(Issue originalIssue) {
+  public void setOriginalIssue(final Issue originalIssue) {
     this.originalIssue = originalIssue;
   }
 
@@ -29,7 +29,7 @@ public class IssueAnalysingResult {
     return similarIssues;
   }
 
-  public void setSimilarIssues(List<Pair<Issue, Double>> similarIssues) {
+  public void setSimilarIssues(final List<Pair<Issue, Double>> similarIssues) {
     this.similarIssues = similarIssues;
   }
 
@@ -37,7 +37,7 @@ public class IssueAnalysingResult {
     return qualifiedUsers;
   }
 
-  public void setQualifiedUsers(List<Pair<User, Integer>> qualifiedUsers) {
+  public void setQualifiedUsers(final List<Pair<User, Integer>> qualifiedUsers) {
     this.qualifiedUsers = qualifiedUsers;
   }
 
@@ -45,7 +45,7 @@ public class IssueAnalysingResult {
     return probableLabels;
   }
 
-  public void setProbableLabels(List<Pair<String, Integer>> probableLabels) {
+  public void setProbableLabels(final List<Pair<String, Integer>> probableLabels) {
     this.probableLabels = probableLabels;
   }
 
@@ -53,7 +53,7 @@ public class IssueAnalysingResult {
     return probableAttachmentTypes;
   }
 
-  public void setProbableAttachmentTypes(List<AttachmentResult> probableAttachmentTypes) {
+  public void setProbableAttachmentTypes(final List<AttachmentResult> probableAttachmentTypes) {
     this.probableAttachmentTypes = probableAttachmentTypes;
   }
 
@@ -61,7 +61,7 @@ public class IssueAnalysingResult {
     return documentationResults;
   }
 
-  public void setDocumentationResults(List<DocumentationResult> documentationResults) {
+  public void setDocumentationResults(final List<DocumentationResult> documentationResults) {
     this.documentationResults = documentationResults;
   }
 
@@ -69,7 +69,7 @@ public class IssueAnalysingResult {
     return confluenceResults;
   }
 
-  public void setConfluenceResults(List<ConfluenceResult> confluenceResults) {
+  public void setConfluenceResults(final List<ConfluenceResult> confluenceResults) {
     this.confluenceResults = confluenceResults;
   }
 
@@ -77,7 +77,7 @@ public class IssueAnalysingResult {
     return proposals;
   }
 
-  public void setProposals(List<String> proposals) {
+  public void setProposals(final List<String> proposals) {
     this.proposals = proposals;
   }
 }
