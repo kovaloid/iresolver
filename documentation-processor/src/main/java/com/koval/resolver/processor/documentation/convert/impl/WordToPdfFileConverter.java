@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.core.FileRepository;
 
@@ -38,6 +39,15 @@ public class WordToPdfFileConverter implements FileConverter {
       LOGGER.info("PDF file created: " + outputFilePath);
     } catch (IOException e) {
       LOGGER.error("Could not convert word file " + inputFilePath + " to pdf " + outputFilePath, e);
+    }
+  }
+
+  @Override
+  public Boolean isConvert(MediaType docType) {
+    if (docType == MediaType.WORD) {
+      return Boolean.TRUE;
+    } else {
+      return Boolean.FALSE;
     }
   }
 }
