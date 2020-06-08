@@ -5,6 +5,6 @@ import com.koval.resolver.processor.documentation.bean.MediaType;
 public interface FileConverter {
   void convert(String inputFilePath, String outputFilePath);
 
-  Boolean isConvert(MediaType docType);
+  MediaType getConvertibleType(MediaType docType);
 }
 

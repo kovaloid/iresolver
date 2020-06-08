@@ -125,11 +125,7 @@ public class PptPptxToPdfFileConverter implements FileConverter {
     }
 
     @Override
-    public Boolean isConvert(MediaType docType) {
-        if (docType == MediaType.POWERPOINT) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
+    public MediaType getConvertibleType(MediaType docType) {
+        return MediaType.POWERPOINT;
     }
 }
