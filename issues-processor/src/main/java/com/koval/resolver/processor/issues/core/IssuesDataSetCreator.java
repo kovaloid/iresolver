@@ -36,7 +36,7 @@ public class IssuesDataSetCreator {
 
   public void create() throws IOException {
     final File dataSetFile = new File(properties.getDataSetFile());
-    if (properties.getOverwriteMode()) {
+    if (properties.isOverwriteMode()) {
       FileUtils.forceMkdir(dataSetFile.getParentFile());
       LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
       LOGGER.info("Start creating data set file: {}", dataSetFile.getName());

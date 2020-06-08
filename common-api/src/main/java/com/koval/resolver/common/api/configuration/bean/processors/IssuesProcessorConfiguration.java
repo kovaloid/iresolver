@@ -19,7 +19,7 @@ public class IssuesProcessorConfiguration {
     return vectorModelFile;
   }
 
-  public boolean getOverwriteMode() {
+  public boolean isOverwriteMode() {
     return overwriteMode;
   }
 

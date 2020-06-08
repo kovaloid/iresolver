@@ -70,7 +70,7 @@ public final class Launcher {
     try (IssueClient issueClient = getIssueClient()) {
       final Connector connector = getConnector(issueClient);
       String resolvedQuery;
-      if (!configuration.getProcessors().getIssues().getOverwriteMode()) {
+      if (!configuration.getProcessors().getIssues().isOverwriteMode()) {
         String lastSavedIssue = getLastSavedIssue(configuration.getProcessors().getIssues().getDataSetFile());
         if (lastSavedIssue != null) {
           resolvedQuery = configuration.getConnectors().getJira().getResolvedQuery();
