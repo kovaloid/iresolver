@@ -62,6 +62,7 @@ processors:
   issues:
     dataSetFile: ../data/Issues_DataSet.txt
     vectorModelFile: ../data/Issues_VectorModel.zip
+    overwriteMode: false
 
   granularIssues:
     affectedIssueParts:
