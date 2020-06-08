@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,6 +36,7 @@ import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.exception.ConfigurationException;
 import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
@@ -233,10 +237,37 @@ public final class Launcher {
         LOGGER.info("Not exists available fields.");
       } else {
         LOGGER.info("Available fields:");
-        fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
+        if (configuration.getConnectors().getJira().getIssueFieldsCsvFile() == null || configuration.getConnectors().getJira().getIssueFieldsCsvFile().isEmpty()) {
+          fields.forEach(field -> LOGGER.info("Field '{}' with id {}", field.getName(), field.getId()));
+        } else {
+          printIssueFieldsInCsv(fields, configuration.getConnectors().getJira().getIssueFieldsCsvFile());
+        }
       }
     } catch (IOException e) {
       LOGGER.error("Could not run issues processing.", e);
+    }
+  }
+
+  private void printIssueFieldsInCsv(List<IssueField> fields, String filePath) throws IOException {
+    StringBuilder fieldsToWrite = new StringBuilder().append("Field" + ',' + "Id" + '\n');
+    for (IssueField field : fields) {
+      fieldsToWrite.append(field.getName().replaceAll(",", " "))
+              .append(',')
+              .append(field.getId().replaceAll(",", " "))
+              .append('\n');
+      LOGGER.info("Field '{}' with id {}", field.getName(), field.getId());
+    }
+    Path path = Paths.get(filePath);
+    if (!Files.exists(path.getParent())) {
+      Files.createDirectories(path.getParent()); //NPE if path is wrong
+    }
+    Files.deleteIfExists(path);
+    Files.createFile(path);
+    try (FileWriter writeIntoCsv = new FileWriter(path.toAbsolutePath().toString())) {
+      writeIntoCsv.write(fieldsToWrite.toString());
+      LOGGER.info("The file is recorded and located on the path: " + Paths.get(filePath).toAbsolutePath().toString());
+    } catch (IOException e) {
+      LOGGER.error("Failed to write file ", e);
     }
   }
 
@@ -266,23 +297,26 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
     final List<String> processorNames = configuration.getAdministration().getProcessors();
     final List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
-      issueProcessors.add(new IssuesProcessor(issueClient, configuration));
+    if (processorNames != null) {
+      if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
+        issueProcessors.add(new IssuesProcessor(issueClient, configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
+        issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
+        issueProcessors.add(createDocumentationProcessor());
+      }
+      if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
+        issueProcessors.add(new ConfluenceProcessor(configuration));
+      }
+      if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
+        issueProcessors.add(new RuleEngineProcessor(configuration));
+      }
     }
-    if (processorNames.contains(ProcessorConstants.GRANULAR_ISSUES.getContent())) {
-      issueProcessors.add(new GranularIssuesProcessor(issueClient, configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.DOCUMENTATION.getContent())) {
-      issueProcessors.add(createDocumentationProcessor());
-    }
-    if (processorNames.contains(ProcessorConstants.CONFLUENCE.getContent())) {
-      issueProcessors.add(new ConfluenceProcessor(configuration));
-    }
-    if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
-      issueProcessors.add(new RuleEngineProcessor(configuration));
-    }
-    if (issueProcessors.isEmpty()) {
-      LOGGER.warn("Could not find any appropriate issue processor in the list: {}", processorNames);
+    if (processorNames == null || issueProcessors.isEmpty()) {
+      LOGGER.error("Could not find any appropriate issue processor in the list: {}", processorNames);
+      throw new ConfigurationException("No processor is enabled.", null);
     }
     return issueProcessors;
   }
