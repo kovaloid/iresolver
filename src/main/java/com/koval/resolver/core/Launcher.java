@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +46,10 @@ import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
+import com.koval.resolver.processor.documentation.bean.MediaType;
+import com.koval.resolver.processor.documentation.convert.FileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.HtmlToPdfFileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.PptPptxToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
 import com.koval.resolver.processor.documentation.core.*;
@@ -139,12 +145,6 @@ public final class Launcher {
     final DocTypeDetector docTypeDetector = new DocTypeDetector();
 
     final FileRepository fileRepository = new FileRepository();
-    final XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
-
-    final WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
-      fileRepository,
-      pdfConverter
-    );
 
     final PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
     final MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
