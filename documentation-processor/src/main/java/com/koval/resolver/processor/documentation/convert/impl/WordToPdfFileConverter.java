@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.core.FileRepository;
 
@@ -39,5 +40,10 @@ public class WordToPdfFileConverter implements FileConverter {
     } catch (IOException e) {
       LOGGER.error("Could not convert word file " + inputFilePath + " to pdf " + outputFilePath, e);
     }
+  }
+
+  @Override
+  public MediaType getConvertibleType(MediaType docType) {
+    return MediaType.WORD;
   }
 }

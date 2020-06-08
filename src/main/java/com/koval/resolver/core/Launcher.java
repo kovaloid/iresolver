@@ -1,15 +1,13 @@
 package com.koval.resolver.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +46,10 @@ import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
+import com.koval.resolver.processor.documentation.bean.MediaType;
+import com.koval.resolver.processor.documentation.convert.FileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.HtmlToPdfFileConverter;
+import com.koval.resolver.processor.documentation.convert.impl.PptPptxToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
 import com.koval.resolver.processor.documentation.core.*;
@@ -143,12 +145,6 @@ public final class Launcher {
     final DocTypeDetector docTypeDetector = new DocTypeDetector();
 
     final FileRepository fileRepository = new FileRepository();
-    final XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
-
-    final WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
-      fileRepository,
-      pdfConverter
-    );
 
     final PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
     final MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
@@ -164,18 +160,31 @@ public final class Launcher {
     );
 
     final DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
-      documentationConfiguration,
-      docDataSetEntryWriter,
-      docTypeDetector,
-      wordToPdfFileConverter
+        documentationConfiguration,
+        docDataSetEntryWriter,
+        docTypeDetector,
+        createAllFileConverter()
     );
-
-    docDataSetCreator.convertWordFilesToPdf();
+    docDataSetCreator.convert();
     try {
       docDataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create documentation data set file.", e);
     }
+  }
+
+  private Map<MediaType, FileConverter> createAllFileConverter() {
+    HashMap<MediaType, FileConverter> fileConverters = new HashMap<>();
+    final FileRepository fileRepository = new FileRepository();
+    final XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
+    fileConverters.put(MediaType.WORD, new WordToPdfFileConverter(
+            fileRepository,
+            pdfConverter
+    )
+    );
+    fileConverters.put(MediaType.POWERPOINT, new PptPptxToPdfFileConverter(fileRepository));
+    fileConverters.put(MediaType.HTML, new HtmlToPdfFileConverter());
+    return fileConverters;
   }
 
   public void createDocumentationVectorModel() {
