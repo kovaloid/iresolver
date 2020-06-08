@@ -1,11 +1,17 @@
 package com.koval.resolver.core;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +74,16 @@ public final class Launcher {
   public void createIssuesDataSet() {
     try (IssueClient issueClient = getIssueClient()) {
       final Connector connector = getConnector(issueClient);
+      String resolvedQuery;
+      if (!configuration.getProcessors().getIssues().isOverwriteMode()) {
+        String lastSavedIssue = getLastSavedIssue(configuration.getProcessors().getIssues().getDataSetFile());
+        if (lastSavedIssue != null) {
+          resolvedQuery = configuration.getConnectors().getJira().getResolvedQuery();
+          configuration.getConnectors().getJira().setResolvedQuery(resolvedQuery + " AND key > " + lastSavedIssue);
+        }
+      }
+      resolvedQuery = configuration.getConnectors().getJira().getResolvedQuery();
+      configuration.getConnectors().getJira().setResolvedQuery(resolvedQuery + " ORDER BY key ASC");
       final IssueReceiver receiver = connector.getResolvedIssuesReceiver();
       final IssuesDataSetCreator dataSetCreator = new IssuesDataSetCreator(receiver,
                                                                            configuration.getProcessors().getIssues());
@@ -376,6 +392,29 @@ public final class Launcher {
     } catch (ConnectorException e) {
       throw new IResolverException("Could not initialize client.", e);
     }
+  }
+
+  private String getLastSavedIssue(String dataSetFile) {
+    String lastIssue = null;
+    try (FileReader reader = new FileReader(dataSetFile);
+         BufferedReader input = new BufferedReader(reader)) {
+      String lastLine = input.readLine();
+      String currentLine;
+      while ((currentLine = input.readLine()) != null) {
+        lastLine = currentLine;
+      }
+     if (lastLine != null) {
+       Pattern pattern = Pattern.compile("^\\S*-\\d*");
+       Matcher matcher = pattern.matcher(lastLine);
+       if (matcher.find()) {
+         lastIssue = matcher.group(0);
+       }
+     }
+    } catch (IOException e) {
+      LOGGER.error("Overwrite mode was set, but there is no file to overwrite");
+      //throw new ConfigurationException("There is no file with issues to overwrite.", e);
+    }
+    return lastIssue;
   }
 
 }
