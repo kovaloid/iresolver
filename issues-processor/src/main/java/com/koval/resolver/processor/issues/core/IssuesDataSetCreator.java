@@ -36,9 +36,9 @@ public class IssuesDataSetCreator {
 
   public void create() throws IOException {
     final File dataSetFile = new File(properties.getDataSetFile());
+    FileUtils.forceMkdir(dataSetFile.getParentFile());
+    LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
     if (properties.isOverwriteMode()) {
-      FileUtils.forceMkdir(dataSetFile.getParentFile());
-      LOGGER.info("Folder to store data set file created: {}", dataSetFile.getParentFile().getCanonicalPath());
       LOGGER.info("Start creating data set file: {}", dataSetFile.getName());
       try (PrintWriter output = new PrintWriter(dataSetFile, StandardCharsets.UTF_8.name());
            BufferedWriter writer = new BufferedWriter(output)) {
