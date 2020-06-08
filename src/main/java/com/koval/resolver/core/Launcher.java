@@ -5,9 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +44,6 @@ import com.koval.resolver.exception.IResolverException;
 import com.koval.resolver.processor.confluence.ConfluenceProcessor;
 import com.koval.resolver.processor.confluence.core.ConfluenceDataSetWriter;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
-import com.koval.resolver.processor.documentation.bean.MediaType;
-import com.koval.resolver.processor.documentation.convert.FileConverter;
-import com.koval.resolver.processor.documentation.convert.impl.HtmlToPdfFileConverter;
-import com.koval.resolver.processor.documentation.convert.impl.PptPptxToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.WordToPdfFileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
 import com.koval.resolver.processor.documentation.core.*;
@@ -74,9 +70,19 @@ public final class Launcher {
   public void createIssuesDataSet() {
     try (IssueClient issueClient = getIssueClient()) {
       final Connector connector = getConnector(issueClient);
+      String resolvedQuery;
+      if (!configuration.getProcessors().getIssues().isOverwriteMode()) {
+        String lastSavedIssue = getLastSavedIssue(configuration.getProcessors().getIssues().getDataSetFile());
+        if (lastSavedIssue != null) {
+          resolvedQuery = configuration.getConnectors().getJira().getResolvedQuery();
+          configuration.getConnectors().getJira().setResolvedQuery(resolvedQuery + " AND key > " + lastSavedIssue);
+        }
+      }
+      resolvedQuery = configuration.getConnectors().getJira().getResolvedQuery();
+      configuration.getConnectors().getJira().setResolvedQuery(resolvedQuery + " ORDER BY key ASC");
       final IssueReceiver receiver = connector.getResolvedIssuesReceiver();
       final IssuesDataSetCreator dataSetCreator = new IssuesDataSetCreator(receiver,
-          configuration.getProcessors().getIssues());
+                                                                           configuration.getProcessors().getIssues());
       dataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create data set file.", e);
@@ -94,9 +100,9 @@ public final class Launcher {
       final Connector connector = getConnector(issueClient);
       final IssueReceiver receiver = connector.getResolvedIssuesReceiver();
       final GranularIssuesDataSetsCreator dataSetCreator = new GranularIssuesDataSetsCreator(receiver,
-          configuration
-              .getProcessors()
-              .getGranularIssues());
+                                                                                             configuration
+                                                                                               .getProcessors()
+                                                                                               .getGranularIssues());
       dataSetCreator.create();
     } catch (IOException e) {
       LOGGER.error("Could not create data set files.", e);
@@ -109,30 +115,36 @@ public final class Launcher {
       final String dataSetFile = configuration.getProcessors().getGranularIssues().getSummaryDataSetFile();
       final String vectorModelFile = configuration.getProcessors().getGranularIssues().getSummaryVectorModelFile();
       createVectorModel(dataSetFile,
-          vectorModelFile,
-          "Could not create summary granular issues vector model file.");
+                        vectorModelFile,
+                        "Could not create summary granular issues vector model file.");
     }
     if (affectedIssueParts.contains(IssueParts.DESCRIPTION.getContent())) {
       final String dataSetFile = configuration.getProcessors().getGranularIssues().getDescriptionDataSetFile();
       final String vectorModelFile = configuration.getProcessors().getGranularIssues().getDescriptionVectorModelFile();
       createVectorModel(dataSetFile, vectorModelFile,
-          "Could not create description granular issues vector model file.");
+                        "Could not create description granular issues vector model file.");
     }
     if (affectedIssueParts.contains(IssueParts.COMMENTS.getContent())) {
       final String dataSetFile = configuration.getProcessors().getGranularIssues().getCommentsDataSetFile();
       final String vectorModelFile = configuration.getProcessors().getGranularIssues().getCommentsVectorModelFile();
       createVectorModel(dataSetFile,
-          vectorModelFile,
-          "Could not create comments granular issues vector model file.");
+                        vectorModelFile,
+                        "Could not create comments granular issues vector model file.");
     }
   }
 
   public void createDocumentationDataSet() {
     final DocumentationProcessorConfiguration documentationConfiguration =
-        configuration.getProcessors().getDocumentation();
+      configuration.getProcessors().getDocumentation();
     final DocTypeDetector docTypeDetector = new DocTypeDetector();
 
     final FileRepository fileRepository = new FileRepository();
+    final XwpfPdfConverter pdfConverter = new XwpfPdfConverter();
+
+    final WordToPdfFileConverter wordToPdfFileConverter = new WordToPdfFileConverter(
+      fileRepository,
+      pdfConverter
+    );
 
     final PdfPageSplitter pdfPageSplitter = new PdfPageSplitter();
     final MetadataFileEntryWriter metadataFileEntryWriter = new MetadataFileEntryWriter();
@@ -140,11 +152,11 @@ public final class Launcher {
     final DataSetFileEntryWriter dataSetFileEntryWriter = new DataSetFileEntryWriter();
 
     final DocDataSetEntryWriter docDataSetEntryWriter = new DocDataSetEntryWriter(
-        fileRepository,
-        pdfPageSplitter,
-        metadataFileEntryWriter,
-        docListFileEntryWriter,
-        dataSetFileEntryWriter
+      fileRepository,
+      pdfPageSplitter,
+      metadataFileEntryWriter,
+      docListFileEntryWriter,
+      dataSetFileEntryWriter
     );
 
     final DocDataSetCreator docDataSetCreator = new DocDataSetCreator(
@@ -183,9 +195,9 @@ public final class Launcher {
 
   public void createConfluenceDataSet() {
     final ConfluenceConnector confluenceConnector = new ConfluenceConnector(
-        configuration.getConnectors().getConfluence());
+      configuration.getConnectors().getConfluence());
     try (DataSetWriter<ConfluencePage> confluenceDataSetWriter = new ConfluenceDataSetWriter(
-        configuration.getProcessors().getConfluence())) {
+      configuration.getProcessors().getConfluence())) {
       confluenceConnector.createDataSet(confluenceDataSetWriter);
     } catch (IOException e) {
       LOGGER.error("Could not create confluence data set file.", e);
@@ -250,9 +262,9 @@ public final class Launcher {
     StringBuilder fieldsToWrite = new StringBuilder().append("Field" + ',' + "Id" + '\n');
     for (IssueField field : fields) {
       fieldsToWrite.append(field.getName().replaceAll(",", " "))
-          .append(',')
-          .append(field.getId().replaceAll(",", " "))
-          .append('\n');
+              .append(',')
+              .append(field.getId().replaceAll(",", " "))
+              .append('\n');
       LOGGER.info("Field '{}' with id {}", field.getName(), field.getId());
     }
     Path path = Paths.get(filePath);
@@ -323,22 +335,22 @@ public final class Launcher {
     final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
     final File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
     final VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
-        configuration.getParagraphVectors()
-            .getLanguage());
+                                                                      configuration.getParagraphVectors()
+                                                                                   .getLanguage());
 
     final FileRepository fileRepository = new FileRepository();
     final DocOutputFilesParser docOutputFilesParser = new DocOutputFilesParser(
-        configuration.getProcessors().getDocumentation(),
-        fileRepository
+      configuration.getProcessors().getDocumentation(),
+      fileRepository
     );
 
     final TextDataExtractor textDataExtractor = new TextDataExtractor();
 
     return new DocumentationProcessor(
-        configuration.getProcessors().getDocumentation(),
-        docOutputFilesParser,
-        vectorModel,
-        textDataExtractor
+      configuration.getProcessors().getDocumentation(),
+      docOutputFilesParser,
+      vectorModel,
+      textDataExtractor
     );
   }
 
@@ -347,7 +359,7 @@ public final class Launcher {
     final List<ReportGenerator> reportGenerators = new ArrayList<>();
     if (reporterNames.contains(ReporterConstants.HTML.getContent())) {
       reportGenerators.add(new HtmlReportGenerator(configuration.getReporters().getHtml(),
-          configuration.getAdministration().getProcessors()));
+                                                   configuration.getAdministration().getProcessors()));
     }
     if (reporterNames.contains(ReporterConstants.TEXT.getContent())) {
       reportGenerators.add(new TextReportGenerator(configuration.getReporters().getText()));
@@ -389,6 +401,29 @@ public final class Launcher {
     } catch (ConnectorException e) {
       throw new IResolverException("Could not initialize client.", e);
     }
+  }
+
+  private String getLastSavedIssue(String dataSetFile) {
+    String lastIssue = null;
+    try (FileReader reader = new FileReader(dataSetFile);
+         BufferedReader input = new BufferedReader(reader)) {
+      String lastLine = input.readLine();
+      String currentLine;
+      while ((currentLine = input.readLine()) != null) {
+        lastLine = currentLine;
+      }
+     if (lastLine != null) {
+       Pattern pattern = Pattern.compile("^\\S*-\\d*");
+       Matcher matcher = pattern.matcher(lastLine);
+       if (matcher.find()) {
+         lastIssue = matcher.group(0);
+       }
+     }
+    } catch (IOException e) {
+      LOGGER.error("Overwrite mode was set, but there is no file to overwrite");
+      //throw new ConfigurationException("There is no file with issues to overwrite.", e);
+    }
+    return lastIssue;
   }
 
 }

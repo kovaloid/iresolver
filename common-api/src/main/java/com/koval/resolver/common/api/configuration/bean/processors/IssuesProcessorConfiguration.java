@@ -4,6 +4,7 @@ package com.koval.resolver.common.api.configuration.bean.processors;
 public class IssuesProcessorConfiguration {
 
   private String dataSetFile;
+  private boolean overwriteMode;
   private String vectorModelFile;
 
   public String getDataSetFile() {
@@ -18,6 +19,14 @@ public class IssuesProcessorConfiguration {
     return vectorModelFile;
   }
 
+  public boolean isOverwriteMode() {
+    return overwriteMode;
+  }
+
+  public void setOverwriteMode(final boolean overwriteMode) {
+    this.overwriteMode = overwriteMode;
+  }
+
   public void setVectorModelFile(final String vectorModelFile) {
     this.vectorModelFile = vectorModelFile;
   }
@@ -26,6 +35,7 @@ public class IssuesProcessorConfiguration {
   public String toString() {
     return "IssuesProcessorConfiguration{"
         + "dataSetFile='" + dataSetFile + '\''
+        + ", overwriteMode='" + overwriteMode + '\''
         + ", vectorModelFile='" + vectorModelFile + '\''
         + '}';
   }
