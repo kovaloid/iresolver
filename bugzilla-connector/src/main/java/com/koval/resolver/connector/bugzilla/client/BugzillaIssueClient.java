@@ -2,6 +2,7 @@ package com.koval.resolver.connector.bugzilla.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BugzillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(final String query) {
-    return 1_000_000;
+    return this.search(query, 0,0, Collections.emptyList()).size();
   }
 
   @Override
@@ -69,7 +70,14 @@ public class BugzillaIssueClient implements IssueClient {
       searchData.add("product", parsedQuery.getProduct());
     }
     if (parsedQuery.getStatus() != null) {
-      searchData.add("status", parsedQuery.getStatus());
+      final String status = parsedQuery.getStatus();
+      String bugzillaStatus = "";
+      if (status.equals("Close")) {
+        bugzillaStatus = "__closed__";
+      } else if (status.equals("Open")) {
+        bugzillaStatus = "__open__";
+      }
+      searchData.add("bug_status", bugzillaStatus);
     }
     if (parsedQuery.getResolution() != null) {
       searchData.add("resolution", parsedQuery.getResolution());
