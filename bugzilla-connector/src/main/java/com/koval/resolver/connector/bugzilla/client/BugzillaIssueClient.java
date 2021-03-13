@@ -70,13 +70,7 @@ public class BugzillaIssueClient implements IssueClient {
       searchData.add("product", parsedQuery.getProduct());
     }
     if (parsedQuery.getStatus() != null) {
-      final String status = parsedQuery.getStatus();
-      String bugzillaStatus = "";
-      if ("Close".equals(status)) {
-        bugzillaStatus = "__closed__";
-      } else if ("Open".equals(status)) {
-        bugzillaStatus = "__open__";
-      }
+      String bugzillaStatus = getBugzillaStatus(parsedQuery.getStatus());
       searchData.add("bug_status", bugzillaStatus);
     }
     if (parsedQuery.getResolution() != null) {
@@ -90,6 +84,16 @@ public class BugzillaIssueClient implements IssueClient {
     }
 
     return searchData;
+  }
+
+  private String getBugzillaStatus(final String status) {
+    String bugzillaStatus = "";
+    if ("Close".equals(status)) {
+      bugzillaStatus = "__closed__";
+    } else if ("Open".equals(status)) {
+      bugzillaStatus = "__open__";
+    }
+    return bugzillaStatus;
   }
 
   @Override
