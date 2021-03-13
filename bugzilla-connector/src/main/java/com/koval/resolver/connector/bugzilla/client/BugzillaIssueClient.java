@@ -35,7 +35,7 @@ public class BugzillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(final String query) {
-    return this.search(query, 0,0, Collections.emptyList()).size();
+    return this.search(query, 0, 0, Collections.emptyList()).size();
   }
 
   @Override
@@ -72,9 +72,9 @@ public class BugzillaIssueClient implements IssueClient {
     if (parsedQuery.getStatus() != null) {
       final String status = parsedQuery.getStatus();
       String bugzillaStatus = "";
-      if (status.equals("Close")) {
+      if ("Close".equals(status)) {
         bugzillaStatus = "__closed__";
-      } else if (status.equals("Open")) {
+      } else if ("Open".equals(status)) {
         bugzillaStatus = "__open__";
       }
       searchData.add("bug_status", bugzillaStatus);
