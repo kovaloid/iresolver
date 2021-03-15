@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,12 @@ public class BugzillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(final String query) {
-    return this.search(query, 0, 0, Collections.emptyList()).size();
+    final DefaultSearchData searchData = getSearchDataByQuery(query);
+    searchData.add("offset", "0");
+    searchData.add("limit", "0");
+    AtomicInteger totalIssues = new AtomicInteger();
+    session.searchBugs(searchData, totalIssues::set);
+    return totalIssues.get();
   }
 
   @Override
