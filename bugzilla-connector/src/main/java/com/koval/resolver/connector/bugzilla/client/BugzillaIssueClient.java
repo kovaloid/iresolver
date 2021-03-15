@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,12 @@ public class BugzillaIssueClient implements IssueClient {
 
   @Override
   public int getTotalIssues(final String query) {
-    return 1_000_000;
+    final DefaultSearchData searchData = getSearchDataByQuery(query);
+    searchData.add("offset", "0");
+    searchData.add("limit", "0");
+    AtomicInteger totalIssues = new AtomicInteger();
+    session.searchBugs(searchData, totalIssues::set);
+    return totalIssues.get();
   }
 
   @Override
@@ -69,7 +75,8 @@ public class BugzillaIssueClient implements IssueClient {
       searchData.add("product", parsedQuery.getProduct());
     }
     if (parsedQuery.getStatus() != null) {
-      searchData.add("status", parsedQuery.getStatus());
+      String bugzillaStatus = getBugzillaStatus(parsedQuery.getStatus());
+      searchData.add("bug_status", bugzillaStatus);
     }
     if (parsedQuery.getResolution() != null) {
       searchData.add("resolution", parsedQuery.getResolution());
@@ -82,6 +89,16 @@ public class BugzillaIssueClient implements IssueClient {
     }
 
     return searchData;
+  }
+
+  private String getBugzillaStatus(final String status) {
+    String bugzillaStatus = "";
+    if ("Close".equals(status)) {
+      bugzillaStatus = "__closed__";
+    } else if ("Open".equals(status)) {
+      bugzillaStatus = "__open__";
+    }
+    return bugzillaStatus;
   }
 
   @Override
