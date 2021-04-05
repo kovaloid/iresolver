@@ -38,10 +38,8 @@ public class DocDataSetCreator {
     this.docDataSetEntryWriter = docDataSetEntryWriter;
     this.docTypeDetector = docTypeDetector;
     this.fileConverters = fileConverters;
-    docsFolderPath = properties.getDocsFolder();
+    this.docsFolderPath = properties.getDocsFolder();
   }
-
-
 
 
   //TODO: Refactor this method so we can test it safely
@@ -123,5 +121,9 @@ public class DocDataSetCreator {
 
   private String replaceExtensionWithPdf(String wordFileName) {
     return wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(EXTENSION_PDF);
+  }
+
+  public String getDocsFolderPath() {
+    return docsFolderPath;
   }
 }
