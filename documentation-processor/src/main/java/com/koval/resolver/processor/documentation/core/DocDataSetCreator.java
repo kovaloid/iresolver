@@ -17,7 +17,6 @@ public class DocDataSetCreator {
   private static final Logger LOGGER = LoggerFactory.getLogger(DocDataSetCreator.class);
 
   private static final String EXTENSION_PDF = ".pdf";
-  private static final String DOC_FILES_LOCATION = "../docs";
 
   private final DocDataSetEntryWriter docDataSetEntryWriter;
 
@@ -39,10 +38,8 @@ public class DocDataSetCreator {
     this.docDataSetEntryWriter = docDataSetEntryWriter;
     this.docTypeDetector = docTypeDetector;
     this.fileConverters = fileConverters;
-    docsFolderPath = properties.getDocsFolder();
+    this.docsFolderPath = properties.getDocsFolder();
   }
-
-
 
 
   //TODO: Refactor this method so we can test it safely
@@ -117,12 +114,16 @@ public class DocDataSetCreator {
 
 
   private String createPdfFilePath(String wordFilePath) {
-    final File pdfOutputFile = new File(DOC_FILES_LOCATION, replaceExtensionWithPdf(wordFilePath));
+    final File pdfOutputFile = new File(docsFolderPath, replaceExtensionWithPdf(wordFilePath));
 
     return pdfOutputFile.getAbsolutePath();
   }
 
   private String replaceExtensionWithPdf(String wordFileName) {
     return wordFileName.substring(0, wordFileName.lastIndexOf('.')).concat(EXTENSION_PDF);
+  }
+
+  public String getDocsFolderPath() {
+    return docsFolderPath;
   }
 }

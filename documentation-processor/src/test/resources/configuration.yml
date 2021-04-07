@@ -1,0 +1,9 @@
+
+processors:
+
+  documentation:
+    dataSetFile: ../data/Documentation_DataSet.txt
+    vectorModelFile: ../data/Documentation_VectorModel.zip
+    docsMetadataFile: ../data/Documentation_Metadata.txt
+    docsListFile: ../data/Documentation_List.txt
+    docsFolder: ../docs/
