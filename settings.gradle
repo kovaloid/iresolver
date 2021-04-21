@@ -14,5 +14,3 @@ include 'html-reporter'
 include 'text-reporter'
 include 'test-similarity-processor'
 // include 'rule-editor'
-include 'gitlab-connector'
-
