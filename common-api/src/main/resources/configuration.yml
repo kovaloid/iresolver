@@ -46,6 +46,14 @@ connectors:
       - KAFKA
     limitPerRequest: 500
 
+  gitlab:
+    url: https://gitlab.com
+    credentialsFolder: ../data/
+    resolvedQuery: project = ase/ase, status = Closed
+    unresolvedQuery: project = ase/ase, status = Opened
+    batchSize: 10
+    batchDelay: 3000
+
 
 paragraphVectors:
   minWordFrequency: 1
