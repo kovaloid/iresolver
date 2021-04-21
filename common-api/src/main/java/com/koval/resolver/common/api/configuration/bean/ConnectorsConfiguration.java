@@ -11,7 +11,6 @@ public class ConnectorsConfiguration {
   private JiraConnectorConfiguration jira;
   private BugzillaConnectorConfiguration bugzilla;
   private ConfluenceConnectorConfiguration confluence;
-
   private GitlabConnectorConfiguration gitlab;
 
   public JiraConnectorConfiguration getJira() {
@@ -45,7 +44,6 @@ public class ConnectorsConfiguration {
   public void setGitlab(GitlabConnectorConfiguration gitlab) {
     this.gitlab = gitlab;
   }
-
 
   @Override
   public String toString() {

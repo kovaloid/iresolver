@@ -54,7 +54,6 @@ connectors:
     batchSize: 10
     batchDelay: 3000
 
-
 paragraphVectors:
   minWordFrequency: 1
   iterations: 5
