@@ -1,14 +1,15 @@
 package com.koval.resolver.connector.gitlab.client;
 
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
 import com.koval.resolver.common.api.configuration.bean.connectors.GitlabConnectorConfiguration;
 import com.koval.resolver.connector.gitlab.exception.GitlabConnectorException;
-import org.gitlab4j.api.GitLabApi;
-import org.gitlab4j.api.GitLabApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GitlabIssueClientFactory implements IssueClientFactory {
 

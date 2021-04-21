@@ -1,16 +1,16 @@
 package com.koval.resolver.connector.gitlab.core;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
 import com.koval.resolver.common.api.component.connector.ProgressMonitor;
 import com.koval.resolver.common.api.configuration.bean.connectors.GitlabConnectorConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collections;
-import java.util.List;
-
 
 public class GitlabIssueReceiver implements IssueReceiver {
 

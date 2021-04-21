@@ -11,9 +11,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.koval.resolver.connector.gitlab.GitlabConnector;
-import com.koval.resolver.connector.gitlab.client.GitlabIssueClient;
-import com.koval.resolver.connector.gitlab.client.GitlabIssueClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +40,8 @@ import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
 import com.koval.resolver.connector.confluence.ConfluenceConnector;
+import com.koval.resolver.connector.gitlab.GitlabConnector;
+import com.koval.resolver.connector.gitlab.client.GitlabIssueClientFactory;
 import com.koval.resolver.connector.jira.JiraConnector;
 import com.koval.resolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.resolver.exception.IResolverException;

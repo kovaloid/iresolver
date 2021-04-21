@@ -60,13 +60,13 @@ public class GitlabQuery {
 
   @Override
   public String toString() {
-    return "GitlabQuery{" +
-            "project='" + project + '\'' +
-            ", status='" + status + '\'' +
-            ", label='" + label + '\'' +
-            ", assigneeId='" + assigneeId + '\'' +
-            ", milestone='" + milestone + '\'' +
-            ", authorId='" + authorId + '\'' +
-            '}';
+    return "GitlabQuery{"
+          + "project='" + project + '\''
+          + ", status='" + status + '\''
+          + ", label='" + label + '\''
+          + ", assigneeId='" + assigneeId + '\''
+          + ", milestone='" + milestone + '\''
+          + ", authorId='" + authorId + '\''
+          + '}';
   }
 }

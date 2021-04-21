@@ -47,11 +47,11 @@ public class ConnectorsConfiguration {
 
   @Override
   public String toString() {
-    return "ConnectorsConfiguration{" +
-            "jira=" + jira +
-            ", bugzilla=" + bugzilla +
-            ", confluence=" + confluence +
-            ", gitlab=" + gitlab +
-            '}';
+    return "ConnectorsConfiguration{"
+         + "jira=" + jira
+         + ", bugzilla=" + bugzilla
+         + ", confluence=" + confluence
+         + ", gitlab=" + gitlab
+         + '}';
   }
 }

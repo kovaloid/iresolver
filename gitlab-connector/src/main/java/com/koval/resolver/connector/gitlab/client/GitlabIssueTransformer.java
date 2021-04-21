@@ -1,8 +1,8 @@
 package com.koval.resolver.connector.gitlab.client;
 
-import com.koval.resolver.common.api.bean.issue.*;
-import com.koval.resolver.common.api.component.connector.IssueTransformer;
-import com.koval.resolver.connector.gitlab.exception.GitlabClientException;
+import java.net.URI;
+import java.util.*;
+
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Assignee;
@@ -11,8 +11,9 @@ import org.gitlab4j.api.models.Discussion;
 import org.gitlab4j.api.models.Note;
 import org.joda.time.DateTime;
 
-import java.net.URI;
-import java.util.*;
+import com.koval.resolver.common.api.bean.issue.*;
+import com.koval.resolver.common.api.component.connector.IssueTransformer;
+import com.koval.resolver.connector.gitlab.exception.GitlabClientException;
 
 public class GitlabIssueTransformer implements IssueTransformer<org.gitlab4j.api.models.Issue> {
 
@@ -48,10 +49,10 @@ public class GitlabIssueTransformer implements IssueTransformer<org.gitlab4j.api
     } else {
       transformedIssue.setAssignee(transformAssignee(originalIssue.getAssignee()));
     }
-    if (originalIssue.getMilestone() != null) {
-      transformedIssue.setIssueType(new IssueType(originalIssue.getMilestone().getTitle(), false));
-    } else {
+    if (originalIssue.getMilestone() == null) {
       transformedIssue.setIssueType(null);
+    } else {
+      transformedIssue.setIssueType(new IssueType(originalIssue.getMilestone().getTitle(), false));
     }
     transformedIssue.setProject(transformProject(originalIssue.getProjectId()));
     transformedIssue.setCreationDate(new DateTime(originalIssue.getClosedAt()));
@@ -59,13 +60,13 @@ public class GitlabIssueTransformer implements IssueTransformer<org.gitlab4j.api
     transformedIssue.setDueDate(new DateTime(originalIssue.getDueDate()));
 
     transformedIssue.setLabels(originalIssue.getLabels());
-    transformedIssue.setComponents(transformComponents(originalIssue));
-    transformedIssue.setFixVersions(transformFixVersions(originalIssue));
-    transformedIssue.setAffectedVersions(transformAffectedVersions(originalIssue));
+    transformedIssue.setComponents(new ArrayList<>());
+    transformedIssue.setFixVersions(new ArrayList<>());
+    transformedIssue.setAffectedVersions(new ArrayList<>());
     transformedIssue.setComments(transformComments(originalIssue));
-    transformedIssue.setIssueLinks(transformIssueLinks(originalIssue));
-    transformedIssue.setAttachments(transformAttachments(originalIssue));
-    transformedIssue.setSubTasks(transformSubTasks(originalIssue));
+    transformedIssue.setIssueLinks(new ArrayList<>());
+    transformedIssue.setAttachments(new ArrayList<>());
+    transformedIssue.setSubTasks(new ArrayList<>());
     transformedIssue.setIssueFields(new ArrayList<>());
 
     return transformedIssue;
@@ -101,30 +102,15 @@ public class GitlabIssueTransformer implements IssueTransformer<org.gitlab4j.api
     return transformedProject;
   }
 
-  private List<Component> transformComponents(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<Component> transformedComponents = new ArrayList<>();
-    return transformedComponents;
-  }
-
-  private List<Version> transformFixVersions(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<Version> transformedFixVersions = new ArrayList<>();
-    return transformedFixVersions;
-  }
-
-  private List<Version> transformAffectedVersions(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<Version> transformedAffectedVersions = new ArrayList<>();
-    return transformedAffectedVersions;
-  }
-
   private List<Comment> transformComments(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<Comment> transformedComments = new ArrayList<>();
-    List<Discussion> discussions = null;
+    List<Discussion> discussions;
     try {
-      discussions = apiClient.getDiscussionsApi().getIssueDiscussions(originalIssue.getProjectId(), originalIssue.getIid());
+      discussions = apiClient.getDiscussionsApi()
+              .getIssueDiscussions(originalIssue.getProjectId(), originalIssue.getIid());
     } catch (GitLabApiException e) {
-      e.printStackTrace();
       throw new GitlabClientException("Could not get components by issueId = " + originalIssue.getIid(), e);
     }
+    final List<Comment> transformedComments = new ArrayList<>();
     if (discussions != null) {
       for (Discussion discussion : discussions) {
         for (Note originalComment : discussion.getNotes()) {
@@ -138,21 +124,6 @@ public class GitlabIssueTransformer implements IssueTransformer<org.gitlab4j.api
       }
     }
     return transformedComments;
-  }
-
-  private List<IssueLink> transformIssueLinks(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<IssueLink> transformedIssueLinks = new ArrayList<>();
-    return transformedIssueLinks;
-  }
-
-  private List<Attachment> transformAttachments(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<Attachment> transformedAttachments = new ArrayList<>();
-    return transformedAttachments;
-  }
-
-  private List<SubTask> transformSubTasks(final org.gitlab4j.api.models.Issue originalIssue) {
-    final List<SubTask> transformedSubTasks = new ArrayList<>();
-    return transformedSubTasks;
   }
 
   private User transformAuthor(final Author originalUser) {
