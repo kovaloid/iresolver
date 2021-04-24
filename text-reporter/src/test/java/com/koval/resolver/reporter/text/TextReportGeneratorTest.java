@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class TextReportGeneratorTest {
 
     private static final String FILE_NAME = "test-report-generator.txt";
@@ -42,7 +44,7 @@ public class TextReportGeneratorTest {
     public void testGenerateWithEmptyResults() throws IOException {
         List<IssueAnalysingResult> emptyResults = new ArrayList<>();
         textReportGenerator.generate(emptyResults);
-        Assertions.assertTrue(isFileContainString(""));
+        assertThatFileContainString("");
     }
 
     @Test
@@ -68,14 +70,14 @@ public class TextReportGeneratorTest {
         StringBuilder expectedContent = new StringBuilder();
         for (int i = 0; i < numResults; i++) {
             addToContentOriginalIssuesInformation(expectedContent, i);
+            expectedContent.append("\n\n");
         }
-        Assertions.assertTrue(isFileContainString(expectedContent.toString()));
+        assertThatFileContainString(expectedContent.toString());
     }
 
     private void addToContentOriginalIssuesInformation(StringBuilder expectedContent, int i) {
         expectedContent.append("key").append(i)
-                .append(" : ").append("summary").append(i)
-                .append("\n\n");
+                .append(" : ").append("summary").append(i);
     }
 
     @Test
@@ -93,7 +95,7 @@ public class TextReportGeneratorTest {
             addToContentProposalsInformation(expectedContent, i);
             expectedContent.append("\n\n");
         }
-        Assertions.assertTrue(isFileContainString(expectedContent.toString()));
+        assertThatFileContainString(expectedContent.toString());
     }
 
     private void addToContentProposalsInformation(StringBuilder expectedContent, int i) {
@@ -123,7 +125,7 @@ public class TextReportGeneratorTest {
             addToContentAttachmentInformation(expectedContent, i);
             expectedContent.append("\n\n");
         }
-        Assertions.assertTrue(isFileContainString(expectedContent.toString()));
+        assertThatFileContainString(expectedContent.toString());
     }
 
     private void addToContentAttachmentInformation(StringBuilder expectedContent, int i) {
@@ -188,7 +190,7 @@ public class TextReportGeneratorTest {
         }
     }
 
-    private boolean isFileContainString(String string) throws IOException {
+    private void assertThatFileContainString(String string) throws IOException {
         InputStream inputStream = new FileInputStream(FILE_NAME);
         StringBuilder fileContent = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -197,6 +199,6 @@ public class TextReportGeneratorTest {
                 fileContent.append(line).append("\n");
             }
         }
-        return fileContent.toString().equals(string);
+        assertEquals(fileContent.toString(), string);
     }
 }
