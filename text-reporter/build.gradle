@@ -1,3 +1,16 @@
+ext {
+    junitVersion = '5.4.2'
+}
+
 dependencies {
-  compile project(':common-api')
+    compile project(':common-api')
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testCompileOnly "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testCompile 'org.mockito:mockito-junit-jupiter:3.3.3'
+    testImplementation group: 'uk.org.lidalia', name: 'slf4j-test', version: '1.0.0'
+}
+
+test {
+    useJUnitPlatform()
 }
