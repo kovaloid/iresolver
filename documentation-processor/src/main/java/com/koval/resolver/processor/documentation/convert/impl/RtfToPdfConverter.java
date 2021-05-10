@@ -22,36 +22,37 @@ import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 
 
-
 public class RtfToPdfConverter implements FileConverter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(WordToPdfFileConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WordToPdfFileConverter.class);
 
-	@Override
-	public void convert(final String inputFilePath, final String outputFilePath) {
-		ByteArrayOutputStream bo = new ByteArrayOutputStream();
-		InputStream in = new BufferedInputStream (new FileInputStream(inputFilePath));
-		IConverter converter = LocalConverter.builder()
-				.workerPool(20, 25, 2, TimeUnit.SECONDS)
-				.processTimeout(5, TimeUnit.SECONDS)
-				.build();
+        InterruptedException {
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        InputStream in = new BufferedInputStream(new FileInputStream(inputFilePath));
+        IConverter converter = LocalConverter.builder()
+                .workerPool(20, 25, 2, TimeUnit.SECONDS)
+                .processTimeout(5, TimeUnit.SECONDS)
+                .build();
 
-		Future<Boolean> conversion = converter
-				.convert(in).as(DocumentType.RTF)
-				.to(bo).as(DocumentType.PDF)
-				.prioritizeWith(1000)
-				.schedule();
-		conversion.get();
-		try (OutputStream outputStream = new FileOutputStream(outputFilePath)) {
-			bo.writeTo(outputStream);
-		} catch (IOException | InterruptedException | ExecutionException e) {
-			LOGGER.error("Could not convert rtf file " + inputFilePath + " to pdf " + outputFilePath, e);
-		}
-		in.close();
-		bo.close();
-	}
+        Future<Boolean> conversion = converter
+                .convert(in).as(DocumentType.RTF)
+                .to(bo).as(DocumentType.PDF)
+                .prioritizeWith(1000)
+                .schedule();
+        conversion.get();
+        try (OutputStream outputStream = new FileOutputStream(outputFilePath)) {
+            bo.writeTo(outputStream);
+        } catch (IOException | InterruptedException | ExecutionException e) {
+            LOGGER.error("Could not convert rtf file " + inputFilePath + " to pdf " + outputFilePath, e);
+        }
+        in.close();
+        bo.close();
+    } throw IOException,
 
-	@Override
-	public MediaType getConvertibleType(MediaType docType) {
-		return MediaType.RTF;
-	}
+@Override
+    public void convert(final String inputFilePath, final String outputFilePath)
+
+    @Override
+    public MediaType getConvertibleType(MediaType docType) {
+        return MediaType.RTF;
+    }
 }
