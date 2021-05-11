@@ -1,0 +1,5 @@
+
+dependencies {
+    compile project(':common-api'),
+            'org.gitlab4j:gitlab4j-api:4.16.0'
+}

@@ -54,6 +54,7 @@ dependencies {
   compile project(':jira-connector'),
       project(':bugzilla-connector'),
       project(':confluence-connector'),
+      project(':gitlab-connector'),
       project(':issues-processor'),
       project(':granular-issues-processor'),
       project(':documentation-processor'),

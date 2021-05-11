@@ -40,6 +40,8 @@ import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
 import com.koval.resolver.connector.confluence.ConfluenceConnector;
+import com.koval.resolver.connector.gitlab.GitlabConnector;
+import com.koval.resolver.connector.gitlab.client.GitlabIssueClientFactory;
 import com.koval.resolver.connector.jira.JiraConnector;
 import com.koval.resolver.connector.jira.client.JiraIssueClientFactory;
 import com.koval.resolver.exception.IResolverException;
@@ -377,6 +379,8 @@ public final class Launcher {
         return new JiraConnector(issueClient, configuration.getConnectors().getJira());
       case BUGZILLA:
         return new BugzillaConnector(issueClient, configuration.getConnectors().getBugzilla());
+      case GITLAB:
+        return new GitlabConnector(issueClient, configuration.getConnectors().getGitlab());
       default:
         throw new IResolverException("Could not get connector with name: " + connectorType);
     }
@@ -391,6 +395,9 @@ public final class Launcher {
         break;
       case BUGZILLA:
         clientFactory = new BugzillaIssueClientFactory(configuration.getConnectors().getBugzilla());
+        break;
+      case GITLAB:
+        clientFactory = new GitlabIssueClientFactory(configuration.getConnectors().getGitlab());
         break;
       default:
         throw new IResolverException("Could not get issue client for connector with name: " + connectorType);
