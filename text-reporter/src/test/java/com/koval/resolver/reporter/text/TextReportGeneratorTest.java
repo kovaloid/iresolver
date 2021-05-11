@@ -1,5 +1,19 @@
 package com.koval.resolver.reporter.text;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.koval.resolver.common.api.bean.issue.Issue;
 import com.koval.resolver.common.api.bean.issue.User;
@@ -7,19 +21,9 @@ import com.koval.resolver.common.api.bean.result.AttachmentResult;
 import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.bean.result.Pair;
 import com.koval.resolver.common.api.configuration.bean.reporters.TextReporterConfiguration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class TextReportGeneratorTest {
 
@@ -27,17 +31,11 @@ public class TextReportGeneratorTest {
     private static final String DASH = " - ";
     private static TextReportGenerator textReportGenerator;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TextReporterConfiguration textReporterConfiguration = new TextReporterConfiguration();
         textReporterConfiguration.setOutputFile(FILE_NAME);
         textReportGenerator = new TextReportGenerator(textReporterConfiguration);
-    }
-
-
-    @AfterEach
-    public void tearDown() {
-        new File(FILE_NAME).delete();
     }
 
     @Test
@@ -53,9 +51,9 @@ public class TextReportGeneratorTest {
         TextReporterConfiguration errorConfig = new TextReporterConfiguration();
         errorConfig.setOutputFile("");
         new TextReportGenerator(errorConfig).generate(new ArrayList<>());
-        Assertions.assertEquals(1, logger.getLoggingEvents().asList().size());
+        Assert.assertEquals(1, logger.getLoggingEvents().asList().size());
         String loggerMessage = logger.getLoggingEvents().asList().get(0).getMessage();
-        Assertions.assertEquals("Could not save file: ", loggerMessage);
+        Assert.assertEquals("Could not save file: ", loggerMessage);
         System.out.println();
     }
 
@@ -199,6 +197,11 @@ public class TextReportGeneratorTest {
                 fileContent.append(line).append("\n");
             }
         }
-        assertEquals(fileContent.toString(), string);
+        Assert.assertEquals(fileContent.toString(), string);
+    }
+
+    @AfterClass
+    public static void  tearDown() {
+        new File(FILE_NAME).delete();
     }
 }
