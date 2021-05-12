@@ -1,3 +1,7 @@
+ext {
+  junitVersion = '5.4.2'
+}
+
 jar {
   exclude('html-report-template.vm')
 }
@@ -7,5 +11,8 @@ dependencies {
       'org.apache.velocity:velocity:1.7',
       'org.apache.velocity:velocity-tools:2.0'
   testCompile 'junit:junit:4.12',
-      'org.mockito:mockito-core:2.19.0'
+          'org.mockito:mockito-core:2.23.4'
+  testImplementation group: 'uk.org.lidalia',
+          name: 'slf4j-test',
+          version: '1.0.0'
 }
