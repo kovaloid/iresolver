@@ -1,3 +1,10 @@
-dependencies {
-  compile project(':common-api')
+ext {
+    junitVersion = '5.4.2'
 }
+
+dependencies {
+    compile project(':common-api')
+    testCompile 'junit:junit:4.12', 'org.mockito:mockito-core:2.23.4'
+    testImplementation group: 'uk.org.lidalia', name: 'slf4j-test', version: '1.0.0'
+}
+
