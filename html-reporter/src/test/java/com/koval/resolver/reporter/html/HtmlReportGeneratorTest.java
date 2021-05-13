@@ -64,4 +64,14 @@ public class HtmlReportGeneratorTest {
         Assert.assertEquals(3, logger.getLoggingEvents().asList().size());
         Assert.assertEquals("Could not generate report", logger.getLoggingEvents().asList().get(2).getMessage());
     }
+
+    @Test
+    public void testOpeningReport() throws IOException {
+        List<IssueAnalysingResult> results = new ArrayList<>();
+        HtmlReporterConfiguration htmlReporterConfiguration = new HtmlReporterConfiguration();
+        htmlReporterConfiguration.setOpenBrowser(true);
+        htmlReporterConfiguration.setHtmlTemplateFileName(templateFile);
+        htmlReporterConfiguration.setOutputFile(outputFile);
+        new HtmlReportGenerator(htmlReporterConfiguration, enabledProcessors).generate(results);
+    }
 }
