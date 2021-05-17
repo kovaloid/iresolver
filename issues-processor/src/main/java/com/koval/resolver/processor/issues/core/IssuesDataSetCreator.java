@@ -50,7 +50,6 @@ public class IssuesDataSetCreator {
       try (FileOutputStream fos = new FileOutputStream(dataSetFile, true);
            OutputStreamWriter output = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
            BufferedWriter writer = new BufferedWriter(output)) {
-        writer.newLine();
         writeIssues(output, writer);
       }
       LOGGER.info("Data set file was updated: {}", dataSetFile.getCanonicalPath());
