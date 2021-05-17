@@ -61,10 +61,10 @@ public class GranularIssuesDataSetsCreator {
             descriptionWriter.print(issue.getKey());
             descriptionWriter.print(SEPARATOR);
             String descriptionText = issue.getDescription();
-            if (descriptionText != null) {
-              descriptionWriter.println(TextUtil.simplify(descriptionText));
+            if (descriptionText == null) {
+                descriptionWriter.println("No description");
             } else {
-              descriptionWriter.println("No description");
+                descriptionWriter.println(TextUtil.simplify(descriptionText));
             }
           }
           if (commentsWriter != null && !issue.getComments().isEmpty()) {
