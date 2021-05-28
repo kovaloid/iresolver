@@ -2,6 +2,7 @@ package com.koval.resolver.processor.issues;
 
 import static java.util.Comparator.comparingDouble;
 import static java.util.Comparator.comparingInt;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +10,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.koval.resolver.common.api.bean.issue.Attachment;
 import com.koval.resolver.common.api.bean.issue.Comment;
@@ -24,30 +45,12 @@ import com.koval.resolver.common.api.configuration.bean.ProcessorsConfiguration;
 import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 import com.koval.resolver.common.api.doc2vec.VectorModel;
 import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(IssuesProcessor.class)
 public class IssuesProcessorTest {
 
-    private static final List<Issue> issues = IntStream.range(0, 30).mapToObj(i -> {
+    private static final List<Issue> ISSUES = IntStream.range(0, 30).mapToObj(i -> {
         Issue issue = new Issue();
         issue.setKey("key-" + i);
         issue.setLabels(Collections.emptyList());
@@ -56,7 +59,7 @@ public class IssuesProcessorTest {
         return issue;
     }).collect(Collectors.toList());
 
-    private static final Map<String, Issue> issueByLabel = issues.stream()
+    private static final Map<String, Issue> ISSUE_BY_LABEL = ISSUES.stream()
         .collect(Collectors.toMap(Issue::getKey, Function.identity()));
 
     @Test
@@ -82,7 +85,7 @@ public class IssuesProcessorTest {
 
     @Test
     public void testSimilarIssues() throws Exception {
-        List<Issue> similarIssues = new ArrayList<>(issues.subList(0, 10));
+        List<Issue> similarIssues = new ArrayList<>(ISSUES.subList(0, 10));
         List<String> nearestLabels = similarIssues.stream().map(Issue::getKey)
             .collect(Collectors.toList());
 
@@ -93,7 +96,7 @@ public class IssuesProcessorTest {
             issuesSimilarity.put(label, r.nextDouble());
         }
 
-        similarIssues.sort(comparingDouble((issue) -> - issuesSimilarity.get(issue.getKey())));
+        similarIssues.sort(comparingDouble((issue) -> -issuesSimilarity.get(issue.getKey())));
 
         VectorModel vectorModelMock = vectorModelMock(nearestLabels);
         mockSimilarityToLabelWithMap(vectorModelMock, issuesSimilarity);
@@ -117,7 +120,7 @@ public class IssuesProcessorTest {
 
     @Test
     public void testProbableLabels() throws Exception {
-        List<Issue> similarIssues = new ArrayList<>(issues.subList(0, 3));
+        List<Issue> similarIssues = new ArrayList<>(ISSUES.subList(0, 3));
         similarIssues.get(0).setLabels(Arrays.asList("label-1", "label-2"));
         similarIssues.get(1).setLabels(Arrays.asList("label-1", "label-2", "label-3"));
         similarIssues.get(2).setLabels(Collections.singletonList("label-1"));
@@ -145,7 +148,7 @@ public class IssuesProcessorTest {
 
     @Test
     public void testQualifiedUsers() throws Exception {
-        List<Issue> similarIssues = new ArrayList<>(issues.subList(0, 3));
+        List<Issue> similarIssues = new ArrayList<>(ISSUES.subList(0, 3));
         User user1 = new User();
         user1.setName("A");
         User user2 = new User();
@@ -198,7 +201,7 @@ public class IssuesProcessorTest {
         Attachment xmlAttachment = new Attachment();
         xmlAttachment.setFileName("some.xml");
 
-        List<Issue> similarIssues = new ArrayList<>(issues.subList(0, 3));
+        List<Issue> similarIssues = new ArrayList<>(ISSUES.subList(0, 3));
         similarIssues.get(0).setAttachments(Arrays.asList(csvAttachment, txtAttachment));
         similarIssues.get(1).setAttachments(Arrays.asList(csvAttachment, txtAttachment));
         similarIssues.get(2).setAttachments(Arrays.asList(csvAttachment, xmlAttachment));
@@ -285,7 +288,8 @@ public class IssuesProcessorTest {
         return issue;
     }
 
-    private void mockSimilarityToLabelWithMap(VectorModel vectorModelMock, Map<String, Double> similarities) {
+    private void mockSimilarityToLabelWithMap(VectorModel vectorModelMock,
+        Map<String, Double> similarities) {
         Mockito.when(vectorModelMock.similarityToLabel(anyString(), anyString()))
             .thenAnswer(invocation -> {
                 String label = invocation.getArgument(1);
@@ -297,7 +301,7 @@ public class IssuesProcessorTest {
         IssueClient issueClientMock = Mockito.mock(IssueClient.class);
         Mockito.when(issueClientMock.getIssueByKey(anyString())).thenAnswer(invocation -> {
                 String key = invocation.getArgument(0);
-                return Optional.ofNullable(issueByLabel.get(key)).orElseThrow(() ->
+                return Optional.ofNullable(ISSUE_BY_LABEL.get(key)).orElseThrow(() ->
                     new InvalidUseOfMatchersException(String.format("Argument %s does not match", key)
                     ));
             }
@@ -318,7 +322,9 @@ public class IssuesProcessorTest {
         return vectorModelMock;
     }
 
-    /** vectorModel with getNearestLabels method always returning nearestLabels param */
+    /**
+     * vectorModel with getNearestLabels method always returning nearestLabels param.
+     */
     private VectorModel vectorModelMock(List<String> nearestLabels) throws Exception {
         VectorModel vectorModelMock = vectorModelMock();
         Mockito.when(vectorModelMock.getNearestLabels(any(), anyInt())).thenReturn(nearestLabels);
@@ -326,8 +332,10 @@ public class IssuesProcessorTest {
         return vectorModelMock;
     }
 
-    /** vectorModel with getNearestLabels method always returning nearestLabels param
-     *  and similarityToLabel method returning similarity param */
+    /**
+     * vectorModel with getNearestLabels method always returning nearestLabels param and
+     * similarityToLabel method returning similarity param.
+     */
     private VectorModel vectorModelMock(List<String> nearestLabels, double similarity)
         throws Exception {
         VectorModel vectorModelMock = vectorModelMock(nearestLabels);

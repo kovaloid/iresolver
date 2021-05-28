@@ -2,9 +2,6 @@ package com.koval.resolver.processor.issues.core;
 
 import static org.junit.Assert.assertTrue;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,9 +12,14 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.component.connector.IssueReceiver;
+import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
 
 public class IssuesDataSetCreatorTest {
 
@@ -98,7 +100,7 @@ public class IssuesDataSetCreatorTest {
         issues.add(testIssues.subList(3, 5));
 
         return new IssueReceiver() {
-            final Iterator<List<Issue>> iterator = issues.iterator();
+            private final Iterator<List<Issue>> iterator = issues.iterator();
 
             @Override
             public boolean hasNextIssues() {
