@@ -121,9 +121,13 @@ public class IssuesProcessorTest {
     @Test
     public void testProbableLabels() throws Exception {
         List<Issue> similarIssues = new ArrayList<>(ISSUES.subList(0, 3));
-        similarIssues.get(0).setLabels(Arrays.asList("label-1", "label-2"));
-        similarIssues.get(1).setLabels(Arrays.asList("label-1", "label-2", "label-3"));
-        similarIssues.get(2).setLabels(Collections.singletonList("label-1"));
+        String label1 = "label-1";
+        String label2 = "label-2";
+        String label3 = "label-3";
+
+        similarIssues.get(0).setLabels(Arrays.asList(label1, label2));
+        similarIssues.get(1).setLabels(Arrays.asList(label1, label2, label3));
+        similarIssues.get(2).setLabels(Collections.singletonList(label1));
 
         List<String> nearestLabels = similarIssues.stream().map(Issue::getKey)
             .collect(Collectors.toList());
@@ -141,9 +145,9 @@ public class IssuesProcessorTest {
         List<Pair<String, Integer>> probableLabels = result.getProbableLabels();
 
         assertEquals(3, probableLabels.size());
-        assertTrue(probableLabels.contains(new Pair<>("label-1", 3)));
-        assertTrue(probableLabels.contains(new Pair<>("label-2", 2)));
-        assertTrue(probableLabels.contains(new Pair<>("label-3", 1)));
+        assertTrue(probableLabels.contains(new Pair<>(label1, 3)));
+        assertTrue(probableLabels.contains(new Pair<>(label2, 2)));
+        assertTrue(probableLabels.contains(new Pair<>(label3, 1)));
     }
 
     @Test
