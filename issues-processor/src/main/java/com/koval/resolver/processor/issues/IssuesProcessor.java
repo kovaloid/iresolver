@@ -1,5 +1,8 @@
 package com.koval.resolver.processor.issues;
 
+import static java.util.Collections.reverseOrder;
+import static java.util.Comparator.comparingInt;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -71,12 +74,7 @@ public class IssuesProcessor implements IssueProcessor {
   }
 
   private <E> void addEntityOrUpdateMetric(final Map<E, Integer> map, final E entity) {
-    if (map.containsKey(entity)) {
-      final Integer oldMetricNumber = map.get(entity);
-      map.replace(entity, oldMetricNumber + 1);
-    } else {
-      map.put(entity, 1);
-    }
+    map.merge(entity, 1, Integer::sum);
   }
 
   private <E> List<Pair<E, Integer>> convertMapToPairList(final Map<E, Integer> map) {
@@ -102,17 +100,9 @@ public class IssuesProcessor implements IssueProcessor {
     return attachmentResults;
   }
 
-   public List<Pair<User, Integer>> sortUsersByRank(List<Pair<User, Integer>> listQualifiedUsers) {
-        listQualifiedUsers.sort((u1, u2) -> {
-            if (u1.getMetric().equals(u2.getMetric())) {
-                return 0;
-            } else if (u1.getMetric() < u2.getMetric()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
-        return listQualifiedUsers;
-    }
+  public List<Pair<User, Integer>> sortUsersByRank(List<Pair<User, Integer>> listQualifiedUsers) {
+    listQualifiedUsers.sort(reverseOrder(comparingInt(Pair::getMetric)));
 
+    return listQualifiedUsers;
+  }
 }
