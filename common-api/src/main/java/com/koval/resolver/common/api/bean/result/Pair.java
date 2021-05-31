@@ -32,8 +32,8 @@ public class Pair<E, M> {
     }
     if (o instanceof Pair) {
       final Pair<?, ?> oP = (Pair<?, ?>)o;
-      return (Objects.equals(entity, oP.entity))
-          && (Objects.equals(metric, oP.metric));
+      return Objects.equals(entity, oP.entity)
+          && Objects.equals(metric, oP.metric);
     } else {
       return false;
     }

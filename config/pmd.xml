@@ -17,6 +17,7 @@
     <rule ref="rulesets/java/braces.xml" />
     <rule ref="rulesets/java/clone.xml" />
 
+
     <rule ref="rulesets/java/codesize.xml">
         <exclude name="ExcessiveMethodLength" />
         <exclude name="ExcessivePublicCount" />
@@ -38,6 +39,8 @@
         <exclude name="UseConcurrentHashMap" />
         <exclude name="AvoidPrefixingMethodParameters" />
         <exclude name="UseObjectForClearerAPI" />
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="MissingSerialVersionUID"/>
     </rule>
 
     <rule ref="rulesets/java/coupling.xml">
@@ -65,6 +68,9 @@
         <!-- Does not allow inner classes to be at the start of a class -->
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
         <exclude name="SingletonClassReturningNewInstance" />
+        <exclude name="DataClass" />
+        <exclude name="OptimizableToArrayCall"/>
+        <exclude name="CloseResource"/>
     </rule>
 
     <rule ref="rulesets/java/empty.xml">
@@ -94,15 +100,6 @@
         <exclude name="JUnitTestContainsTooManyAsserts" />
     </rule>
 
-    <rule ref="rulesets/java/logging-jakarta-commons.xml">
-        <exclude name="GuardDebugLogging" />
-        <exclude name="GuardLogStatement" />
-    </rule>
-
-    <rule ref="rulesets/java/logging-java.xml">
-        <exclude name="GuardLogStatementJavaUtil" />
-    </rule>
-
     <rule ref="rulesets/java/migrating.xml">
         <exclude name="JUnit4TestShouldUseTestAnnotation" />
     </rule>
@@ -112,6 +109,7 @@
         <exclude name="LongVariable" />
         <exclude name="AbstractNaming" />
         <exclude name="AvoidFieldNameMatchingMethodName" />
+        <exclude name="ClassNamingConventions"/>
 
         <!-- Short names can still be descriptive -->
         <exclude name="ShortClassName" />
@@ -136,6 +134,7 @@
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="ConsecutiveAppendsShouldReuse"/>
     </rule>
+
 
     <rule ref="rulesets/java/strings.xml/AvoidDuplicateLiterals">
         <properties>

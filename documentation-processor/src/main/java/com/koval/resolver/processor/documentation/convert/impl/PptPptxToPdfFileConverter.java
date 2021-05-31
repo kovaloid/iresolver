@@ -25,6 +25,7 @@ import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.core.FileRepository;
 
 
+@SuppressWarnings("PMD.ForLoopCanBeForeach")
 public class PptPptxToPdfFileConverter implements FileConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WordToPdfFileConverter.class);

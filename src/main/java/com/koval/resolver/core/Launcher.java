@@ -309,7 +309,10 @@ public final class Launcher {
   private List<IssueProcessor> getIssueProcessors(final IssueClient issueClient) throws IOException {
     final List<String> processorNames = configuration.getAdministration().getProcessors();
     final List<IssueProcessor> issueProcessors = new ArrayList<>();
-    if (processorNames != null) {
+    if (processorNames == null) {
+      LOGGER.error("Could not find any appropriate issue processor in the list: {}", processorNames);
+      throw new ConfigurationException("No processor is enabled.", null);
+    } else {
       if (processorNames.contains(ProcessorConstants.ISSUES.getContent())) {
         issueProcessors.add(new IssuesProcessor(issueClient, configuration));
       }
@@ -325,10 +328,6 @@ public final class Launcher {
       if (processorNames.contains(ProcessorConstants.RULE_ENGINE.getContent())) {
         issueProcessors.add(new RuleEngineProcessor(configuration));
       }
-    }
-    if (processorNames == null || issueProcessors.isEmpty()) {
-      LOGGER.error("Could not find any appropriate issue processor in the list: {}", processorNames);
-      throw new ConfigurationException("No processor is enabled.", null);
     }
     return issueProcessors;
   }
