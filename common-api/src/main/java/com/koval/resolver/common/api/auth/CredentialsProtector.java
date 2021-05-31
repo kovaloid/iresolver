@@ -37,29 +37,25 @@ public class CredentialsProtector {
   }
 
   String encrypt(final String decryptedText) throws CredentialException {
-    String encryptedString;
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
       final byte[] plainText = decryptedText.getBytes(CHARSET);
       final byte[] encryptedText = cipher.doFinal(plainText);
-      encryptedString = new String(Base64.encodeBase64(encryptedText), CHARSET);
+      return new String(Base64.encodeBase64(encryptedText), CHARSET);
     } catch (GeneralSecurityException e) {
       throw new CredentialException("Could not encrypt data: " + decryptedText, e);
     }
-    return encryptedString;
   }
 
 
   String decrypt(final String encryptedString) throws CredentialException {
-    String decryptedText;
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);
       final byte[] encryptedText = Base64.decodeBase64(encryptedString);
       final byte[] plainText = cipher.doFinal(encryptedText);
-      decryptedText = new String(plainText, CHARSET);
+      return new String(plainText, CHARSET);
     } catch (GeneralSecurityException e) {
       throw new CredentialException("Could not decrypt data: " + encryptedString, e);
     }
-    return decryptedText;
   }
 }

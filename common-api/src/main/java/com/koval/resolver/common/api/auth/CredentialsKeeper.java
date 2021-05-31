@@ -44,6 +44,10 @@ public class CredentialsKeeper {
         throw new CredentialException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
       }
     }
+    writeCredentials(credentials);
+  }
+
+  private void writeCredentials(final Credentials credentials) {
     try (PrintWriter printWriter = new PrintWriter(credentialsFile, charset.name());
          BufferedWriter fileWriter = new BufferedWriter(printWriter)) {
       fileWriter.write(protector.encrypt(credentials.getUsername()));

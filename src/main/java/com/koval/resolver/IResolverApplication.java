@@ -43,63 +43,10 @@ public final class IResolverApplication {
   }
 
   public static void main(String[] args) {
-    final Configuration configuration = ConfigurationManager.getConfiguration();
-    final Launcher launcher = new Launcher(configuration);
-
     if (args.length == 0) {
-      LOGGER.info("Start processing issues.");
-      launcher.run();
+      runWithNoArguments(createLauncher());
     } else if (args.length == 1) {
-      switch (args[0]) {
-        case CREATE_ISSUES_DATA_SET:
-          LOGGER.info("Start creating issues data set.");
-          launcher.createIssuesDataSet();
-          break;
-        case CREATE_ISSUES_VECTOR_MODEL:
-          LOGGER.info("Start creating issues vector model.");
-          launcher.createIssuesVectorModel();
-          break;
-        case CREATE_GRANULAR_ISSUES_DATA_SETS:
-          LOGGER.info("Start creating granular issues data sets.");
-          launcher.createGranularIssuesDataSets();
-          break;
-        case CREATE_GRANULAR_ISSUES_VECTOR_MODELS:
-          LOGGER.info("Start creating granular issues vector models.");
-          launcher.createGranularIssuesVectorModels();
-          break;
-        case CREATE_DOCUMENTATION_DATA_SET:
-          LOGGER.info("Start creating documentation data set.");
-          launcher.createDocumentationDataSet();
-          break;
-        case CREATE_DOCUMENTATION_VECTOR_MODEL:
-          LOGGER.info("Start creating documentation vector model.");
-          launcher.createDocumentationVectorModel();
-          break;
-        case CREATE_CONFLUENCE_DATA_SET:
-          LOGGER.info("Start creating Confluence data set.");
-          launcher.createConfluenceDataSet();
-          break;
-        case CREATE_CONFLUENCE_VECTOR_MODEL:
-          LOGGER.info("Start creating Confluence vector model.");
-          launcher.createConfluenceVectorModel();
-          break;
-        case PRINT_ISSUE_FIELDS:
-          LOGGER.info("Start printing issue fields.");
-          launcher.printIssueFields();
-          break;
-        case RUN_UI:
-          LOGGER.info("Start configuration wizard.");
-          launcher.runUI();
-          break;
-        case TEST_SIMILARITY_PROCESSOR:
-          LOGGER.info("Start testing similarity processor.");
-          launcher.testSimilarityProcessor();
-          break;
-        default:
-          LOGGER.warn("Wrong arguments.");
-          LOGGER.warn(HELP_TIP);
-          break;
-      }
+      runWithAnArgument(createLauncher(), args[0]);
     } else {
       LOGGER.warn("Too much arguments.");
       LOGGER.warn(HELP_TIP);
@@ -109,6 +56,69 @@ public final class IResolverApplication {
     try {
       System.in.read();
     } catch (IOException ignored) {
+    }
+  }
+
+  private static Launcher createLauncher() {
+    final Configuration configuration = ConfigurationManager.getConfiguration();
+    return new Launcher(configuration);
+  }
+
+  private static void runWithNoArguments(final Launcher launcher) {
+    LOGGER.info("Start processing issues.");
+    launcher.run();
+  }
+
+  private static void runWithAnArgument(final Launcher launcher, final String task) {
+    switch (task) {
+      case CREATE_ISSUES_DATA_SET:
+        LOGGER.info("Start creating issues data set.");
+        launcher.createIssuesDataSet();
+        break;
+      case CREATE_ISSUES_VECTOR_MODEL:
+        LOGGER.info("Start creating issues vector model.");
+        launcher.createIssuesVectorModel();
+        break;
+      case CREATE_GRANULAR_ISSUES_DATA_SETS:
+        LOGGER.info("Start creating granular issues data sets.");
+        launcher.createGranularIssuesDataSets();
+        break;
+      case CREATE_GRANULAR_ISSUES_VECTOR_MODELS:
+        LOGGER.info("Start creating granular issues vector models.");
+        launcher.createGranularIssuesVectorModels();
+        break;
+      case CREATE_DOCUMENTATION_DATA_SET:
+        LOGGER.info("Start creating documentation data set.");
+        launcher.createDocumentationDataSet();
+        break;
+      case CREATE_DOCUMENTATION_VECTOR_MODEL:
+        LOGGER.info("Start creating documentation vector model.");
+        launcher.createDocumentationVectorModel();
+        break;
+      case CREATE_CONFLUENCE_DATA_SET:
+        LOGGER.info("Start creating Confluence data set.");
+        launcher.createConfluenceDataSet();
+        break;
+      case CREATE_CONFLUENCE_VECTOR_MODEL:
+        LOGGER.info("Start creating Confluence vector model.");
+        launcher.createConfluenceVectorModel();
+        break;
+      case PRINT_ISSUE_FIELDS:
+        LOGGER.info("Start printing issue fields.");
+        launcher.printIssueFields();
+        break;
+      case RUN_UI:
+        LOGGER.info("Start configuration wizard.");
+        launcher.runUI();
+        break;
+      case TEST_SIMILARITY_PROCESSOR:
+        LOGGER.info("Start testing similarity processor.");
+        launcher.testSimilarityProcessor();
+        break;
+      default:
+        LOGGER.warn("Wrong arguments.");
+        LOGGER.warn(HELP_TIP);
+        break;
     }
   }
 }

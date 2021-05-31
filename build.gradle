@@ -208,7 +208,8 @@ allprojects {
   apply plugin: 'pmd'
   pmd {
     ruleSetFiles = rootProject.files('config/pmd.xml')
-    toolVersion = '5.8.1'
+    ruleSets = []
+    toolVersion = '6.21.0'
     ignoreFailures = false
   }
 
