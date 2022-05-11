@@ -12,7 +12,6 @@ public class GranularIssuesProcessorConfiguration {
   private String summaryVectorModelFile;
   private String descriptionVectorModelFile;
   private String commentsVectorModelFile;
-  private boolean overwriteMode;
 
   public List<String> getAffectedIssueParts() {
     return affectedIssueParts;
@@ -70,14 +69,6 @@ public class GranularIssuesProcessorConfiguration {
     this.commentsVectorModelFile = commentsVectorModelFile;
   }
 
-  public boolean isOverwriteMode() {
-    return overwriteMode;
-  }
-
-  public void setOverwriteMode(final boolean overwriteMode) {
-    this.overwriteMode = overwriteMode;
-  }
-
   @Override
   public String toString() {
     return "GranularIssuesProcessorConfiguration{"
@@ -88,7 +79,6 @@ public class GranularIssuesProcessorConfiguration {
         + ", summaryVectorModelFile='" + summaryVectorModelFile + '\''
         + ", descriptionVectorModelFile='" + descriptionVectorModelFile + '\''
         + ", commentsVectorModelFile='" + commentsVectorModelFile + '\''
-        + ", overwriteMode='" + overwriteMode + '\''
         + '}';
   }
 }

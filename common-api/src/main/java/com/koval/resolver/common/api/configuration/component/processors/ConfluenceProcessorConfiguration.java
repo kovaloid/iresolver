@@ -6,7 +6,6 @@ public class ConfluenceProcessorConfiguration {
   private String dataSetFile;
   private String vectorModelFile;
   private String confluenceMetadataFile;
-  private boolean overwriteMode;
 
   public String getDataSetFile() {
     return dataSetFile;
@@ -32,21 +31,12 @@ public class ConfluenceProcessorConfiguration {
     this.confluenceMetadataFile = confluenceMetadataFile;
   }
 
-  public boolean isOverwriteMode() {
-    return overwriteMode;
-  }
-
-  public void setOverwriteMode(final boolean overwriteMode) {
-    this.overwriteMode = overwriteMode;
-  }
-
   @Override
   public String toString() {
     return "ConfluenceProcessorConfiguration{"
         + "dataSetFile='" + dataSetFile + '\''
         + ", vectorModelFile='" + vectorModelFile + '\''
         + ", confluenceMetadataFile='" + confluenceMetadataFile + '\''
-        + ", overwriteMode='" + overwriteMode + '\''
         + '}';
   }
 }

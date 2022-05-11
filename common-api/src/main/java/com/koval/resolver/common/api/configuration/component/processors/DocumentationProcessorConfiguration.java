@@ -8,7 +8,6 @@ public class DocumentationProcessorConfiguration {
   private String docsMetadataFile;
   private String docsListFile;
   private String docsFolder;
-  private boolean overwriteMode;
 
   public String getDataSetFile() {
     return dataSetFile;
@@ -50,14 +49,6 @@ public class DocumentationProcessorConfiguration {
     this.docsFolder = docsFolder;
   }
 
-  public boolean isOverwriteMode() {
-    return overwriteMode;
-  }
-
-  public void setOverwriteMode(final boolean overwriteMode) {
-    this.overwriteMode = overwriteMode;
-  }
-
   @Override
   public String toString() {
     return "DocumentationProcessorConfiguration{"
@@ -66,7 +57,6 @@ public class DocumentationProcessorConfiguration {
         + ", docsMetadataFile='" + docsMetadataFile + '\''
         + ", docsListFile='" + docsListFile + '\''
         + ", docsFolder='" + docsFolder + '\''
-        + ", overwriteMode='" + overwriteMode + '\''
         + '}';
   }
 }
