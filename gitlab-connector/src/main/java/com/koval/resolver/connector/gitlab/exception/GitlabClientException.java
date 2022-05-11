@@ -2,6 +2,7 @@ package com.koval.resolver.connector.gitlab.exception;
 
 import com.koval.resolver.common.api.exception.ClientException;
 
+
 public class GitlabClientException extends ClientException {
 
   public GitlabClientException(final String message) {

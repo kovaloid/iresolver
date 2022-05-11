@@ -8,12 +8,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.koval.resolver.common.api.configuration.component.reporters.HtmlReporterConfiguration;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.configuration.component.reporters.HtmlReporterConfiguration;
 
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+
 
 public class HtmlReportGeneratorTest {
     private static HtmlReportGenerator htmlReportGenerator;

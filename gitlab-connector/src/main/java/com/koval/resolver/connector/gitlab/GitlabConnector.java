@@ -6,6 +6,7 @@ import com.koval.resolver.common.api.component.connector.IssueReceiver;
 import com.koval.resolver.common.api.configuration.component.connectors.GitlabConnectorConfiguration;
 import com.koval.resolver.connector.gitlab.core.GitlabIssueReceiver;
 
+
 public class GitlabConnector implements Connector {
 
   private final IssueClient issueClient;

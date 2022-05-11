@@ -23,7 +23,7 @@ import com.koval.resolver.processor.documentation.convert.impl.XwpfPdfConverter;
 
 ////TODO: Refactor DocDataSetCreator to get rid of real files in this test
 @ExtendWith(MockitoExtension.class)
-public class DocDataSetCreatorTest {
+class DocDataSetCreatorTest {
 
 //  private static final String FILE_NAME = "tempfile.txt";
 //  private static final String DATA_SET_FILE_NAME = "dataset.txt";

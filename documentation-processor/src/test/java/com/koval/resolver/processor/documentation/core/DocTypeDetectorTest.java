@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.koval.resolver.processor.documentation.bean.MediaType;
 
+
 class DocTypeDetectorTest {
 
   private static final String FILE_NAME = "filename";

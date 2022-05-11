@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 public class MetadataFileEntryWriter {
 
   public void write(

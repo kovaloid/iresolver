@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.confluence.api.model.content.Content;
 import com.atlassian.confluence.api.model.content.Space;
 import com.atlassian.confluence.api.model.pagination.PageResponse;
-import com.koval.resolver.common.api.model.confluence.ConfluencePage;
 import com.koval.resolver.common.api.component.processor.DataSetWriter;
 import com.koval.resolver.common.api.configuration.component.connectors.ConfluenceConnectorConfiguration;
+import com.koval.resolver.common.api.model.confluence.ConfluencePage;
 import com.koval.resolver.connector.confluence.client.ConfluenceClient;
 import com.koval.resolver.connector.confluence.client.ConfluenceTransformer;
 

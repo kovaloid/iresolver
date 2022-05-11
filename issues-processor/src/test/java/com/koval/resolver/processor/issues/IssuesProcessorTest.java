@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
@@ -31,6 +30,11 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.koval.resolver.common.api.component.connector.IssueClient;
+import com.koval.resolver.common.api.configuration.Configuration;
+import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
+import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
 import com.koval.resolver.common.api.model.issue.Attachment;
 import com.koval.resolver.common.api.model.issue.Comment;
 import com.koval.resolver.common.api.model.issue.Issue;
@@ -38,13 +42,9 @@ import com.koval.resolver.common.api.model.issue.User;
 import com.koval.resolver.common.api.model.result.AttachmentResult;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.model.result.Pair;
-import com.koval.resolver.common.api.component.connector.IssueClient;
-import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
-import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
-import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
 import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(IssuesProcessor.class)

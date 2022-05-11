@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.processor.rules.core.impl.DroolsRuleEngine;
 
+
 public class DroolsRuleEngineTest {
     private final InputStream inputStream = new ByteArrayInputStream("test-stream".getBytes(StandardCharsets.UTF_8));
     private final InputStream wrongInputStream = new ByteArrayInputStream("wrong-test-stream".getBytes(StandardCharsets.UTF_8));

@@ -17,8 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
+
 @ExtendWith(MockitoExtension.class)
-public class DocFileDataParserTest {
+class DocFileDataParserTest {
 
   private static final String FILE_NAME = "FILE_NAME";
   private static final String DELIMITER = " ";

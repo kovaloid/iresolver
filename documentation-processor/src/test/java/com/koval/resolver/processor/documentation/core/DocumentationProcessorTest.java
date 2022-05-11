@@ -13,18 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.model.result.DocumentationResult;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.vectorization.TextDataExtractor;
 import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 @ExtendWith(MockitoExtension.class)
-public class DocumentationProcessorTest {
+class DocumentationProcessorTest {
 
   private static final String DOCS_PATH = "docsPath";
 

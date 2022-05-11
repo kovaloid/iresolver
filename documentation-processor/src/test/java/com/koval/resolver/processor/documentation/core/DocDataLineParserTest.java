@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
+
 //TODO: make tests of handling invalid strings pass
-public class DocDataLineParserTest {
+class DocDataLineParserTest {
 
   private static final String DELIMITER = " ";
 

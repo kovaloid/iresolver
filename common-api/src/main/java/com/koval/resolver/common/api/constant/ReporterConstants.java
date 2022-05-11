@@ -1,5 +1,6 @@
 package com.koval.resolver.common.api.constant;
 
+
 public enum ReporterConstants {
   HTML("html"),
   TEXT("text");

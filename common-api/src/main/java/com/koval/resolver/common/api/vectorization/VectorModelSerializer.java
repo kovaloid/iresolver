@@ -14,7 +14,7 @@ import com.koval.resolver.common.api.configuration.component.VectorizerConfigura
 
 public class VectorModelSerializer {
 
-  private VectorizerConfiguration properties;
+  private final VectorizerConfiguration properties;
 
   public VectorModelSerializer(final VectorizerConfiguration properties) {
     this.properties = properties;

@@ -15,8 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
 @ExtendWith(MockitoExtension.class)
-public class FileParserTest {
+class FileParserTest {
 
   private static final String FILE_NAME = "FILE_NAME";
 

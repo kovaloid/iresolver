@@ -1,5 +1,6 @@
 package com.koval.resolver.common.api.model.result;
 
+
 public class AttachmentResult {
 
   private String extension;

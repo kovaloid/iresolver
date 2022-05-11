@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 //TODO: make tests of handling invalid strings pass
-public class MetadataLineParserTest {
+class MetadataLineParserTest {
 
   private static final String DELIMITER = " ";
 

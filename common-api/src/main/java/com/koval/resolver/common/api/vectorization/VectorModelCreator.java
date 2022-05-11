@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.deeplearning4j.models.embeddings.learning.impl.sequence.DBOW;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.models.word2vec.wordstore.inmemory.AbstractCache;

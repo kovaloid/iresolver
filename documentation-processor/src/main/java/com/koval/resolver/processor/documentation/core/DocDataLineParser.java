@@ -2,6 +2,7 @@ package com.koval.resolver.processor.documentation.core;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
+
 public class DocDataLineParser implements LineParser<DocFile> {
 
   private final String delimiter;

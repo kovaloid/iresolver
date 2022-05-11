@@ -3,6 +3,7 @@ package com.koval.resolver.common.api.model.issue;
 import java.net.URI;
 import java.util.Objects;
 
+
 public class SubTask {
 
   private String issueKey;

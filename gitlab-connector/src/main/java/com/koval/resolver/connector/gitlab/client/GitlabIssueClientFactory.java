@@ -11,6 +11,7 @@ import com.koval.resolver.common.api.component.connector.IssueClientFactory;
 import com.koval.resolver.common.api.configuration.component.connectors.GitlabConnectorConfiguration;
 import com.koval.resolver.connector.gitlab.exception.GitlabConnectorException;
 
+
 public class GitlabIssueClientFactory implements IssueClientFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GitlabIssueClientFactory.class);

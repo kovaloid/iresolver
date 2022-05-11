@@ -2,6 +2,7 @@ package com.koval.resolver.common.api.model.issue;
 
 import java.util.Objects;
 
+
 public class IssueType {
 
   private String name;

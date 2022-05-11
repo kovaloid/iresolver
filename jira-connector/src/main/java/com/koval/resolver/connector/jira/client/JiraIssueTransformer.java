@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicUser;
-import com.koval.resolver.common.api.model.issue.*;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
+import com.koval.resolver.common.api.model.issue.*;
 import com.koval.resolver.common.api.util.CollectionsUtil;
+
 
 public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira.rest.client.api.domain.Issue> {
 
@@ -22,7 +23,7 @@ public class JiraIssueTransformer implements IssueTransformer<com.atlassian.jira
   private final JiraRestClient restClient;
   private final String browseUrl;
 
-  public JiraIssueTransformer(final JiraRestClient restClient, final String browseUrl) {
+  JiraIssueTransformer(final JiraRestClient restClient, final String browseUrl) {
     this.restClient = restClient;
     this.browseUrl = browseUrl;
   }

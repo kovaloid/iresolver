@@ -11,10 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
 import com.koval.resolver.common.api.configuration.component.processors.GranularIssuesProcessorConfiguration;
 import com.koval.resolver.common.api.constant.IssueParts;
+import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.util.TextUtil;
 
 

@@ -9,14 +9,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.resolver.common.api.component.processor.IssueProcessor;
+import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.model.result.ConfluenceResult;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.component.processor.IssueProcessor;
-import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.vectorization.TextDataExtractor;
 import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
+
 
 public class ConfluenceProcessor implements IssueProcessor {
 

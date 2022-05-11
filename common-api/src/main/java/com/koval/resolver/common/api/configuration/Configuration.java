@@ -2,9 +2,9 @@ package com.koval.resolver.common.api.configuration;
 
 import com.koval.resolver.common.api.configuration.component.AdministrationConfiguration;
 import com.koval.resolver.common.api.configuration.component.ConnectorsConfiguration;
-import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
 import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
 import com.koval.resolver.common.api.configuration.component.ReportersConfiguration;
+import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
 
 
 public class Configuration {

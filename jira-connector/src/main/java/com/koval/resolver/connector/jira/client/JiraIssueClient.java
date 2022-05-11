@@ -15,10 +15,10 @@ import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Field;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.koval.resolver.common.api.model.issue.Issue;
-import com.koval.resolver.common.api.model.issue.IssueField;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.IssueField;
 import com.koval.resolver.common.api.util.CollectionsUtil;
 import com.koval.resolver.connector.jira.exception.JiraClientException;
 

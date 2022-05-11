@@ -1,5 +1,6 @@
 package com.koval.resolver.exception;
 
+
 public class IResolverException extends RuntimeException {
 
   public IResolverException(final String message) {

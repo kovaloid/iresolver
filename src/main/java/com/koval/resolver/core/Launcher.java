@@ -15,9 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.ProcessExecutor;
-import com.koval.resolver.common.api.model.confluence.ConfluencePage;
-import com.koval.resolver.common.api.model.issue.IssueField;
-import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.connector.Connector;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
@@ -31,12 +28,15 @@ import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
+import com.koval.resolver.common.api.exception.ConfigurationException;
+import com.koval.resolver.common.api.exception.ConnectorException;
+import com.koval.resolver.common.api.model.confluence.ConfluencePage;
+import com.koval.resolver.common.api.model.issue.IssueField;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.vectorization.TextDataExtractor;
 import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.common.api.vectorization.VectorModelCreator;
 import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
-import com.koval.resolver.common.api.exception.ConfigurationException;
-import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
 import com.koval.resolver.connector.bugzilla.client.BugzillaIssueClientFactory;
 import com.koval.resolver.connector.confluence.ConfluenceConnector;
@@ -64,6 +64,7 @@ import com.koval.resolver.processor.issues.test.TestSimilarityProcessor;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 import com.koval.resolver.reporter.html.HtmlReportGenerator;
 import com.koval.resolver.reporter.text.TextReportGenerator;
+
 
 public final class Launcher {
 

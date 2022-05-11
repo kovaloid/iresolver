@@ -7,18 +7,19 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.resolver.common.api.component.connector.IssueClient;
+import com.koval.resolver.common.api.component.processor.IssueProcessor;
+import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.model.issue.User;
 import com.koval.resolver.common.api.model.result.AttachmentResult;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.model.result.Pair;
-import com.koval.resolver.common.api.component.connector.IssueClient;
-import com.koval.resolver.common.api.component.processor.IssueProcessor;
-import com.koval.resolver.common.api.configuration.Configuration;
+import com.koval.resolver.common.api.util.AttachmentTypeUtil;
 import com.koval.resolver.common.api.vectorization.TextDataExtractor;
 import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
-import com.koval.resolver.common.api.util.AttachmentTypeUtil;
+
 
 public class IssuesProcessor implements IssueProcessor {
 

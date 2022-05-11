@@ -1,5 +1,6 @@
 package com.koval.resolver.common.api.constant;
 
+
 public enum ProcessorConstants {
   ISSUES("issues"),
   GRANULAR_ISSUES("granular-issues"),

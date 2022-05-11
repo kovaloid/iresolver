@@ -10,9 +10,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.model.confluence.ConfluencePage;
 import com.koval.resolver.common.api.component.processor.DataSetWriter;
 import com.koval.resolver.common.api.configuration.component.processors.ConfluenceProcessorConfiguration;
+import com.koval.resolver.common.api.model.confluence.ConfluencePage;
 import com.koval.resolver.common.api.util.TextUtil;
 
 

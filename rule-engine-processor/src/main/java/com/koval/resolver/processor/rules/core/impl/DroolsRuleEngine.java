@@ -27,6 +27,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.processor.rules.core.RuleEngine;
 
+
 public class DroolsRuleEngine implements RuleEngine {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DroolsRuleEngine.class);

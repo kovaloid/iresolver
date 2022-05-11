@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 @ExtendWith(MockitoExtension.class)
 class DocMetadataParserTest {
 

@@ -15,15 +15,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.koval.resolver.common.api.configuration.component.reporters.TextReporterConfiguration;
 import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.model.issue.User;
 import com.koval.resolver.common.api.model.result.AttachmentResult;
 import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.model.result.Pair;
-import com.koval.resolver.common.api.configuration.component.reporters.TextReporterConfiguration;
+
 
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+
 
 public class TextReportGeneratorTest {
 

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import com.koval.resolver.common.api.model.issue.Issue;
 
+
 public class RuleEngineTest {
     private RuleEngine ruleEngine;
 
@@ -14,7 +15,7 @@ public class RuleEngineTest {
         issue.setSummary("S" + 1);
         try {
             ruleEngine.execute(issue);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }

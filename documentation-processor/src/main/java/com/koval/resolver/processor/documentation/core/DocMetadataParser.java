@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 
+
 public class DocMetadataParser {
 
   private static final String DELIMITER = " ";

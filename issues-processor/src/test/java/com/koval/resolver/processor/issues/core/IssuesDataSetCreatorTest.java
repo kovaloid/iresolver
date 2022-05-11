@@ -17,9 +17,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
 import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
+import com.koval.resolver.common.api.model.issue.Issue;
+
 
 public class IssuesDataSetCreatorTest {
 

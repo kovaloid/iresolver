@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.koval.resolver.processor.documentation.bean.DocFile;
 
+
 public class DocFileDataParser {
 
   private static final String DELIMITER = " ";
