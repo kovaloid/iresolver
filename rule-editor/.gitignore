@@ -1,6 +1,5 @@
 /node
 /node_modules
-package-lock.json
 src/main/resources/static
 
 # e2e
