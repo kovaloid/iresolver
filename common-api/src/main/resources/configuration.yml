@@ -3,7 +3,6 @@ administration:
   connectorType: JIRA # BUGZILLA
   processors:
     - issues
-    #- granular-issues
     - documentation
     - confluence
     - rule-engine
