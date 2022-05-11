@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 

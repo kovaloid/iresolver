@@ -3,7 +3,7 @@ package com.koval.resolver.connector.gitlab;
 import com.koval.resolver.common.api.component.connector.Connector;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.connectors.GitlabConnectorConfiguration;
+import com.koval.resolver.common.api.configuration.component.connectors.GitlabConnectorConfiguration;
 import com.koval.resolver.connector.gitlab.core.GitlabIssueReceiver;
 
 public class GitlabConnector implements Connector {

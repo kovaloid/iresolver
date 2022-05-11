@@ -7,7 +7,7 @@ import java.util.List;
 import com.atlassian.confluence.api.model.content.Content;
 import com.atlassian.confluence.api.model.content.ContentBody;
 import com.atlassian.confluence.api.model.content.ContentRepresentation;
-import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
+import com.koval.resolver.common.api.model.confluence.ConfluencePage;
 
 
 public class ConfluenceTransformer {

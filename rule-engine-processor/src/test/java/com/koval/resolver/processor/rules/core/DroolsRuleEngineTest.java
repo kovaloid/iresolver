@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.processor.rules.core.impl.DroolsRuleEngine;
 
 public class DroolsRuleEngineTest {

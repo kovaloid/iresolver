@@ -23,7 +23,7 @@ import com.atlassian.confluence.rest.client.RestClientFactory;
 import com.atlassian.confluence.rest.client.authentication.AuthenticatedWebResourceProvider;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.koval.resolver.common.api.configuration.bean.connectors.ConfluenceConnectorConfiguration;
+import com.koval.resolver.common.api.configuration.component.connectors.ConfluenceConnectorConfiguration;
 import com.sun.jersey.api.client.Client;
 
 

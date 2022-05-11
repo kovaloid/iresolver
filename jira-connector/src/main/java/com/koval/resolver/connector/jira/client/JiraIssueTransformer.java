@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.BasicUser;
-import com.koval.resolver.common.api.bean.issue.*;
+import com.koval.resolver.common.api.model.issue.*;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
 import com.koval.resolver.common.api.util.CollectionsUtil;
 

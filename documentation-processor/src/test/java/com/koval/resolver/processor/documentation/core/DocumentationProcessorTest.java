@@ -13,12 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.DocumentationResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.DocumentationResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
+import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.processor.documentation.DocumentationProcessor;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
@@ -67,7 +67,7 @@ public class DocumentationProcessorTest {
 
     when(textDataExtractor.extract(any(Issue.class))).thenReturn(EXTRACTED_TEXT);
 
-    when(vectorModel.getNearestLabels(anyString(), anyInt())).thenReturn(NEAREST_LABELS);
+    when(vectorModel.getNearestLabels(anyString())).thenReturn(NEAREST_LABELS);
 
     when(docOutputFilesParser.parseDocumentationMetadata()).thenReturn(DOC_METADATA);
     when(docOutputFilesParser.parseDocumentationFilesList()).thenReturn(DOC_FILES);

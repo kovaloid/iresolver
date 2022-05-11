@@ -7,11 +7,11 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.ProcessorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.processors.RuleEngineProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.RuleEngineProcessorConfiguration;
 import com.koval.resolver.processor.rules.RuleEngineProcessor;
 
 public class RuleEngineProcessorTest {

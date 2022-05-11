@@ -5,7 +5,7 @@ import java.util.*;
 
 import org.joda.time.DateTime;
 
-import com.koval.resolver.common.api.bean.issue.*;
+import com.koval.resolver.common.api.model.issue.*;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
 
 public class BugzillaIssueTransformer implements IssueTransformer<b4j.core.Issue> {

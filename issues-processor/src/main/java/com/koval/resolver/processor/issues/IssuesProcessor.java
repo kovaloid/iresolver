@@ -7,23 +7,22 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.User;
-import com.koval.resolver.common.api.bean.result.AttachmentResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.bean.result.Pair;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.User;
+import com.koval.resolver.common.api.model.result.AttachmentResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.result.Pair;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
 import com.koval.resolver.common.api.util.AttachmentTypeUtil;
 
 public class IssuesProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuesProcessor.class);
-  private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final TextDataExtractor textDataExtractor = new TextDataExtractor();
   private final IssueClient issueClient;
@@ -31,17 +30,16 @@ public class IssuesProcessor implements IssueProcessor {
 
   public IssuesProcessor(final IssueClient issueClient, final Configuration properties) throws IOException {
     this.issueClient = issueClient;
-    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties.getVectorizer());
     final File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
-                                                         properties.getParagraphVectors().getLanguage());
+                                                         properties.getVectorizer().getLanguage());
   }
 
   @Override
   public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
-    final Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-                                                                       NUMBER_OF_NEAREST_LABELS);
+    final Collection<String> similarIssueKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue));
     final List<Pair<Issue, Double>> similarIssuesWithSimilarity = new ArrayList<>();
     final Map<String, Integer> probableLabelsMap = new HashMap<>();
     final Map<User, Integer> qualifiedUsersMap = new HashMap<>();

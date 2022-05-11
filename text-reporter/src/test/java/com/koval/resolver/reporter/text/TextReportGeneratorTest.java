@@ -15,12 +15,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.User;
-import com.koval.resolver.common.api.bean.result.AttachmentResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.bean.result.Pair;
-import com.koval.resolver.common.api.configuration.bean.reporters.TextReporterConfiguration;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.User;
+import com.koval.resolver.common.api.model.result.AttachmentResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.result.Pair;
+import com.koval.resolver.common.api.configuration.component.reporters.TextReporterConfiguration;
 
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;

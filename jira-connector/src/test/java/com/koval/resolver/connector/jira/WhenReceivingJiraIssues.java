@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.connectors.JiraConnectorConfiguration;
+import com.koval.resolver.common.api.configuration.component.connectors.JiraConnectorConfiguration;
 import com.koval.resolver.connector.jira.core.JiraIssueReceiver;
 
 

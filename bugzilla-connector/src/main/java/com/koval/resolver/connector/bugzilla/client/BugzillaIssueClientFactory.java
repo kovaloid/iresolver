@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
-import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
+import com.koval.resolver.common.api.configuration.component.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.connector.bugzilla.exception.BugzillaConnectorException;
 
 import b4j.core.DefaultIssue;

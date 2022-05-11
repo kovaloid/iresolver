@@ -9,13 +9,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
 import com.koval.resolver.common.api.util.TextUtil;
 
 
@@ -23,7 +23,6 @@ import com.koval.resolver.common.api.util.TextUtil;
 public class GranularIssuesProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GranularIssuesProcessor.class);
-  private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final IssueClient issueClient;
   private final VectorModel summaryVectorModel;
@@ -32,13 +31,13 @@ public class GranularIssuesProcessor implements IssueProcessor {
 
   public GranularIssuesProcessor(IssueClient issueClient, Configuration properties) throws IOException {
     this.issueClient = issueClient;
-    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties.getVectorizer());
     File summaryVectorModelFile = new File(properties.getProcessors().getGranularIssues().getSummaryVectorModelFile());
     File descriptionVectorModelFile = new File(properties.getProcessors().getGranularIssues().getDescriptionVectorModelFile());
     File commentsVectorModelFile = new File(properties.getProcessors().getGranularIssues().getCommentsVectorModelFile());
-    this.summaryVectorModel = vectorModelSerializer.deserialize(summaryVectorModelFile, properties.getParagraphVectors().getLanguage());
-    this.descriptionVectorModel = vectorModelSerializer.deserialize(descriptionVectorModelFile, properties.getParagraphVectors().getLanguage());
-    this.commentsVectorModel = vectorModelSerializer.deserialize(commentsVectorModelFile, properties.getParagraphVectors().getLanguage());
+    this.summaryVectorModel = vectorModelSerializer.deserialize(summaryVectorModelFile, properties.getVectorizer().getLanguage());
+    this.descriptionVectorModel = vectorModelSerializer.deserialize(descriptionVectorModelFile, properties.getVectorizer().getLanguage());
+    this.commentsVectorModel = vectorModelSerializer.deserialize(commentsVectorModelFile, properties.getVectorizer().getLanguage());
   }
 
   @Override
@@ -49,13 +48,13 @@ public class GranularIssuesProcessor implements IssueProcessor {
 
     if (summaryVectorModel != null) {
       Collection<String> similarIssueKeysBySummary = summaryVectorModel
-          .getNearestLabels(TextUtil.simplify(issue.getSummary()), NUMBER_OF_NEAREST_LABELS);
+          .getNearestLabels(TextUtil.simplify(issue.getSummary()));
 
       calculateKeys(similarKeysWithRank, similarIssueKeysBySummary);
     }
     if (descriptionVectorModel != null) {
       Collection<String> similarIssueKeysByDescription = descriptionVectorModel
-          .getNearestLabels(TextUtil.simplify(issue.getDescription()), NUMBER_OF_NEAREST_LABELS);
+          .getNearestLabels(TextUtil.simplify(issue.getDescription()));
 
       calculateKeys(similarKeysWithRank, similarIssueKeysByDescription);
     }
@@ -63,7 +62,7 @@ public class GranularIssuesProcessor implements IssueProcessor {
       StringBuilder comments = new StringBuilder();
       issue.getComments().forEach(comment -> comments.append(comment.getBody()));
       Collection<String> similarIssueKeysByComments = commentsVectorModel
-          .getNearestLabels(TextUtil.simplify(comments.toString()), NUMBER_OF_NEAREST_LABELS);
+          .getNearestLabels(TextUtil.simplify(comments.toString()));
 
       calculateKeys(similarKeysWithRank, similarIssueKeysByComments);
     }

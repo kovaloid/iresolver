@@ -9,13 +9,13 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.User;
-import com.koval.resolver.common.api.bean.result.AttachmentResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.bean.result.Pair;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.User;
+import com.koval.resolver.common.api.model.result.AttachmentResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.result.Pair;
 import com.koval.resolver.common.api.component.reporter.ReportGenerator;
-import com.koval.resolver.common.api.configuration.bean.reporters.TextReporterConfiguration;
+import com.koval.resolver.common.api.configuration.component.reporters.TextReporterConfiguration;
 
 
 public class TextReportGenerator implements ReportGenerator {

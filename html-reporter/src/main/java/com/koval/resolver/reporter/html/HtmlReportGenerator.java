@@ -16,9 +16,9 @@ import org.apache.velocity.tools.generic.NumberTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.reporter.ReportGenerator;
-import com.koval.resolver.common.api.configuration.bean.reporters.HtmlReporterConfiguration;
+import com.koval.resolver.common.api.configuration.component.reporters.HtmlReporterConfiguration;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 
 public class HtmlReportGenerator implements ReportGenerator {

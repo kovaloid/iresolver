@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 
 public final class ConfigurationPropertiesCreator {
 

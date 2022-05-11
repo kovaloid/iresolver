@@ -1,7 +1,7 @@
 package com.koval.resolver.common.api.component.processor;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 
 
 public interface IssueProcessor {

@@ -14,19 +14,22 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.exception.CredentialException;
 
 
 public class CredentialsKeeper {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsKeeper.class);
   private static final String CREDENTIALS_FILE_NAME = ".credentials";
 
   private final CredentialsProtector protector;
   private final File credentialsFile;
   private final Charset charset = StandardCharsets.UTF_8;
 
-  public CredentialsKeeper(final CredentialsProtector protector, final String credentialsPath) {
+  CredentialsKeeper(final CredentialsProtector protector, final String credentialsPath) {
     this.protector = protector;
     this.credentialsFile = new File(credentialsPath, CREDENTIALS_FILE_NAME);
   }
@@ -39,7 +42,9 @@ public class CredentialsKeeper {
     if (!isStored()) {
       try {
         FileUtils.forceMkdir(credentialsFile.getParentFile());
-        credentialsFile.createNewFile();
+        if (credentialsFile.createNewFile()) {
+          LOGGER.info("Credentials file has been created");
+        }
       } catch (IOException e) {
         throw new CredentialException("Could not create credentials file: " + credentialsFile.getAbsolutePath(), e);
       }

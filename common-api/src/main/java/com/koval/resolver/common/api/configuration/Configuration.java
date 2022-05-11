@@ -1,17 +1,17 @@
 package com.koval.resolver.common.api.configuration;
 
-import com.koval.resolver.common.api.configuration.bean.AdministrationConfiguration;
-import com.koval.resolver.common.api.configuration.bean.ConnectorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.ParagraphVectorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.ProcessorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.ReportersConfiguration;
+import com.koval.resolver.common.api.configuration.component.AdministrationConfiguration;
+import com.koval.resolver.common.api.configuration.component.ConnectorsConfiguration;
+import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
+import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
+import com.koval.resolver.common.api.configuration.component.ReportersConfiguration;
 
 
 public class Configuration {
 
   private AdministrationConfiguration administration;
   private ConnectorsConfiguration connectors;
-  private ParagraphVectorsConfiguration paragraphVectors;
+  private VectorizerConfiguration vectorizer;
   private ProcessorsConfiguration processors;
   private ReportersConfiguration reporters;
 
@@ -31,12 +31,12 @@ public class Configuration {
     this.connectors = connectors;
   }
 
-  public ParagraphVectorsConfiguration getParagraphVectors() {
-    return paragraphVectors;
+  public VectorizerConfiguration getVectorizer() {
+    return vectorizer;
   }
 
-  public void setParagraphVectors(final ParagraphVectorsConfiguration paragraphVectors) {
-    this.paragraphVectors = paragraphVectors;
+  public void setVectorizer(final VectorizerConfiguration vectorizer) {
+    this.vectorizer = vectorizer;
   }
 
   public ProcessorsConfiguration getProcessors() {
@@ -60,7 +60,7 @@ public class Configuration {
     return "Configuration{"
         + "administration=" + administration
         + ", connectors=" + connectors
-        + ", paragraphVectors=" + paragraphVectors
+        + ", vectorizer=" + vectorizer
         + ", processors=" + processors
         + ", reporters=" + reporters
         + '}';

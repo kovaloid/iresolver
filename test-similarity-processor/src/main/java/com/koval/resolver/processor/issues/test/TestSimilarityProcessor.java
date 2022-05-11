@@ -10,18 +10,21 @@ import org.deeplearning4j.text.sentenceiterator.labelaware.LabelAwareSentenceIte
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.koval.resolver.common.api.configuration.Configuration;
 import com.koval.resolver.common.api.configuration.ConfigurationManager;
-import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
+
 
 public class TestSimilarityProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestSimilarityProcessor.class);
 
   public void test() throws IOException {
-    final IssuesProcessorConfiguration properties = ConfigurationManager.getConfiguration().getProcessors().getIssues();
-    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final Configuration configuration = ConfigurationManager.getConfiguration();
+    final IssuesProcessorConfiguration properties = configuration.getProcessors().getIssues();
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(configuration.getVectorizer());
 
     final File vectorModelFile = new File(properties.getVectorModelFile());
     final VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile, "English");
@@ -39,7 +42,7 @@ public class TestSimilarityProcessor {
         final String currentSentence = iterator.nextSentence();
         final String currentLabel = iterator.currentLabel();
 
-        final String nearestLabel = vectorModel.getNearestLabels(currentSentence, 1).iterator().next();
+        final String nearestLabel = vectorModel.getNearestLabels(currentSentence).iterator().next();
         if (!nearestLabel.equalsIgnoreCase(currentLabel)) {
           LOGGER.info("{} : Impossible to find a correct label for the corresponding text!", currentLabel);
           errorCounter++;

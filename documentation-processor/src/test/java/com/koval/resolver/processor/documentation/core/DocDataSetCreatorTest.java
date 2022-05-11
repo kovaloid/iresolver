@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.koval.resolver.common.api.configuration.ConfigurationManager;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.processor.documentation.bean.MediaType;
 import com.koval.resolver.processor.documentation.convert.FileConverter;
 import com.koval.resolver.processor.documentation.convert.impl.HtmlToPdfFileConverter;

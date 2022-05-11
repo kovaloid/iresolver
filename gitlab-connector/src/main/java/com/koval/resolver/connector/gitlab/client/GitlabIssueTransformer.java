@@ -11,7 +11,7 @@ import org.gitlab4j.api.models.Discussion;
 import org.gitlab4j.api.models.Note;
 import org.joda.time.DateTime;
 
-import com.koval.resolver.common.api.bean.issue.*;
+import com.koval.resolver.common.api.model.issue.*;
 import com.koval.resolver.common.api.component.connector.IssueTransformer;
 import com.koval.resolver.connector.gitlab.exception.GitlabClientException;
 

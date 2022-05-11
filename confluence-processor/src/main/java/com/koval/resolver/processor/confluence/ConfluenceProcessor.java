@@ -9,19 +9,18 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.ConfluenceResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.ConfluenceResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
 
 public class ConfluenceProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceProcessor.class);
-  private static final int NUMBER_OF_NEAREST_LABELS = 10;
   private static final String BROWSE_SUFFIX = "/display/pages/viewinfo.action?pageId=";
 
   private final VectorModel vectorModel;
@@ -30,17 +29,16 @@ public class ConfluenceProcessor implements IssueProcessor {
 
   public ConfluenceProcessor(final Configuration properties) throws IOException {
     this.confluenceUrl = properties.getConnectors().getConfluence().getUrl();
-    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties.getVectorizer());
     final File vectorModelFile = new File(properties.getProcessors().getConfluence().getVectorModelFile());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
-                                                         properties.getParagraphVectors().getLanguage());
+                                                         properties.getVectorizer().getLanguage());
   }
 
   @Override
   public void run(final Issue issue, final IssueAnalysingResult result) {
     setOriginalIssueToResults(issue, result);
-    final Collection<String> similarPageKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue),
-                                                                            NUMBER_OF_NEAREST_LABELS);
+    final Collection<String> similarPageKeys = vectorModel.getNearestLabels(textDataExtractor.extract(issue));
     LOGGER.info("Nearest confluence keys for {}: {}", issue.getKey(), similarPageKeys);
 
     final List<ConfluenceResult> confluenceResults = new ArrayList<>();

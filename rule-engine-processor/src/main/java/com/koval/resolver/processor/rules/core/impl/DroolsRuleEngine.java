@@ -24,7 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.processor.rules.core.RuleEngine;
 
 public class DroolsRuleEngine implements RuleEngine {

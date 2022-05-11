@@ -1,7 +1,7 @@
 package com.koval.resolver.common.api.auth;
 
-
 import com.koval.resolver.common.api.util.CommandLineUtil;
+
 
 public class Credentials {
 

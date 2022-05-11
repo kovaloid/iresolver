@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.koval.resolver.common.api.ProcessExecutor;
-import com.koval.resolver.common.api.bean.confluence.ConfluencePage;
-import com.koval.resolver.common.api.bean.issue.IssueField;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.confluence.ConfluencePage;
+import com.koval.resolver.common.api.model.issue.IssueField;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.connector.Connector;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueClientFactory;
@@ -26,15 +26,15 @@ import com.koval.resolver.common.api.component.processor.DataSetWriter;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
 import com.koval.resolver.common.api.component.reporter.ReportGenerator;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
 import com.koval.resolver.common.api.constant.ConnectorType;
 import com.koval.resolver.common.api.constant.IssueParts;
 import com.koval.resolver.common.api.constant.ProcessorConstants;
 import com.koval.resolver.common.api.constant.ReporterConstants;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelCreator;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelCreator;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
 import com.koval.resolver.common.api.exception.ConfigurationException;
 import com.koval.resolver.common.api.exception.ConnectorException;
 import com.koval.resolver.connector.bugzilla.BugzillaConnector;
@@ -296,10 +296,10 @@ public final class Launcher {
   }
 
   private void createVectorModel(final String dataSetFile, final String vectorModelFile, final String errorMessage) {
-    final VectorModelCreator vectorModelCreator = new VectorModelCreator(configuration.getParagraphVectors());
+    final VectorModelCreator vectorModelCreator = new VectorModelCreator(configuration.getVectorizer());
     try {
       final VectorModel vectorModel = vectorModelCreator.createFromFile(new File(dataSetFile));
-      final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+      final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(configuration.getVectorizer());
       vectorModelSerializer.serialize(vectorModel, vectorModelFile);
     } catch (IOException e) {
       LOGGER.error(errorMessage, e);
@@ -333,10 +333,10 @@ public final class Launcher {
   }
 
   private DocumentationProcessor createDocumentationProcessor() throws IOException {
-    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer();
+    final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(configuration.getVectorizer());
     final File vectorModelFile = new File(configuration.getProcessors().getDocumentation().getVectorModelFile());
     final VectorModel vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
-                                                                      configuration.getParagraphVectors()
+                                                                      configuration.getVectorizer()
                                                                                    .getLanguage());
 
     final FileRepository fileRepository = new FileRepository();

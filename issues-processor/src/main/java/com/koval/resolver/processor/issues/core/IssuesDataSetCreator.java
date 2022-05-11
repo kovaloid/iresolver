@@ -14,10 +14,10 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
+import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
 
 
 public class IssuesDataSetCreator {

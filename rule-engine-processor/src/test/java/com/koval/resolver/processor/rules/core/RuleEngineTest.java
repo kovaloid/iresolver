@@ -2,7 +2,7 @@ package com.koval.resolver.processor.rules.core;
 
 import org.junit.Test;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 
 public class RuleEngineTest {
     private RuleEngine ruleEngine;

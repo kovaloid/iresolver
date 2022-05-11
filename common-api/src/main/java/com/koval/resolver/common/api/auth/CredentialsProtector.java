@@ -15,14 +15,14 @@ import org.apache.commons.codec.binary.Base64;
 import com.koval.resolver.common.api.exception.CredentialException;
 
 
-public class CredentialsProtector {
+class CredentialsProtector {
 
   private static final Charset CHARSET = StandardCharsets.UTF_8;
 
   private Cipher cipher;
   private SecretKey key;
 
-  public CredentialsProtector() throws CredentialException {
+  CredentialsProtector() throws CredentialException {
     final String encryptionKey = "6veuxBtJA9IodvM9pLlWl0bffmWB8PWDBXGZaUAizkebHWvjSdv9sZBM1d3YweOj";
     final String encryptionSchema = "DESede";
     final byte[] arrayBytes = encryptionKey.getBytes(CHARSET);

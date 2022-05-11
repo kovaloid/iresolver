@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.result.DocumentationResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.result.DocumentationResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
 import com.koval.resolver.common.api.component.processor.IssueProcessor;
-import com.koval.resolver.common.api.configuration.bean.processors.DocumentationProcessorConfiguration;
-import com.koval.resolver.common.api.doc2vec.TextDataExtractor;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
+import com.koval.resolver.common.api.configuration.component.processors.DocumentationProcessorConfiguration;
+import com.koval.resolver.common.api.vectorization.TextDataExtractor;
+import com.koval.resolver.common.api.vectorization.VectorModel;
 import com.koval.resolver.processor.documentation.bean.DocFile;
 import com.koval.resolver.processor.documentation.bean.DocMetadata;
 import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
@@ -24,7 +24,6 @@ import com.koval.resolver.processor.documentation.core.DocOutputFilesParser;
 public class DocumentationProcessor implements IssueProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationProcessor.class);
-  private static final int NUMBER_OF_NEAREST_LABELS = 10;
 
   private final VectorModel vectorModel;
   private final TextDataExtractor textDataExtractor;
@@ -49,10 +48,7 @@ public class DocumentationProcessor implements IssueProcessor {
     setOriginalIssueToResults(issue, result);
 
     final String extractedIssueText = textDataExtractor.extract(issue);
-    final Collection<String> similarDocKeys = vectorModel.getNearestLabels(
-            extractedIssueText,
-            NUMBER_OF_NEAREST_LABELS
-    );
+    final Collection<String> similarDocKeys = vectorModel.getNearestLabels(extractedIssueText);
     LOGGER.info("Nearest doc keys for {}: {}", issue.getKey(), similarDocKeys);
 
     final List<DocMetadata> docMetadata = docOutputFilesParser.parseDocumentationMetadata();

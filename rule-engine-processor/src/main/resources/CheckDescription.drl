@@ -1,6 +1,6 @@
 package com.koval.resolver.rules
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 global java.util.List results
 
 

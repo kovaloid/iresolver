@@ -3,7 +3,7 @@ package com.koval.resolver.connector.bugzilla;
 import com.koval.resolver.common.api.component.connector.Connector;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.connectors.BugzillaConnectorConfiguration;
+import com.koval.resolver.common.api.configuration.component.connectors.BugzillaConnectorConfiguration;
 import com.koval.resolver.connector.bugzilla.core.BugzillaIssueReceiver;
 
 

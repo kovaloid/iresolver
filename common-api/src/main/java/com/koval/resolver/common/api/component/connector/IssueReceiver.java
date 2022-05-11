@@ -2,7 +2,7 @@ package com.koval.resolver.common.api.component.connector;
 
 import java.util.List;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 
 
 public interface IssueReceiver {

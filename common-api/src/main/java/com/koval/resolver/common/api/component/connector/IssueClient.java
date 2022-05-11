@@ -4,8 +4,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.IssueField;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.IssueField;
 
 
 public interface IssueClient extends Closeable {

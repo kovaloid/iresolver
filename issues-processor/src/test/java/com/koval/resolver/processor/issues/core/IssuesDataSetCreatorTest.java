@@ -17,9 +17,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.koval.resolver.common.api.bean.issue.Issue;
+import com.koval.resolver.common.api.model.issue.Issue;
 import com.koval.resolver.common.api.component.connector.IssueReceiver;
-import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
 
 public class IssuesDataSetCreatorTest {
 

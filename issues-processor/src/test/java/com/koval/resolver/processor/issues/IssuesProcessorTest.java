@@ -31,20 +31,20 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.koval.resolver.common.api.bean.issue.Attachment;
-import com.koval.resolver.common.api.bean.issue.Comment;
-import com.koval.resolver.common.api.bean.issue.Issue;
-import com.koval.resolver.common.api.bean.issue.User;
-import com.koval.resolver.common.api.bean.result.AttachmentResult;
-import com.koval.resolver.common.api.bean.result.IssueAnalysingResult;
-import com.koval.resolver.common.api.bean.result.Pair;
+import com.koval.resolver.common.api.model.issue.Attachment;
+import com.koval.resolver.common.api.model.issue.Comment;
+import com.koval.resolver.common.api.model.issue.Issue;
+import com.koval.resolver.common.api.model.issue.User;
+import com.koval.resolver.common.api.model.result.AttachmentResult;
+import com.koval.resolver.common.api.model.result.IssueAnalysingResult;
+import com.koval.resolver.common.api.model.result.Pair;
 import com.koval.resolver.common.api.component.connector.IssueClient;
 import com.koval.resolver.common.api.configuration.Configuration;
-import com.koval.resolver.common.api.configuration.bean.ParagraphVectorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.ProcessorsConfiguration;
-import com.koval.resolver.common.api.configuration.bean.processors.IssuesProcessorConfiguration;
-import com.koval.resolver.common.api.doc2vec.VectorModel;
-import com.koval.resolver.common.api.doc2vec.VectorModelSerializer;
+import com.koval.resolver.common.api.configuration.component.VectorizerConfiguration;
+import com.koval.resolver.common.api.configuration.component.ProcessorsConfiguration;
+import com.koval.resolver.common.api.configuration.component.processors.IssuesProcessorConfiguration;
+import com.koval.resolver.common.api.vectorization.VectorModel;
+import com.koval.resolver.common.api.vectorization.VectorModelSerializer;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(IssuesProcessor.class)
@@ -271,15 +271,15 @@ public class IssuesProcessorTest {
         IssuesProcessorConfiguration issuesProcessorConfiguration = new IssuesProcessorConfiguration();
         issuesProcessorConfiguration.setVectorModelFile("");
 
-        ParagraphVectorsConfiguration paragraphVectorsConfiguration = new ParagraphVectorsConfiguration();
-        paragraphVectorsConfiguration.setLanguage("");
+        VectorizerConfiguration vectorizerConfiguration = new VectorizerConfiguration();
+        vectorizerConfiguration.setLanguage("");
 
         ProcessorsConfiguration processorsConfiguration = new ProcessorsConfiguration();
         processorsConfiguration.setIssues(issuesProcessorConfiguration);
 
         Configuration configuration = new Configuration();
         configuration.setProcessors(processorsConfiguration);
-        configuration.setParagraphVectors(paragraphVectorsConfiguration);
+        configuration.setVectorizer(vectorizerConfiguration);
 
         return configuration;
     }
@@ -331,7 +331,7 @@ public class IssuesProcessorTest {
      */
     private VectorModel vectorModelMock(List<String> nearestLabels) throws Exception {
         VectorModel vectorModelMock = vectorModelMock();
-        Mockito.when(vectorModelMock.getNearestLabels(any(), anyInt())).thenReturn(nearestLabels);
+        Mockito.when(vectorModelMock.getNearestLabels(any())).thenReturn(nearestLabels);
 
         return vectorModelMock;
     }
