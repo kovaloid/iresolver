@@ -9,7 +9,7 @@ public class VectorizerConfiguration {
   private int layerSize;
   private double learningRate;
   private int minWordFrequency;
-  private int sampling;
+  private double sampling;
   private int windowSize;
   private int topResults;
   private String language;
@@ -62,11 +62,11 @@ public class VectorizerConfiguration {
     this.minWordFrequency = minWordFrequency;
   }
 
-  public int getSampling() {
+  public double getSampling() {
     return sampling;
   }
 
-  public void setSampling(final int sampling) {
+  public void setSampling(final double sampling) {
     this.sampling = sampling;
   }
 
