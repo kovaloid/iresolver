@@ -41,10 +41,6 @@ public class JiraIssueClient implements IssueClient {
     final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
         "Could not get total issues.");
-    if (searchResult == null) {
-      LOGGER.warn("Search result does not exist");
-      return 0;
-    }
     return searchResult.getTotal();
   }
 
@@ -61,10 +57,6 @@ public class JiraIssueClient implements IssueClient {
     final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, maxResults, startAt, uniqueFields).claim(),
         "Could not search by JQL.");
-    if (searchResult == null) {
-      LOGGER.warn("Search result does not exist");
-      return new ArrayList<>();
-    }
     return issueTransformer.transform(CollectionsUtil.convert(searchResult.getIssues()));
   }
 
@@ -78,10 +70,6 @@ public class JiraIssueClient implements IssueClient {
     final com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
         () -> restClient.getIssueClient().getIssue(issueKey).claim(),
         "Could not get issue by key: " + issueKey);
-    if (issue == null) {
-      LOGGER.warn("Issue with key {} does not exist", issueKey);
-      return null;
-    }
     return issueTransformer.transform(issue);
   }
 
@@ -112,16 +100,22 @@ public class JiraIssueClient implements IssueClient {
       return supplier.get();
     } catch (RestClientException e) {
       e.getErrorCollections().forEach(errorCollection -> errorCollection.getErrorMessages().forEach(LOGGER::error));
-      if (e.getStatusCode().isPresent() && e.getStatusCode().get().equals(400)) {
-        throw new JiraClientException("Bad Request. Incorrect JQL.");
-      }
-      if (e.getStatusCode().isPresent() && e.getStatusCode().get().equals(401)) {
-        throw new JiraClientException("Unauthorized. Incorrect login or password.");
-      }
-      if (e.getStatusCode().isPresent() && e.getStatusCode().get().equals(404)) {
-        return null;
+      if (e.getStatusCode().isPresent()) {
+        handleStatusCode(e.getStatusCode().get());
       }
       throw new JiraClientException(message, e);
+    }
+  }
+
+  private void handleStatusCode(int statusCode) {
+    switch (statusCode) {
+      case 400:
+        throw new JiraClientException("Bad Request. Incorrect JQL.");
+      case 401:
+        throw new JiraClientException("Unauthorized. Incorrect login or password.");
+      case 404:
+        LOGGER.warn("Could not find issue with such key in Jira. Please, check keys in the data set.");
+        break;
     }
   }
 

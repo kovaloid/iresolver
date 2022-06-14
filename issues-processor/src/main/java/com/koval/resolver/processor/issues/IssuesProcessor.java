@@ -49,9 +49,6 @@ public class IssuesProcessor implements IssueProcessor {
     LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), similarIssueKeys);
     similarIssueKeys.forEach((similarIssueKey) -> {
       final Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
-      if (similarIssue == null) {
-        return;
-      }
 
       final double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, Math.abs(similarity * 100)));
