@@ -116,6 +116,8 @@ public class JiraIssueClient implements IssueClient {
       case 404:
         LOGGER.warn("Could not find issue with such key in Jira. Please, check keys in the data set.");
         break;
+      default:
+        break;
     }
   }
 
