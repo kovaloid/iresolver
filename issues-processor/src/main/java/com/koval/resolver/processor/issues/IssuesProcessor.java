@@ -34,7 +34,7 @@ public class IssuesProcessor implements IssueProcessor {
     final VectorModelSerializer vectorModelSerializer = new VectorModelSerializer(properties.getVectorizer());
     final File vectorModelFile = new File(properties.getProcessors().getIssues().getVectorModelFile());
     this.vectorModel = vectorModelSerializer.deserialize(vectorModelFile,
-                                                         properties.getVectorizer().getLanguage());
+        properties.getVectorizer().getLanguage());
   }
 
   @Override
@@ -49,6 +49,9 @@ public class IssuesProcessor implements IssueProcessor {
     LOGGER.info("Nearest issue keys for {}: {}", issue.getKey(), similarIssueKeys);
     similarIssueKeys.forEach((similarIssueKey) -> {
       final Issue similarIssue = issueClient.getIssueByKey(similarIssueKey.trim());
+      if (similarIssue == null) {
+        return;
+      }
 
       final double similarity = vectorModel.similarityToLabel(textDataExtractor.extract(issue), similarIssueKey);
       similarIssuesWithSimilarity.add(new Pair<>(similarIssue, Math.abs(similarity * 100)));
@@ -59,14 +62,14 @@ public class IssuesProcessor implements IssueProcessor {
       }
       similarIssue.getComments().forEach(comment -> addEntityOrUpdateMetric(qualifiedUsersMap, comment.getAuthor()));
       similarIssue.getAttachments().forEach(attachment ->
-                                              addEntityOrUpdateMetric(probableAttachmentExtensionsMap,
-                                                                      AttachmentTypeUtil.getExtension(attachment)));
+          addEntityOrUpdateMetric(probableAttachmentExtensionsMap,
+              AttachmentTypeUtil.getExtension(attachment)));
     });
     result.setSimilarIssues(similarIssuesWithSimilarity);
     result.setProbableLabels(convertMapToPairList(probableLabelsMap));
     result.setQualifiedUsers(sortUsersByRank(convertMapToPairList(qualifiedUsersMap)));
     result.setProbableAttachmentTypes(
-      getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentExtensionsMap)));
+        getAttachmentMetrics(issue, convertMapToPairList(probableAttachmentExtensionsMap)));
   }
 
   private <E> void addEntityOrUpdateMetric(final Map<E, Integer> map, final E entity) {
@@ -85,33 +88,33 @@ public class IssuesProcessor implements IssueProcessor {
   }
 
   private List<AttachmentResult> getAttachmentMetrics(
-    final Issue issue, final List<Pair<String, Integer>> probableAttachmentExtensions) {
+      final Issue issue, final List<Pair<String, Integer>> probableAttachmentExtensions) {
     final List<String> currentIssueAttachmentTypes = AttachmentTypeUtil.getExtensions(issue.getAttachments());
     final List<AttachmentResult> attachmentResults = new ArrayList<>();
     for (final Pair<String, Integer> probableAttachmentExtension : probableAttachmentExtensions) {
       attachmentResults.add(
-        new AttachmentResult(
-          probableAttachmentExtension.getEntity(),
-          probableAttachmentExtension.getMetric(),
-          AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
-          currentIssueAttachmentTypes.contains(probableAttachmentExtension.getEntity())
-        )
-                           );
+          new AttachmentResult(
+              probableAttachmentExtension.getEntity(),
+              probableAttachmentExtension.getMetric(),
+              AttachmentTypeUtil.getType(probableAttachmentExtension.getEntity()),
+              currentIssueAttachmentTypes.contains(probableAttachmentExtension.getEntity())
+          )
+      );
     }
     return attachmentResults;
   }
 
-   public List<Pair<User, Integer>> sortUsersByRank(List<Pair<User, Integer>> listQualifiedUsers) {
-        listQualifiedUsers.sort((u1, u2) -> {
-            if (u1.getMetric().equals(u2.getMetric())) {
-                return 0;
-            } else if (u1.getMetric() < u2.getMetric()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
-        return listQualifiedUsers;
-    }
+  public List<Pair<User, Integer>> sortUsersByRank(List<Pair<User, Integer>> listQualifiedUsers) {
+    listQualifiedUsers.sort((u1, u2) -> {
+      if (u1.getMetric().equals(u2.getMetric())) {
+        return 0;
+      } else if (u1.getMetric() < u2.getMetric()) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+    return listQualifiedUsers;
+  }
 
 }

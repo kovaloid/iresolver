@@ -41,6 +41,10 @@ public class JiraIssueClient implements IssueClient {
     final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, 0, 0, getRequiredFields()).claim(),
         "Could not get total issues.");
+    if (searchResult == null) {
+      LOGGER.warn("Search result does not exist");
+      return 0;
+    }
     return searchResult.getTotal();
   }
 
@@ -57,6 +61,10 @@ public class JiraIssueClient implements IssueClient {
     final SearchResult searchResult = checkRestExceptions(
         () -> restClient.getSearchClient().searchJql(query, maxResults, startAt, uniqueFields).claim(),
         "Could not search by JQL.");
+    if (searchResult == null) {
+      LOGGER.warn("Search result does not exist");
+      return new ArrayList<>();
+    }
     return issueTransformer.transform(CollectionsUtil.convert(searchResult.getIssues()));
   }
 
@@ -70,6 +78,10 @@ public class JiraIssueClient implements IssueClient {
     final com.atlassian.jira.rest.client.api.domain.Issue issue = checkRestExceptions(
         () -> restClient.getIssueClient().getIssue(issueKey).claim(),
         "Could not get issue by key: " + issueKey);
+    if (issue == null) {
+      LOGGER.warn("Issue with key {} does not exist", issueKey);
+      return null;
+    }
     return issueTransformer.transform(issue);
   }
 
@@ -78,6 +90,10 @@ public class JiraIssueClient implements IssueClient {
     final Iterable<Field> fields = checkRestExceptions(
         () -> restClient.getMetadataClient().getFields().claim(),
         "Could not get fields.");
+    if (fields == null) {
+      LOGGER.warn("Fields does not exist");
+      return new ArrayList<>();
+    }
     final List<IssueField> issueFields = new ArrayList<>();
     fields.forEach(field -> {
       final IssueField issueField = new IssueField();
@@ -101,6 +117,9 @@ public class JiraIssueClient implements IssueClient {
       }
       if (e.getStatusCode().isPresent() && e.getStatusCode().get().equals(401)) {
         throw new JiraClientException("Unauthorized. Incorrect login or password.");
+      }
+      if (e.getStatusCode().isPresent() && e.getStatusCode().get().equals(404)) {
+        return null;
       }
       throw new JiraClientException(message, e);
     }
