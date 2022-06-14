@@ -79,9 +79,6 @@ distributions {
       from('rule-engine-processor/src/main/resources') { into 'rules' }
       from('docs') { into 'docs' }
       exclude('**/*-android-*.jar')
-      exclude('**/*-macosx-*.jar')
-      exclude('**/*-linux-armhf.jar')
-      exclude('**/*-linux-ppc64le.jar')
       exclude('**/sslext*.jar')
       exclude('**/oro*.jar')
       exclude('**/stax2*.jar')
