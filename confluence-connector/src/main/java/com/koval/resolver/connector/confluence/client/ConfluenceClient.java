@@ -14,6 +14,7 @@ import com.atlassian.confluence.api.model.content.ContentType;
 import com.atlassian.confluence.api.model.content.Space;
 import com.atlassian.confluence.api.model.pagination.PageRequest;
 import com.atlassian.confluence.api.model.pagination.PageResponse;
+import com.atlassian.confluence.api.model.pagination.PageResponseImpl;
 import com.atlassian.confluence.api.model.pagination.SimplePageRequest;
 import com.atlassian.confluence.rest.client.RemoteContentService;
 import com.atlassian.confluence.rest.client.RemoteContentServiceImpl;
@@ -23,6 +24,7 @@ import com.atlassian.confluence.rest.client.RestClientFactory;
 import com.atlassian.confluence.rest.client.authentication.AuthenticatedWebResourceProvider;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.koval.resolver.common.api.auth.Credentials;
 import com.koval.resolver.common.api.configuration.component.connectors.ConfluenceConnectorConfiguration;
 import com.sun.jersey.api.client.Client;
 
@@ -39,8 +41,8 @@ public class ConfluenceClient implements Closeable {
     executor = MoreExecutors.newDirectExecutorService();
     provider = new AuthenticatedWebResourceProvider(client, connectorProperties.getUrl(), "");
     if (!connectorProperties.isAnonymous()) {
-      throw new UnsupportedOperationException("Basic authentication is not supported yet.");
-      // provider.setAuthContext(connectorProperties.getUsername(), connectorProperties.getPassword().toCharArray());
+      final Credentials credentials = Credentials.getCredentials(connectorProperties.getCredentialsFolder());
+      provider.setAuthContext(credentials.getUsername(), credentials.getPassword().toCharArray());
     }
     LOGGER.info("Confluence client created for {}", connectorProperties.getUrl());
   }
@@ -59,14 +61,21 @@ public class ConfluenceClient implements Closeable {
 
   public PageResponse<Content> getPagesBySpaceKeys(final List<Space> spaces, final int startIndex, final int limit) {
     final RemoteContentService contentService = new RemoteContentServiceImpl(provider, executor);
-    final PageRequest pageRequest = new SimplePageRequest(startIndex, limit);
-    LOGGER.info("Get pages by spaces: {} with page request: {}",
-        spaces.stream().map(Space::getKey).collect(Collectors.toList()), pageRequest);
-    return contentService
-        .find(new Expansion("body.storage"))
-        .withSpace(spaces.toArray(new Space[spaces.size()]))
-        .fetchMany(ContentType.PAGE, pageRequest)
-        .claim();
+    // TODO fix limit configuration in requests and replace 100 with limit argument below
+    final PageRequest pageRequest = new SimplePageRequest(startIndex, 100);
+    LOGGER.info("Get pages by spaces: {} starting from: {} with batch size: {}",
+        spaces.stream().map(Space::getKey).collect(Collectors.toList()), startIndex, limit);
+    try {
+      return contentService
+          .find(new Expansion("body.storage"))
+          .withSpace(spaces.toArray(new Space[spaces.size()]))
+          .fetchManyCompletionStage(ContentType.PAGE, pageRequest)
+          .toCompletableFuture()
+          .get();
+
+    } catch (Exception e) {
+      return PageResponseImpl.empty(true, pageRequest);
+    }
   }
 
   @Override

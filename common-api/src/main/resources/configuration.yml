@@ -18,9 +18,9 @@ connectors:
     anonymous: true
     credentialsFolder: ../data/
     resolvedQuery: project = Kafka AND resolution != Unresolved
-    unresolvedQuery: project = Kafka AND resolution = Unresolved AND type = Bug AND affectedVersion = 2.5.0
-    batchSize: 100
-    batchDelay: 3000
+    unresolvedQuery: project = Kafka AND resolution = Unresolved AND type = Bug AND affectedVersion = 2.5.0 AND priority = Critical
+    batchSize: 1000
+    batchDelay: 100
     issueFieldsCsvFile : ../output/field.csv
     resolvedIssueFields:
       - summary
@@ -34,8 +34,8 @@ connectors:
     credentialsFolder: ../data/
     resolvedQuery: product = Ant, status = Close
     unresolvedQuery: product = Ant, status = Open
-    batchSize: 10
-    batchDelay: 3000
+    batchSize: 1000
+    batchDelay: 100
 
   confluence:
     url: https://cwiki.apache.org/confluence
@@ -43,20 +43,20 @@ connectors:
     credentialsFolder: ../data/
     spaceKeys:
       - KAFKA
-    limitPerRequest: 500
+    limitPerRequest: 100
 
   gitlab:
     url: https://gitlab.com
     credentialsFolder: ../data/
     resolvedQuery: project = ase/ase, status = Closed
     unresolvedQuery: project = ase/ase, status = Opened
-    batchSize: 10
-    batchDelay: 3000
+    batchSize: 1000
+    batchDelay: 100
 
 vectorizer:
-  batchSize: 10
-  iterations: 3
-  epochs: 8
+  batchSize: 100
+  iterations: 1
+  epochs: 1
   layerSize: 100
   learningRate: 0.025
   minWordFrequency: 5
